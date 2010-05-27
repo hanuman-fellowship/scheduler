@@ -8,7 +8,7 @@ class AppController extends Controller {
             'model' => 'User'
         )
     );
-    
+        
 	function beforeFilter() {
 		// put the latest published schedule into the session
 		if (!$this->Session->check('Schedule')) {
@@ -20,7 +20,12 @@ class AppController extends Controller {
 			);
 			$this->Session->write('Schedule', $schedule['Schedule']);
 		}
-		$this->{$this->modelClass}->schedule_id = $this->Session->read('Schedule.id');
+	}	
+	
+    function LoadModel($modelClass = null, $id = null) {
+    	$modelObject = parent::loadModel($modelClass, $id);
+		$this->$modelClass->schedule_id = $this->Session->read('Schedule.id');
+		return $modelObject;
 	}	
 	
 	function setSchedule($id) {

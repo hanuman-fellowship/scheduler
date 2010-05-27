@@ -14,7 +14,7 @@ class Schedule extends AppModel {
 		'Person',
 		'ResidentCategory',
 		'Shift',
-		'Time'
+		'Slot'
 	);
 
 	function newBranch($user_id, $parent_id) {

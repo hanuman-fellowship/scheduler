@@ -5,7 +5,7 @@ class Boundary extends AppModel {
 
 	var $belongsTo = array(
 		'Day',
-		'Time'
+		'Slot'
 	);
 
 }
