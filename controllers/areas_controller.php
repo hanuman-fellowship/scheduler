@@ -6,7 +6,7 @@ class AreasController extends AppController {
 
 	function schedule($id = null) {
 		$this->Area->id = $id;
-		$this->Area->contain('Shift.Assignment.Person.ResidentCategory','FloatingShift.Person.ResidentCategory');
+		$this->Area->sContain('Shift.Assignment.Person.ResidentCategory');
 		$this->set('area',$this->Area->sFind('first'));
 		$this->set('days', ClassRegistry::init('Days')->find('all'));
 		$days = ClassRegistry::init('Days')->find('all');

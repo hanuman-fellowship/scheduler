@@ -1,6 +1,5 @@
 <? $this->pageTitle=$area['Area']['name']." Schedule"; ?>
 <body onclick="hide_tools();hide_login_who()">  
-
  <? if ($username = Authsome::get('username')) : ?>
  	<?=$username;?> is logged in.
  	<?=$html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>

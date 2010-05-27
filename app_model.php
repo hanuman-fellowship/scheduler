@@ -5,10 +5,22 @@ class AppModel extends Model {
 	
 	function sContain() {
 		$args = func_get_args();
+		$new_args = array();
 		foreach($args as &$arg) {
-			$arg .= '.schedule_id = ' . $this->schedule_id;
+			$models = explode('.', $arg);
+			$arg = array();
+			$next_arg =& $arg;
+			foreach($models as $model) {
+				$next_arg[$model] = array(
+					'conditions' => array(
+						"{$model}.schedule_id =" => $this->schedule_id
+					)
+				);
+				$next_arg =& $next_arg[$model];
+			}
+			$new_args = array_merge($new_args, $arg);
 		}
-		$this->contain($args);
+		$this->contain($new_args);
 	}
 	
 	function sFind($type, $params = array()) {
