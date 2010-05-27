@@ -39,7 +39,9 @@ class Schedule extends AppModel {
 	}
 
 	function deleteBranch($id) {
-		$this->delete($id);
+		$this->id = $id;
+		$parent_id = $this->field('parent_id');
+		$this->delete();
 		$models = array_keys($this->hasMany);
 		foreach($models as $model) {
 			$this->{$model}->deleteAll(array(

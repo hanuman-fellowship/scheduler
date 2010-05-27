@@ -20,7 +20,7 @@ class SchedulesController extends AppController {
 	}
 	
 	function doDeleteBranch($id) {
-		$this->Schedule->deleteBranch($id);
+		$this->setSchedule($this->Schedule->deleteBranch($id));
 	}
 	
 }
