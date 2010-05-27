@@ -1,0 +1,221 @@
+.shift {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	padding-top:10px;
+}
+
+#hide {
+	display:none;
+}
+
+.dayoff_bg {
+	background-color:#DDDDDD;
+}
+
+.dayoff_x {
+	display:none;
+}
+
+.const {
+	color:#999999;
+}
+
+body.RC_1 {
+	background-color:#E4F7E3;
+}
+
+body.RC_2 {
+	background-color:#F9F0E7;
+}
+
+body.RC_3 {
+	background-color:#E3ECF5;
+}
+
+body.RC_4 {
+	background-color:#F4E2F4;
+}
+
+body.RC_5 {
+	background-color:#FFC4C4;
+}
+
+.extra {
+	font-size: 20px;
+	padding:5px;
+}
+
+a:link.extra, a:visited.extra {
+	font-size: 20px;
+	padding:5px;
+}
+
+a:link.extra_blank, a:visited.extra_blank {
+	font-size: 20px;
+	padding:5px;
+	color: #999999;
+}
+
+a:hover.extra_blank, a:hover.extra {
+	color: #3366FF;
+	text-decoration: none;
+}
+
+
+a:hover.dayoff {
+	color: #888888;
+	text-decoration: none;
+}
+
+a:link, a:visited {
+	text-decoration: none;
+	color: #000000;
+}
+
+a:hover {
+	color: #3366FF;
+	text-decoration: none;
+}
+
+a:hover.remove {
+	color: #333333;
+	text-decoration:line-through;
+}
+
+a:link.other, a:visited.other, a:link.remove_other, a:visited.remove_other, #other {
+	text-decoration: none;
+	color: #777777;
+}
+
+a:hover.other {
+	text-decoration: none;
+	color: #999999;
+}
+
+a:hover.remove_other {
+	color: #777777;
+	text-decoration:line-through;
+}
+
+
+.board_RC_1, .menu_RC_1, a:link.RC_1, a:visited.RC_1, a:link.remove_RC_1, a:visited.remove_RC_1, #RC_1  {
+	text-decoration: none;
+	color:#009900;
+}
+
+a:hover.RC_1, a:hover.remove_RC_1 {
+	color: #00E600;
+	text-decoration: none;
+}
+
+a:hover.remove_RC_1 {
+	text-decoration:line-through;
+}
+
+a:hover.remove {
+	text-decoration:line-through;
+}
+
+.board_RC_2, .menu_RC_2, a:link.RC_2, a:visited.RC_2, a:link.remove_RC_2, a:visited.remove_RC_2, #RC_2 {
+	text-decoration: none;
+	color:#CC6633;
+}
+
+a:hover.RC_2, a:hover.remove_RC_2 {
+	color:#FE803F;
+	text-decoration: none;
+}
+
+a:hover.remove_RC_2 {
+	text-decoration:line-through;
+}
+
+
+.board_RC_3, .menu_RC_3, a:link.RC_3, a:visited.RC_3, a:link.remove_RC_3, a:visited.remove_RC_3, #RC_3 {
+	text-decoration: none;
+	color:#0066CC;
+}
+
+a:hover.RC_3, a:hover.remove_RC_3 {
+	color:#007FFF;
+	text-decoration: none;
+}
+
+a:hover.remove_RC_3 {
+	text-decoration:line-through;
+}
+
+.board_RC_4, .menu_RC_4, a:link.RC_4, a:visited.RC_4, a:link.remove_RC_4, a:visited.remove_RC_4, #RC_4 {
+	text-decoration: none;
+	color:#990099;
+}
+
+
+a:hover.RC_4, a:hover.remove_RC_4 {
+	color:#E900E9;
+	text-decoration: none;
+}
+
+a:hover.remove_RC_4 {
+	text-decoration:line-through;
+}
+
+.board_RC_5, .menu_RC_5, a:link.RC_5, a:visited.RC_5, a:link.remove_RC_5, a:visited.remove_RC_5, #RC_5 {
+	text-decoration: none;
+	color:#000000;
+}
+
+
+a:hover.RC_5, a:hover.remove_RC_5 {
+	color:#888888;
+	text-decoration: none;
+}
+
+a:hover.remove_RC_5 {
+	text-decoration:line-through;
+}
+
+.board_temporary, .menu_temporary, a:link.temporary, a:visited.temporary, a:link.remove_temporary, a:visited.remove_temporary, #temporary {
+	text-decoration: none;
+	color:#ff0000;
+}
+
+
+a:hover.temporary, a:hover.remove_temporary {
+	color:#ff5555;
+	text-decoration: none;
+}
+
+a:hover.remove_temporary {
+	text-decoration:line-through;
+}
+
+.taken {
+	color:#777777;
+}
+
+
+.title {
+	font-size: 24px;
+}
+
+.email {
+	font-size: 10px;
+}
+
+
+a.redo {
+	font-size: 12px;
+	position:absolute;
+	top:1em;
+	left:3em;
+	padding:2px;
+}
+
+.undo {
+	font-size: 12px;
+	position:absolute;
+	top:0;
+	left:0;
+	padding:2px;
+}
