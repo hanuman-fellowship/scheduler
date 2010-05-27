@@ -11,7 +11,7 @@ class PeopleController extends AppController {
 	 */
 	function schedule($id = null) {	
 		$this->Person->id = $id;
-		$this->Person->contain('Shift.Area','ResidentCategory','OffDay','FloatingShift.Area');
+		$this->Person->contain('Assignment.Shift.Area','ResidentCategory','OffDay','FloatingShift.Area');
 		$this->set('person',$this->Person->find('first'));
 		$this->set('days', ClassRegistry::init('Days')->find('all'));
 		$days = ClassRegistry::init('Days')->find('all');

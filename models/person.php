@@ -8,7 +8,6 @@ class Person extends AppModel {
 		'last' => array('notempty'),
 		'resident_category_id' => array('numeric')
 	);
-	var $actsAs = array('Containable');
 	
 
 	var $belongsTo = array(
@@ -16,14 +15,9 @@ class Person extends AppModel {
 	);
 
 	var $hasMany = array(
+		'Assignment',
 		'FloatingShift',
 		'OffDay'
-	);
-
-	var $hasAndBelongsToMany = array(
-		'Shift' => array(
-			'order' => 'time',
-		)
 	);
 
 }

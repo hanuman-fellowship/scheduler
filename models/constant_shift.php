@@ -8,15 +8,8 @@ class ConstantShift extends AppModel {
 		'day' => array('numeric')
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
-		'ResidentCategory' => array(
-			'className' => 'ResidentCategory',
-			'foreignKey' => 'resident_category_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
+		'ResidentCategory'
 	);
 
 }

@@ -7,22 +7,9 @@ class FloatingShift extends AppModel {
 		'area_id' => array('numeric')
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
-		'Person' => array(
-			'className' => 'Person',
-			'foreignKey' => 'person_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'Area' => array(
-			'className' => 'Area',
-			'foreignKey' => 'area_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
+		'Person',
+		'Area'
 	);
 
 }

@@ -41,15 +41,15 @@ class ScheduleHelper extends AppHelper {
 						$this->displayTime($shift['time'] + $shift['length']);
 			$people = '';
 			$people_displayed = 0;
-			foreach ($shift['Person'] as $person) {
+			foreach ($shift['Assignment'] as $assignment) {
 				$people_displayed++;
-				$link_title = $person['name'];
-				$link_url = array('controller'=>'people','action'=>'schedule',$person['id']);
+				$link_title = $assignment['Person']['name'];
+				$link_url = array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']);
 			
 				$this->total_hours[$day] += $shift['length'];
 				$this->total_hours['total'] += $shift['length'];
 				
-				$people .= '<br/>' . $this->html->link($link_title, $link_url, array('class' => 'RC_' . $person['resident_category_id']));
+				$people .= '<br/>' . $this->html->link($link_title, $link_url, array('class' => 'RC_' . $assignment['Person']['resident_category_id']));
 				
 			}
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {

@@ -31,7 +31,6 @@
 class Change extends AppModel { 
 
     var $name = 'Change'; 
-    var $actsAs = array('Containable'); 
     var $hasMany = array('ChangeField','ChangeModel');
     var $id = 0; // the current change is always 0 
     

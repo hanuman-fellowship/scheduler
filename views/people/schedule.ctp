@@ -74,8 +74,8 @@
 		<td <?=$schedule->offDays($person['OffDay'], $day);?>> 
 			<div align="center" class="shift"> 
 				<p> 
-		<? foreach ($person['Shift'] as $shift) { ?>
-					<?=$schedule->displayPersonShift($shift,$bounds[$time_num][$day],$day);?>
+		<? foreach ($person['Assignment'] as $assignment) { ?>
+					<?=$schedule->displayPersonShift($assignment['Shift'],$bounds[$time_num][$day],$day);?>
 		<? } ?>
 				</p> 
 			</div> 

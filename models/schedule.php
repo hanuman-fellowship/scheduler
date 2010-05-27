@@ -4,9 +4,17 @@ class Schedule extends AppModel {
 	var $name = 'Schedule';
 	
 	var $hasMany = array(
-		'Hobby',
-		'Job',
-		'Person'
+		'Area',
+		'Boundary',
+		'ConstantShift',
+		'Day',
+		'FloatingShift',
+		'OffDay',
+		'Assignment',
+		'Person',
+		'ResidentCategory',
+		'Shift',
+		'Time'
 	);
 
 	function newBranch($user_id, $parent_id) {

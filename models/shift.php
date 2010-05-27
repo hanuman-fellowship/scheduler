@@ -8,33 +8,12 @@ class Shift extends AppModel {
 		'num_people' => array('numeric')
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
-		'Area' => array(
-			'className' => 'Area',
-			'foreignKey' => 'area_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
+		'Area'
 	);
-
-	var $hasAndBelongsToMany = array(
-		'Person' => array(
-			'className' => 'Person',
-			'joinTable' => 'people_shifts',
-			'foreignKey' => 'shift_id',
-			'associationForeignKey' => 'person_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => 'resident_category_id,name',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		)
+	
+	var $hasMany = array(
+		'Assignment'
 	);
 
 }
