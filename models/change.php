@@ -44,7 +44,8 @@ class Change extends AppModel {
      * Return false if there is no change to undo.
      */
     function doUndo() { 
-        if ($this->findById(0)) { // is there an undo? (if so, the id would be 0) 
+    	$this->id = 0;
+        if ($this->sFind('first')) { // is there an undo? (if so, the id would be 0) 
             $this->nudge(-1); // decrement undo tables ids so the next undo will be 0 
             $this->applyChange('undo'); // read the change and apply it to the database 
             return true; 
@@ -63,7 +64,8 @@ class Change extends AppModel {
      * Return false if there is no change to redo.
      */    
     function doRedo() { 
-        if ($this->findById(-1)) { // is there a change to redo? (redoable changes are always negative) 
+		$this->id = -1;
+        if ($this->sFind('first')) { // is there a change to redo? (redoable changes are always negative) 
             $this->applyChange('redo'); 
             $this->nudge(1);             
             return true; 
@@ -77,8 +79,8 @@ class Change extends AppModel {
         // so that either way the table id we use is -1 
         $this->id = -1;  
         $field_val = ($direction == 'undo') ? 'field_old_val' : 'field_new_val';
-        $this->contain('ChangeModel.ChangeField'); 
-        $data = $this->find('first'); 
+        $this->sContain('ChangeModel.ChangeField'); 
+        $data = $this->sFind('first');
         foreach ($data['ChangeModel'] as $model_num => $change_model) { 
             $model_data = Set::combine($change_model,  
                 'ChangeField.{n}.field_key',  
@@ -127,7 +129,7 @@ class Change extends AppModel {
 		);
     }             
      
-    function saveChange($action, $change_model_id = null) {
+    function saveChange($action) {
         $model_name = key($this->newData);
         $fields = array_keys($this->newData[$model_name]);
 		// if it's a create, get the last inserted id, otherwise get the oldData id
@@ -138,38 +140,31 @@ class Change extends AppModel {
 			$this->newData[$model_name]['id'] = $id;
 			$fields[] = 'id';
 		}
-		$change_model_data = array( 
-			'undo_id'   => $this->id, 
-			'name'      => $model_name, 
-			'action'    => $action, 
-			'record_id' => $id 
+		$change_model_data = array(
+			'ChangeModel' => array(
+				'change_id'   => $this->id, 
+				'name'        => $model_name, 
+				'action'      => $action, 
+				'record_id'   => $id,
+				'schedule_id' => $this->schedule_id
+			)
 		); 
-		if ($change_model_id) { 
-			$change_model_data['id'] = $change_model_id; 
-			$this->ChangeField->deleteAll(array( 
-				'ChangeField.change_model_id' => $change_model_id, 
-				'ChangeField.change_id'       => -1                     
-			));     
-			$clear_hanging = false; 
-		} else { 
-			$clear_hanging = true; 
-		} 
 		$this->ChangeModel->create(); 
 		$this->ChangeModel->save($change_model_data); 
-		if (!$change_model_id) $change_model_id = $this->ChangeModel->getLastInsertId(); 
 		foreach ($fields as $field_key) { 
 			$this->ChangeField->create(); 
-			$this->ChangeField->save(array ( 
-				'change_id'       => $this->id, 
-				'change_model_id' => $change_model_id, 
-				'field_key'       => $field_key, 
-				'field_old_val'   => $this->oldData[$model_name][$field_key],
-				'field_new_val'   => $this->newData[$model_name][$field_key]
+			$this->ChangeField->save(array(
+				'ChangeField' => array(
+					'change_id'       => $this->id, 
+					'change_model_id' => $this->ChangeModel->getLastInsertId(), 
+					'field_key'       => $field_key, 
+					'field_old_val'   => $this->oldData[$model_name][$field_key],
+					'field_new_val'   => $this->newData[$model_name][$field_key],
+					'schedule_id'     => $this->schedule_id
+				)
 			)); 
 		}
-        if ($clear_hanging) {
-        	$this->clearHanging();
-        }
+        $this->clearHanging();
     }     
      
     /**
@@ -180,9 +175,23 @@ class Change extends AppModel {
      * change is made) this function is called.
      */
     function clearHanging() { 
-        $this->deleteAll(array('Change.id <' => 0)); 
-        $this->ChangeModel->deleteAll(array('ChangeModel.change_id <' => 0)); 
-        $this->ChangeField->deleteAll(array('ChangeField.change_id <' => 0)); 
+        $this->deleteAll(
+        	array(
+        		'Change.id <' => 0,
+        		'Change.schedule_id' => $this->schedule_id
+        	),false,false
+        ); 
+        $this->ChangeModel->deleteAll(
+        	array(
+        		'ChangeModel.change_id <' => 0,
+        		'ChangeModel.schedule_id' => $this->schedule_id
+        	),false,false
+        );
+        $this->ChangeField->deleteAll(array(
+        	'ChangeField.change_id <' => 0,
+        	'ChangeField.schedule_id' => $this->schedule_id
+        	),false,false
+        ); 
     }     
 
     /**
@@ -194,15 +203,18 @@ class Change extends AppModel {
      * $i should be 1 or -1 
      */
     function nudge($i) { 
-        $this->updateAll(array( 
-            'Change.id' => "Change.id + {$i}" 
-        ));      
-        $this->ChangeModel->updateAll(array( 
-            'ChangeModel.change_id' => "ChangeModel.change_id + {$i}" 
-        ));      
-        $this->ChangeField->updateAll(array( 
-            'ChangeField.change_id' => "ChangeField.change_id + {$i}" 
-        ));      
+        $this->updateAll(
+        	array('Change.id' => "Change.id + {$i}"),
+        	array('Change.schedule_id' => $this->schedule_id)
+        );      
+        $this->ChangeModel->updateAll(
+        	array('ChangeModel.change_id' => "ChangeModel.change_id + {$i}"),
+        	array('ChangeModel.schedule_id' => $this->schedule_id)
+        );      
+        $this->ChangeField->updateAll(
+        	array('ChangeField.change_id' => "ChangeField.change_id + {$i}"),
+        	array('ChangeField.schedule_id' => $this->schedule_id)
+        );      
     } 
      
 } 

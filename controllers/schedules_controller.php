@@ -23,5 +23,9 @@ class SchedulesController extends AppController {
 		$this->setSchedule($this->Schedule->deleteBranch($id));
 	}
 	
+	function selectBranch($id) {
+		$this->setSchedule($id);
+	}
+	
 }
 ?>

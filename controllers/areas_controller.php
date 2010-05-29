@@ -9,7 +9,6 @@ class AreasController extends AppController {
 		$this->Area->sContain('Shift.Assignment.Person.ResidentCategory','FloatingShift.Person');
 		$this->set('area',$this->Area->sFind('first'));
 		
-		
 		$this->loadModel('Boundary');
 		$this->Boundary->sContain('Day','Slot');
 		$bounds = $this->Boundary->sFind('all');				
@@ -28,7 +27,6 @@ class AreasController extends AppController {
 				'{n}.Boundary.day_id',"{n}.Boundary", '{n}.Boundary.slot_id'
 			)
 		);
-		//$this->set('updated', $this->Session->read('Schedule.Schedule.updated'));
 	}
 
 }

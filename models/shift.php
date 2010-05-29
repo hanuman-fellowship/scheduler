@@ -15,6 +15,6 @@ class Shift extends AppModel {
 	var $hasMany = array(
 		'Assignment'
 	);
-
+	
 }
 ?>

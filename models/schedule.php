@@ -13,8 +13,11 @@ class Schedule extends AppModel {
 		'Assignment',
 		'Person',
 		'ResidentCategory',
+		'Slot',
 		'Shift',
-		'Slot'
+		'Change',
+		'ChangeModel',
+		'ChangeField'
 	);
 
 	function newBranch($user_id, $parent_id) {
@@ -27,12 +30,25 @@ class Schedule extends AppModel {
 		$branch_id = $this->id;
 		$parent = $this->findById($parent_id);
 		foreach($parent as $model => $record) {
-			if ($model == 'Schedule') {
-				continue;
-			}
-			foreach($record as $data) {
-				$data['schedule_id'] = $branch_id;
-				$this->{$model}->forceSave($data);
+			switch ($model) {
+				case 'Schedule':
+					continue;
+				case 'ChangeField':
+					foreach($record as &$field_data) {
+						if ($field_data['field_key'] == 'schedule_id') {
+							if ($field_data['field_old_val'] != null) {
+								$field_data['field_old_val'] = $branch_id;
+							}
+							if ($field_data['field_new_val'] != null) {
+								$field_data['field_new_val'] = $branch_id;
+							}
+						}
+					}
+				default:
+					foreach($record as $data) {
+						$data['schedule_id'] = $branch_id;
+						$this->{$model}->forceSave($data);
+					}
 			}
 		}
 		return $branch_id;
@@ -48,6 +64,7 @@ class Schedule extends AppModel {
 				"{$model}.schedule_id" => $id
 			),false,false);
 		}
+		return $parent_id;
 	}
 	
 }

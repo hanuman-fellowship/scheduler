@@ -5,10 +5,11 @@
  	<?=$username;?> is logged in.
  	<?=$html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>
  	<br/>
-	<?=$html->link('Undo',array('plugin' => 'track_changes', 'controller'=>'changes','action'=>'undo'));?>
+	<?=$html->link('Undo',array('controller'=>'changes','action'=>'undo'));?>
 	
-	<?=$html->link('Redo',array('plugin' => 'track_changes', 'controller'=>'changes','action'=>'redo'));?>
+	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'));?>
 	<br/>
+	<?=$html->link('New Shift', array('controller' => 'shifts', 'action' => 'add', $area['Area']['id']));?>
  <? else : ?>
  	 <?=$html->link('Login', array('controller' => 'users', 'action' => 'login')); ?>
  <? endif ?>

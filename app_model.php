@@ -46,12 +46,14 @@ class AppModel extends Model {
 	}
 	
 	function sSave($data) {
-		// first prepare the data to be recorded in the Change models.
-		$this->Change =& ClassRegistry::init('Change');  
 		$fields =& $data[$this->name];
 		$create = !array_key_exists('id', $fields);
 		// now add the schedule_id
-		$fields['schedule_id'] = $this->schedule_id;	
+		$fields['schedule_id'] = $this->schedule_id;
+
+		// prepare data for saving the Change
+		$this->Change =& ClassRegistry::init('Change');  
+		$this->Change->schedule_id = $this->schedule_id;		
 		// if it's an update, get the old data
 		if (!$create) { 
 			$this->Change->getOldData($this->name, $fields['id']); 
@@ -61,6 +63,7 @@ class AppModel extends Model {
 			);
 			$this->Change->oldData[$this->name]['id'] = null;
 		}
+		
 		// save the data
 		if ($create) {
 			$this->create(); 
@@ -77,19 +80,25 @@ class AppModel extends Model {
 				"{$this->name}.schedule_id" => $this->schedule_id
 			));
 		}
+		
 		// save the Change
 		$this->Change->newData = $data;
-		$this->Change->saveChange(($create xor 1) + 1); // 1 for create or 2 for update 
+		$this->Change->saveChange(($create xor 1) + 1); // 1 for create or 2 for update
+
 		return true;
 	}
 	
 	function sDelete($id) {
+		// save the change
 		$this->Change =& ClassRegistry::init('Change');  
+		$this->Change->schedule_id = $this->schedule_id;
 		$this->Change->getOldData($this->name,$id);
 		$this->Change->newData = array(
 			"{$this->name}" => array_fill_keys(array_keys($this->Change->oldData[$this->name]),null)
 		);
-		$this->Change->saveChange(0); // 0 for delete 	
+		$this->Change->saveChange(0); // 0 for delete
+
+		// delete the record
 		if ($this->deleteAll(array(
 			"{$this->name}.id"          => $id,
 			"{$this->name}.schedule_id" => $this->schedule_id
@@ -105,12 +114,16 @@ class AppModel extends Model {
 	 * we change the id to what it should be.
 	 */
 	function forceSave($data) {
+		$schedule_id = $data['schedule_id'];
 		$real_id = $data['id'];
 		$data['id'] = -1;
 		$this->create(); 
 		$this->save($data);
 		$data = array("{$this->name}.id" => $real_id);
-		$this->updateAll($data, array("{$this->name}.id" => -1));               	
+		$this->updateAll($data, array(
+			"{$this->name}.id"          => -1,
+			"{$this->name}.schedule_id" => $schedule_id
+		));               	
 	}
 		
 }

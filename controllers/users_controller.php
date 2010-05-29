@@ -15,7 +15,6 @@ class UsersController extends AppController {
             $this->Session->setFlash('Unknown user or wrong password');
             return;
         }
-        $this->Recorder->wipe();
        $this->redirect('/areas/schedule/1');
     }
     

@@ -35,6 +35,7 @@ class AppController extends Controller {
 	
 	function record() {
         $this->Change =& ClassRegistry::init('Change');
+        $this->Change->schedule_id = $this->Session->read('Schedule.id');
         $this->Change->clearHanging(); 
         $this->Change->nudge(1);
 	}
@@ -45,7 +46,8 @@ class AppController extends Controller {
         $this->Change->save(array( 
             'Change' => array( 
                 'id' => 0, 
-                'description' => $description
+                'description' => $description,
+                'schedule_id' => $this->Session->read('Schedule.id')
             ) 
         )); 	
 	}	
