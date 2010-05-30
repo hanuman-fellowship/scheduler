@@ -71,7 +71,7 @@
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		</td> 
-<? foreach ($days as $day) { ?>
+<? foreach ($bounds['days'] as $day) { ?>
 		<td width="75" bordercolor="#000000"> 
 			<div align="center"> 
 				<p><?=$day?></p> 
@@ -80,18 +80,18 @@
 <? } ?>
 	</tr>	
 	<tr> 
-<? foreach ($slots as $slot_num => $slot) { ?>
+<? foreach ($bounds['slots'] as $slot_num => $slot) { ?>
 		<td width="75" height="60" bordercolor="#000000"> 
 			<div align="center"> 
 				<p><?=$slot?></p> 
 			</div> 
 		</td> 
-	<? foreach ($days as $day => $d) { ?>
+	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<td> 
 			<div align="center" class="shift"> 
 				<p> 
 		<? foreach ($area['Shift'] as $shift) { ?>
-					<?=$schedule->displayAreaShift($shift,$bounds[$slot_num][$day],$day);?>
+					<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day);?>
 		<? } ?>
 				</p> 
 			</div> 

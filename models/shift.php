@@ -4,7 +4,7 @@ class Shift extends AppModel {
 	var $name = 'Shift';
 	var $validate = array(
 		'area_id' => array('numeric'),
-		'day' => array('numeric'),
+		'day_id' => array('numeric'),
 		'num_people' => array('numeric')
 	);
 
