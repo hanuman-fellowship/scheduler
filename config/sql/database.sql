@@ -3,17 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 28, 2010 at 09:56 PM
+-- Generation Time: May 30, 2010 at 01:34 AM
 -- Server version: 5.0.41
 -- PHP Version: 5.2.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `krishna`
@@ -38,6 +32,8 @@ CREATE TABLE `areas` (
 -- Dumping data for table `areas`
 --
 
+INSERT INTO `areas` VALUES(1, 'Kitchen', 'K', 'Sunanda', 1);
+INSERT INTO `areas` VALUES(2, 'CB', 'CB', 'Nicholas', 1);
 
 -- --------------------------------------------------------
 
@@ -70,8 +66,8 @@ CREATE TABLE `boundaries` (
   `id` int(11) NOT NULL,
   `day_id` int(11) NOT NULL,
   `slot_id` int(11) NOT NULL,
-  `start` double NOT NULL,
-  `end` double NOT NULL,
+  `start` time NOT NULL,
+  `end` time NOT NULL,
   `schedule_id` int(11) NOT NULL,
   KEY `branch_id` (`schedule_id`,`id`),
   KEY `day_id` (`day_id`),
@@ -82,34 +78,34 @@ CREATE TABLE `boundaries` (
 -- Dumping data for table `boundaries`
 --
 
-INSERT INTO `boundaries` VALUES(1, 1, 1, 0, 8, 1);
-INSERT INTO `boundaries` VALUES(2, 1, 2, 8, 12, 1);
-INSERT INTO `boundaries` VALUES(3, 1, 3, 12, 18, 1);
-INSERT INTO `boundaries` VALUES(4, 1, 4, 18, 24, 1);
-INSERT INTO `boundaries` VALUES(5, 2, 1, 0, 8, 1);
-INSERT INTO `boundaries` VALUES(6, 2, 2, 8, 12, 1);
-INSERT INTO `boundaries` VALUES(7, 2, 3, 12, 18, 1);
-INSERT INTO `boundaries` VALUES(8, 2, 4, 18, 24, 1);
-INSERT INTO `boundaries` VALUES(9, 3, 1, 0, 8, 1);
-INSERT INTO `boundaries` VALUES(10, 3, 2, 8, 12, 1);
-INSERT INTO `boundaries` VALUES(11, 3, 3, 12, 18, 1);
-INSERT INTO `boundaries` VALUES(12, 3, 4, 18, 24, 1);
-INSERT INTO `boundaries` VALUES(13, 4, 1, 0, 8, 1);
-INSERT INTO `boundaries` VALUES(14, 4, 2, 8, 12, 1);
-INSERT INTO `boundaries` VALUES(15, 4, 3, 12, 18, 1);
-INSERT INTO `boundaries` VALUES(16, 4, 4, 18, 24, 1);
-INSERT INTO `boundaries` VALUES(17, 5, 1, 0, 8, 1);
-INSERT INTO `boundaries` VALUES(18, 5, 2, 8, 12, 1);
-INSERT INTO `boundaries` VALUES(19, 5, 3, 12, 18.5, 1);
-INSERT INTO `boundaries` VALUES(20, 5, 4, 18.5, 24, 1);
-INSERT INTO `boundaries` VALUES(21, 6, 1, 0, 10, 1);
-INSERT INTO `boundaries` VALUES(22, 6, 2, 10, 12, 1);
-INSERT INTO `boundaries` VALUES(23, 6, 3, 12, 24, 1);
-INSERT INTO `boundaries` VALUES(24, 6, 4, 18, 24, 1);
-INSERT INTO `boundaries` VALUES(25, 7, 1, 0, 8.5, 1);
-INSERT INTO `boundaries` VALUES(26, 7, 2, 8.5, 12, 1);
-INSERT INTO `boundaries` VALUES(27, 7, 3, 12, 18, 1);
-INSERT INTO `boundaries` VALUES(28, 7, 4, 18, 24, 1);
+INSERT INTO `boundaries` VALUES(1, 1, 1, '00:00:00', '08:00:00', 1);
+INSERT INTO `boundaries` VALUES(2, 1, 2, '08:00:00', '12:00:00', 1);
+INSERT INTO `boundaries` VALUES(3, 1, 3, '12:00:00', '18:00:00', 1);
+INSERT INTO `boundaries` VALUES(4, 1, 4, '18:00:00', '24:00:00', 1);
+INSERT INTO `boundaries` VALUES(5, 2, 1, '00:00:00', '08:00:00', 1);
+INSERT INTO `boundaries` VALUES(6, 2, 2, '08:00:00', '12:00:00', 1);
+INSERT INTO `boundaries` VALUES(7, 2, 3, '12:00:00', '18:00:00', 1);
+INSERT INTO `boundaries` VALUES(8, 2, 4, '18:00:00', '24:00:00', 1);
+INSERT INTO `boundaries` VALUES(9, 3, 1, '00:00:00', '08:00:00', 1);
+INSERT INTO `boundaries` VALUES(10, 3, 2, '08:00:00', '12:00:00', 1);
+INSERT INTO `boundaries` VALUES(11, 3, 3, '12:00:00', '18:00:00', 1);
+INSERT INTO `boundaries` VALUES(12, 3, 4, '18:00:00', '24:00:00', 1);
+INSERT INTO `boundaries` VALUES(13, 4, 1, '00:00:00', '08:00:00', 1);
+INSERT INTO `boundaries` VALUES(14, 4, 2, '08:00:00', '12:00:00', 1);
+INSERT INTO `boundaries` VALUES(15, 4, 3, '12:00:00', '18:00:00', 1);
+INSERT INTO `boundaries` VALUES(16, 4, 4, '18:00:00', '24:00:00', 1);
+INSERT INTO `boundaries` VALUES(17, 5, 1, '00:00:00', '08:00:00', 1);
+INSERT INTO `boundaries` VALUES(18, 5, 2, '08:00:00', '12:00:00', 1);
+INSERT INTO `boundaries` VALUES(19, 5, 3, '12:00:00', '18:00:00', 1);
+INSERT INTO `boundaries` VALUES(20, 5, 4, '18:00:00', '24:00:00', 1);
+INSERT INTO `boundaries` VALUES(21, 6, 1, '00:00:00', '10:00:00', 1);
+INSERT INTO `boundaries` VALUES(22, 6, 2, '10:00:00', '12:00:00', 1);
+INSERT INTO `boundaries` VALUES(23, 6, 3, '12:00:00', '18:00:00', 1);
+INSERT INTO `boundaries` VALUES(24, 6, 4, '18:00:00', '24:00:00', 1);
+INSERT INTO `boundaries` VALUES(25, 7, 1, '00:00:00', '08:00:00', 1);
+INSERT INTO `boundaries` VALUES(26, 7, 2, '08:00:00', '12:00:00', 1);
+INSERT INTO `boundaries` VALUES(27, 7, 3, '12:00:00', '18:00:00', 1);
+INSERT INTO `boundaries` VALUES(28, 7, 4, '00:00:18', '00:00:24', 1);
 
 -- --------------------------------------------------------
 
@@ -129,6 +125,8 @@ CREATE TABLE `changes` (
 -- Dumping data for table `changes`
 --
 
+INSERT INTO `changes` VALUES(1, 'New Kitchen shift created', 1);
+INSERT INTO `changes` VALUES(0, 'New Kitchen shift created', 1);
 
 -- --------------------------------------------------------
 
@@ -153,6 +151,20 @@ CREATE TABLE `change_fields` (
 -- Dumping data for table `change_fields`
 --
 
+INSERT INTO `change_fields` VALUES(1, 1, 1, 'area_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(2, 1, 1, 'day_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(3, 1, 1, 'start', NULL, '13:00:00', 1);
+INSERT INTO `change_fields` VALUES(4, 1, 1, 'end', NULL, '15:00:00', 1);
+INSERT INTO `change_fields` VALUES(5, 1, 1, 'num_people', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(6, 1, 1, 'schedule_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(7, 1, 1, 'id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(8, 0, 2, 'area_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(9, 0, 2, 'day_id', NULL, '3', 1);
+INSERT INTO `change_fields` VALUES(10, 0, 2, 'start', NULL, '13:30:00', 1);
+INSERT INTO `change_fields` VALUES(11, 0, 2, 'end', NULL, '17:00:00', 1);
+INSERT INTO `change_fields` VALUES(12, 0, 2, 'num_people', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(13, 0, 2, 'schedule_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(14, 0, 2, 'id', NULL, '2', 1);
 
 -- --------------------------------------------------------
 
@@ -176,6 +188,8 @@ CREATE TABLE `change_models` (
 -- Dumping data for table `change_models`
 --
 
+INSERT INTO `change_models` VALUES(1, 1, 'Shift', 1, 1, 1);
+INSERT INTO `change_models` VALUES(2, 0, 'Shift', 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -290,6 +304,7 @@ CREATE TABLE `people` (
 -- Dumping data for table `people`
 --
 
+INSERT INTO `people` VALUES(1, 'Shantam', 'Jason', 'Galuten', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -328,7 +343,7 @@ CREATE TABLE `schedules` (
   `parent_id` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=40 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `schedules`
@@ -345,19 +360,22 @@ INSERT INTO `schedules` VALUES(1, NULL, NULL, '2010-05-26 22:04:02', NULL);
 CREATE TABLE `shifts` (
   `id` int(11) NOT NULL auto_increment,
   `area_id` int(11) NOT NULL,
-  `day` int(11) NOT NULL,
-  `time` double NOT NULL,
-  `length` double NOT NULL,
+  `day_id` int(11) NOT NULL,
+  `start` time NOT NULL,
+  `end` time NOT NULL,
   `num_people` int(11) NOT NULL,
   `schedule_id` int(11) NOT NULL,
   UNIQUE KEY `schedule_id` (`schedule_id`,`id`),
-  KEY `area_id` (`area_id`)
+  KEY `area_id` (`area_id`),
+  KEY `day_id` (`day_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `shifts`
 --
 
+INSERT INTO `shifts` VALUES(1, 1, 1, '13:00:00', '15:00:00', 1, 1);
+INSERT INTO `shifts` VALUES(2, 1, 3, '13:30:00', '17:00:00', 1, 1);
 
 -- --------------------------------------------------------
 

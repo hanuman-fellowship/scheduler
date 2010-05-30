@@ -1,2 +1,2 @@
-1275108956
+1275208394
 a:6:{s:2:"id";a:5:{s:4:"type";s:7:"integer";s:4:"null";b:0;s:7:"default";N;s:6:"length";i:11;s:3:"key";s:7:"primary";}s:9:"person_id";a:5:{s:4:"type";s:7:"integer";s:4:"null";b:0;s:7:"default";s:0:"";s:6:"length";i:11;s:3:"key";s:5:"index";}s:7:"area_id";a:5:{s:4:"type";s:7:"integer";s:4:"null";b:0;s:7:"default";s:0:"";s:6:"length";i:11;s:3:"key";s:5:"index";}s:5:"hours";a:4:{s:4:"type";s:5:"float";s:4:"null";b:0;s:7:"default";s:0:"";s:6:"length";N;}s:4:"note";a:4:{s:4:"type";s:6:"string";s:4:"null";b:0;s:7:"default";s:0:"";s:6:"length";N;}s:11:"schedule_id";a:5:{s:4:"type";s:7:"integer";s:4:"null";b:0;s:7:"default";s:0:"";s:6:"length";i:11;s:3:"key";s:7:"primary";}}

@@ -22,7 +22,7 @@ class AppController extends Controller {
 		}
 	}	
 	
-    function LoadModel($modelClass = null, $id = null) {
+    function loadModel($modelClass = null, $id = null) {
     	$modelObject = parent::loadModel($modelClass, $id);
 		$this->$modelClass->schedule_id = $this->Session->read('Schedule.id');
 		return $modelObject;

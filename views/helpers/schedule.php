@@ -8,11 +8,11 @@ class ScheduleHelper extends AppHelper {
 		
 	function displayPersonShift($shift,$bound,$day) {
 		// if the shift is within the bounds for this day and time
-		if ($shift['time'] >= $bound['start'] && $shift['time'] < $bound['end'] && $shift['day'] == $day) {
+		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day'] == $day) {
 			$link_title = $shift['Area']['short_name'];
 			$link_url = array('controller'=>'areas','action'=>'schedule',$shift['Area']['id']);
-			$time = $this->displayTime($shift['time']) . " - " . 
-					$this->displayTime($shift['time'] + $shift['length']);
+			$time = $this->displayTime($shift['start']) . " - " . 
+					$this->displayTime($shift['start'] + $shift['length']);
 		
 			$this->total_hours[$day] += $shift['length'];
 			$this->total_hours['total'] += $shift['length'];
@@ -36,9 +36,9 @@ class ScheduleHelper extends AppHelper {
 
 	function displayAreaShift($shift,$bound,$day) {
 		// if the shift is within the bounds for this day and time
-		if ($shift['time'] >= $bound['start'] && $shift['time'] < $bound['end'] && $shift['day'] == $day) {
-			$time = $this->displayTime($shift['time']) . " - " . 
-						$this->displayTime($shift['time'] + $shift['length']);
+		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day_id'] == $day) {
+			$time = $this->displayTime($shift['start']) . " - " . 
+				$this->displayTime($shift['end']);
 			$people = '';
 			$people_displayed = 0;
 			foreach ($shift['Assignment'] as $assignment) {
@@ -46,8 +46,9 @@ class ScheduleHelper extends AppHelper {
 				$link_title = $assignment['Person']['name'];
 				$link_url = array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']);
 			
-				$this->total_hours[$day] += $shift['length'];
-				$this->total_hours['total'] += $shift['length'];
+				$length = timeToHours($shift['end']) - timeToHours($shift['start']);
+				$this->total_hours[$day] += $length;
+				$this->total_hours['total'] += $length;
 				
 				$people .= '<br/>' . $this->html->link($link_title, $link_url, array('class' => 'RC_' . $assignment['Person']['resident_category_id']));
 				
@@ -60,12 +61,19 @@ class ScheduleHelper extends AppHelper {
 	}
 	
 	function displayTime($time) {
-		$hours = $time - fmod($time, 1);
-		$minutes = (fmod($time, 1) * 60);
-		$minutes = ($minutes == 0) ? "" : ":" . $minutes;
-		if ($hours > 12) $hours = $hours - 12;
+		$time = strtotime($time);
+		$hours = date('g', $time);
+		$minutes = date('i', $time);
+		$minutes = ($minutes == '00') ? "" : ":" . $minutes;
 		return $hours . $minutes;
 	}	
+
+	function timeToHours($time) {
+		$time = strtotime($time);
+ 		$hour = date('G', $time);
+ 		$decimal = (date('i', $time) / 60);
+ 		return $hour + $decimal;
+	}
 	
 	function offDays($off_days,$day) {
 		foreach ($off_days as $off_day) {

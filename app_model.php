@@ -38,7 +38,7 @@ class AppModel extends Model {
 					)
 				)
 			);
-			if (isset($this->id)) {
+			if (isset($this->id) && $type != 'list') {
 				$params['conditions']["{$this->name}.id"] = $this->id;
 			}		
 		}
@@ -125,6 +125,6 @@ class AppModel extends Model {
 			"{$this->name}.schedule_id" => $schedule_id
 		));               	
 	}
-		
+			
 }
 ?>
