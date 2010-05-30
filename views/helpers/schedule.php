@@ -8,14 +8,15 @@ class ScheduleHelper extends AppHelper {
 		
 	function displayPersonShift($shift,$bound,$day) {
 		// if the shift is within the bounds for this day and time
-		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day'] == $day) {
+		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day_id'] == $day) {
 			$link_title = $shift['Area']['short_name'];
 			$link_url = array('controller'=>'areas','action'=>'schedule',$shift['Area']['id']);
 			$time = $this->displayTime($shift['start']) . " - " . 
-					$this->displayTime($shift['start'] + $shift['length']);
+				$this->displayTime($shift['end']);
 		
-			$this->total_hours[$day] += $shift['length'];
-			$this->total_hours['total'] += $shift['length'];
+			$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
+			$this->total_hours[$day] += $length;
+			$this->total_hours['total'] += $length;
 			
 			/**
 			 * Make $legend an array of area ids, each of which is an array (short_name, name, manager)
@@ -46,7 +47,7 @@ class ScheduleHelper extends AppHelper {
 				$link_title = $assignment['Person']['name'];
 				$link_url = array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']);
 			
-				$length = timeToHours($shift['end']) - timeToHours($shift['start']);
+				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
 				
@@ -77,7 +78,7 @@ class ScheduleHelper extends AppHelper {
 	
 	function offDays($off_days,$day) {
 		foreach ($off_days as $off_day) {
-			if ($off_day['day'] == $day) {
+			if ($off_day['day_id'] == $day) {
 				return 'class="dayoff_bg"';
 			}
 		}

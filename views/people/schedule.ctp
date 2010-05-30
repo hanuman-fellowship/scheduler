@@ -64,10 +64,10 @@
 <? } ?>
 	</tr>	
 	<tr> 
-<? foreach ($times as $time_num => $time) { ?>
+<? foreach ($slots as $slot_num => $slot) { ?>
 		<td width="75" height="60" bordercolor="#000000"> 
 			<div align="center"> 
-				<p><?=$time?></p> 
+				<p><?=$slot?></p> 
 			</div> 
 		</td> 
 	<? foreach ($days as $day => $d) { ?>
@@ -75,7 +75,7 @@
 			<div align="center" class="shift"> 
 				<p> 
 		<? foreach ($person['Assignment'] as $assignment) { ?>
-					<?=$schedule->displayPersonShift($assignment['Shift'],$bounds[$time_num][$day],$day);?>
+					<?=$schedule->displayPersonShift($assignment['Shift'],$bounds[$slot_num][$day],$day);?>
 		<? } ?>
 				</p> 
 			</div> 

@@ -2350,3 +2350,4 @@
 2010-05-30 00:52:23 Notice: Notice (8): Array to string conversion in [CORE/cake/libs/model/datasources/dbo_source.php, line 584]
 2010-05-30 00:56:17 Notice: Notice (8): Undefined index:  time in [APP/models/shift.php, line 37]
 2010-05-30 01:12:13 Notice: Notice (8): Undefined index:  day in [APP/views/helpers/schedule.php, line 39]
+2010-05-30 01:51:30 Notice: Notice (8): Undefined variable: times in [APP/views/people/schedule.ctp, line 67]
