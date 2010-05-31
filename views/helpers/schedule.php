@@ -4,7 +4,7 @@ class ScheduleHelper extends AppHelper {
 	var $legend = array();
 	var $total_hours = array(
 		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
-	var $helpers = array('html','text');
+	var $helpers = array('html','text','role');
 		
 	function displayPersonShift($shift,$bound,$day) {
 		// if the shift is within the bounds for this day and time
@@ -55,7 +55,10 @@ class ScheduleHelper extends AppHelper {
 				
 			}
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {
-				$people .= '<br/>________';
+				$unassigned = $this->role->link('________',array(
+					'operations' => array('controller'=>'assignments','action'=>'assign',$shift['id'])
+				));
+				$people .= "<br/>{$unassigned}";
 			}
 		}
 	if (isset($time)) return "<b>" . $time . "</b> " . $people . "<br/><br/><br/>";

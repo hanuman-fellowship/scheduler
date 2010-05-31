@@ -2359,3 +2359,4 @@
 2010-05-30 02:21:54 Notice: Notice (8): Undefined variable: days in [APP/views/people/schedule.ctp, line 58]
 2010-05-30 02:21:54 Notice: Notice (8): Undefined variable: slots in [APP/views/people/schedule.ctp, line 67]
 2010-05-30 02:21:54 Notice: Notice (8): Undefined variable: days in [APP/views/people/schedule.ctp, line 92]
+2010-05-30 02:25:13 Notice: Notice (8): Undefined index:  start in [APP/views/helpers/schedule.php, line 11]
