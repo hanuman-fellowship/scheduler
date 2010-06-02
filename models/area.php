@@ -9,7 +9,9 @@ class Area extends AppModel {
 
 	var $hasMany = array(
 		'FloatingShift',
-		'Shift'
+		'Shift' => array(
+			'order' => 'start, end'
+		)
 	);
 
 }

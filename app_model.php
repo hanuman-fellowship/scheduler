@@ -38,7 +38,7 @@ class AppModel extends Model {
 					)
 				)
 			);
-			if (isset($this->id) && $type != 'list') {
+			if (strlen($this->id) != 0 && $type != 'list') {
 				$params['conditions']["{$this->name}.id"] = $this->id;
 			}		
 		}

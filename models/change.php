@@ -45,7 +45,7 @@ class Change extends AppModel {
      */
     function doUndo() { 
     	$this->id = 0;
-        if ($this->sFind('first')) { // is there an undo? (if so, the id would be 0) 
+        if ($this->sFind('first')) { // is there an undo? (if so, the id would be 0)
             $this->nudge(-1); // decrement undo tables ids so the next undo will be 0 
             $this->applyChange('undo'); // read the change and apply it to the database 
             return true; 
