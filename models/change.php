@@ -142,7 +142,7 @@ class Change extends AppModel {
 		}
 		$change_model_data = array(
 			'ChangeModel' => array(
-				'change_id'   => $this->id, 
+				'change_id'   => 0, 
 				'name'        => $model_name, 
 				'action'      => $action, 
 				'record_id'   => $id,
@@ -155,7 +155,7 @@ class Change extends AppModel {
 			$this->ChangeField->create(); 
 			$this->ChangeField->save(array(
 				'ChangeField' => array(
-					'change_id'       => $this->id, 
+					'change_id'       => 0, 
 					'change_model_id' => $this->ChangeModel->getLastInsertId(), 
 					'field_key'       => $field_key, 
 					'field_old_val'   => $this->oldData[$model_name][$field_key],

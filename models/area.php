@@ -14,5 +14,17 @@ class Area extends AppModel {
 		)
 	);
 
+	function getArea($id) {
+		$this->id = $id;
+		$this->sContain('Shift.Assignment.Person.ResidentCategory','FloatingShift.Person');
+		$area = $this->sFind('first');
+		if (isset($area['Shift'])) {
+			foreach($area['Shift'] as &$shift) {
+				$shift['Assignment'] = Set::sort($shift['Assignment'],"{n}.Person.resident_category_id","asc");
+			}
+		}
+		return $area;
+	}
+
 }
 ?>

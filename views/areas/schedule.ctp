@@ -10,11 +10,16 @@
 	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'));?>
 	<br/>
 	<?=$html->link('New Shift', array('controller' => 'shifts', 'action' => 'add', $area['Area']['id']));?>
+	<br/>
+	<?=$html->link('New Branch', array('controller' => 'schedules', 'action' => 'doNewBranch'));?>
+	| <?=$html->link('Select Branch', array('controller' => 'schedules', 'action' => 'selectBranch'));?>
+	| <?=$html->link('Delete Branch', array('controller' => 'schedules', 'action' => 'doDeleteBranch'));?>
+	| <?=$html->link('Merge Branch', array('controller' => 'schedules', 'action' => 'doMergeBranch'));?>
  <? else : ?>
  	 <?=$html->link('Login', array('controller' => 'users', 'action' => 'login')); ?>
  <? endif ?>
  <br/>
- <?="Updated: " . $time->format('F jS, Y @ g:ia',$session->read('Schedule.updated')); ?>
+<!-- <?="Updated: " . $time->format('F jS, Y @ g:ia',$session->read('Schedule.updated')); ?> -->
 <table width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
 		<td width="99" rowspan="2"> 

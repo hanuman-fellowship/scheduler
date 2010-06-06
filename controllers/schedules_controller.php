@@ -3,28 +3,50 @@ class SchedulesController extends AppController {
 
 	var $name = 'Schedules';
 	
-	function showPerson($id) {
- 		$sch = $this->Session->read('Schedule.id');
-		$this->Schedule->Person->contain("Hobby.schedule_id = {$sch}");
-		$data = $this->Schedule->Person->find('all', array(
-			'conditions' => array(
-				'Person.id' => $id,
-				'Person.schedule_id' => $sch
+	function doNewBranch() {
+		if ($user = Authsome::get('id') && !empty($this->data)) {
+			$this->setSchedule($this->Schedule->newBranch($user, $this->data['name']));	
+			$this->redirect('/areas/schedule/1');
+		}
+	}
+	
+	function doDeleteBranch($id = null) {
+		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
+			$this->setSchedule($this->Schedule->deleteBranch($id));	
+   		    $this->redirect('/areas/schedule/1');
+		}
+		$this->Schedule->order = 'id';
+		$this->Schedule->contain();
+		$this->set('schedules',$this->Schedule->find('all'));
+		$this->set('schedule_id',$this->Schedule->schedule_id);			
+	}
+	
+	function selectBranch($id = null) {
+		if ($id && in_array($this->Schedule->field('user_id', array('id' => $id)),
+			array(
+				Authsome::get('id'),
+				null
 			)
-		));
-		debug($data);
-	}
-
-	function doNewBranch($user_id, $parent_id) {
-		$this->setSchedule($this->Schedule->newBranch($user_id,$parent_id));
-	}
-	
-	function doDeleteBranch($id) {
-		$this->setSchedule($this->Schedule->deleteBranch($id));
+		)) {
+			$this->setSchedule($id);
+   		    $this->redirect('/areas/schedule/1');
+		}
+		$this->Schedule->order = 'id';
+		$this->Schedule->contain();
+		$this->set('schedules',$this->Schedule->find('all'));
+		$this->set('schedule_id',$this->Schedule->schedule_id);		
 	}
 	
-	function selectBranch($id) {
-		$this->setSchedule($id);
+	function doMergeBranch($id = null) {
+		if ($id) {
+			$this->Schedule->mergeBranch($id);
+			$this->redirect('areas/schedule/1');
+		}
+		$this->Schedule->order = 'id';
+		$this->Schedule->contain();
+		$this->set('schedules',$this->Schedule->find('all'));
+		$this->set('schedule_id',$this->Schedule->schedule_id);		
+		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => $this->Schedule->schedule_id)));		
 	}
 	
 }
