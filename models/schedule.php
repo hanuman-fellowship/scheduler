@@ -29,6 +29,10 @@ class Schedule extends AppModel {
 			// give the new one the same parent
 			$parent_id = $this->field('parent_id', array('id' => $this->schedule_id));
 		}
+//		if ($this->find('count', array('name' => $name)) > 0) {
+//			$this->error = "That name is already taken. Please choose a different one.";
+//			return false;
+//		}
 		$branch_data = array(
 			'user_id'   => $user_id,
 			'parent_id' => $parent_id,
@@ -130,7 +134,7 @@ class Schedule extends AppModel {
 		}
 		*/
 		
-
+		// get the change data for each branch
 		$this->Change = ClassRegistry::init('Change');		
 		foreach($sched_ids as $key => $sched_id) {
 			$this->Change->id = '';
@@ -141,7 +145,8 @@ class Schedule extends AppModel {
 			$changes[$key] = $this->Change->sFind('all');
 			$this->Change->nudge(-1); // move the ids back
 		}
-		debug($changes);
+		
+		// modify the change data to be merged so that there are no conflicting ids
 		$latest_ids = array();
 		foreach($changes['b'] as &$b_change) {
 			foreach($b_change['ChangeModel'] as &$b_change_model) {
@@ -153,10 +158,11 @@ class Schedule extends AppModel {
 						rsort($ids);
 						$latest_ids[$b_change_model['name']] = $ids[0] + 1;
 					}
-					foreach($b_change_model['ChangeField'] as &$field) {
-						if ($field['field_key'] == 'id') {
-							$old_id = $field['field_new_val'];
-							$field['field_new_val'] = $latest_ids[$b_change_model['name']];
+					$old_id = $b_change_model['record_id'];
+					$b_change_model['record_id'] = $latest_ids[$b_change_model['name']];
+					foreach($b_change_model['ChangeField'] as &$b_field) {
+						if ($b_field['field_key'] == 'id') {
+							$b_field['field_new_val'] = $latest_ids[$b_change_model['name']];
 							$foreign_key = strtolower($b_change_model['name']) . '_id';
 							foreach($changes['b'] as &$b_change_fk) {
 								foreach($b_change_fk['ChangeModel'] as &$b_change_model_fk) {
@@ -170,78 +176,50 @@ class Schedule extends AppModel {
 									}
 								}
 							}	
-						}
+						}						
 					}
 				}
 			}
 		}
-		debug($changes);
-
-		$changeFields = $this->Change->ChangeModel->ChangeField->find('all', array(
-			'conditions' => array('ChangeField.schedule_id' => array($this->schedule_id, $id)),
-			'recursive' => -1
-		));
-
-		$changeFields = Set::combine($changeFields,"{n}.ChangeField.id","{n}.ChangeField","{n}.ChangeField.schedule_id");
-		foreach($changeFields as &$schedule) {
-			$schedule = Set::combine($schedule,"{n}.id","{n}","{n}.change_model_id");
-			foreach($schedule as &$field_changes) {
-				foreach($field_changes as &$field_data) {
-					unset($field_data['schedule_id']);
+		// save changes from b as redos for a
+		$new_change_id = 0;		
+		foreach($changes['b'] as $change) {
+			$new_change_id --;
+			$change['Change']['id']          = $new_change_id;
+			$change['Change']['schedule_id'] = $sched_ids['a'];
+			$this->Change->create();
+			$this->Change->save(array('Change' => $change['Change']));
+			foreach($change['ChangeModel'] as $change_model) {
+				$change_model_data = array('ChangeModel' => $change_model);
+				$change_model_data['ChangeModel']['change_id']   = $new_change_id;
+				$change_model_data['ChangeModel']['schedule_id'] = $sched_ids['a'];
+				unset($change_model_data['ChangeModel']['ChangeField']);
+				unset($change_model_data['ChangeModel']['id']);
+				$this->Change->ChangeModel->create();
+				$this->Change->ChangeModel->save($change_model_data);
+				$change_model_id = $this->Change->ChangeModel->getLastInsertId();
+				foreach($change_model['ChangeField'] as $field) {
+					$field['change_id']       = $new_change_id;
+					$field['change_model_id'] = $change_model_id;
+					$field['schedule_id']     = $sched_ids['a'];
+					if ($field['field_key'] == 'schedule_id') {
+						$field['field_old_val'] = $field['field_old_val'] ? $sched_ids['a'] : null;
+						$field['field_new_val'] = $field['field_new_val'] ? $sched_ids['a'] : null;
+					}
+					$change_field_data = array('ChangeField' => $field);
+					unset($change_field_data['ChangeField']['id']);
+					$this->Change->ChangeField->create();
+					$this->Change->ChangeField->save($change_field_data);
 				}
 			}
 		}
-		$my_fields = $changeFields[$this->id];
-		$other_fields = $changeFields[$id];
-//		debug(Set::merge($my_fields,$other_fields));
-		foreach($my_fields as $change_model_id => $field_changes) {
-		//	$diffs[$change_model_id] = 
-			//debug(Set::pushDiff($field_changes,$other_fields[$change_model_id]));
-		}
-//		debug($my_fields);
-//		debug($other_fields);
-//		debug(Set::pushDiff($my_fields,$other_fields));
-
-		$changeModels = $this->Change->ChangeModel->find('all', array(
-			'conditions' => array('ChangeModel.schedule_id' => array($this->schedule_id, $id)),
-			'recursive' => -1
-		));
-		$changeModels = Set::combine($changeModels,"{n}.ChangeModel.id","{n}.ChangeModel","{n}.ChangeModel.schedule_id");
-		foreach($changeModels as &$schedule) {
-			$schedule = Set::combine($schedule,"{n}.id","{n}","{n}.name");
-			foreach($schedule as &$model_changes) {
-				foreach($model_changes as &$change_data) {
-					unset($change_data['schedule_id']);
-				}
-				$model_changes = Set::combine($model_changes,"{n}.id","{n}","{n}.record_id");
-			}
-		}
-//		debug($changeModels);
-		$my_changes    = $changeModels[$this->id];
-		$other_changes = $changeModels[$id];
-
-//		debug($my_changes);
-//		debug($other_changes);
-//		debug(Set::merge($my_changes,$other_changes));
-
-		foreach($other_changes as $model => $records) {
-			if (!array_key_exists($model,$my_changes)) {
-				continue;
-			}
-			foreach($records as $record_id => $changes) {
-				if (!array_key_exists($record_id,$my_changes[$model])) {
-					continue;
-				}
-//				debug($model);
-//				debug($record_id);
-//				debug($my_changes[$model][$record_id]);
-//				debug($other_changes[$model][$record_id]);
-//				debug(Set::pushDiff($my_changes[$model][$record_id],$other_changes[$model][$record_id]));
-			}
+		
+		// apply all the new changes
+		$this->Change->schedule_id = $this->schedule_id;
+		while($this->Change->doRedo()) {
 		}
 		
 		
 	}
-	
 }
 ?>

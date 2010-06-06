@@ -63,7 +63,7 @@ class Change extends AppModel {
      * 
      * Return false if there is no change to redo.
      */    
-    function doRedo() { 
+    function doRedo() {
 		$this->id = -1;
         if ($this->sFind('first')) { // is there a change to redo? (redoable changes are always negative) 
             $this->applyChange('redo'); 

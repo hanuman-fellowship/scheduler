@@ -5,7 +5,8 @@ foreach($schedules as $schedule) {
 		array('<b>','</b') :
 		array(null,null);
 	echo $style[0];
-	echo $html->link($schedule['Schedule']['name'],array($schedule['Schedule']['id']),null,'Are you sure?');
+	echo $html->link($schedule['Schedule']['name'],array($schedule['Schedule']['id']),null,
+		"Are you sure you want to delete the branch \"{$schedule['Schedule']['name']}\"? This action cannot be undone.");
 	echo $style[1];
 	echo '<br/>';
 }

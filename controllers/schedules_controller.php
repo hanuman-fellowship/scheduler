@@ -40,7 +40,7 @@ class SchedulesController extends AppController {
 	function doMergeBranch($id = null) {
 		if ($id) {
 			$this->Schedule->mergeBranch($id);
-			$this->redirect('areas/schedule/1');
+			$this->redirect('/areas/schedule/1');
 		}
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();

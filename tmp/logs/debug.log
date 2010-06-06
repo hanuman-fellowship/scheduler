@@ -2502,3 +2502,5 @@
 2010-06-05 21:26:07 Notice: Notice (8): Undefined variable: schedule in [APP/app_controller.php, line 36]
 2010-06-05 21:26:49 Notice: Notice (8): Undefined variable: schedule in [APP/app_controller.php, line 36]
 2010-06-06 00:30:49 Notice: Notice (8): Undefined variable: style in [APP/views/schedules/do_merge_branch.ctp, line 5]
+2010-06-06 12:15:59 Notice: Notice (8): Undefined index:  id in [APP/app_model.php, line 118]
+2010-06-06 12:36:22 Notice: Notice (8): Undefined index:  id in [APP/app_model.php, line 118]
