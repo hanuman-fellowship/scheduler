@@ -10,13 +10,12 @@ class PeopleController extends AppController {
 	 * 
 	 */
 	function schedule($id = null) {	
-		$this->Person->id = $id;
-		$this->Person->contain('Assignment.Shift.Area','ResidentCategory','OffDay','FloatingShift.Area');
-		$this->set('person',$this->Person->sFind('first'));
-		
+		$this->set('person',$this->Person->getPerson($id));		
 		$this->loadModel('Boundary');
 		$this->set('bounds', $this->Boundary->getBounds());
 	}	
+	
+	
 }
 	
 ?>

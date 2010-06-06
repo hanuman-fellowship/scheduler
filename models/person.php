@@ -19,6 +19,13 @@ class Person extends AppModel {
 		'FloatingShift',
 		'OffDay'
 	);
+	
+	function getPerson($id) {
+		$this->id = $id;
+		$this->sContain('Assignment.Shift.Area','ResidentCategory','OffDay','FloatingShift.Area');
+		$person = $this->sFind('first');
+		return $person;
+	}	
 
 	function available($shift_id) {
 		$this->Assignment->Shift->id = $shift_id;
