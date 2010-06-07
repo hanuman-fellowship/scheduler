@@ -61,7 +61,12 @@ class ScheduleHelper extends AppHelper {
 				$people .= "<br/>{$unassigned}";
 			}
 		}
-	if (isset($time)) return "<b>" . $time . "</b> " . $people . "<br/><br/><br/>";
+		if (isset($time)) {
+			$time = $this->role->link($time,array(
+				'operations' => array('controller'=>'shifts','action'=>'edit',$shift['id'])
+			));
+			return "<b>" . $time . "</b> " . $people . "<br/><br/><br/>";
+		}
 	}
 	
 	function displayTime($time) {

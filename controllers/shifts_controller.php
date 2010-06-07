@@ -12,7 +12,7 @@ class ShiftsController extends AppController {
 				$this->stop("New {$area_name} shift created");
 				$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
 			} else {
-				$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
+				$this->Session->setFlash(__('The Area could not be saved. Please, try again.', true));
 			}
 		}
 		$this->loadModel('Area');
@@ -22,7 +22,32 @@ class ShiftsController extends AppController {
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
 		$this->set('days',$this->Day->sFind('list'));
-	}		
+	}
+	
+	function edit($id = null) {
+		if (!$id && empty($this->data)) {
+			$this->Session->setFlash(__('Invalid Shift', true));
+			$this->redirect(array('action' => 'index'));
+		}
+		if (!empty($this->data)) {
+			$this->record();
+			if ($this->Shift->sSave($this->data)) {
+				$this->stop("Shift edited");
+				$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
+			} else {
+				$this->Session->setFlash(__('The Shift could not be saved. Please, try again.', true));
+			}
+		}
+		if (empty($this->data)) {
+			$this->data = $this->Shift->read(null, $id);
+		}
+		$this->loadModel('Area');
+		$this->Area->order = 'name';
+		$this->set('areas',$this->Area->sFind('list'));
+		$this->loadModel('Day');
+		$this->Day->order = 'id';
+		$this->set('days',$this->Day->sFind('list'));
+	}
 	
 }
 ?>
