@@ -181,6 +181,49 @@ class Schedule extends AppModel {
 				}
 			}
 		}
+		
+		// look for deletes or updates in b that a has made changes to and vice versa
+		$conflicts = array();
+		$a_and_b = array(
+			array('a','b'),
+			array('b','a')
+		);
+		foreach($a_and_b as $ab) {
+			foreach($changes[$ab[0]] as $change0) {
+				foreach($change0['ChangeModel'] as $change_model0) {
+					if ($change_model0['action'] != 1) {
+						$foreign_key = strtolower($change_model0['name']) . '_id';
+						foreach($changes[$ab[1]] as $change1) {
+							foreach($change1['ChangeModel'] as $change_model1) {
+								if ($change_model1['name'] == $change_model0['name'] &&
+								$change_model1['id'] == $change_model0['id']) {
+									$conflicts[] = array(
+										$ab[1] => $change1['Change']['description'],
+										$ab[0] => $change0['Change']['description']
+									);
+									continue;
+								}
+								foreach($change_model1['ChangeField'] as $field1) {
+									if ($field1['field_key'] == $foreign_key &&
+									$field1['field_new_val'] == $change_model0['id']) {
+										$conflicts[] = array(
+											$ab[1] => $change1['Change']['description'],
+											$ab[0] => $change0['Change']['description']
+										);
+										continue;
+									}
+								}		
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		debug($conflicts);
+		die;
+		
+		
 		// save changes from b as redos for a
 		$new_change_id = 0;		
 		foreach($changes['b'] as $change) {
@@ -213,13 +256,10 @@ class Schedule extends AppModel {
 				}
 			}
 		}
-		
 		// apply all the new changes
 		$this->Change->schedule_id = $this->schedule_id;
 		while($this->Change->doRedo()) {
 		}
-		
-		
 	}
 }
 ?>
