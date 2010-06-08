@@ -25,6 +25,11 @@ class Area extends AppModel {
 		}
 		return $area;
 	}
+	
+	function sSave($data) {
+		$changes = parent::sSave($data);
+		debug($changes);
+	}
 
 }
 ?>

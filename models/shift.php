@@ -27,9 +27,8 @@ class Shift extends AppModel {
 				)
 			);
 		}
-		if (parent::sSave($data)) {
-			return true;
-		}
+		$changes = parent::sSave($data);
+		debug($changes);
 	}
 	
 	function sDelete($id) {
@@ -40,7 +39,7 @@ class Shift extends AppModel {
 		foreach($shift['Assignment'] as $assignment) {
 			$this->Assignment->sDelete($assignment['id']);
 		}
-		parent::sDelete($id);
+		$changes = parent::sDelete($id);
 	}
 	
 }

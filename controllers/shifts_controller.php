@@ -7,13 +7,10 @@ class ShiftsController extends AppController {
 		if (!empty($this->data)) {
 			$this->Shift->create();
 			$this->record();
-			if ($this->Shift->sSave($this->data)) {
-				$area_name = $this->Shift->Area->field('name', array('id' => $this->data['Shift']['area_id']));
-				$this->stop("New {$area_name} shift created");
-				$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
-			} else {
-				$this->Session->setFlash(__('The Area could not be saved. Please, try again.', true));
-			}
+			$this->Shift->sSave($this->data);
+			$area_name = $this->Shift->Area->field('name', array('id' => $this->data['Shift']['area_id']));
+			$this->stop("New {$area_name} shift created");
+			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
 		}
 		$this->loadModel('Area');
 		$this->Area->order = 'name';
@@ -31,12 +28,9 @@ class ShiftsController extends AppController {
 		}
 		if (!empty($this->data)) {
 			$this->record();
-			if ($this->Shift->sSave($this->data)) {
-				$this->stop("Shift edited");
-				$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
-			} else {
-				$this->Session->setFlash(__('The Shift could not be saved. Please, try again.', true));
-			}
+			$this->Shift->sSave($this->data);
+			$this->stop("Shift edited");
+			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
 		}
 		if (empty($this->data)) {
 			$this->id = $id;

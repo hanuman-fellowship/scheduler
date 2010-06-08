@@ -224,8 +224,8 @@ class Schedule extends AppModel {
 			}
 		}
 		
-//		debug($conflicts);
-//		die;
+		debug($conflicts);
+		die;
 		
 		
 		// save changes from b as redos for a

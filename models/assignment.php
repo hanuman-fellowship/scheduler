@@ -15,5 +15,11 @@ class Assignment extends AppModel {
 		$this->area_id     = $info['Shift']['Area']['id'];	
 	}
 
+	function sSave($data) {
+		$changes = parent::sSave($data);
+		debug($changes);
+	}
+
+	
 }
 ?>

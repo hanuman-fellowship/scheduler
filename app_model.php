@@ -85,7 +85,12 @@ class AppModel extends Model {
 		$this->Change->newData = $data;
 		$this->Change->saveChange(($create xor 1) + 1); // 1 for create or 2 for update
 
-		return true;
+		// create description
+		
+		return array(
+			'newData' => $data[$this->name],
+			'oldData' => $this->Change->oldData[$this->name]
+		);
 	}
 	
 	function sDelete($id) {
@@ -99,12 +104,11 @@ class AppModel extends Model {
 		$this->Change->saveChange(0); // 0 for delete
 
 		// delete the record
-		if ($this->deleteAll(array(
+		$this->deleteAll(array(
 			"{$this->name}.id"          => $id,
 			"{$this->name}.schedule_id" => $this->schedule_id
-		),false,false)) {
-			return true;
-		}
+		),false,false);
+		return $this->Change->oldData[$this->name];
 	}
 	
 	/**
