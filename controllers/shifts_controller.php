@@ -39,7 +39,8 @@ class ShiftsController extends AppController {
 			}
 		}
 		if (empty($this->data)) {
-			$this->data = $this->Shift->read(null, $id);
+			$this->id = $id;
+			$this->data = $this->Shift->sFind('first');
 		}
 		$this->loadModel('Area');
 		$this->Area->order = 'name';
@@ -47,6 +48,13 @@ class ShiftsController extends AppController {
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
 		$this->set('days',$this->Day->sFind('list'));
+	}
+	
+	function delete($id) {
+		$this->record();
+		$this->Shift->sDelete($id);
+		$this->stop("Shift Deleted");
+		$this->redirect('/areas/schedule/1');
 	}
 	
 }

@@ -145,7 +145,7 @@ class Schedule extends AppModel {
 			$changes[$key] = $this->Change->sFind('all');
 			$this->Change->nudge(-1); // move the ids back
 		}
-		
+
 		// modify the change data to be merged so that there are no conflicting ids
 		$latest_ids = array();
 		foreach($changes['b'] as &$b_change) {
@@ -154,9 +154,13 @@ class Schedule extends AppModel {
 					if (isset($latest_ids[$b_change_model['name']])) {
 						$latest_ids[$b_change_model['name']] ++;
 					} else {
-						$ids = array_keys($data[$b_change_model['name']][$sched_ids['a']]);
-						rsort($ids);
-						$latest_ids[$b_change_model['name']] = $ids[0] + 1;
+						if (isset($data[$b_change_model['name']][$sched_ids['a']])) {
+							$ids = array_keys($data[$b_change_model['name']][$sched_ids['a']]);
+							rsort($ids);
+							$latest_ids[$b_change_model['name']] = $ids[0] + 1;
+						} else {
+							$latest_ids[$b_change_model['name']] = 1;
+						}
 					}
 					$old_id = $b_change_model['record_id'];
 					$b_change_model['record_id'] = $latest_ids[$b_change_model['name']];

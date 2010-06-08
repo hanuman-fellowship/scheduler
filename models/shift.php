@@ -32,5 +32,16 @@ class Shift extends AppModel {
 		}
 	}
 	
+	function sDelete($id) {
+		$this->id = $id;
+		$this->Assignment->schedule_id = $this->schedule_id;
+		$this->sContain('Assignment');
+		$shift = $this->sFind('first');
+		foreach($shift['Assignment'] as $assignment) {
+			$this->Assignment->sDelete($assignment['id']);
+		}
+		parent::sDelete($id);
+	}
+	
 }
 ?>

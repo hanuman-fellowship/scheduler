@@ -3,6 +3,9 @@
 	<fieldset>
  		<legend><?php __('Edit Shift');?></legend>
 	<?php
+	
+		echo $html->link('Delete Shift',array('action'=>'delete',$this->data['Shift']['id']));
+
 		echo $form->hidden('id');
 		echo $form->input('area_id');
 		echo $form->input('day_id');
@@ -12,5 +15,5 @@
 		echo $form->hidden('schedule_id');
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
+<?php echo $form->end('Submit');?> 
 </div>
