@@ -44,26 +44,37 @@ class ScheduleHelper extends AppHelper {
 			$people_displayed = 0;
 			foreach ($shift['Assignment'] as $assignment) {
 				$people_displayed++;
-				$link_title = $assignment['Person']['name'];
-				$link_url = array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']);
 			
 				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
 				
-				$people .= '<br/>' . $this->html->link($link_title, $link_url, array('class' => 'RC_' . $assignment['Person']['resident_category_id']));
+				$people .= '<br/>' . $this->role->link($assignment['Person']['name'],array(
+					'' => array(
+						'url' => array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
+						'attributes' => array('class' => 'RC_' . $assignment['Person']['resident_category_id'])
+					),
+					'operations' => array(
+						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['id']),
+						'attributes' => array('class' => 'remove_RC_'.$assignment['Person']['resident_category_id'])
+					)
+				));
 				
 			}
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {
 				$unassigned = $this->role->link('________',array(
-					'operations' => array('controller'=>'assignments','action'=>'assign',$shift['id'])
+					'operations' => array(
+						'url' => array('controller'=>'assignments','action'=>'assign',$shift['id'])
+					)
 				));
 				$people .= "<br/>{$unassigned}";
 			}
 		}
 		if (isset($time)) {
 			$time = $this->role->link($time,array(
-				'operations' => array('controller'=>'shifts','action'=>'edit',$shift['id'])
+				'operations' => array(
+					'url' => array('controller'=>'shifts','action'=>'edit',$shift['id'])
+				)
 			));
 			return "<b>" . $time . "</b> " . $people . "<br/><br/><br/>";
 		}

@@ -17,7 +17,7 @@ class Assignment extends AppModel {
 
 	function sSave($data) {
 		$changes = parent::sSave($data);
-		debug($changes);
+		//debug($changes);
 	}
 
 	

@@ -2544,3 +2544,4 @@
 2010-06-07 23:11:25 Notice: Notice (8): Undefined variable: data in [APP/views/shifts/edit.ctp, line 15]
 2010-06-07 23:36:38 Notice: Notice (8): Undefined variable: assignment in [APP/models/shift.php, line 40]
 2010-06-07 23:38:00 Notice: Notice (8): Undefined variable: assignment in [APP/models/shift.php, line 43]
+2010-06-09 10:20:58 Notice: Notice (8): Undefined index:  attributes in [APP/views/helpers/role.php, line 21]
