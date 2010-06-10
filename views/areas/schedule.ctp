@@ -9,7 +9,10 @@
 	
 	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'));?>
 	<br/>
-	<?=$html->link('New Shift', array('controller' => 'shifts', 'action' => 'add', $area['Area']['id']));?>
+	<?=$html->link('New Area', array('controller' => 'areas', 'action' => 'add'));?>
+	| <?=$html->link('Edit Area', array('controller' => 'areas', 'action' => 'edit', $area['Area']['id']));?>
+	| <?=$html->link('View Area', array('controller' => 'areas', 'action' => 'schedule'));?>
+	| <?=$html->link('New Shift', array('controller' => 'shifts', 'action' => 'add', $area['Area']['id']));?>
 	<br/>
 	<?=$html->link('New Branch', array('controller' => 'schedules', 'action' => 'doNewBranch'));?>
 	| <?=$html->link('Select Branch', array('controller' => 'schedules', 'action' => 'selectBranch'));?>

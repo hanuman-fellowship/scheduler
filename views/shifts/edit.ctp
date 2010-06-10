@@ -12,7 +12,6 @@
 		echo $form->input('start', array('interval' => 15));
 		echo $form->input('end', array('interval' => 15));
 		echo $form->input('num_people', array('label' => '# of People'));
-		echo $form->hidden('schedule_id');
 	?>
 	</fieldset>
 <?php echo $form->end('Submit');?> 

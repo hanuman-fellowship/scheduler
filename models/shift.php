@@ -28,7 +28,7 @@ class Shift extends AppModel {
 			);
 		}
 		$changes = parent::sSave($data);
-		debug($changes);
+		//debug($changes);
 	}
 	
 	function sDelete($id) {

@@ -28,7 +28,27 @@ class Area extends AppModel {
 	
 	function sSave($data) {
 		$changes = parent::sSave($data);
-		debug($changes);
+		$this->setDescription($changes);
+	}
+	
+	function setDescription($changes) {
+		if ($changes['oldData']['id'] == '') {
+			$this->description = 'New Area created: '.
+			"{$changes['newData']['name']} ".
+			"({$changes['newData']['short_name']})";
+		} else {
+			$this->description = 'Area changed: '.
+			"{$changes['oldData']['name']}";
+			$listed = false;
+			foreach($changes['newData'] as $field => $val) {
+				if ($changes['newData'][$field] != $changes['oldData'][$field]) {
+					$this->description .= $listed ? ', ' : ' ';
+					$this->description .= 
+						Inflector::humanize($field).' is now '.$val;
+					$listed = true;
+				}
+			}
+		}
 	}
 
 }
