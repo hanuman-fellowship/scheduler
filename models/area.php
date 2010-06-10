@@ -31,23 +31,31 @@ class Area extends AppModel {
 		$this->setDescription($changes);
 	}
 	
+	function sDelete($id) {
+		$changes = parent::sDelete($id);
+		$this->setDescription($changes);
+	}	
+	
 	function setDescription($changes) {
-		if ($changes['oldData']['id'] == '') {
-			$this->description = 'New Area created: '.
-			"{$changes['newData']['name']} ".
-			"({$changes['newData']['short_name']})";
-		} else {
-			$this->description = 'Area changed: '.
-			"{$changes['oldData']['name']}";
-			$listed = false;
-			foreach($changes['newData'] as $field => $val) {
-				if ($changes['newData'][$field] != $changes['oldData'][$field]) {
-					$this->description .= $listed ? ', ' : ' ';
-					$this->description .= 
-						Inflector::humanize($field).' is now '.$val;
-					$listed = true;
+		debug($changes);
+		if (isset($changes['newData'])) {
+			if ($changes['oldData']['id'] == '') {
+				$this->description = "New Area created: {$changes['newData']['name']}";
+			} else {
+				$this->description = 'Area changed: '.
+				"{$changes['oldData']['name']}";
+				$listed = false;
+				foreach($changes['newData'] as $field => $val) {
+					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
+						$this->description .= $listed ? ', ' : ' ';
+						$this->description .= 
+							Inflector::humanize($field).' is now '.$val;
+						$listed = true;
+					}
 				}
 			}
+		} else {
+			$this->description = "Area Deleted: {$changes['name']}";
 		}
 	}
 
