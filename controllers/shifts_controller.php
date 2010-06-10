@@ -8,8 +8,7 @@ class ShiftsController extends AppController {
 			$this->Shift->create();
 			$this->record();
 			$this->Shift->sSave($this->data);
-			$area_name = $this->Shift->Area->field('name', array('id' => $this->data['Shift']['area_id']));
-			$this->stop("New {$area_name} shift created");
+			$this->stop($this->Shift->description);
 			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
 		}
 		$this->loadModel('Area');
@@ -29,7 +28,7 @@ class ShiftsController extends AppController {
 		if (!empty($this->data)) {
 			$this->record();
 			$this->Shift->sSave($this->data);
-			$this->stop("Shift edited");
+			$this->stop($this->Shift->description);
 			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
 		}
 		if (empty($this->data)) {
@@ -47,7 +46,7 @@ class ShiftsController extends AppController {
 	function delete($id) {
 		$this->record();
 		$this->Shift->sDelete($id);
-		$this->stop("Shift Deleted");
+		$this->stop($this->Shift->description);
 		$this->redirect('/areas/schedule/1');
 	}
 	

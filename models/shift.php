@@ -9,7 +9,8 @@ class Shift extends AppModel {
 	);
 
 	var $belongsTo = array(
-		'Area'
+		'Area',
+		'Day'
 	);
 	
 	var $hasMany = array(
@@ -28,7 +29,7 @@ class Shift extends AppModel {
 			);
 		}
 		$changes = parent::sSave($data);
-		//debug($changes);
+		$this->setDescription($changes);
 	}
 	
 	function sDelete($id) {
@@ -40,7 +41,82 @@ class Shift extends AppModel {
 			$this->Assignment->sDelete($assignment['id']);
 		}
 		$changes = parent::sDelete($id);
+		$this->setDescription($changes);
 	}
 	
+	function setDescription($changes) {
+		if (isset($changes['newData'])) {
+			$newData = $this->formatShift($changes['newData']);
+			if ($changes['oldData']['id'] == '') {
+				$this->description = "New Shift created: {$newData['name']}";
+			} else {
+				$oldData = $this->formatShift($changes['oldData']);				
+				$this->description = "Shift changed: ({$oldData['name']})";
+				$listed = false;
+				foreach($changes['newData'] as $field => $val) {
+					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
+						switch ($field) {
+							case 'area_id':
+								$this->description .= $listed ? ', ' : ' ';
+								$this->description .= 
+									'area -> '.$newData['area_id'];
+								break;
+							case 'day_id':
+								$this->description .= $listed ? ', ' : ' ';
+								$this->description .= 
+									'day -> '.$newData['day_id'];
+								break;		
+							case 'start':
+								$this->description .= $listed ? ', ' : ' ';
+								$this->description .= 
+									'start -> '.$newData['start'];
+								break;		
+							case 'end':
+								$this->description .= $listed ? ', ' : ' ';
+								$this->description .= 
+									'end -> '.$newData['end'];
+								break;		
+							case 'num_people':
+								$this->description .= $listed ? ', ' : ' ';
+								$this->description .= 
+									'# of people -> '.$newData['num_people'];
+								break;	
+						}
+						$listed = true;
+					}
+				}
+			}
+		} else {
+			$oldData = $this->formatShift($changes);
+			$this->description = "Shift deleted: {$oldData['name']}";
+		}
+	}
+	
+	function formatShift($data) {
+		$this->Area->id = $data['area_id'];
+		$this->Area->recursive = -1;
+		$this->Area->schedule_id = $this->schedule_id;
+		$area = $this->Area->sFind('first');
+		$data['area_id'] = $area['Area']['short_name'];
+		$this->Day->id = $data['day_id'];
+		$this->Day->recursive = -1;
+		$this->Day->schedule_id = $this->schedule_id;
+		$day = $this->Day->sFind('first');
+		$data['day_id'] = substr($day['Day']['name'],0,3);
+		$start = strtotime($data['start']);
+		$minutes = (date('i',$start) == '00') ? '' : ':i';
+		$data['start'] = date("g{$minutes}",$start);
+		$end = strtotime($data['end']);
+		$minutes = (date('i',$end) == '00') ? '' : ':i';
+		$data['end'] = date("g{$minutes}",$end);
+		$data['name'] = 
+			$data['area_id'].' '.
+			$data['day_id'].' '.
+			$data['start'].'-'.
+			$data['end'];
+		return $data;
+	}
+	
+		
 }
 ?>
