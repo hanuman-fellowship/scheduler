@@ -37,10 +37,9 @@ class Area extends AppModel {
 	}	
 	
 	function setDescription($changes) {
-		debug($changes);
 		if (isset($changes['newData'])) {
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New Area created: {$changes['newData']['name']}";
+				$this->description = "New area created: {$changes['newData']['name']}";
 			} else {
 				$this->description = 'Area changed: '.
 				"{$changes['oldData']['name']}";
@@ -55,7 +54,7 @@ class Area extends AppModel {
 				}
 			}
 		} else {
-			$this->description = "Area Deleted: {$changes['name']}";
+			$this->description = "Area deleted: {$changes['name']}";
 		}
 	}
 

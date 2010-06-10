@@ -7,15 +7,14 @@ class AssignmentsController extends AppController {
 	function assign($shift_id, $person_id = null) {
 		if ($person_id) {
 			$this->Assignment->create();
-			$this->record();
 			$this->data = array('Assignment' => array(
 				'shift_id'  => $shift_id,
 				'person_id' => $person_id
 			));
+			$this->record();
 			$this->Assignment->sSave($this->data);
-			$this->Assignment->info(); // get decsription and area_id
 			$this->stop($this->Assignment->description);
-			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->Assignment->area_id));
+			$this->redirect('/areas/schedule/1');
 		}
 		$this->loadModel('Person');
 		$this->loadModel('Shift');
@@ -26,7 +25,7 @@ class AssignmentsController extends AppController {
 	function unassign($id) {
 		$this->record();
 		$this->Assignment->sDelete($id);
-		$this->stop("Removed from shift");
+		$this->stop($this->Assignment->description);
 		$this->redirect('/areas/schedule/1');
 	}
 		
