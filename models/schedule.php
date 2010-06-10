@@ -200,7 +200,7 @@ class Schedule extends AppModel {
 						foreach($changes[$ab[1]] as $change1) {
 							foreach($change1['ChangeModel'] as $change_model1) {
 								if ($change_model1['name'] == $change_model0['name'] &&
-								$change_model1['id'] == $change_model0['id']) {
+								$change_model1['record_id'] == $change_model0['record_id']) {
 									$conflicts[] = array(
 										$ab[1] => $change1['Change']['description'],
 										$ab[0] => $change0['Change']['description']

@@ -1780,3 +1780,5 @@ Aco: controllers/Areas/view in [CORE/cake/libs/controller/components/acl.php, li
 2010-06-10 12:13:31 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/JasonGaluten/Sites/cakephp/cake/basics.php:109) in [CORE/cake/libs/controller/controller.php, line 647]
 2010-06-10 12:14:03 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/JasonGaluten/Sites/cakephp/cake/basics.php:109) in [CORE/cake/libs/controller/controller.php, line 647]
 2010-06-10 12:14:56 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/JasonGaluten/Sites/cakephp/cake/basics.php:109) in [CORE/cake/libs/controller/controller.php, line 647]
+2010-06-10 13:11:28 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/areas/schedule.ctp, line 101]
+2010-06-10 13:11:28 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 136]
