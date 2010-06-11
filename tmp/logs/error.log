@@ -1788,3 +1788,4 @@ Aco: controllers/Areas/view in [CORE/cake/libs/controller/components/acl.php, li
 2010-06-10 18:58:52 Warning: Warning (2): array_key_exists() [<a href='http://php.net/function.array-key-exists'>function.array-key-exists</a>]: The second argument should be either an array or an object in [APP/models/schedule.php, line 224]
 2010-06-10 19:26:11 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 243]
 2010-06-10 19:28:46 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 244]
+2010-06-10 20:13:51 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 246]

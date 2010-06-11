@@ -213,22 +213,23 @@ class Schedule extends AppModel {
 							foreach($change1['ChangeModel'] as $change_model1) {
 								if ($change_model1['name'] == $change_model0['name'] &&
 								$change_model1['record_id'] == $change_model0['record_id']) {
-									$conflict = 'a and b are the same object';
-									continue;
+									$conflict = 'a and b are operating on the same thing';
 								}
 								foreach($change_model1['ChangeField'] as $field1) {
 									if ($field1['field_key'] == $foreign_key &&
-									($field1['field_new_val'] == $change_model0['id'] ||
-									$field1['field_old_val'] == $change_model0['id'])) {
+									($field1['field_new_val'] == $change_model0['record_id'] ||
+									$field1['field_old_val'] == $change_model0['record_id'])) {
 										$conflict = "{$ab[1]} relates to {$ab[0]}";
-										continue;
 									}
 									foreach($foreign_keys as $foreign_fields) {
 										if (array_key_exists($field1['field_key'],$foreign_fields)) {
 											if ($foreign_fields[$field1['field_key']] == $field1['field_new_val'] ||
 											$foreign_fields[$field1['field_key']] == $field1['field_old_val']) {
-												$conflict = 'a and b relate to a common thing';
-												continue;
+												if ($conflict == '') { // in case they are the same thing, that's more accurate
+													$conflict = 'a and b relate to a common thing';
+												}
+											} else {
+												$conflict = '';
 											}
 										}
 									}											
@@ -244,7 +245,7 @@ class Schedule extends AppModel {
 									$ab[0] => $change0['Change']['description'],
 									'why'  => $conflict
 								);
-								ksort($conflicts[$change0['Change']['id'].'_'.$change1['Change']['id']]);
+								ksort($conflicts[$conflict_key['a'].'_'.$conflict_key['b']]);
 							}
 						}
 //					}
@@ -252,6 +253,7 @@ class Schedule extends AppModel {
 			}
 		}
 		
+		echo 'Conflicts merging b into a<br><br>';
 		debug($conflicts);
 		die;
 		
