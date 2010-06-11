@@ -192,34 +192,62 @@ class Schedule extends AppModel {
 			array('a','b'),
 			array('b','a')
 		);
+//		debug($changes);
 		foreach($a_and_b as $ab) {
 			foreach($changes[$ab[0]] as $change0) {
 				foreach($change0['ChangeModel'] as $change_model0) {
-					if ($change_model0['action'] != 1) {
+//					if ($change_model0['action'] != 1) {
+
+						$foreign_keys = array();
+						foreach($change_model0['ChangeField'] as $field0) {
+							if ($field0['field_key'] != 'schedule_id' && substr($field0['field_key'],-3) == '_id') {
+								$val = ($field0['field_new_val'] == '') ? 
+									$field0['field_old_val'] : $field0['field_new_val'];	
+								$foreign_keys[$change_model0['id']][$field0['field_key']] = $val;
+								//Inflector::humanize(array_shift(explode('_id',$field0['field_key'],2)))
+							}
+						}
 						$foreign_key = strtolower($change_model0['name']) . '_id';
 						foreach($changes[$ab[1]] as $change1) {
+							$conflict = '';
 							foreach($change1['ChangeModel'] as $change_model1) {
 								if ($change_model1['name'] == $change_model0['name'] &&
 								$change_model1['record_id'] == $change_model0['record_id']) {
-									$conflicts[] = array(
-										$ab[1] => $change1['Change']['description'],
-										$ab[0] => $change0['Change']['description']
-									);
+									$conflict = 'a and b are the same object';
 									continue;
 								}
 								foreach($change_model1['ChangeField'] as $field1) {
 									if ($field1['field_key'] == $foreign_key &&
-									$field1['field_new_val'] == $change_model0['id']) {
-										$conflicts[] = array(
-											$ab[1] => $change1['Change']['description'],
-											$ab[0] => $change0['Change']['description']
-										);
+									($field1['field_new_val'] == $change_model0['id'] ||
+									$field1['field_old_val'] == $change_model0['id'])) {
+										$conflict = "{$ab[1]} relates to {$ab[0]}";
 										continue;
 									}
+									foreach($foreign_keys as $foreign_fields) {
+										if (array_key_exists($field1['field_key'],$foreign_fields)) {
+											if ($foreign_fields[$field1['field_key']] == $field1['field_new_val'] ||
+											$foreign_fields[$field1['field_key']] == $field1['field_old_val']) {
+												$conflict = 'a and b relate to a common thing';
+												continue;
+											}
+										}
+									}											
 								}		
 							}
+							if ($conflict != '') {
+								$conflict_key = array(
+									$ab[0] => $change0['Change']['id'],
+									$ab[1] => $change1['Change']['id']
+								);
+								$conflicts[$conflict_key['a'].'_'.$conflict_key['b']] = array(
+									$ab[1] => $change1['Change']['description'],
+									$ab[0] => $change0['Change']['description'],
+									'why'  => $conflict
+								);
+								ksort($conflicts[$change0['Change']['id'].'_'.$change1['Change']['id']]);
+							}
 						}
-					}
+//					}
 				}
 			}
 		}
