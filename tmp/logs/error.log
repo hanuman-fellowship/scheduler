@@ -1789,3 +1789,4 @@ Aco: controllers/Areas/view in [CORE/cake/libs/controller/components/acl.php, li
 2010-06-10 19:26:11 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 243]
 2010-06-10 19:28:46 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 244]
 2010-06-10 20:13:51 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 246]
+2010-06-10 20:30:23 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 248]

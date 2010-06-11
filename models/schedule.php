@@ -240,12 +240,14 @@ class Schedule extends AppModel {
 									$ab[0] => $change0['Change']['id'],
 									$ab[1] => $change1['Change']['id']
 								);
-								$conflicts[$conflict_key['a'].'_'.$conflict_key['b']] = array(
+								$new_conflict = array(
 									$ab[1] => $change1['Change']['description'],
 									$ab[0] => $change0['Change']['description'],
 									'why'  => $conflict
 								);
-								ksort($conflicts[$conflict_key['a'].'_'.$conflict_key['b']]);
+								$conflicts[$conflict_key['a']]['a'] = $new_conflict['a'];
+								$conflicts[$conflict_key['a']]['conflicts'][$conflict_key['b']] = array('b' => $new_conflict['b'],'why' => $new_conflict['why']);
+//								ksort($conflicts[$conflict_key['a'].'_'.$conflict_key['b']]);
 							}
 						}
 //					}
