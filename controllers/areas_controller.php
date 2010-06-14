@@ -41,7 +41,7 @@ class AreasController extends AppController {
 		$this->record();
 		$this->Area->sDelete($id);
 		$this->stop($this->Area->description);
-		$this->redirect('/areas/schedule/1');
+		$this->redirect('/');
 	}
 	
 	function select() {

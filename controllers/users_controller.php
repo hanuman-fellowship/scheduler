@@ -6,6 +6,7 @@ class UsersController extends AppController {
 		
     public function login() {
 		if (empty($this->data)) {
+			$this->savePage();
 			return;
 		}
 
@@ -15,7 +16,7 @@ class UsersController extends AppController {
             $this->Session->setFlash('Unknown user or wrong password');
             return;
         }
-       $this->redirect('/areas/schedule/1');
+       $this->redirect($this->loadPage());
     }
     
     public function logout() {

@@ -54,5 +54,14 @@ class AppController extends Controller {
         )); 	
 	}	
 	
+	function savePage() {
+		$this->Session->write('referer',$this->referer());
+	}
+	
+	function loadPage() {
+		return $this->Session->read('referer');
+	}
+	
+	
 }
 ?>

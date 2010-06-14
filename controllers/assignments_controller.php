@@ -14,8 +14,9 @@ class AssignmentsController extends AppController {
 			$this->record();
 			$this->Assignment->sSave($this->data);
 			$this->stop($this->Assignment->description);
-			$this->redirect('/areas/schedule/1');
+			$this->redirect($this->loadPage());
 		}
+		$this->savePage();
 		$this->loadModel('Person');
 		$this->loadModel('Shift');
 		$this->set('people',$this->Assignment->Person->available($shift_id));
@@ -26,7 +27,7 @@ class AssignmentsController extends AppController {
 		$this->record();
 		$this->Assignment->sDelete($id);
 		$this->stop($this->Assignment->description);
-		$this->redirect('/areas/schedule/1');
+		$this->redirect($this->referer());
 	}
 		
 }

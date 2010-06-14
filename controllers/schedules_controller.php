@@ -6,15 +6,17 @@ class SchedulesController extends AppController {
 	function doNewBranch() {
 		if ($user = Authsome::get('id') && !empty($this->data)) {
 			$this->setSchedule($this->Schedule->newBranch($user, $this->data['name']));	
-			$this->redirect('/areas/schedule/1');
+			$this->redirect($this->loadPage());
 		}
+		$this->savePage();
 	}
 	
 	function doDeleteBranch($id = null) {
 		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
 			$this->setSchedule($this->Schedule->deleteBranch($id));	
-   		    $this->redirect('/areas/schedule/1');
+   		    $this->redirect($this->loadPage());
 		}
+		$this->savePage();
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
 		$this->set('schedules',$this->Schedule->find('all'));
@@ -29,8 +31,9 @@ class SchedulesController extends AppController {
 			)
 		)) {
 			$this->setSchedule($id);
-   		    $this->redirect('/areas/schedule/1');
+   		    $this->redirect($this->loadPage());
 		}
+		$this->savePage();		
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
 		$this->set('schedules',$this->Schedule->find('all'));
@@ -40,8 +43,9 @@ class SchedulesController extends AppController {
 	function doMergeBranch($id = null) {
 		if ($id) {
 			$this->Schedule->mergeBranch($id);
-			$this->redirect('/areas/schedule/1');
+			$this->redirect($this->loadPage());
 		}
+		$this->savePage();
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
 		$this->set('schedules',$this->Schedule->find('all'));
