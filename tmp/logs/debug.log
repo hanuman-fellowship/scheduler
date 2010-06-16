@@ -2696,3 +2696,4 @@
 2010-06-15 11:56:53 Notice: Notice (8): Undefined offset:  4 in [APP/views/areas/schedule.ctp, line 112]
 2010-06-15 11:57:07 Notice: Notice (8): Undefined index:  bonds in [APP/views/areas/schedule.ctp, line 112]
 2010-06-15 11:57:11 Notice: Notice (8): Undefined index:  bonds in [APP/views/areas/schedule.ctp, line 112]
+2010-06-16 12:01:00 Notice: Notice (8): Undefined variable: html in [APP/views/helpers/schedule.php, line 67]

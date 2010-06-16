@@ -49,6 +49,13 @@ class ScheduleHelper extends AppHelper {
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
 				
+				if (Authsome::get('role') == 'operations') {
+					$people .= $this->html->tag('span', null, array(
+						'style'=>"position:relative",
+						'onmouseover' => "show('goto_{$assignment['id']}')",
+						'onmouseout' => "hide('goto_{$assignment['id']}')"
+					));
+				}
 				$people .= '<br/>' . $this->role->link($assignment['Person']['name'],array(
 					'' => array(
 						'url' => array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
@@ -56,9 +63,23 @@ class ScheduleHelper extends AppHelper {
 					),
 					'operations' => array(
 						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['id']),
-						'attributes' => array('class' => 'remove_RC_'.$assignment['Person']['resident_category_id'])
+						'attributes' => array(
+							'class' => 'remove_RC_'.$assignment['Person']['resident_category_id'],
+							'onmouseover' => "show('goto_{$assignment['id']}')",
+							'onmouseout' => "hide('goto_{$assignment['id']}')"
+						)
 					)
 				));
+				if (Authsome::get('role') == 'operations') {				
+					$people .= $this->html->link('(view)',
+						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
+						array(
+							'style'=>'display:none;position:absolute;top:0;right:-3.2em;background-color:#DDDDDD;padding:5px',
+							'id'=>"goto_{$assignment['id']}"
+						)
+					)."</span>";
+				}
+
 				
 			}
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {
