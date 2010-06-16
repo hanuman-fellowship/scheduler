@@ -1,4 +1,5 @@
 <? $this->pageTitle=$area['Area']['name']." Schedule"; ?>
+<?=$javascript->link('functions');?>
 <body onclick="hide_tools();hide_login_who()">  
 
  <? if ($username = Authsome::get('username')) : ?>
@@ -95,7 +96,19 @@
 			</div> 
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
-		<td> 
+		<? if (Authsome::get('role') == 'operations') { ?>
+		<td id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num.'_'.$day?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")'> 
+			<?=$html->link(
+				'add shift',
+				array('controller'=>'shifts','action'=>'add',$area['Area']['id'],$day,str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start'])),
+				array(
+					'id'=>"add_{$slot_num}_{$day}", 
+					'style'=>"display:none;font-size:8pt;position:absolute;padding:3px;background-color:#DDDDDD"
+				)
+			);?>
+		<? } else { ?>
+		<td>
+		<? } ?>
 			<div align="center" class="shift"> 
 				<p> 
 		<? foreach ($area['Shift'] as $shift) { ?>

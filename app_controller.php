@@ -1,7 +1,7 @@
 <?php
 
 class AppController extends Controller {
-	var $helpers = array('html','session','form','role', 'time');
+	var $helpers = array('html','session','form','javascript','role', 'time');
 	
     public $components = array(
         'Authsome.Authsome' => array(

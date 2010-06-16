@@ -3,7 +3,7 @@ class ShiftsController extends AppController {
 
 	var $name = 'Shifts';
 
-	function add($area_id = null) {
+	function add($area_id = null,$day_id = null, $start = null) {
 		if (!empty($this->data)) {
 			$this->Shift->create();
 			$this->record();
@@ -15,6 +15,12 @@ class ShiftsController extends AppController {
 		$this->Area->order = 'name';
 		$this->set('areas',$this->Area->sFind('list'));
 		$this->set('area_id',$area_id);
+		$day_id = ($day_id) ? $day_id : 1;
+		$this->set('day_id',$day_id);
+		$start = ($start) ? str_replace("-",":",$start) : '13:00:00';
+		$end = date("H:i:s",strtotime($start." + 1 hour"));
+		$this->set('start',$start);
+		$this->set('end',$end);
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
 		$this->set('days',$this->Day->sFind('list'));

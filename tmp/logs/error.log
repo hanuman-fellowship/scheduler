@@ -1792,3 +1792,7 @@ Aco: controllers/Areas/view in [CORE/cake/libs/controller/components/acl.php, li
 2010-06-10 20:30:23 Warning: Warning (2): ksort() expects parameter 1 to be array, null given in [APP/models/schedule.php, line 248]
 2010-06-13 08:39:30 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/areas/schedule.ctp, line 101]
 2010-06-13 08:39:30 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 136]
+2010-06-14 10:16:00 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/areas/schedule.ctp, line 102]
+2010-06-14 10:16:00 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 136]
+2010-06-14 10:36:03 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/areas/schedule.ctp, line 105]
+2010-06-14 10:36:03 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 136]
