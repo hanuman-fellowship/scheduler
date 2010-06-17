@@ -96,13 +96,12 @@ class ScheduleHelper extends AppHelper {
 				'operations' => array(
 					'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
 					'attributes'=>array(
-						'id'=>$shift['id'],
 						'update'=>'edit_shift',
 						'complete'=>"editDialog({$shift['id']})"
 					)
 				)
 			),'ajax');
-			return "<b>" . $time . "</b> " . $people . "<br/><br/><br/>";
+			return "<span id='{$shift['id']}'><b>" . $time . "</b> " . $people . "</span><br/><br/><br/>";
 		}
 	}
 	

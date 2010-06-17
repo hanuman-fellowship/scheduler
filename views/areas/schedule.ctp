@@ -2,7 +2,7 @@
 <?=$javascript->link('prototype');?>
 <?=$javascript->link('scriptaculous');?> 
 <?=$javascript->link('functions');?>
-<body onclick="hideElement('add_shift');hideElement('edit_shift')">  
+<body onclick="hideDialogs()">  
 <div id="add_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#FFFFCC;padding:10px;">
 </div>
 <div id="edit_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#D8E2EC;padding:10px;">
