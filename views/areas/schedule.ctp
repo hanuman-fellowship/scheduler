@@ -2,12 +2,10 @@
 <?=$javascript->link('prototype');?>
 <?=$javascript->link('scriptaculous');?> 
 <?=$javascript->link('functions');?>
-<body onclick="hide_tools();hide_login_who()">  
-<div id="add_shift" style="position:absolute;background-color:#FFFFCC;padding:10px;">
+<body onclick="hideElement('add_shift');hideElement('edit_shift')">  
+<div id="add_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#FFFFCC;padding:10px;">
 </div>
-<div id="edit_shift" style="position:absolute;background-color:#D8E2EC;padding:10px;">
-</div>
-<div id="" style="position:absolute;background-color:#FFFFFF;padding:10px;">
+<div id="edit_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#D8E2EC;padding:10px;">
 </div>
  <? if ($username = Authsome::get('username')) : ?>
  	<?=$username;?> is logged in.
@@ -111,7 +109,8 @@
 				array(
 					'id'=>"add_{$slot_num}_{$day}", 
 					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
-					'update' => 'add_shift'
+					'update' => 'add_shift',
+					'complete' => "showElement('add_shift')"
 				)
 			);?>
 		<? } else { ?>

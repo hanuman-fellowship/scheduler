@@ -52,8 +52,8 @@ class ScheduleHelper extends AppHelper {
 				if (Authsome::get('role') == 'operations') {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
-						'onmouseover' => "show('goto_{$assignment['id']}')",
-						'onmouseout' => "hide('goto_{$assignment['id']}')"
+						'onmouseover' => "showElement('goto_{$assignment['id']}')",
+						'onmouseout' => "hideElement('goto_{$assignment['id']}')"
 					));
 				}
 				$people .= '<br/>' . $this->role->link($assignment['Person']['name'],array(
@@ -65,8 +65,8 @@ class ScheduleHelper extends AppHelper {
 						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['id']),
 						'attributes' => array(
 							'class' => 'remove_RC_'.$assignment['Person']['resident_category_id'],
-							'onmouseover' => "show('goto_{$assignment['id']}')",
-							'onmouseout' => "hide('goto_{$assignment['id']}')"
+							'onmouseover' => "showElement('goto_{$assignment['id']}')",
+							'onmouseout' => "hideElement('goto_{$assignment['id']}')"
 						)
 					)
 				));
@@ -95,7 +95,11 @@ class ScheduleHelper extends AppHelper {
 			$time = $this->role->link($time,array(
 				'operations' => array(
 					'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
-					'attributes'=>array('update'=>'edit_shift')
+					'attributes'=>array(
+						'id'=>$shift['id'],
+						'update'=>'edit_shift',
+						'complete'=>"editDialog({$shift['id']})"
+					)
 				)
 			),'ajax');
 			return "<b>" . $time . "</b> " . $people . "<br/><br/><br/>";
