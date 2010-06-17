@@ -24,6 +24,7 @@ class ShiftsController extends AppController {
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
 		$this->set('days',$this->Day->sFind('list'));
+		$this->render('add','ajax');
 	}
 	
 	function edit($id = null) {
@@ -47,6 +48,7 @@ class ShiftsController extends AppController {
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
 		$this->set('days',$this->Day->sFind('list'));
+			$this->render('edit','ajax');
 	}
 	
 	function delete($id) {

@@ -94,9 +94,10 @@ class ScheduleHelper extends AppHelper {
 		if (isset($time)) {
 			$time = $this->role->link($time,array(
 				'operations' => array(
-					'url' => array('controller'=>'shifts','action'=>'edit',$shift['id'])
+					'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
+					'attributes'=>array('update'=>'edit_shift')
 				)
-			));
+			),'ajax');
 			return "<b>" . $time . "</b> " . $people . "<br/><br/><br/>";
 		}
 	}

@@ -1,9 +1,10 @@
 <?php
 
 class AppController extends Controller {
-	var $helpers = array('html','session','form','javascript','role', 'time');
+	var $helpers = array('html','session','form','ajax','javascript','role', 'time');
 	
     public $components = array(
+    	'RequestHandler',
         'Authsome.Authsome' => array(
             'model' => 'User'
         )

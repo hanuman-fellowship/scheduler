@@ -1,7 +1,14 @@
 <? $this->pageTitle=$area['Area']['name']." Schedule"; ?>
+<?=$javascript->link('prototype');?>
+<?=$javascript->link('scriptaculous');?> 
 <?=$javascript->link('functions');?>
 <body onclick="hide_tools();hide_login_who()">  
-
+<div id="add_shift" style="position:absolute;background-color:#FFFFCC;padding:10px;">
+</div>
+<div id="edit_shift" style="position:absolute;background-color:#D8E2EC;padding:10px;">
+</div>
+<div id="" style="position:absolute;background-color:#FFFFFF;padding:10px;">
+</div>
  <? if ($username = Authsome::get('username')) : ?>
  	<?=$username;?> is logged in.
  	<?=$html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>
@@ -97,13 +104,14 @@
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? if (Authsome::get('role') == 'operations') { ?>
-		<td id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num.'_'.$day?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")'> 
-			<?=$html->link(
-				'add shift',
+		<td id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
+			<?=$ajax->link(
+				' + ',
 				array('controller'=>'shifts','action'=>'add',$area['Area']['id'],$day,str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start'])),
 				array(
 					'id'=>"add_{$slot_num}_{$day}", 
-					'style'=>"display:none;font-size:8pt;position:absolute;padding:3px;background-color:#DDDDDD"
+					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
+					'update' => 'add_shift'
 				)
 			);?>
 		<? } else { ?>
