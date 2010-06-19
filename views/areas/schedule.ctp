@@ -7,6 +7,8 @@
 </div>
 <div id="edit_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#D8E2EC;padding:10px;">
 </div>
+<div id="assign_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#D8FDA9;padding:10px;">
+</div>
  <? if ($username = Authsome::get('username')) : ?>
  	<?=$username;?> is logged in.
  	<?=$html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>

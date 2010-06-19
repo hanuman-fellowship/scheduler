@@ -2708,3 +2708,5 @@
 2010-06-16 17:50:39 Notice: Notice (8): Undefined index:  day_id in [APP/models/shift.php, line 101]
 2010-06-16 18:14:28 Notice: Notice (8): Undefined property: RoleHelper::$ajax in [APP/views/helpers/role.php, line 20]
 2010-06-16 18:14:30 Notice: Notice (8): Undefined property: RoleHelper::$ajax in [APP/views/helpers/role.php, line 20]
+2010-06-18 17:42:50 Notice: Notice (8): Undefined variable: conflict in [APP/views/assignments/assign.ctp, line 17]
+2010-06-18 17:42:50 Notice: Notice (8): Undefined variable: conflict in [APP/views/assignments/assign.ctp, line 18]

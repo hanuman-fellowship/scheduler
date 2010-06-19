@@ -85,9 +85,13 @@ class ScheduleHelper extends AppHelper {
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {
 				$unassigned = $this->role->link('________',array(
 					'operations' => array(
-						'url' => array('controller'=>'assignments','action'=>'assign',$shift['id'])
+						'url' => array('controller'=>'assignments','action'=>'assign',$shift['id']),
+						'attributes'=>array(
+							'update'=>'assign_shift',
+							'complete'=>"assignDialog({$shift['id']})"
+						)
 					)
-				));
+				),'ajax');
 				$people .= "<br/>{$unassigned}";
 			}
 		}

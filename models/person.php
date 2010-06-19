@@ -31,11 +31,13 @@ class Person extends AppModel {
 		$this->Assignment->Shift->id = $shift_id;
 		$this->Assignment->Shift->recursive = -1;
 		$shift = $this->Assignment->Shift->sFind('first');
-		$this->sContain('OffDay','Assignment.Shift');
+		$this->sContain('OffDay','Assignment.Shift','ResidentCategory');
+		$this->order = array('Person.resident_category_id','Person.name');
 		$people = $this->sFind('all');
 		$list = array();
 		foreach($people as $person_num => $person) {
 			$list[$person_num] = $person['Person'];
+			$list[$person_num]['ResidentCategory'] = $person['ResidentCategory'];
 			$list[$person_num]['available'] = true; // benefit of the doubt
 			foreach($person['OffDay'] as $OffDay) {
 				
