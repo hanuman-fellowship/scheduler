@@ -56,7 +56,7 @@ class ScheduleHelper extends AppHelper {
 						'onmouseout' => "hideElement('goto_{$assignment['id']}')"
 					));
 				}
-				$people .= '<br/>' . $this->role->link($assignment['Person']['name'],array(
+				$people .= $this->role->link($assignment['Person']['name'],array(
 					'' => array(
 						'url' => array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						'attributes' => array('class' => 'RC_' . $assignment['Person']['resident_category_id'])
@@ -65,16 +65,17 @@ class ScheduleHelper extends AppHelper {
 						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['id']),
 						'attributes' => array(
 							'class' => 'remove_RC_'.$assignment['Person']['resident_category_id'],
+							'style' => 'margin:10px',
 							'onmouseover' => "showElement('goto_{$assignment['id']}')",
 							'onmouseout' => "hideElement('goto_{$assignment['id']}')"
 						)
 					)
-				));
+				)) . '<br/>';
 				if (Authsome::get('role') == 'operations') {				
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
-							'style'=>'display:none;position:absolute;top:0;right:-3.2em;background-color:#DDDDDD;padding:5px',
+							'style'=>'display:none;position:absolute;top:0;right:-3.0em;background-color:#DDDDDD;padding:5px',
 							'id'=>"goto_{$assignment['id']}"
 						)
 					)."</span>";
@@ -105,7 +106,7 @@ class ScheduleHelper extends AppHelper {
 					)
 				)
 			),'ajax');
-			return "<span id='{$shift['id']}'><b>" . $time . "</b> " . $people . "</span><br/><br/><br/>";
+			return "<span id='{$shift['id']}'><b>" . $time . "</b><br/>" . $people . "</span><br/><br/>";
 		}
 	}
 	
