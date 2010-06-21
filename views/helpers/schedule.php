@@ -93,7 +93,7 @@ class ScheduleHelper extends AppHelper {
 						)
 					)
 				),'ajax');
-				$people .= "<br/>{$unassigned}";
+				$people .= "{$unassigned}<br/>";
 			}
 		}
 		if (isset($time)) {

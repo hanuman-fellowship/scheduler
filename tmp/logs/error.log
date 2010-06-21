@@ -1821,3 +1821,8 @@ Aco: controllers/Areas/view in [CORE/cake/libs/controller/components/acl.php, li
 2010-06-19 23:37:45 Warning: Warning (2): Invalid argument supplied for foreach() in [CORE/cake/libs/view/scaffolds/index.ctp, line 41]
 2010-06-20 14:19:44 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/areas/schedule.ctp, line 123]
 2010-06-20 14:19:44 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 165]
+2010-06-20 14:50:17 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/areas/schedule.ctp, line 123]
+2010-06-20 14:50:17 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 166]
+2010-06-20 15:46:03 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 129]
+2010-06-20 15:46:03 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/people/schedule.ctp, line 77]
+2010-06-20 15:46:03 Warning: Warning (2): Invalid argument supplied for foreach() in [APP/views/helpers/schedule.php, line 138]
