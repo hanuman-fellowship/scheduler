@@ -34,6 +34,7 @@ class AreasController extends AppController {
 		if (empty($this->data)) {
 			$this->id = $id;
 			$this->data = $this->Area->sFind('first');
+			$this->render('edit','ajax');
 		}
 	}
 	

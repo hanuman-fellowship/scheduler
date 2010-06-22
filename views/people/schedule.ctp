@@ -1,7 +1,6 @@
 <? $this->pageTitle=$person['Person']['name']."'s Schedule"; ?>
-<body class="RC_<?=$person['Person']['resident_category_id']?>" onclick="hide_tools();hide_login_who()">  
- 
- 
+<body class="RC_<?=$person['Person']['resident_category_id']?>" onclick="hideDialog()">  
+ <?=$this->element('schedule');?>
 <table width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
 		<td width="99" rowspan="2"> 

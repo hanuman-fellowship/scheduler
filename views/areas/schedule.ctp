@@ -1,36 +1,6 @@
 <? $this->pageTitle=$area['Area']['name']." Schedule"; ?>
-<?=$javascript->link('prototype');?>
-<?=$javascript->link('scriptaculous');?> 
-<?=$javascript->link('functions');?>
-<body onclick="hideDialogs()">  
-<div id="add_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#FFFFCC;padding:10px;">
-</div>
-<div id="edit_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#D8E2EC;padding:10px;">
-</div>
-<div id="assign_shift" onclick="stopclick(this.event)" style="display:none;position:absolute;background-color:#D8FDA9;padding:10px;">
-</div>
- <? if ($username = Authsome::get('username')) : ?>
- 	<?=$username;?> is logged in.
- 	<?=$html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>
- 	<br/>
-	<?=$html->link('Undo',array('controller'=>'changes','action'=>'undo'));?>
-	
-	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'));?>
-	<br/>
-	<?=$html->link('New Area', array('controller' => 'areas', 'action' => 'add'));?>
-	| <?=$html->link('Edit Area', array('controller' => 'areas', 'action' => 'edit', $area['Area']['id']));?>
-	| <?=$html->link('View Area', array('controller' => 'areas', 'action' => 'schedule'));?>
-	| <?=$html->link('New Shift', array('controller' => 'shifts', 'action' => 'add', $area['Area']['id']));?>
-	<br/>
-	<?=$html->link('New Branch', array('controller' => 'schedules', 'action' => 'doNewBranch'));?>
-	| <?=$html->link('Select Branch', array('controller' => 'schedules', 'action' => 'selectBranch'));?>
-	| <?=$html->link('Delete Branch', array('controller' => 'schedules', 'action' => 'doDeleteBranch'));?>
-	| <?=$html->link('Merge Branch', array('controller' => 'schedules', 'action' => 'doMergeBranch'));?>
- <? else : ?>
- 	 <?=$html->link('Login', array('controller' => 'users', 'action' => 'login')); ?>
- <? endif ?>
- <br/>
-<!-- <?="Updated: " . $time->format('F jS, Y @ g:ia',$session->read('Schedule.updated')); ?> -->
+<body onclick="hideDialog()">  
+<?=$this->element('schedule');?>
 <table width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
 		<td width="99" rowspan="2"> 
@@ -51,7 +21,17 @@
 		</td> 
 		<td width="222" rowspan="2"> 
 			<div align="center" class="title"> 
-				<?= $area['Area']['name'] ?><br />
+				<span id='area_name'>
+				<?=$role->link($area['Area']['name'],array(
+					'operations' => array(
+						'url' => array('action'=>'edit',$area['Area']['id']),
+						'attributes'=>array(
+							'update'=>'dialog_content',
+							'complete'=>"openDialog('area_name','#8DBBD5')"
+						)
+					)
+				),'ajax');?>
+				</span><br />
 				Schedule
 			</div>
 		</td> 
@@ -111,8 +91,8 @@
 				array(
 					'id'=>"add_{$slot_num}_{$day}", 
 					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
-					'update' => 'add_shift',
-					'complete' => "showElement('add_shift')"
+					'update' => 'dialog_content',
+					'complete' => "openDialog(null,'#ACBFDA')"
 				)
 			);?>
 		<? } else { ?>

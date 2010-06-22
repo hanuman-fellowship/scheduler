@@ -8,5 +8,5 @@
 		echo $form->input('manager');
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
+<?php echo '<span style="float:right">'.$form->end('Submit').'</span>';?>
 </div>

@@ -2710,3 +2710,7 @@
 2010-06-16 18:14:30 Notice: Notice (8): Undefined property: RoleHelper::$ajax in [APP/views/helpers/role.php, line 20]
 2010-06-18 17:42:50 Notice: Notice (8): Undefined variable: conflict in [APP/views/assignments/assign.ctp, line 17]
 2010-06-18 17:42:50 Notice: Notice (8): Undefined variable: conflict in [APP/views/assignments/assign.ctp, line 18]
+2010-06-21 19:54:10 Notice: Notice (8): Undefined variable: area in [APP/views/elements/schedule.ctp, line 15]
+2010-06-21 19:54:10 Notice: Notice (8): Undefined variable: area in [APP/views/elements/schedule.ctp, line 17]
+2010-06-21 19:55:41 Notice: Notice (8): Undefined variable: area in [APP/views/elements/schedule.ctp, line 15]
+2010-06-21 19:55:41 Notice: Notice (8): Undefined variable: area in [APP/views/elements/schedule.ctp, line 17]

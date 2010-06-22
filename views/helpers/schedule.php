@@ -88,8 +88,8 @@ class ScheduleHelper extends AppHelper {
 					'operations' => array(
 						'url' => array('controller'=>'assignments','action'=>'assign',$shift['id']),
 						'attributes'=>array(
-							'update'=>'assign_shift',
-							'complete'=>"assignDialog({$shift['id']})"
+							'update'=>'dialog_content',
+							'complete'=>"openDialog({$shift['id']},'#D8FDA9')"
 						)
 					)
 				),'ajax');
@@ -101,8 +101,8 @@ class ScheduleHelper extends AppHelper {
 				'operations' => array(
 					'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
 					'attributes'=>array(
-						'update'=>'edit_shift',
-						'complete'=>"editDialog({$shift['id']})"
+						'update'=>'dialog_content',
+						'complete'=>"openDialog({$shift['id']},'#D8E2EC')"
 					)
 				)
 			),'ajax');

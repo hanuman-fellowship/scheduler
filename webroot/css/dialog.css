@@ -1,0 +1,22 @@
+.out {
+	display:block; 
+	background: url('black50.png'); 
+	position:absolute;
+	margin:1em 0;
+	display:none;
+}
+.in {
+	text-align:center; 
+	border:1px solid #555; 
+	position:relative; 
+	padding:5px;
+	font-weight:normal;
+	padding:10px;
+}
+.ltin {
+  left:-5px;
+  }
+.tpin {
+  top:-5px;
+  }
+.narrow {width:8em;} /* change to suit */
