@@ -127,4 +127,5 @@
 		</td> 
 	</tr> 
 </table> 
+<?=$this->element('dialog');?>
 </body>

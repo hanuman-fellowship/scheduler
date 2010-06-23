@@ -5,8 +5,8 @@ function get(id) {
 }
 
 function showAddShift(slot,day) {
-	var addElement = document.getElementById('add_'+slot+'_'+day);
-	loc = findPos(document.getElementById(slot+'_'+day));
+	var addElement = get('add_'+slot+'_'+day);
+	loc = findPos(get(slot+'_'+day));
 	addElement.style.left = loc[0];
 	addElement.style.top = loc[1]+3+'px';
 	addElement.style.display = 'block';
@@ -33,8 +33,9 @@ function hideDialog() {
 }
 
 function openDialog(id,color) {
-	get('dialog').style.display = 'block';
+//	loc = findPos(get('id'));
 	get('dialog_content').style.backgroundColor = color;
+	get('dialog').style.display = '';
 	get(id).style.backgroundColor = '#FFF8BA';
 	highlighted = id;
 }

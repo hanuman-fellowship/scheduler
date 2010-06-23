@@ -1,15 +1,14 @@
 .out {
-	display:block; 
 	background: url('black50.png'); 
 	position:absolute;
 	margin:1em 0;
-	display:none;
+	top:-400px;
+	left:50px;
 }
 .in {
 	text-align:center; 
 	border:1px solid #555; 
 	position:relative; 
-	padding:5px;
 	font-weight:normal;
 	padding:10px;
 }

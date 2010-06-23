@@ -5,6 +5,8 @@
 		Krishna: <?=$title_for_layout?>
 	</title>	
 	<?=$html->css("screen") ?>
+	<?=$javascript->link('prototype');?>
+	<?=$javascript->link('scriptaculous');?> 
 </head>
 <body>
 	<div id="container">

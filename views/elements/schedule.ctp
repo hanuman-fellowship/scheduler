@@ -1,12 +1,6 @@
-<?=$javascript->link('prototype');?>
-<?=$javascript->link('scriptaculous');?> 
 <?=$javascript->link('functions');?>
 <?=$html->css("dialog") ?>
-<div id="dialog" class='out'>
-	<div id="dialog_content" class='in ltin tpin' onclick="stopclick(this.event)">
-	</div>
-</div>
- <? if ($username = Authsome::get('username')) : ?>
+  <? if ($username = Authsome::get('username')) : ?>
  	<?=$username;?> is logged in.
  	<?=$html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>
  	<br/>
