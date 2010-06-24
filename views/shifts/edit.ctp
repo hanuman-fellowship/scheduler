@@ -1,5 +1,5 @@
 <div class="shifts form">
-<?php echo $form->create('Shift');?>
+<?php echo $ajax->form('edit','post',array('model'=>'Shift','update'=>'schedule_content','complete'=>'hideDialog()'));?>
 	<fieldset>
  		<legend><?php __('Edit Shift');?></legend>
 	<?php
@@ -13,7 +13,11 @@
 	?>
 	<?php echo '<span style="float:right">'.$form->end('Submit').'</span>';?>
 	</fieldset>
-<?=$html->link('Delete Shift',array('action'=>'delete',$this->data['Shift']['id']),
-	array('style'=>'position:relative;top:5px')
+<?=$ajax->link('Delete Shift',array('action'=>'delete',$this->data['Shift']['id']),
+	array(
+		'style'=>'position:relative;top:5px',
+		'update'=>'schedule_content',
+		'complete'=>'document.getElementById("dialog").style.display="none"'
+	)
 );?>
 </div>

@@ -9,7 +9,7 @@ class ShiftsController extends AppController {
 			$this->record();
 			$this->Shift->sSave($this->data);
 			$this->stop($this->Shift->description);
-			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
+			$this->redirect('/areas/schedule/'.$this->data['Shift']['area_id']);
 		}
 		$this->loadModel('Area');
 		$this->Area->order = 'name';
@@ -24,7 +24,6 @@ class ShiftsController extends AppController {
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
 		$this->set('days',$this->Day->sFind('list'));
-		$this->render('add','ajax');
 	}
 	
 	function edit($id = null) {
@@ -36,7 +35,7 @@ class ShiftsController extends AppController {
 			$this->record();
 			$this->Shift->sSave($this->data);
 			$this->stop($this->Shift->description);
-			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
+			$this->redirect('/areas/schedule/'.$this->data['Shift']['area_id']);
 		}
 		if (empty($this->data)) {
 			$this->id = $id;
@@ -48,7 +47,6 @@ class ShiftsController extends AppController {
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
 		$this->set('days',$this->Day->sFind('list'));
-		$this->render('edit','ajax');
 	}
 	
 	function delete($id) {
@@ -58,7 +56,7 @@ class ShiftsController extends AppController {
 		$this->record();
 		$this->Shift->sDelete($id);
 		$this->stop($this->Shift->description);
-		$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $shift['Shift']['area_id']));
+		$this->redirect('/areas/schedule/'.$shift['Shift']['area_id']);
 	}
 	
 }

@@ -20,9 +20,7 @@ class AssignmentsController extends AppController {
 		$this->loadModel('Person');
 		$this->loadModel('Shift');
 		$this->set('people',$this->Assignment->Person->available($shift_id));
-		$this->set('shift',$shift_id);
-		$this->render('assign','ajax');
-	
+		$this->set('shift',$shift_id);	
 	}		
 	
 	function unassign($id) {

@@ -1,5 +1,5 @@
 <div class="shifts form">
-<?php echo $form->create('Shift');?>
+<?php echo $ajax->form('add','post',array('model'=>'Shift','update'=>'schedule_content'));?>
 	<fieldset>
  		<legend><?php __('New Shift');?></legend>
 	<?php
@@ -10,5 +10,6 @@
 		echo $form->input('num_people', array('label' => '# of People', 'default' => 1));
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
+<?= $form->submit('Submit');?>
+<?php echo $form->end();?>
 </div>

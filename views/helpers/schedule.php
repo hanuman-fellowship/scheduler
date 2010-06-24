@@ -67,10 +67,11 @@ class ScheduleHelper extends AppHelper {
 							'class' => 'remove_RC_'.$assignment['Person']['resident_category_id'],
 							'style' => 'margin:10px',
 							'onmouseover' => "showElement('goto_{$assignment['id']}')",
-							'onmouseout' => "hideElement('goto_{$assignment['id']}')"
+							'onmouseout' => "hideElement('goto_{$assignment['id']}')",
+							'update'=>'schedule_content'
 						)
 					)
-				)) . '<br/>';
+				),'ajax') . '<br/>';
 				if (Authsome::get('role') == 'operations') {				
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),

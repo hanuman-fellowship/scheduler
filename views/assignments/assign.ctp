@@ -13,8 +13,10 @@ echo "<div style='float:left;padding:10px;'>";
 				echo "</div><div style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
 				$rcId = $person['resident_category_id'];
 			}
-			echo $html->link($person['name'],array($shift,$person['id']),array(
-				'class' => 'RC_' . $person['resident_category_id']
+			echo $ajax->link($person['name'],array($shift,$person['id']),array(
+				'class' => 'RC_' . $person['resident_category_id'],
+				'update'=>'schedule_content',
+				'complete'=>'hideDialog()'
 			)) . '<br>';
 		}
 	}
