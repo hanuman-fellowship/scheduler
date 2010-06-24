@@ -1,9 +1,7 @@
 .out {
 	background: url('black50.png'); 
-	position:absolute;
+	position:relative;
 	margin:1em 0;
-	top:-400px;
-	left:50px;
 }
 .in {
 	text-align:center; 

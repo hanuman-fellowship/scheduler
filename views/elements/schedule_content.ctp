@@ -89,7 +89,7 @@
 					'id'=>"add_{$slot_num}_{$day}", 
 					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 					'update' => 'dialog_content',
-					'complete' => "openDialog(null,'#ACBFDA')"
+					'complete' => "openDialog('schedule_content','#ACBFDA','true')"
 				)
 			);?>
 		<? } else { ?>

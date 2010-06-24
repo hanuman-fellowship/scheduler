@@ -32,12 +32,29 @@ function hideDialog() {
 	get('dialog').style.display = 'none';
 }
 
-function openDialog(id,color) {
-//	loc = findPos(get('id'));
+function openDialog(id,color,noHighlight) {
 	get('dialog_content').style.backgroundColor = color;
-	get('dialog').style.display = '';
-	get(id).style.backgroundColor = '#FFF8BA';
-	highlighted = id;
+	get('dialog').style.display = 'table';
+	if (!noHighlight) {
+		get(id).style.backgroundColor = '#FFF8BA';
+		highlighted = id;
+	}
+	loc = findPos(get(id));
+	windowWidth = f_clientWidth();
+	windowHeight = f_clientHeight();
+	dialogWidth = get('dialog').offsetWidth;
+	dialogHeight = get('dialog').offsetHeight;
+	linkWidth = get(id).offsetWidth;
+	newLeft = loc[0]-f_scrollLeft()+linkWidth+20;
+	newTop = loc[1]-f_scrollTop()-30;
+	if (newLeft + dialogWidth > windowWidth) {
+		newLeft = newLeft - dialogWidth - linkWidth - 40;
+	}
+	if (newTop + dialogHeight > windowHeight) {
+		newTop = windowHeight - dialogHeight;
+	}
+	get('dialog').style.left = newLeft+'px';
+	get('dialog').style.top = newTop+'px';
 }
 
 function toggleConflicts() {
@@ -66,3 +83,39 @@ function stopclick(e) {
 	e.cancelBubble = true;
 	if (e.stopPropagation) e.stopPropagation();
 }
+
+function f_clientWidth() {
+	return f_filterResults (
+		window.innerWidth ? window.innerWidth : 0,
+		document.documentElement ? document.documentElement.clientWidth : 0,
+		document.body ? document.body.clientWidth : 0
+	);
+}
+function f_clientHeight() {
+	return f_filterResults (
+		window.innerHeight ? window.innerHeight : 0,
+		document.documentElement ? document.documentElement.clientHeight : 0,
+		document.body ? document.body.clientHeight : 0
+	);
+}
+function f_scrollLeft() {
+	return f_filterResults (
+		window.pageXOffset ? window.pageXOffset : 0,
+		document.documentElement ? document.documentElement.scrollLeft : 0,
+		document.body ? document.body.scrollLeft : 0
+	);
+}
+function f_scrollTop() {
+	return f_filterResults (
+		window.pageYOffset ? window.pageYOffset : 0,
+		document.documentElement ? document.documentElement.scrollTop : 0,
+		document.body ? document.body.scrollTop : 0
+	);
+}
+function f_filterResults(n_win, n_docel, n_body) {
+	var n_result = n_win ? n_win : 0;
+	if (n_docel && (!n_result || (n_result > n_docel)))
+		n_result = n_docel;
+	return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
+}
+
