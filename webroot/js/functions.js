@@ -138,3 +138,4 @@ function getCookie ( cookie_name ) {
 		return null;
 	}
 }
+//
