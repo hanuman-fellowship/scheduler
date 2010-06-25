@@ -1,5 +1,5 @@
 <div class="areas form">
-<?php echo $ajax->form('edit','post',array('model'=>'Area','update'=>'schedule_content','complete'=>'hideDialog()'));?>
+<?php echo $form->create('Area',array('onsubmit'=>'saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Area');?></legend>
 	<?php

@@ -1,5 +1,5 @@
 <div class="shifts form">
-<?php echo $ajax->form('add','post',array('model'=>'Shift','update'=>'schedule_content'));?>
+<?php echo $form->create('Shift',array('onsubmit'=>'saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('New Shift');?></legend>
 	<?php

@@ -18,6 +18,5 @@
 			<?=$content_for_layout?>
 		</div>
 	</div>
-	<?=$cakeDebug?>
 </body>
 </html>

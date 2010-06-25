@@ -119,3 +119,22 @@ function f_filterResults(n_win, n_docel, n_body) {
 	return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
 }
 
+function saveScroll() {
+	document.cookie = "scrollTop="+f_scrollTop();
+	document.cookie = "scrollLeft="+f_scrollLeft();
+}
+
+function setScroll() {
+	window.scroll(getCookie('scrollLeft'),getCookie('scrollTop'));
+	document.cookie = "scrollTop=;";
+	document.cookie = "scrollLeft=;";	
+}
+
+function getCookie ( cookie_name ) {
+	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
+	if ( results ) {
+		return ( unescape ( results[2] ) );
+	} else {
+		return null;
+	}
+}

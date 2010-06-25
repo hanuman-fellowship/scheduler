@@ -68,9 +68,8 @@ class ScheduleHelper extends AppHelper {
 							'style' => 'margin:10px',
 							'onmouseover' => "showElement('goto_{$assignment['id']}')",
 							'onmouseout' => "hideElement('goto_{$assignment['id']}')",
-							'update'=>'schedule_content'
-						),
-						'ajax'
+							'onclick' => 'saveScroll()'
+						)
 					)
 				)) . '<br/>';
 				if (Authsome::get('role') == 'operations') {				
