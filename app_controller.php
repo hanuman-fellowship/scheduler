@@ -1,4 +1,3 @@
-//test
 <?php
 
 class AppController extends Controller {
