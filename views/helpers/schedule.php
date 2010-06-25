@@ -69,9 +69,10 @@ class ScheduleHelper extends AppHelper {
 							'onmouseover' => "showElement('goto_{$assignment['id']}')",
 							'onmouseout' => "hideElement('goto_{$assignment['id']}')",
 							'update'=>'schedule_content'
-						)
+						),
+						'ajax'
 					)
-				),'ajax') . '<br/>';
+				)) . '<br/>';
 				if (Authsome::get('role') == 'operations') {				
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
@@ -91,9 +92,10 @@ class ScheduleHelper extends AppHelper {
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog({$shift['id']},'#D8FDA9')"
-						)
+						),
+						'ajax'
 					)
-				),'ajax');
+				));
 				$people .= "{$unassigned}<br/>";
 			}
 		}
@@ -104,9 +106,10 @@ class ScheduleHelper extends AppHelper {
 					'attributes'=>array(
 						'update'=>'dialog_content',
 						'complete'=>"openDialog({$shift['id']},'#D8E2EC')"
-					)
+					),
+					'ajax'
 				)
-			),'ajax');
+			));
 			return "<span id='{$shift['id']}'><b>" . $time . "</b><br/>" . $people . "</span><br/><br/>";
 		}
 	}

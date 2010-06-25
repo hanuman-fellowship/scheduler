@@ -11,12 +11,14 @@ class RoleHelper extends AppHelper {
 		}
 	}
 	
-	function link($title,$roles,$type = 'html') {
+	function link($title,$roles) {
 		$cur_role = Authsome::get('role');
 		if (array_key_exists($cur_role,$roles)) {
 			$attributes = array_key_exists('attributes',$roles[$cur_role]) ? 
 				$roles[$cur_role]['attributes'] : null;
 			$url =  $roles[$cur_role]['url'];
+			$type = in_array('ajax',$roles[$cur_role]) ?
+				'ajax' : 'html';
 			return $this->{$type}->link($title,$url,$attributes);
 		} else {
 			return $title;

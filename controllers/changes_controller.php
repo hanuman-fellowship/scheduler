@@ -39,6 +39,12 @@
         } 
         $this->redirect($this->referer()); 
     } 
+    
+    function history() {
+    	$this->Change->recursive = -1;
+    	$this->Change->order = 'id';
+    	$this->set('changes',$this->Change->sFind('all'));
+    }
      
 } 
 ?>

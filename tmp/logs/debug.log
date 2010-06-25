@@ -2861,3 +2861,4 @@
 2010-06-23 23:06:31 Notice: Notice (8): Undefined variable: bounds in [APP/views/elements/schedule_content.ctp, line 67]
 2010-06-23 23:06:31 Notice: Notice (8): Undefined variable: bounds in [APP/views/elements/schedule_content.ctp, line 76]
 2010-06-23 23:06:31 Notice: Notice (8): Undefined variable: area in [APP/views/elements/schedule_content.ctp, line 111]
+2010-06-24 20:55:17 Notice: Notice (8): Undefined variable: here in [APP/views/changes/history.ctp, line 12]

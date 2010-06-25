@@ -25,9 +25,10 @@
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog('area_name','#8DBBD5')"
-						)
+						),
+						'ajax'
 					)
-				),'ajax');?>
+				));?>
 				</span><br />
 				Schedule
 			</div>

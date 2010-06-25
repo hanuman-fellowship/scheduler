@@ -7,6 +7,7 @@
 	<?=$html->link('Undo',array('controller'=>'changes','action'=>'undo'));?>
 	
 	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'));?>
+	<?=$html->link('History',array('controller'=>'changes','action'=>'history'));?>
 	<br/>
 	<?=$html->link('New Area', array('controller' => 'areas', 'action' => 'add'));?>
 	| <?=$html->link('View Area', array('controller' => 'areas', 'action' => 'schedule'));?>
