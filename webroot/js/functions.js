@@ -84,8 +84,6 @@ function stopclick(e) {
 	if (e.stopPropagation) e.stopPropagation();
 }
 
-
-
 function f_clientWidth() {
 	return f_filterResults (
 		window.innerWidth ? window.innerWidth : 0,
