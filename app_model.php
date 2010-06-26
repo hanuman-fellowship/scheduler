@@ -60,7 +60,7 @@ class AppModel extends Model {
 			$this->Change->getOldData($this->name, $fields['id']); 
 		} else {
 			$this->Change->oldData = array(
-				"{$this->name}" => array_combine($keys,array_fill(0,count($keys),null)) // array_fill_keys not available
+				"{$this->name}" => array_fill_keys(array_keys($fields),null)
 			);
 			$this->Change->oldData[$this->name]['id'] = null;
 		}
