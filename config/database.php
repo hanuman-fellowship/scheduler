@@ -5,9 +5,8 @@ class DATABASE_CONFIG {
 		'driver' => 'mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'port' => '/Applications/MAMP/tmp/mysql/mysql.sock',
 		'login' => 'root',
-		'password' => 'root',
+		'password' => 'mYsqlr00t',
 		'database' => 'krishna',
 	);
 }
