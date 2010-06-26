@@ -1,3 +1,4 @@
+
 <div class="shifts form">
 <?php echo $form->create('Shift', array('onsubmit'=>'saveScroll()'));?>
 	<fieldset>
