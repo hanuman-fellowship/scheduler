@@ -1,5 +1,5 @@
 <div class="shifts form">
-<?php echo $form->create('Shift',array('onsubmit'=>'saveScroll()'));?>
+<?php echo $form->create('Shift', array('onsubmit'=>'saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Shift');?></legend>
 	<?php
