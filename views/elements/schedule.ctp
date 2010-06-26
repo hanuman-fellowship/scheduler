@@ -1,9 +1,29 @@
 <?=$javascript->link('functions');?>
 <?=$html->css("dialog") ?>
-  <? if ($username = Authsome::get('username')) : ?>
- 	<?=$username;?> is logged in.
- 	<?=$html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>
- 	<br/>
+<?=$role->menu(array(
+	'' => array(
+		'Login' => array(
+			'url' => array('controller' => 'users', 'action' => 'login')
+		)
+	),
+	'operations' => array(
+		"Hello, ".Inflector::humanize(Authsome::get('username')),
+		'Logout' => array(
+			'url' => array('controller' => 'users', 'action' => 'logout')
+		),
+		' | ',
+		'New' => array(
+			'url' => '#',
+			'sub' => array(
+				'Area' => array('controller' => 'areas', 'action' => 'add'),
+				'--------------------------------------' => '',
+				'Person' => array('controller' => 'people', 'action' => 'add'),
+				'Shift' => array('controller' => 'shifts', 'action' => 'add')
+			)
+		)
+	)
+));?>
+<!--  <? if ($username = Authsome::get('username')) : ?>
 	<?=$html->link('Undo',array('controller'=>'changes','action'=>'undo'));?>
 	
 	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'));?>
@@ -16,8 +36,5 @@
 	| <?=$html->link('Select Branch', array('controller' => 'schedules', 'action' => 'selectBranch'));?>
 	| <?=$html->link('Delete Branch', array('controller' => 'schedules', 'action' => 'doDeleteBranch'));?>
 	| <?=$html->link('Merge Branch', array('controller' => 'schedules', 'action' => 'doMergeBranch'));?>
- <? else : ?>
- 	 <?=$html->link('Login', array('controller' => 'users', 'action' => 'login')); ?>
- <? endif ?>
- <br/>
-<!-- <?="Updated: " . $time->format('F jS, Y @ g:ia',$session->read('Schedule.updated')); ?> -->
+  <? endif ?>
+ <?="Updated: " . $time->format('F jS, Y @ g:ia',$session->read('Schedule.updated')); ?> -->

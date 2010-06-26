@@ -25,5 +25,45 @@ class RoleHelper extends AppHelper {
 		}
 	}
 	
+	function menu($data) {
+		$cur_role = Authsome::get('role');
+		$menuData = $this->html->css("menu");
+		$menuData .= '<div>';
+		$menuData .= '<ul class="menu">';
+		foreach($data[$cur_role] as $title => $top) {
+			$menuData .= '<li class="top">';
+			if (!is_array($top)) {
+				$menuData .= "<span>{$top}</span>";
+			} else {
+				if (isset($top['url'])) {
+					$menuData .= $this->html->link("{$title}",$top['url'],array(
+						'class'=>'top_link'
+					));
+				} else {
+					$menuData .= $title;
+				}
+				if (isset($top['sub'])) {
+					$menuData .= '<ul class="sub">';
+					foreach($top['sub'] as $title => $sub) {
+						$menuData .= '<li>';
+						if ($sub == '') {
+							$menuData .= "<span>{$title}</span>";
+						} else {
+							
+							$menuData .= $this->html->link($title,$sub);
+						}
+						$menuData .= '</li>';
+					}
+					$menuData .= '</ul>';
+				}
+			}
+			$menuData .= '</li>';
+			
+		}
+		$menuData .= '</ul>';
+		$menuData .= '</div>';
+		return $menuData;
+	}
+	
 }
 ?>
