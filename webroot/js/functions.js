@@ -1,4 +1,5 @@
 var highlighted = '';
+var stopClick = false;
 
 function get(id) {
 	return document.getElementById(id);
@@ -26,10 +27,13 @@ function hideElement(id) {
 }
 
 function hideDialog() {
-	if(highlighted != '') {
-		get(highlighted).style.backgroundColor = '#FFFFFF';
+	if (!stopClick) {
+		if(highlighted != '') {
+			get(highlighted).style.backgroundColor = '#FFFFFF';
+		}
+		get('dialog').style.display = 'none';
 	}
-	get('dialog').style.display = 'none';
+	stopClick = false;
 }
 
 function openDialog(id,color,noHighlight) {
@@ -76,12 +80,10 @@ function findPos(obj) {
 		} while (obj = obj.offsetParent);
 	return [curleft,curtop];
 	}
-}		
+}
 
-function stopclick(e) {
-	if (!e) var e = window.event;
-	e.cancelBubble = true;
-	if (e.stopPropagation) e.stopPropagation();
+function clickInDialog() {
+	stopClick = true;
 }
 
 function f_clientWidth() {
