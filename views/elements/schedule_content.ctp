@@ -110,12 +110,6 @@
 	<tr> 
 		<td align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 			<?=$schedule->displayAreaFloating($area['FloatingShift']);?>
-
-<!-- now that the total hours are added up, sneak them in at the top -->
-<script type="text/javascript">
-	document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
-</script>
-
 			<br/>
 			<a class="extra_blank" id="hide" href="javascript:openpopup('add_extra.php','Extra','width=580,height=208')"> 
 				<span id="no_print">
