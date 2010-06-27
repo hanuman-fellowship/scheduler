@@ -36,9 +36,14 @@ class RoleHelper extends AppHelper {
 				$menuData .= "<span>{$top}</span>";
 			} else {
 				if (isset($top['url'])) {
-					$menuData .= $this->html->link("{$title}",$top['url'],array(
-						'class'=>'top_link'
-					));
+					$attributes = array('class'=>'top_link');
+					if (array_key_exists('ajax',$top)) {
+						$type = 'ajax';
+						$attributes = array_merge($attributes,$top['ajax']);
+					} else {
+						$type = 'html';
+					}				
+					$menuData .= $this->{$type}->link($title,$top['url'],$attributes);
 				} else {
 					$menuData .= $title;
 				}
@@ -49,8 +54,9 @@ class RoleHelper extends AppHelper {
 						if ($sub == '') {
 							$menuData .= "<span>{$title}</span>";
 						} else {
-							
+							$menuData .= "<span id='menu_{$title}'>";
 							$menuData .= $this->html->link($title,$sub);
+							$menuData .= "</span>";
 						}
 						$menuData .= '</li>';
 					}

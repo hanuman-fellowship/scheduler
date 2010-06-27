@@ -3,7 +3,12 @@
 <?=$role->menu(array(
 	'' => array(
 		'Login' => array(
-			'url' => array('controller' => 'users', 'action' => 'login')
+			'url' => array('controller' => 'users', 'action' => 'login'),
+			'ajax' => array(
+				'update'=>'dialog_content',
+				'complete'=>"openDialog('menu_Login','#FFF','true')",
+				'id' => 'menu_Login'
+			)
 		)
 	),
 	'operations' => array(
