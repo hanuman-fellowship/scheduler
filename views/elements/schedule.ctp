@@ -20,10 +20,21 @@
 		'New' => array(
 			'url' => '#',
 			'sub' => array(
-				'Area' => array('controller' => 'areas', 'action' => 'add'),
-				'--------------------------------------' => '',
-				'Person' => array('controller' => 'people', 'action' => 'add'),
-				'Shift' => array('controller' => 'shifts', 'action' => 'add')
+				'Area' => array(
+					'url' => array('controller' => 'areas', 'action' => 'add')
+				),
+				'<br>',
+				'Person' => array(
+					'url' => array('controller' => 'people', 'action' => 'add')
+				),
+				'Shift' => array(
+					'url' => array('controller' => 'shifts', 'action' => 'add'),
+					'ajax' => array(
+						'update'=>'dialog_content',
+						'complete'=>"openDialog('menu_Shift','#FFF','true')",
+						'id' => 'menu_Shift'
+					)
+				)
 			)
 		)
 	)

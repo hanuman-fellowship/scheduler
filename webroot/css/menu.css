@@ -1,7 +1,7 @@
-.menu {padding:0 12px 0 0px; margin:0; list-style:none; height:35px; display:table; background:#FFFFE6 repeat-x; position:relative; font-family:arial, verdana, sans-serif; }
+.menu {padding:0 12px 0 12px; margin:0; list-style:none; height:35px; display:table; background:#FFFFE6 repeat-x; position:relative; font-family:arial, verdana, sans-serif; }
 .menu li.top {display:block; float:left; position:relative;}
-.menu li span {display:block; float:left; height:35px; line-height:35px; color:#999; text-decoration:none; font-size:11px; font-weight:bold; padding:0 0 0 12px;}
-.menu li a.top_link {display:block; float:left; height:35px; line-height:35px; color:#bbb; text-decoration:none; font-size:11px; font-weight:bold; padding:0 0 0 12px; cursor:pointer;}
+.menu li span {display:block; float:left; height:35px; line-height:35px; color:#999; text-decoration:none; font-size:11px; font-weight:bold; padding:0 6px 0 6px;}
+.menu li a.top_link {display:block; float:left; height:35px; line-height:35px; color:#bbb; text-decoration:none; font-size:11px; font-weight:bold; padding:0 6px 0 6px; cursor:pointer;}
 .menu li a.top_link span {float:left; font-weight:bold; display:block; padding:0 24px 0 12px; height:35px;}
 .menu li a.top_link span.down {float:left; display:block; padding:0 24px 0 12px; height:40px; background:url(images/down.gif) no-repeat right top;}
 .menu li a.top_link:hover {color:#000; background: url(images/button4.gif) no-repeat;}

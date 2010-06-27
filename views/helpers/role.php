@@ -51,12 +51,17 @@ class RoleHelper extends AppHelper {
 					$menuData .= '<ul class="sub">';
 					foreach($top['sub'] as $title => $sub) {
 						$menuData .= '<li>';
-						if ($sub == '') {
-							$menuData .= "<span>{$title}</span>";
+						if (!is_array($sub)) {
+							$menuData .= "<span>{$sub}</span>";
 						} else {
-							$menuData .= "<span id='menu_{$title}'>";
-							$menuData .= $this->html->link($title,$sub);
-							$menuData .= "</span>";
+							if (array_key_exists('ajax',$sub)) {
+								$type = 'ajax';
+								$attributes = $sub['ajax'];
+							} else {
+								$type = 'html';
+								$attributes = null;
+							}				
+							$menuData .= $this->{$type}->link($title,$sub['url'],$attributes);
 						}
 						$menuData .= '</li>';
 					}
