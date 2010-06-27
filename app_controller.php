@@ -12,6 +12,13 @@ class AppController extends Controller {
     );
         
 	function beforeFilter() {
+		
+		// if the session has timed out, redirect to the login
+		if (!$this->Session->check('User')) {
+			$this->Session->write('User',array());
+			$this->redirect('/');
+		}
+	
 		// put the latest published schedule into the session
 		if (!$this->Session->check('Schedule')) {
 			$this->loadModel('Schedule');
