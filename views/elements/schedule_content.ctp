@@ -4,7 +4,7 @@
 			<div align="right"> 
 				<p>
 				<?= (isset($area)) ?
-				'Manager: ' :  
+				'xManager: ' :  
 				'Total Hours: ';?>
 				</p> 
 			</div>
