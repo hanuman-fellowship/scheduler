@@ -30,46 +30,63 @@ class RoleHelper extends AppHelper {
 		$menuData = $this->html->css("menu");
 		$menuData .= '<span>';
 		$menuData .= '<ul class="menu">';
-		foreach($data[$cur_role] as $title => $top) {
-			$menuData .= '<li class="top">';
-			if (!is_array($top)) {
+		foreach($data as $title => $top) {
+			if (!is_array($top)) { // no link, role, or submenus so draw it and move on
+				$menuData .= '<li class="top">';
 				$menuData .= "<span>{$top}</span>";
-			} else {
-				if (isset($top['url'])) {
-					$attributes = array('class'=>'top_link');
-					if (array_key_exists('ajax',$top)) {
-						$type = 'ajax';
-						$attributes = array_merge($attributes,$top['ajax']);
-					} else {
-						$type = 'html';
-					}				
-					$menuData .= $this->{$type}->link($title,$top['url'],$attributes);
+				$menuData .= '</li>';
+				continue;
+			}
+			if (array_key_exists('role',$top)) {
+				if (!in_array($cur_role,$top['role'])) { // skip this one if it's not our role
+					continue;
+				}
+			} // if there's no role, specification, then we can display it
+			$menuData .= '<li class="top">';			
+			if (isset($top['url'])) {
+				$attributes = array('class'=>'top_link');
+				if (array_key_exists('ajax',$top)) {
+					$type = 'ajax';
+					$attributes = array_merge($attributes,$top['ajax']);
 				} else {
-					$menuData .= $title;
-				}
-				if (isset($top['sub'])) {
-					$menuData .= '<ul class="sub">';
-					foreach($top['sub'] as $title => $sub) {
+					$type = 'html';
+				}				
+				$menuData .= $this->{$type}->link($title,$top['url'],$attributes);
+			} else {
+				$menuData .= "<span>{$title}</span>";
+			}
+			if (isset($top['sub'])) {
+				$menuData .= '<ul class="sub">';
+				foreach($top['sub'] as $title => $sub) {
+					if (!is_array($sub)) { // no link or role, so draw and move on
 						$menuData .= '<li>';
-						if (!is_array($sub)) {
-							$menuData .= "<span>{$sub}</span>";
-						} else {
-							if (array_key_exists('ajax',$sub)) {
-								$type = 'ajax';
-								$attributes = $sub['ajax'];
-							} else {
-								$type = 'html';
-								$attributes = null;
-							}				
-							$menuData .= $this->{$type}->link($title,$sub['url'],$attributes);
-						}
-						$menuData .= '</li>';
+						$menuData .= "<span>{$sub}</span>";
+						$menuData .= '</li>';					
+						continue;
 					}
-					$menuData .= '</ul>';
+					if (array_key_exists('role',$sub)) {
+						if (!in_array($cur_role,$sub['role'])) { // skip this one if it's not our role
+							continue;
+						}
+					} // if there's no role, specification, then we can display it
+					$menuData .= '<li>';
+					if (array_key_exists('url',$sub)) {
+						if (array_key_exists('ajax',$sub)) {
+							$type = 'ajax';
+							$attributes = $sub['ajax'];
+						} else {
+							$type = 'html';
+							$attributes = null;
+						}				
+						$menuData .= $this->{$type}->link($title,$sub['url'],$attributes);
+					} else {
+						$menuData .= "<span>{$title}</span>";
+					}
+					$menuData .= '</li>';
 				}
+				$menuData .= '</ul>';
 			}
 			$menuData .= '</li>';
-			
 		}
 		$menuData .= '</ul>';
 		$menuData .= '</span>';
