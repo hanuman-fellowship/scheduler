@@ -20,6 +20,39 @@ class Person extends AppModel {
 		'OffDay'
 	);
 	
+	function sSave($data) {
+		$changes = parent::sSave($data);
+		$this->setDescription($changes);
+	}
+	
+	function sDelete($id) {
+		$changes = parent::sDelete($id);
+		$this->setDescription($changes);
+	}	
+	
+	function setDescription($changes) {
+		if (isset($changes['newData'])) {
+			if ($changes['oldData']['id'] == '') {
+				$this->description = "New person created: {$changes['newData']['name']}";
+			} else {
+				$this->description = 'Person changed: '.
+				"{$changes['oldData']['name']}";
+				$listed = false;
+				foreach($changes['newData'] as $field => $val) {
+					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
+						$this->description .= $listed ? ', ' : ' ';
+						$this->description .= 
+							Inflector::humanize($field).' is now '.$val;
+						$listed = true;
+					}
+				}
+			}
+		} else {
+			$this->description = "Person deleted: {$changes['name']}";
+		}
+	}
+	
+	
 	function getPerson($id) {
 		$this->id = $id;
 		$this->sContain('Assignment.Shift.Area','ResidentCategory','OffDay','FloatingShift.Area');

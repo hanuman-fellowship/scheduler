@@ -15,6 +15,19 @@ class PeopleController extends AppController {
 		$this->set('bounds', $this->Boundary->getBounds());
 	}	
 	
+	function add() {
+		if (!empty($this->data)) {
+			$this->Person->create();
+			$this->record();
+			$this->Person->sSave($this->data);
+			$this->stop($this->Person->description);
+			$this->redirect(array('controller' => 'people', 'action' => 'schedule', $this->Person->id));
+		}
+		$this->loadModel('ResidentCategory');
+		$residentCategories = $this->ResidentCategory->sFind('list');
+		$this->set(compact('residentCategories'));
+	}
+	
 	
 }
 	
