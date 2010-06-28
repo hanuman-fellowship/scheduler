@@ -1,4 +1,5 @@
-<h2><?php echo $this->pageTitle = 'Select Branch'; ?></h2>
+<fieldset>
+	<legend><?php __('Select Schedule');?></legend>
 <?
 foreach($schedules as $schedule) {
 	$style = ($schedule['Schedule']['id'] == $schedule_id) ? 
@@ -10,3 +11,4 @@ foreach($schedules as $schedule) {
 	echo '<br/>';
 }
 ?>
+</fieldset>

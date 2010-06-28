@@ -38,11 +38,16 @@ class AreasController extends AppController {
 		}
 	}
 	
-	function delete($id) {
-		$this->record();
-		$this->Area->sDelete($id);
-		$this->stop($this->Area->description);
-		$this->redirect('/');
+	function delete($id = null) {
+		if ($id) {
+	//		$this->record();
+	//		$this->Area->sDelete($id);
+	//		$this->stop($this->Area->description);
+	//		$this->redirect('/');
+		}
+		$this->Area->recursive = -1;
+		$this->Area->order = 'name';
+		$this->set('areas',$this->Area->sFind('list'));
 	}
 	
 	function select() {

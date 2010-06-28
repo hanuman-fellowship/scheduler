@@ -1,4 +1,5 @@
-<h2><?php echo $this->pageTitle = 'Merge Branch'; ?></h2>
+<fieldset>
+	<legend><?php __('Merge Schedule');?></legend>
 <?
 foreach($schedules as $schedule) {
 	if (!in_array($schedule['Schedule']['id'],array($schedule_id, $parent_id))) {
@@ -7,3 +8,4 @@ foreach($schedules as $schedule) {
 	}
 }	
 ?>
+</fieldset>

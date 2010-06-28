@@ -1,5 +1,5 @@
 <? $this->pageTitle=$area['Area']['name']." Schedule"; ?>
-<?=$this->element('schedule');?>
+<?=$this->element('menu');?>
 <div id='schedule_content'>
 <?=$this->element('schedule_content');?>
 </div>

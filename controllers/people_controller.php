@@ -28,7 +28,14 @@ class PeopleController extends AppController {
 		$this->set(compact('residentCategories'));
 	}
 	
-	
+	function delete($id = null) {
+		if ($id) {
+//			$this->Person->sDelete($id);
+		}
+		$this->Person->sContain('ResidentCategory');
+		$this->Person->order = 'Person.resident_category_id, Person.name';
+		$this->set('people',$this->Person->sFind('all'));
+	}
 }
 	
 ?>
