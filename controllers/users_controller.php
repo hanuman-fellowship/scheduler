@@ -16,7 +16,6 @@ class UsersController extends AppController {
             $this->Session->setFlash('Unknown user or wrong password');
             return;
         }
-       $this->redirect($this->loadPage());
     }
     
     public function logout() {

@@ -60,7 +60,7 @@ class AppModel extends Model {
 			$this->Change->getOldData($this->name, $fields['id']); 
 		} else {
 			$this->Change->oldData = array(
-				"{$this->name}" => array_fill_keys(array_keys($fields),null)
+				"{$this->name}" => $this->array_fill_keys(array_keys($fields),null)
 			);
 			$this->Change->oldData[$this->name]['id'] = null;
 		}
@@ -100,7 +100,7 @@ class AppModel extends Model {
 		$this->Change->schedule_id = $this->schedule_id;
 		$this->Change->getOldData($this->name,$id);
 		$this->Change->newData = array(
-			"{$this->name}" => array_fill_keys(array_keys($this->Change->oldData[$this->name]),null)
+			"{$this->name}" => $this->array_fill_keys(array_keys($this->Change->oldData[$this->name]),null)
 		);
 		$this->Change->saveChange(0); // 0 for delete
 
@@ -130,6 +130,9 @@ class AppModel extends Model {
 			"{$this->name}.schedule_id" => $schedule_id
 		));               	
 	}
-			
+		
+	function array_fill_keys($keys, $value) {
+		return array_combine($keys,array_fill(0,count($keys),$value));	
+	}
 }
 ?>
