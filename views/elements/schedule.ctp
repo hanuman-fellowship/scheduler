@@ -3,7 +3,12 @@
 <?=$role->menu(array(
 	'' => array(
 		'Login' => array(
-			'url' => array('controller' => 'users', 'action' => 'login')
+			'url' => array('controller' => 'users', 'action' => 'login'),
+			'ajax' => array(
+				'update'=>'dialog_content',
+				'complete'=>"openDialog('menu_Login','#FFF','true')",
+				'id' => 'menu_Login'
+			)
 		)
 	),
 	'operations' => array(
@@ -15,10 +20,21 @@
 		'New' => array(
 			'url' => '#',
 			'sub' => array(
-				'Area' => array('controller' => 'areas', 'action' => 'add'),
-				'--------------------------------------' => '',
-				'Person' => array('controller' => 'people', 'action' => 'add'),
-				'Shift' => array('controller' => 'shifts', 'action' => 'add')
+				'Area' => array(
+					'url' => array('controller' => 'areas', 'action' => 'add')
+				),
+				'<hr/>',
+				'Person' => array(
+					'url' => array('controller' => 'people', 'action' => 'add')
+				),
+				'Shift' => array(
+					'url' => array('controller' => 'shifts', 'action' => 'add'),
+					'ajax' => array(
+						'update'=>'dialog_content',
+						'complete'=>"openDialog('menu_Shift','#FFF','true')",
+						'id' => 'menu_Shift'
+					)
+				)
 			)
 		)
 	)

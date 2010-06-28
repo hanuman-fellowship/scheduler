@@ -28,7 +28,7 @@ class RoleHelper extends AppHelper {
 	function menu($data) {
 		$cur_role = Authsome::get('role');
 		$menuData = $this->html->css("menu");
-		$menuData .= '<div>';
+		$menuData .= '<span>';
 		$menuData .= '<ul class="menu">';
 		foreach($data[$cur_role] as $title => $top) {
 			$menuData .= '<li class="top">';
@@ -36,9 +36,14 @@ class RoleHelper extends AppHelper {
 				$menuData .= "<span>{$top}</span>";
 			} else {
 				if (isset($top['url'])) {
-					$menuData .= $this->html->link("{$title}",$top['url'],array(
-						'class'=>'top_link'
-					));
+					$attributes = array('class'=>'top_link');
+					if (array_key_exists('ajax',$top)) {
+						$type = 'ajax';
+						$attributes = array_merge($attributes,$top['ajax']);
+					} else {
+						$type = 'html';
+					}				
+					$menuData .= $this->{$type}->link($title,$top['url'],$attributes);
 				} else {
 					$menuData .= $title;
 				}
@@ -46,11 +51,17 @@ class RoleHelper extends AppHelper {
 					$menuData .= '<ul class="sub">';
 					foreach($top['sub'] as $title => $sub) {
 						$menuData .= '<li>';
-						if ($sub == '') {
-							$menuData .= "<span>{$title}</span>";
+						if (!is_array($sub)) {
+							$menuData .= "<span>{$sub}</span>";
 						} else {
-							
-							$menuData .= $this->html->link($title,$sub);
+							if (array_key_exists('ajax',$sub)) {
+								$type = 'ajax';
+								$attributes = $sub['ajax'];
+							} else {
+								$type = 'html';
+								$attributes = null;
+							}				
+							$menuData .= $this->{$type}->link($title,$sub['url'],$attributes);
 						}
 						$menuData .= '</li>';
 					}
@@ -61,7 +72,7 @@ class RoleHelper extends AppHelper {
 			
 		}
 		$menuData .= '</ul>';
-		$menuData .= '</div>';
+		$menuData .= '</span>';
 		return $menuData;
 	}
 	

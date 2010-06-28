@@ -1,4 +1,5 @@
 var highlighted = '';
+var stopClick = false;
 
 function get(id) {
 	return document.getElementById(id);
@@ -26,10 +27,13 @@ function hideElement(id) {
 }
 
 function hideDialog() {
-	if(highlighted != '') {
-		get(highlighted).style.backgroundColor = '#FFFFFF';
+	if (!stopClick) {
+		if(highlighted != '') {
+			get(highlighted).style.backgroundColor = '#FFFFFF';
+		}
+		get('dialog').style.display = 'none';
 	}
-	get('dialog').style.display = 'none';
+	stopClick = false;
 }
 
 function openDialog(id,color,noHighlight) {
@@ -47,11 +51,20 @@ function openDialog(id,color,noHighlight) {
 	linkWidth = get(id).offsetWidth;
 	newLeft = loc[0]-f_scrollLeft()+linkWidth+20;
 	newTop = loc[1]-f_scrollTop()-30;
-	if (newLeft + dialogWidth > windowWidth) {
+	
+	// if it's off screen to the right, move the dialog to the other side of the element
+	if (newLeft + dialogWidth > windowWidth) { 
 		newLeft = newLeft - dialogWidth - linkWidth - 40;
 	}
+	
+	// if it's below the bottom of the window, move it up
 	if (newTop + dialogHeight > windowHeight) {
 		newTop = windowHeight - dialogHeight;
+	}
+	
+	// if it's above the top of the window, move it down
+	if (newTop < 0) {
+		newTop = 0;
 	}
 	get('dialog').style.left = newLeft+'px';
 	get('dialog').style.top = newTop+'px';
@@ -76,12 +89,10 @@ function findPos(obj) {
 		} while (obj = obj.offsetParent);
 	return [curleft,curtop];
 	}
-}		
+}
 
-function stopclick(e) {
-	if (!e) var e = window.event;
-	e.cancelBubble = true;
-	if (e.stopPropagation) e.stopPropagation();
+function clickInDialog() {
+	stopClick = true;
 }
 
 function f_clientWidth() {

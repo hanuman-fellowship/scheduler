@@ -8,7 +8,7 @@
 	<?=$javascript->link('prototype');?>
 	<?=$javascript->link('scriptaculous');?> 
 </head>
-<body>
+<body onclick="hideDialog()" onload="setScroll()">  
 	<div id="container">
 		<div id="content">
 			<? if ($session->check('Message.flash')) { ?>
