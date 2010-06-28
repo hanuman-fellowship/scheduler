@@ -28,7 +28,7 @@ class RoleHelper extends AppHelper {
 	function menu($data) {
 		$cur_role = Authsome::get('role');
 		$menuData = $this->html->css("menu");
-		$menuData .= '<div>';
+		$menuData .= '<span>';
 		$menuData .= '<ul class="menu">';
 		foreach($data[$cur_role] as $title => $top) {
 			$menuData .= '<li class="top">';
@@ -72,7 +72,7 @@ class RoleHelper extends AppHelper {
 			
 		}
 		$menuData .= '</ul>';
-		$menuData .= '</div>';
+		$menuData .= '</span>';
 		return $menuData;
 	}
 	

@@ -23,7 +23,7 @@
 				'Area' => array(
 					'url' => array('controller' => 'areas', 'action' => 'add')
 				),
-				'<br>',
+				'<hr/>',
 				'Person' => array(
 					'url' => array('controller' => 'people', 'action' => 'add')
 				),
