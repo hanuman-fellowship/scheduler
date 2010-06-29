@@ -10,11 +10,21 @@ class PeopleController extends AppController {
 	 * 
 	 */
 	function schedule($id = null) {	
-		$this->set('person',$this->Person->getPerson($id));		
-		$this->loadModel('Boundary');
-		$this->set('bounds', $this->Boundary->getBounds());
+		if ($id) {
+			$this->set('person',$this->Person->getPerson($id));		
+			$this->loadModel('Boundary');
+			$this->set('bounds', $this->Boundary->getBounds());
+		} else {
+			$this->redirect(array('action'=>'select'));
+		}
 	}	
-	
+
+    function select() {
+		$this->Person->sContain('ResidentCategory');
+		$this->Person->order = 'Person.resident_category_id, Person.name';	
+		$this->set('people',$this->Person->sFind('all'));
+	}
+
 	function add() {
 		if (!empty($this->data)) {
 			$this->Person->create();

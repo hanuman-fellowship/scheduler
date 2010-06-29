@@ -1,0 +1,1 @@
+alias pk='ping krishna'

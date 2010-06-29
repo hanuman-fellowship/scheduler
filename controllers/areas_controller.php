@@ -11,7 +11,7 @@ class AreasController extends AppController {
 			$this->set('bounds', $this->Boundary->getBounds());
 			if ($this->params['isAjax']) $this->render('/elements/schedule_content');
 		} else {
-			$this->redirect(array('controller'=>'areas','action'=>'select'));
+			$this->redirect(array('action'=>'select'));
 		}
 	}
 	
