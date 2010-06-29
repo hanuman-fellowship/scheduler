@@ -5,11 +5,24 @@
 	<?php
 
 		echo $form->hidden('id');
-		echo $form->input('area_id');
-		echo $form->input('day_id');
-		echo $form->input('start', array('interval' => 15));
-		echo $form->input('end', array('interval' => 15));
-		echo $form->input('num_people', array('label' => '# of People'));
+		echo $form->input('area_id',array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('day_id',array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('start', array(
+			'interval' => 15,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('end', array(
+			'interval' => 15,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('num_people', array(
+			'label' => '# of People',
+			'between' => '&nbsp;'
+		));
 	?>
 	<?php echo '<span style="float:right">'.$form->end('Submit').'</span>';?>
 	</fieldset>

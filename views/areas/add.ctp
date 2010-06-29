@@ -3,9 +3,15 @@
 	<fieldset>
  		<legend><?php __('New Area');?></legend>
 	<?php
-		echo $form->input('name');
-		echo $form->input('short_name');
-		echo $form->input('manager');
+		echo $form->input('name',array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('short_name',array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('manager',array(
+			'between' => '&nbsp;'
+		));
 	?>
 	</fieldset>
 <?=$form->end('Submit');?>
