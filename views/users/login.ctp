@@ -17,4 +17,6 @@ if (Authsome::get('id')) {
 } else {
 	echo $javascript->codeBlock("get('username').select()");
 }
+echo $javascript->codeblock("get('dialog_content').style.backgroundColor='#DFDBC3'");
+
 ?>

@@ -1,4 +1,4 @@
-<div class="constantShifts form">
+<div style='background-color:#ccc'>
 <?php echo $form->create('ConstantShift');?>
 	<fieldset>
  		<legend><?php __('Add ConstantShift');?></legend>

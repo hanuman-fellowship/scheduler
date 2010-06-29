@@ -3,5 +3,5 @@
 	</div>
 </div></div>
 <script type="text/javascript">
-	new Draggable('dialog');
+	new Draggable('dialog', { scroll: window });
 </script>
