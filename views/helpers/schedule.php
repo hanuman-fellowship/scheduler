@@ -49,7 +49,7 @@ class ScheduleHelper extends AppHelper {
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
 				
-				if (Authsome::get('role') == 'operations') {
+				if (Authsome::get('role') == 'operations' && !$this->params['isAjax']) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
 						'onmouseover' => "showElement('goto_{$assignment['id']}')",
@@ -71,7 +71,7 @@ class ScheduleHelper extends AppHelper {
 							'onclick' => 'saveScroll()'
 						)
 					)
-				)) . '<br/>';
+				),$this->params['isAjax']) . '<br/>';
 				if (Authsome::get('role') == 'operations') {				
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
@@ -94,7 +94,7 @@ class ScheduleHelper extends AppHelper {
 						),
 						'ajax'
 					)
-				));
+				),$this->params['isAjax']);
 				$people .= "{$unassigned}<br/>";
 			}
 		}
@@ -108,7 +108,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					'ajax'
 				)
-			));
+			),$this->params['isAjax']);
 			return "<span id='{$shift['id']}'><b>" . $time . "</b><br/>" . $people . "</span><br/><br/>";
 		}
 	}

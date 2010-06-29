@@ -11,8 +11,8 @@ class RoleHelper extends AppHelper {
 		}
 	}
 	
-	function link($title,$roles) {
-		$cur_role = Authsome::get('role');
+	function link($title,$roles,$override = false) {
+		$cur_role = ($override) ? '' :  Authsome::get('role');
 		if (array_key_exists($cur_role,$roles)) {
 			$attributes = array_key_exists('attributes',$roles[$cur_role]) ? 
 				$roles[$cur_role]['attributes'] : null;

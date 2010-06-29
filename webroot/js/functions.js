@@ -149,3 +149,12 @@ function getCookie ( cookie_name ) {
 		return null;
 	}
 }
+
+function swap(a, b) {
+	toggleDisplay(a);
+	toggleDisplay(b);
+}
+
+function toggleDisplay(id) {
+	get(id).style.display = (get(id).style.display == 'none') ? '' : 'none';
+}

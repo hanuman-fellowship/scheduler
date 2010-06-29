@@ -30,7 +30,7 @@
 						),
 						'ajax'
 					)
-				));?>
+				),$this->params['isAjax']);?>
 				</span>
 			<? } else { ?>
 				<?= $person['ResidentCategory']['name'] ?>
@@ -90,7 +90,7 @@
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person)) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
-		<? if (Authsome::get('role') == 'operations' && (isset($area))) { ?>
+		<? if (Authsome::get('role') == 'operations' && (isset($area)) && !$this->params['isAjax']) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
 			<?=$ajax->link(
 				' + ',
