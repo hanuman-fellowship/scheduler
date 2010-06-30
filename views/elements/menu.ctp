@@ -19,7 +19,7 @@
 	),	
 	' | ',
 	'People' => array(
-		'url' => array('controller' => 'people', 'action' => 'schedule'),
+		'url' => '#',
 		'sub' => array(
 			'View Schedule...' => array(
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
@@ -62,7 +62,7 @@
 		)
 	),
 	'Areas' => array(
-		'url' => array('controller' => 'areas', 'action' => 'schedule'),
+		'url' => '#',
 		'sub' => array(
 			'View Schedule...' => array(
 				'url' => array('controller' => 'areas', 'action' => 'schedule'),

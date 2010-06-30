@@ -1,4 +1,5 @@
-<?php echo 'Login<br/><br/>'; ?>
+<fieldset>
+	<legend><?php __('Login');?></legend>
 <?php
 echo $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content'));
 echo $form->input('username', array(
@@ -12,6 +13,9 @@ echo $form->input('password', array(
 ));
 echo $form->submit('Login');
 echo $form->end();
+?>
+</fieldset>
+<?
 if (Authsome::get('id')) {
 	echo $javascript->codeBlock('window.location.reload()');
 } else {
