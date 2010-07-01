@@ -2,7 +2,7 @@
 class AreasController extends AppController {
 
 	var $name = 'Areas';
-	var $helpers = array('schedule');
+	var $helpers = array('schedule','dialog');
 
 	function schedule($id = null) {
 		if ($id) {
@@ -17,20 +17,27 @@ class AreasController extends AppController {
 	
 	function add($area_id = null) {
 		if (!empty($this->data)) {
-			$this->Area->create();
-			$this->record();
-			$this->Area->sSave($this->data);
-			$this->stop($this->Area->description);
-			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $this->Area->id));
+			if ($this->Area->valid($this->data)) {
+				$this->Area->create();
+				$this->record();
+				$this->Area->sSave($this->data);
+				$this->stop($this->Area->description);
+				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->Area->id));
+			} else {
+				$this->set('errorField',$this->Area->errorField);
+				$this->set('errorMessage',$this->Area->errorMessage);
+			}
 		}
 	}
 	
 	function edit($id = null) {
 		if (!empty($this->data)) {
-			$this->record();
-			$this->Area->sSave($this->data);
-			$this->stop($this->Area->description);
-			$this->redirect('/areas/schedule/'.$this->data['Area']['id']);
+			if ($this->Area->valid($this->data)) {
+				$this->record();
+				$this->Area->sSave($this->data);
+				$this->stop($this->Area->description);
+				$this->redirect('/areas/schedule/'.$this->data['Area']['id']);
+			}
 		}
 		if (empty($this->data)) {
 			$this->id = $id;

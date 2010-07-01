@@ -6,6 +6,7 @@ class Area extends AppModel {
 		'name' => array('notempty'),
 		'short_name' => array('notempty')
 	);
+	var $errorField = null;
 
 	var $hasMany = array(
 		'FloatingShift',
@@ -26,6 +27,17 @@ class Area extends AppModel {
 		return $area;
 	}
 	
+	function valid($data) {
+		foreach($data['Area'] as $name => $value) {
+			if ($value == '') {
+				$this->errorField = $name;
+				$this->errorMessage = Inflector::humanize($name)." must not be blank.";
+				return false;
+			}
+		}
+		return true;
+	}
+
 	function sSave($data) {
 		$changes = parent::sSave($data);
 		$this->setDescription($changes);
