@@ -36,7 +36,10 @@ class AreasController extends AppController {
 				$this->record();
 				$this->Area->sSave($this->data);
 				$this->stop($this->Area->description);
-				$this->redirect('/areas/schedule/'.$this->data['Area']['id']);
+				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->data['Area']['id']));
+			 } else {
+				$this->set('errorField',$this->Area->errorField);
+				$this->set('errorMessage',$this->Area->errorMessage);
 			}
 		}
 		if (empty($this->data)) {
