@@ -19,7 +19,7 @@ class Person extends AppModel {
 		'FloatingShift',
 		'OffDay'
 	);
-	
+
 	function sSave($data) {
 		$changes = parent::sSave($data);
 		$this->setDescription($changes);

@@ -49,7 +49,20 @@
 		</td> 
 		<td width="178">
 			<span style="font-size:24px;"> 
-			<?= (isset($person)) ? $person['Person']['name'] : '';?>
+			<? if (isset($person)) { ?>
+				<span id='person_name'>
+				<?=$role->link($person['Person']['name'],array(
+					'operations' => array(
+						'url' => array('action'=>'edit',$person['Person']['id']),
+						'attributes'=>array(
+							'update'=>'dialog_content',
+							'complete'=>"openDialog('person_name','#8DBBD5')"
+						),
+						'ajax'
+					)
+				),$this->params['isAjax']);?>
+				</span>
+			<? } ?>
 			</span>
 		</td> 
 	</tr> 

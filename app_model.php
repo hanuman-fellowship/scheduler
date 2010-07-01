@@ -130,6 +130,17 @@ class AppModel extends Model {
 			"{$this->name}.schedule_id" => $schedule_id
 		));               	
 	}
+	
+	function valid($data) {
+		foreach($data[$this->name] as $name => $value) {
+			if ($value == '') {
+				$this->errorField = $name;
+				$this->errorMessage = Inflector::humanize($name)." must not be blank.";
+				return false;
+			}
+		}
+		return true;
+	}
 		
 	function array_fill_keys($keys, $value) {
 		return array_combine($keys,array_fill(0,count($keys),$value));	

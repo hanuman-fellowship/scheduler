@@ -1,15 +1,18 @@
 <div class="people form">
-<?php echo $form->create('Person');?>
+<?= $ajax->form($this->action,'post',array('model'=>'Person','update'=>'dialog_content'));?>
 	<fieldset>
  		<legend><?php __('Add Person');?></legend>
 	<?php
 		echo $form->input('name',array(
-			'between' => '&nbsp;'
+			'between' => '&nbsp;',
+			'id' => 'name'
 		));
 		echo $form->input('resident_category_id',array(
-			'between' => '&nbsp;'
+			'between' => '&nbsp;',
+			'id' => 'name'
 		));
 	?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
 </div>
+<?=$this->element('validate',array('default_field'=>'name'));?>
