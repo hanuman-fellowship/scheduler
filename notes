@@ -6,14 +6,19 @@ TODO:
 		- Would be done by a check, in sFind in the Person model, if they are 'current'
 		- Removing a person does not delete them, it just turns their 'current' status off
 		  (and unassigns them from all of their shifts).
-		- You can 'Get Perosn From the Past..." wich will turn their 'current' on.
+		- You can 'Get Person From the Past..." which will turn their 'current' on.
 
 	- Continue making validation
 		Finished:
+			- User
+				- login
 			- Area
 				- add
 				- edit
 			- Person
+				- add
+				- edit
+			- Shift
 				- add
 				- edit
 

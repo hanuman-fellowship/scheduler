@@ -2,11 +2,6 @@
 class Shift extends AppModel {
 
 	var $name = 'Shift';
-	var $validate = array(
-		'area_id' => array('numeric'),
-		'day_id' => array('numeric'),
-		'num_people' => array('numeric')
-	);
 
 	var $belongsTo = array(
 		'Area',
@@ -17,16 +12,38 @@ class Shift extends AppModel {
 		'Assignment'
 	);
 	
+	function valid($data) {
+		$start = $this->dbTime($data['Shift']['start']);
+		$end = $this->dbTime($data['Shift']['end']);
+		if ($end <= $start) {	
+			$this->errorField = 'start';
+			$this->errorMessage = "The times don't make sense";
+			return false;
+		}
+		$num_people = $data['Shift']['num_people'];
+		if (!is_numeric($num_people) ||	$num_people < 1) {
+			$this->errorField = 'num_people';
+			$this->errorMessage = "Invalid # of people";
+			return false;
+		}	
+		if (isset($data['Shift']['id'])) {
+			$this->sContain('Assignment');
+			$this->id = $data['Shift']['id'];
+			$shift = $this->sFind('first');
+			$num_assigned = count($shift['Assignment']);
+			if ($num_people < $num_assigned) {
+				$this->errorField = 'num_people';
+				$this->errorMessage = "Too many people already assigned";
+				return false;
+			}
+		}
+		return true;
+	}
+
 	function sSave($data) {
 		$times = array('start', 'end');
 		foreach($times as $time) {
-			$data['Shift'][$time] = date('H:i:00',
-				strtotime(
-					$data['Shift'][$time]['hour'].":".
-					sprintf("%02d",$data['Shift'][$time]['min'])." ".
-					$data['Shift'][$time]['meridian']
-				)
-			);
+			$data['Shift'][$time] = $this->dbTime($data['Shift'][$time]);
 		}
 		$changes = parent::sSave($data);
 		$this->setDescription($changes);
@@ -116,7 +133,16 @@ class Shift extends AppModel {
 			$data['end'];
 		return $data;
 	}
-	
+
+	function dbTime($time) {
+		return  date('H:i:00',
+			strtotime(
+				$time['hour'].":".
+				sprintf("%02d",$time['min'])." ".
+				$time['meridian']
+			)
+		);
+	}
 		
 }
 ?>

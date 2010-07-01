@@ -1,5 +1,5 @@
 <div class="people form">
-<?= $ajax->form($this->action,'post',array('model'=>'Person','update'=>'dialog_content'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Person','update'=>'dialog_content','before'=>'saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Person');?></legend>
 	<?php

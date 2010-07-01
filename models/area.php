@@ -2,11 +2,6 @@
 class Area extends AppModel {
 
 	var $name = 'Area';
-	var $validate = array(
-		'name' => array('notempty'),
-		'short_name' => array('notempty')
-	);
-	var $errorField = null;
 
 	var $hasMany = array(
 		'FloatingShift',

@@ -2,7 +2,7 @@
 class AreasController extends AppController {
 
 	var $name = 'Areas';
-	var $helpers = array('schedule','dialog');
+	var $helpers = array('schedule');
 
 	function schedule($id = null) {
 		if ($id) {

@@ -1,5 +1,5 @@
 <div class="shifts form">
-<?php echo $form->create('Shift', array('onsubmit'=>'saveScroll()'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Shift','update'=>'dialog_content','before'=>'saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Shift');?></legend>
 	<?php
@@ -20,6 +20,7 @@
 			'between' => '&nbsp;'
 		));
 		echo $form->input('num_people', array(
+			'id' => 'num_people',
 			'label' => '# of People',
 			'between' => '&nbsp;'
 		));
@@ -33,3 +34,4 @@
 	)
 );?>
 </div>
+<?=$this->element('validate',array('default_field'=>'name'));?>

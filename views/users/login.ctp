@@ -15,10 +15,4 @@ echo $form->submit('Login');
 echo $form->end();
 ?>
 </fieldset>
-<?
-if (Authsome::get('id')) {
-	echo $javascript->codeBlock('window.location.reload()');
-} else {
-	echo $javascript->codeBlock("get('username').select()");
-}
-?>
+<?=$this->element('validate',array('default_field'=>'username'));?>

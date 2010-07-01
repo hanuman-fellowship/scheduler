@@ -2,8 +2,7 @@
 class PeopleController extends AppController {
 
 	var $name = 'People';
-	var $scaffold;
-	var $helpers = array('schedule','dialog');
+	var $helpers = array('schedule');
 		
 	/**
 	 * Displays the schedule for the specified person.

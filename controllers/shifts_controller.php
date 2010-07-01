@@ -3,13 +3,22 @@ class ShiftsController extends AppController {
 
 	var $name = 'Shifts';
 
-	function add($area_id = null,$day_id = null, $start = null) {
+	function add($area_id = null,$day_id = null, $start = null, $end = null) {
 		if (!empty($this->data)) {
-			$this->Shift->create();
-			$this->record();
-			$this->Shift->sSave($this->data);
-			$this->stop($this->Shift->description);
-			$this->redirect('/areas/schedule/'.$this->data['Shift']['area_id']);
+			if ($this->Shift->valid($this->data)) {
+				$this->Shift->create();
+				$this->record();
+				$this->Shift->sSave($this->data);
+				$this->stop($this->Shift->description);
+				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
+			} else {
+				$this->set('errorField',$this->Shift->errorField);
+				$this->set('errorMessage',$this->Shift->errorMessage);
+				$start = $this->data['Shift']['start'];
+				$end = $this->data['Shift']['end'];
+			}
+		} else {
+			$start = str_replace("-",":",$start);
 		}
 		$this->loadModel('Area');
 		$this->Area->order = 'name';
@@ -17,8 +26,8 @@ class ShiftsController extends AppController {
 		$this->set('area_id',$area_id);
 		$day_id = ($day_id) ? $day_id : 1;
 		$this->set('day_id',$day_id);
-		$start = ($start) ? str_replace("-",":",$start) : '13:00:00';
-		$end = date("H:i:s",strtotime($start." + 1 hour"));
+		$start = ($start) ? $start : '13:00:00';
+		$end = ($end) ? $end : date("H:i:s",strtotime($start." + 1 hour"));
 		$this->set('start',$start);
 		$this->set('end',$end);
 		$this->loadModel('Day');
@@ -32,10 +41,15 @@ class ShiftsController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
-			$this->record();
-			$this->Shift->sSave($this->data);
-			$this->stop($this->Shift->description);
-			$this->redirect('/areas/schedule/'.$this->data['Shift']['area_id']);
+			if ($this->Shift->valid($this->data)) {
+				$this->record();
+				$this->Shift->sSave($this->data);
+				$this->stop($this->Shift->description);
+				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
+			} else {
+				$this->set('errorField',$this->Shift->errorField);
+				$this->set('errorMessage',$this->Shift->errorMessage);
+			}
 		}
 		if (empty($this->data)) {
 			$this->id = $id;

@@ -2,7 +2,6 @@
 class UsersController extends AppController {
 
 	var $name = 'Users';
-	var $helpers = array('Html', 'Form');
 		
     public function login() {
 		if (empty($this->data)) {
@@ -13,9 +12,11 @@ class UsersController extends AppController {
         $user = Authsome::login($this->data['User']);
 
         if (!$user) {
-            $this->Session->setFlash('Unknown user or wrong password');
+			$this->set('errorField','username');
+			$this->set('errorMessage','Unknown user or wrong password');
             return;
         }
+		$this->set('url', $this->loadPage());
     }
     
     public function logout() {
