@@ -17,7 +17,7 @@ class Shift extends AppModel {
 		$end = $this->dbTime($data['Shift']['end']);
 		if ($end <= $start) {	
 			$this->errorField = 'start';
-			$this->errorMessage = "The times don't make sense";
+			$this->errorMessage = "Start must be before end";
 			return false;
 		}
 		$num_people = $data['Shift']['num_people'];
