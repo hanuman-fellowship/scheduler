@@ -50,10 +50,10 @@ class AreasController extends AppController {
 	
 	function delete($id = null) {
 		if ($id) {
-	//		$this->record();
-	//		$this->Area->sDelete($id);
-	//		$this->stop($this->Area->description);
-	//		$this->redirect('/');
+			$this->record();
+			$this->Area->sDelete($id);
+			$this->stop($this->Area->description);
+			$this->redirect('/');
 		}
 		$this->Area->recursive = -1;
 		$this->Area->order = 'name';
