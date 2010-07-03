@@ -224,7 +224,7 @@ class Change extends AppModel {
 			$changeData = $this->find('all',array(
 				'recursive' => -1,
 				'conditions' => ($direction == 'undo') ? 
-					array('Change.id BETWEEN ? AND ?' => array(0,10)) :
+					array('Change.id BETWEEN ? AND ?' => array(0,11)) :
 					array('Change.id BETWEEN ? AND ?' => array(-10,-1)) 
 				,
 				'order' => ($direction == 'undo') ?
