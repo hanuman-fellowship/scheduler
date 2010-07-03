@@ -13,9 +13,25 @@ class Person extends AppModel {
 		'OffDay'
 	);
 
+	var $hasOne = array(
+		'Profile'
+	);
+
 	function sSave($data) {
 		$changes = parent::sSave($data);
 		$this->setDescription($changes);
+		if(!isset($data['Person']['id'])) { // if this is a new person, create a profile
+			$profileData = array('Profile' => array(
+				'person_id' => $this->id,
+				'first' => $data['Person']['name']
+			));
+			$this->Profile->save($profileData);
+			$noteData = array('ProfileNote' => array(
+				'profile_id' => $this->Profile->id,
+				'note' => 'Profile Created'
+			));
+			$this->Profile->ProfileNote->save($noteData);
+		}
 	}
 	
 	function sDelete($id) {

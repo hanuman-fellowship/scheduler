@@ -31,7 +31,7 @@
 			),
 			'View Profile...' => array(
 				'role' => array('operations'),
-				'url' => array('controller' => 'people', 'action' => 'profile'),
+				'url' => array('controller' => 'profiles', 'action' => 'view'),
 				'ajax' => array(
 					'update' => 'dialog_content',
 					'complete' => "openDialog('person_view_profile','#EEE','true')",
