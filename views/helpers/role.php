@@ -37,6 +37,9 @@ class RoleHelper extends AppHelper {
 				$menuData .= '</li>';
 				continue;
 			}
+			if (array_key_exists('title',$top)) {
+				$title = $top['title'];
+			}
 			if (array_key_exists('role',$top)) {
 				if (!in_array($cur_role,$top['role'])) { // skip this one if it's not our role
 					continue;

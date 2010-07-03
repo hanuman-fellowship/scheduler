@@ -217,5 +217,40 @@ class Change extends AppModel {
         );      
     } 
      
+	function getChangesForMenu() {
+		$menuData = array();
+		$directions = array('undo','redo');
+		foreach($directions as $direction) {
+			$changeData = $this->find('all',array(
+				'recursive' => -1,
+				'conditions' => ($direction == 'undo') ? 
+					array('Change.id BETWEEN ? AND ?' => array(0,10)) :
+					array('Change.id BETWEEN ? AND ?' => array(-10,-1)) 
+				,
+				'order' => ($direction == 'undo') ?
+					'id' :
+					'id desc'
+			));
+			foreach($changeData as $change) {
+				$menuData[$direction][$change['Change']['description']] = array(
+					'url' => array('controller' => 'changes', 'action' => 'jumpTo', $change['Change']['id'])
+				);
+			}
+			if (!isset($menuData[$direction])) {
+				$menuData[$direction] = array("Nothing to {$direction}");
+			} else {
+				$menuData[$direction][] = "<hr/>";
+				$menuData[$direction]['More...'] = array(
+					'url' => array('controller' => 'changes', 'action' => 'history'),
+					'ajax' => array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('history','#FFF','true')",
+						'id' => 'history'
+					)
+				);
+			}
+		}
+		return $menuData;
+	}
 } 
 ?>

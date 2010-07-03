@@ -17,7 +17,9 @@
 		'role' => array('operations'),
 		'url' => array('controller' => 'users', 'action' => 'logout')
 	),	
-	' | ',
+	array(
+		'title' => ' | '
+	),
 	'People' => array(
 		'url' => '#',
 		'sub' => array(
@@ -125,7 +127,22 @@
 			)
 		)
 	),
-	" | " => array(
+	array(
+		'title' => ' | ',
+		'role' => array('operations')
+	),
+	'Undo' => array(
+		'role' => array('operations'),
+		'url' => array('controller' => 'changes', 'action' => 'undo'),
+		'sub' => $changes['undo']
+	),
+	'Redo' => array(
+		'role' => array('operations'),
+		'url' => array('controller' => 'changes', 'action' => 'redo'),
+		'sub' => $changes['redo']
+	),
+	array(
+		'title' => ' | ',
 		'role' => array('operations')
 	),
 	'Schedules' => array(

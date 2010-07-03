@@ -9,6 +9,8 @@ class AreasController extends AppController {
 			$this->set('area',$this->Area->getArea($id));
 			$this->loadModel('Boundary');
 			$this->set('bounds', $this->Boundary->getBounds());
+			$this->loadModel('Change');
+			$this->set('changes', $this->Change->getChangesForMenu());
 			if ($this->params['isAjax']) $this->render('/elements/schedule_content');
 		} else {
 			$this->redirect(array('action'=>'select'));
