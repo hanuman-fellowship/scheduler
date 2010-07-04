@@ -36,8 +36,7 @@ function hideDialog() {
 	stopClick = false;
 }
 
-function openDialog(id,color,noHighlight) {
-//	get('dialog_content').style.backgroundColor = color;
+function openDialog(id,noHighlight) {
 	get('dialog').style.display = 'table';
 	if (!noHighlight) {
 		get(id).style.backgroundColor = '#FFF8BA';

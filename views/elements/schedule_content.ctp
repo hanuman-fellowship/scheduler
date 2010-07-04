@@ -26,7 +26,7 @@
 						'url' => array('action'=>'edit',$area['Area']['id']),
 						'attributes'=>array(
 							'update'=>'dialog_content',
-							'complete'=>"openDialog('area_name','#8DBBD5')"
+							'complete'=>"openDialog('area_name')"
 						),
 						'ajax'
 					)
@@ -56,7 +56,7 @@
 						'url' => array('action'=>'edit',$person['Person']['id']),
 						'attributes'=>array(
 							'update'=>'dialog_content',
-							'complete'=>"openDialog('person_name','#8DBBD5')"
+							'complete'=>"openDialog('person_name')"
 						),
 						'ajax'
 					)
@@ -112,7 +112,7 @@
 					'id'=>"add_{$slot_num}_{$day}", 
 					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 					'update' => 'dialog_content',
-					'complete' => "openDialog('{$slot_num}_{$day}','#ACBFDA','true')"
+					'complete' => "openDialog('{$slot_num}_{$day}','true')"
 				)
 			);?>
 		<? } else { ?>

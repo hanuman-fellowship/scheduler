@@ -6,7 +6,7 @@
 		'url' => array('controller' => 'users', 'action' => 'login'),
 		'ajax' => array(
 			'update'=>'dialog_content',
-			'complete'=>"openDialog('menu_Login','#FFF','true')",
+			'complete'=>"openDialog('menu_Login','true')",
 			'id' => 'menu_Login'
 		)
 	),
@@ -27,7 +27,7 @@
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('view_person_schedule','#EEE','true')",
+					'complete' => "openDialog('view_person_schedule','true')",
 					'id' => 'view_person_schedule'
 				)
 			),
@@ -36,7 +36,7 @@
 				'url' => array('controller' => 'profiles', 'action' => 'view'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('person_view_profile','#EEE','true')",
+					'complete' => "openDialog('person_view_profile','true')",
 					'id' => 'person_view_profile'
 				)
 			),
@@ -48,7 +48,7 @@
 				'url' => array('controller' => 'people', 'action' => 'add'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('person_add','#7BC684','true')",
+					'complete' => "openDialog('person_add','true')",
 					'id' => 'person_add'
 				)
 			),
@@ -57,7 +57,7 @@
 				'url' => array('controller' => 'people', 'action' => 'delete'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('person_delete','#CCCCCC','true')",
+					'complete' => "openDialog('person_delete','true')",
 					'id' => 'person_delete'
 				)
 			)
@@ -70,7 +70,7 @@
 				'url' => array('controller' => 'areas', 'action' => 'schedule'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('view_area_schedule','#A3C2D8','true')",
+					'complete' => "openDialog('view_area_schedule','true')",
 					'id' => 'view_area_schedule'
 				)
 			),
@@ -82,7 +82,7 @@
 				'url' => array('controller' => 'areas', 'action' => 'add'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('area_add','#EEE','true')",
+					'complete' => "openDialog('area_add','true')",
 					'id' => 'area_add'
 				)
 			),
@@ -91,7 +91,7 @@
 				'url' => array('controller' => 'areas', 'action' => 'delete'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('area_delete','#CCCCCC','true')",
+					'complete' => "openDialog('area_delete','true')",
 					'id' => 'area_delete'
 				)
 			),
@@ -105,7 +105,7 @@
 				'url' => array('controller' => 'shifts', 'action' => 'add'),
 				'ajax' => array(
 					'update'=>'dialog_content',
-					'complete'=>"openDialog('shift_new','#ACBFDA','true')",
+					'complete'=>"openDialog('shift_new','true')",
 					'id' => 'shift_new'
 				)
 			),
@@ -113,7 +113,7 @@
 				'url' => array('controller' => 'floating_shifts', 'action' => 'add'),
 				'ajax' => array(
 					'update'=>'dialog_content',
-					'complete'=>"openDialog('floating_shift_new','#FFF','true')",
+					'complete'=>"openDialog('floating_shift_new','true')",
 					'id' => 'floating_shift_new'
 				)
 			),
@@ -121,7 +121,7 @@
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
 				'ajax' => array(
 					'update'=>'dialog_content',
-					'complete'=>"openDialog('constant_shift_new','#FFF','true')",
+					'complete'=>"openDialog('constant_shift_new','true')",
 					'id' => 'constant_shift_new'
 				)
 			)
@@ -153,7 +153,7 @@
 				'url' => array('controller' => 'schedules', 'action' => 'selectBranch'),
 				'ajax' => array(
 					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_select','#FFF','true')",
+					'complete'=>"openDialog('schedule_select','true')",
 					'id' => 'schedule_select'
 				)
 			),
@@ -162,7 +162,7 @@
 				'url' => array('controller' => 'schedules', 'action' => 'doNewBranch'),
 				'ajax' => array(
 					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_add','#FFF','true')",
+					'complete'=>"openDialog('schedule_add','true')",
 					'id' => 'schedule_add'
 				)
 			),
@@ -170,7 +170,7 @@
 				'url' => array('controller' => 'schedules', 'action' => 'doDeleteBranch'),
 				'ajax' => array(
 					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_delete','#FFF','true')",
+					'complete'=>"openDialog('schedule_delete','true')",
 					'id' => 'schedule_delete'
 				)
 			),
@@ -178,7 +178,7 @@
 				'url' => array('controller' => 'schedules', 'action' => 'doMergeBranch'),
 				'ajax' => array(
 					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_merge','#FFF','true')",
+					'complete'=>"openDialog('schedule_merge','true')",
 					'id' => 'schedule_merge'
 				)
 			)

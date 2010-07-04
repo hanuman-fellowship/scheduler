@@ -1,27 +1,13 @@
 TODO:
 
-	- People should not have a schedule_id and be copied like the rest.
-		- There should be a field called 'current' which is boolean
-		- This way when people come and go, they can just be reintroduced into the current schedule
-		- Would be done by a check, in sFind in the Person model, if they are 'current'
-		- Removing a person does not delete them, it just turns their 'current' status off
-		  (and unassigns them from all of their shifts).
-		- You can 'Get Person From the Past..." which will turn their 'current' on.
-
-	- Continue making validation
-		Finished:
-			- User
-				- login
-			- Area
-				- add
-				- edit
-			- Person
-				- add
-				- edit
-			- Shift
-				- add
-				- edit
-
 	- Person Profile
 		- images/people/{id}.jpg
+		- find a good image uploader and resizer
+	
+	- Menu
+		- Can the submenu width ba automatic?
+	
+	- Popup menu for person schedule
+		- Use the old script from scheduler?
 
+	

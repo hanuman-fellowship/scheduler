@@ -10,5 +10,7 @@ class Profile extends AppModel {
 	var $hasMany = array(
 		'ProfileNote'
 	);
+
+
 }
 ?>

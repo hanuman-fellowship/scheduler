@@ -244,8 +244,7 @@ class Change extends AppModel {
 					'url' => array('controller' => 'changes', 'action' => 'history'),
 					'ajax' => array(
 						'update' => 'dialog_content',
-						'complete' => "openDialog('history','#FFF','true')",
-						'id' => 'history'
+						'complete' => "openDialog('1_1','#FFF','true')"
 					)
 				);
 			}

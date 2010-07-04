@@ -1,4 +1,5 @@
 <strong>Change History</strong><br/><br/>
+<div style="height:500px;overflow:auto">
 <?
 echo '<i>';
 foreach($changes as $change) {
@@ -9,3 +10,4 @@ foreach($changes as $change) {
 	<br/>';
 }
 ?>
+</div>
