@@ -40,14 +40,14 @@ class AttachmentComponent extends Object
 	* Parameters:
 	*	data: the file input array
 	*/
-	function upload(&$data, $column_prefix = null) {
+	function upload(&$data, $filename, $column_prefix = null) {
 		if ($column_prefix == null) $column_prefix = $this->config['default_col'];
 		$file = $data[$column_prefix];
 		if ($file['error'] === UPLOAD_ERR_OK) {
 			if ($this->config['save_in_db'])
 				return $this->upload_DB($data, $column_prefix);
 			else
-				return $this->upload_FS($data, $column_prefix);
+				return $this->upload_FS($data, $filename, $column_prefix = null);
 		} else
 			$this->log_error_and_exit($file['error']);
 	}
@@ -62,21 +62,19 @@ class AttachmentComponent extends Object
 		return false;
 	}
 
-	function upload_FS(&$data, $column_prefix) {
+	function upload_FS(&$data, $filename, $column_prefix) {
 		if ($column_prefix == null) $column_prefix = $this->config['default_col'];
 		$error = 0;
-		$tmpuploaddir  = WWW_ROOT.'attachments'.DS.'tmp'; // /tmp/ folder (should delete image after upload)
-		$fileuploaddir = WWW_ROOT.'attachments'.DS.'files';
+		$tmpuploaddir  = WWW_ROOT.'img'.DS.'tmp'; // /tmp/ folder (should delete image after upload)
+		$fileuploaddir = WWW_ROOT.'img'.DS.'files';
 
 		// Make sure the required directories exist, and create them if necessary
 		if (!is_dir($tmpuploaddir)) mkdir($tmpuploaddir, 0755, true);
 		if (!is_dir($fileuploaddir)) mkdir($fileuploaddir, 0755, true);
-
-		/* Generate a unique name for the file */
+		
 		$filetype = end(split('\.', $data[$column_prefix]['name']));
-		$filename = String::uuid();
-		settype($filename, 'string');
 		$filename .= '.' . $filetype;
+		
 		$tmpfile  = $tmpuploaddir.DS.$filename;
 		$filefile = $fileuploaddir.DS.$filename;
 

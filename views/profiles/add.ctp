@@ -2,9 +2,10 @@
 	<fieldset>
  		<legend><?php __('New Profile');?></legend>
 	<?php
-		echo $form->create('Profile', array('type' => 'file'));
+		echo $ajax->form($this->action,'post',array('model'=>'Profile','update'=>'dialog_content','type'=>'file'));
 		echo $form->input('first',array(
-			'between' => '&nbsp;'
+			'between' => '&nbsp;',
+			'id' => 'first'
 		));
 		echo $form->input('middle',array(
 			'between' => '&nbsp;'
@@ -27,3 +28,4 @@
 	</fieldset>
 <?=$form->end('Submit');?>
 </div>
+<?=$this->element('validate',array('default_field'=>'first'));?>
