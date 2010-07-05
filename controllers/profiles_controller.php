@@ -19,6 +19,7 @@ class ProfilesController extends AppController {
 			$id.strrchr($file[0],'.') : // get just the extension and append to filename (id))
 			'no_image.jpg';
 		$this->set('image',$image);
+		$this->set('id',$id);
 	}
 
 	function add() {
