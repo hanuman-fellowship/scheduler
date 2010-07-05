@@ -25,11 +25,13 @@ class Person extends AppModel {
 				'person_id' => $this->id,
 				'first' => $data['Person']['name']
 			));
+			$this->Profile->create();
 			$this->Profile->save($profileData);
 			$noteData = array('ProfileNote' => array(
 				'profile_id' => $this->Profile->id,
 				'note' => 'Profile Created'
 			));
+			$this->Profile->ProfileNote->create();
 			$this->Profile->ProfileNote->save($noteData);
 		}
 	}

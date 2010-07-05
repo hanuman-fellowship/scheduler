@@ -2,6 +2,9 @@
 /*
 * File: /app/controllers/components/attachment.php
 *   A file uploader and thumbnailer component for CakePHP
+*
+*   This component has been modified to fit my needs for this app
+*     -Shantam
 */
 class AttachmentComponent extends Object
 {
@@ -88,6 +91,8 @@ class AttachmentComponent extends Object
 			$this->copy_or_raise_error($data[$column_prefix]['tmp_name'], $tmpfile);
 			/* Create each thumbnail_size */
 			foreach ($this->config['images_size'] as $dir => $opts) {
+				$newFile = WWW_ROOT.'img'.DS.$this->config['files_dir'].DS.$dir.DS.$filename;
+				if (file_exists($newFile)) unlink($newFile);
 				$this->thumbnail($tmpfile,$dir,$opts[0],$opts[1],$opts[2]);
 			}
 			if ($this->config['rm_tmp_file'])
@@ -124,7 +129,7 @@ class AttachmentComponent extends Object
 	*/
 	function thumbnail($tmpfile, $upload_dir, $maxw, $maxh, $crop = false) {
 		// Make sure the required directory exist; create it if necessary
-		$upload_dir = WWW_ROOT.'attachments'.DS.$this->config['files_dir'].DS.$upload_dir;
+		$upload_dir = WWW_ROOT.'img'.DS.$this->config['files_dir'].DS.$upload_dir;
 		if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
 
 		/* Directory Separator for windows users */
@@ -144,11 +149,11 @@ class AttachmentComponent extends Object
 	*	filename: The file name of the image
 	*/
 	function delete_files($filename) {
-		if (is_file(WWW_ROOT.'attachments'.DS.'files'.DS.$filename)) {
-			unlink(WWW_ROOT.'attachments'.DS.'files'.DS.$filename);
+		if (is_file(WWW_ROOT.'img'.DS.'files'.DS.$filename)) {
+			unlink(WWW_ROOT.'img'.DS.'files'.DS.$filename);
 		}
 		foreach ($this->config['images_size'] as $size => $opts) {
-			$photo = WWW_ROOT.'attachments'.DS.$this->config['files_dir'].DS.$size.DS.$filename;
+			$photo = WWW_ROOT.'img'.DS.$this->config['files_dir'].DS.$size.DS.$filename;
 			if (is_file($photo)) unlink($photo);
 		}
 	}

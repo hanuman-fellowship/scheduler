@@ -31,8 +31,13 @@ class PeopleController extends AppController {
 				$this->record();
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->description);
-				$this->set('url', 
-					array('controller' => 'people', 'action' => 'schedule', $this->Person->id));
+				if ($this->data['Person']['edit_profile']) {
+					$this->set('url',
+						array('controller' => 'profiles', 'action' => 'view', $this->Person->Profile->id));
+				} else {
+					$this->set('url', 
+						array('action' => 'schedule', $this->Person->id));
+				}
 			} else {
 				$this->set('errorField',$this->Person->errorField);
 				$this->set('errorMessage',$this->Person->errorMessage);

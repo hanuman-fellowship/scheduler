@@ -14,7 +14,11 @@ class ProfilesController extends AppController {
 	);
 
 	function view($id = null) {
-
+		$file = glob(WWW_ROOT.'img'.DS.'photos'.DS.'profile'.DS.$id.'.*');
+		$image = (isset($file[0])) ? 
+			$id.strrchr($file[0],'.') : // get just the extension and append to filename (id))
+			'no_image.jpg';
+		$this->set('image',$image);
 	}
 
 	function add() {

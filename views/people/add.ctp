@@ -11,6 +11,17 @@
 			'between' => '&nbsp;',
 			'id' => 'name'
 		));
+		echo '<br>';
+		echo $form->radio('edit_profile',
+			array(
+				true => 'Yes',
+				false => 'No'
+			),
+			array(
+				'value' => (isset($this->data)) ? $this->data['Person']['edit_profile'] : false,
+				'separator' => '&nbsp;'
+			)
+		);
 	?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
