@@ -31,7 +31,7 @@ function initXMLHttpClient(){
 
 // send request to the server
 function send_request(){
-	request.open('GET','/krishna/app/webroot/progress.php', true); // open asynchronus request
+	request.open('GET','/newscheduler/app/webroot/progress.php', true); // open asynchronus request
 	request.onreadystatechange = request_handler;          // set request handler
 	request.send(null);                                    // send request
 }
