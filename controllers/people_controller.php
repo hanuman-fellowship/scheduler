@@ -12,6 +12,8 @@ class PeopleController extends AppController {
 		if ($id) {
 			$this->set('person',$this->Person->getPerson($id));		
 			$this->loadModel('Boundary');
+			$this->loadModel('Change');
+			$this->set('changes', $this->Change->getChangesForMenu());
 			$this->set('bounds', $this->Boundary->getBounds());
 		} else {
 			$this->redirect(array('action'=>'select'));

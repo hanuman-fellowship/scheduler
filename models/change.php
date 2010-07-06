@@ -233,7 +233,7 @@ class Change extends AppModel {
 			));
 			foreach($changeData as $change) {
 				$menuData[$direction][$change['Change']['description']] = array(
-					'url' => array('controller' => 'changes', 'action' => 'jumpTo', $change['Change']['id'])
+					'url' => array('controller' => 'changes', 'action' => 'jump', $change['Change']['id'])
 				);
 			}
 			if (!isset($menuData[$direction])) {
@@ -251,5 +251,26 @@ class Change extends AppModel {
 		}
 		return $menuData;
 	}
+
+	/**
+	 * Jumps to the specified change. (Performs the undos/redos up to the one specified)
+	 *
+	 */
+	function jumpTo($id) {
+		$direction = 'redo';
+		$distance = abs($id);
+		if ($id >= 0) {
+			$direction = 'undo';
+			$distance++;
+		}
+		for($i = 1; $i <= $distance; $i++) {
+			if ($direction == 'undo') {
+				$this->doUndo();
+			} else {
+				$this->doRedo();
+			}
+		}
+	}
+
 } 
 ?>

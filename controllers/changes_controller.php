@@ -45,6 +45,11 @@
     	$this->Change->order = 'id';
     	$this->set('changes',$this->Change->sFind('all'));
     }
+
+	function jump($id) {
+		$this->Change->jumpTo($id);
+		$this->redirect($this->referer());
+	}
 				
 } 
 ?>
