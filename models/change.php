@@ -276,6 +276,7 @@ class Change extends AppModel {
 			}
 			$this->writeProgressFile(100*($i/$distance));
 		}
+		unlink("progress.txt");
 	}
 
 	function writeProgressFile($data) {

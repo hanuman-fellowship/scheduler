@@ -4,7 +4,7 @@ var intervalID; // interval ID
 
 // button actions
 function polling_start() {
-	intervalID = window.setInterval('send_request()',500)
+	intervalID = window.setInterval('send_request()',50)
 }
 function polling_stop()  {window.clearInterval(intervalID)}
 
