@@ -233,7 +233,11 @@ class Change extends AppModel {
 			));
 			foreach($changeData as $change) {
 				$menuData[$direction][$change['Change']['description']] = array(
-					'url' => array('controller' => 'changes', 'action' => 'jump', $change['Change']['id'])
+					'url' => array('controller' => 'changes', 'action' => 'jump', $change['Change']['id']),
+					'ajax' => array(
+						'before' => 'polling_start()',
+						'complete' => "window.location.reload()"
+					)
 				);
 			}
 			if (!isset($menuData[$direction])) {
@@ -244,7 +248,7 @@ class Change extends AppModel {
 					'url' => array('controller' => 'changes', 'action' => 'history'),
 					'ajax' => array(
 						'update' => 'dialog_content',
-						'complete' => "openDialog('1_1','#FFF','true')"
+						'complete' => "openDialog('1_1','true')"
 					)
 				);
 			}
@@ -257,6 +261,7 @@ class Change extends AppModel {
 	 *
 	 */
 	function jumpTo($id) {
+		session_start();
 		$direction = 'redo';
 		$distance = abs($id);
 		if ($id >= 0) {
@@ -269,7 +274,15 @@ class Change extends AppModel {
 			} else {
 				$this->doRedo();
 			}
+			$this->writeProgressFile(100*($i/$distance));
 		}
+	}
+
+	function writeProgressFile($data) {
+		if($data == 100) $data = 0;
+		$fp = fopen("progress.txt", "w");
+		fwrite($fp, $data);
+		fclose($fp);
 	}
 
 } 

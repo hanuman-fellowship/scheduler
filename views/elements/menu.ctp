@@ -1,4 +1,4 @@
-<?=$javascript->link('functions');?>
+<?=$javascript->link(array('functions','progress'));?>
 <?=$html->css("dialog") ?>
 <?=$role->menu(array(
 	'Login' => array(
