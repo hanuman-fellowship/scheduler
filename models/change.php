@@ -261,7 +261,7 @@ class Change extends AppModel {
 	 *
 	 */
 	function jumpTo($id) {
-		session_start();
+		$this->writeProgressFile(0);
 		$direction = 'redo';
 		$distance = abs($id);
 		if ($id >= 0) {
@@ -279,7 +279,6 @@ class Change extends AppModel {
 	}
 
 	function writeProgressFile($data) {
-		if($data == 100) $data = 0;
 		$fp = fopen("progress.txt", "w");
 		fwrite($fp, $data);
 		fclose($fp);
