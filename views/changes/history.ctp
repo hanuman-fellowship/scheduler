@@ -7,7 +7,7 @@ foreach($changes as $change) {
 		echo '</i><br/>**You are Here**<br/><br/>';
 	}
 	echo $ajax->link($change['Change']['description'],array('action'=>'jump',$change['Change']['id']),array(
-		'before' => 'polling_start()',
+		'before' => "progress_start('Applying Changes')",
 		'complete' => "window.location.reload()"
 	)).'
 	<br/>';

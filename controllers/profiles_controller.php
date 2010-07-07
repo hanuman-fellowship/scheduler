@@ -8,7 +8,9 @@ class ProfilesController extends AppController {
 			'rm_tmp_file' => true,
 			'allow_non_image_files' => false,
 			'images_size' => array(
+				'icon' => array(75,75,true),
 				'profile' => array(250,250,true),
+				'big' => array(500,500,true),
 			)
 		)
 	);

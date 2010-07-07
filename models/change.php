@@ -235,7 +235,7 @@ class Change extends AppModel {
 				$menuData[$direction][$change['Change']['description']] = array(
 					'url' => array('controller' => 'changes', 'action' => 'jump', $change['Change']['id']),
 					'ajax' => array(
-						'before' => 'polling_start()',
+						'before' => 'progress_start()',
 						'complete' => "window.location.reload()"
 					)
 				);
@@ -261,6 +261,7 @@ class Change extends AppModel {
 	 *
 	 */
 	function jumpTo($id) {
+		$this->message = 'Applying Changes...';
 		$this->writeProgressFile(0);
 		$direction = 'redo';
 		$distance = abs($id);
@@ -279,9 +280,10 @@ class Change extends AppModel {
 		unlink("progress.txt");
 	}
 
-	function writeProgressFile($data) {
+	function writeProgressFile($percent, $message = null) {
+		$this->message = ($message) ? $message : $this->message;
 		$fp = fopen("progress.txt", "w");
-		fwrite($fp, $data);
+		fwrite($fp, $this->message.'|'.$percent);
 		fclose($fp);
 	}
 

@@ -3,10 +3,10 @@ var request;    // request object
 var intervalID; // interval ID
 
 // button actions
-function polling_start() {
+function progress_start() {
 	intervalID = window.setInterval('send_request()',50)
 }
-function polling_stop()  {window.clearInterval(intervalID)}
+function progress_stop()  {window.clearInterval(intervalID)}
 
 // create an XMLHttpClient in a cross-browser manner
 function initXMLHttpClient(){
