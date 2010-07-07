@@ -14,6 +14,9 @@ class ProfilesController extends AppController {
 	);
 
 	function view($id = null) {
+		if (!$id) {
+			$this->redirect(array('action'=>'select'));
+		}
 		$file = glob(WWW_ROOT.'img'.DS.'photos'.DS.'profile'.DS.$id.'.*');
 		$image = (isset($file[0])) ? 
 			$id.strrchr($file[0],'.') : // get just the extension and append to filename (id))
@@ -22,6 +25,12 @@ class ProfilesController extends AppController {
 		$this->set('id',$id);
 	}
 
+	function select() {
+		$this->Profile->recursive = -1;
+		$this->Profile->order = 'first';
+		$this->set('profiles',$this->Profile->find('list'));
+	}
+	
 	function add() {
 		if (!empty($this->data)) {
 			if ($this->Profile->valid($this->data)) {

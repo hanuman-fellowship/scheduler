@@ -40,15 +40,6 @@
 					'id' => 'person_view_profile'
 				)
 			),
-			'Upload Profile Image...' => array(
-				'role' => array('operations'),
-				'url' => array('controller' => 'profiles', 'action' => 'uploadImage',1),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('profile_image','true')",
-					'id' => 'profile_image'
-				)
-			),
 			"<hr/>" => array(
 				'role' => array('operations')
 			),

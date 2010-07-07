@@ -8,12 +8,6 @@ function polling_start() {
 }
 function polling_stop()  {window.clearInterval(intervalID)}
 
-// define reference to the progress bar and create request object
-window.onload = function (){
-	progress = document.getElementById('progress');
-	request  = initXMLHttpClient();
-}
-
 // create an XMLHttpClient in a cross-browser manner
 function initXMLHttpClient(){
 	var xmlhttp;
@@ -31,6 +25,8 @@ function initXMLHttpClient(){
 
 // send request to the server
 function send_request(){
+	progress = get('progress');
+	request  = initXMLHttpClient();
 	request.open('GET','/newscheduler/app/webroot/progress.php', true); // open asynchronus request
 	request.onreadystatechange = request_handler;          // set request handler
 	request.send(null);                                    // send request

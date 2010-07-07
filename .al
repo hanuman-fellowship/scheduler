@@ -1,2 +1,2 @@
 alias pk='ping krishna'
-alias n='vi ~/Sites/krishna/app/notes'
+alias n='vi ~/Sites/newscheduler/app/notes'
