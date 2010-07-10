@@ -10,11 +10,8 @@ class Person extends AppModel {
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
-		'OffDay'
-	);
-
-	var $hasOne = array(
-		'Profile'
+		'OffDay',
+		'ProfileNote'
 	);
 
 	function sSave($data) {
@@ -116,6 +113,36 @@ class Person extends AppModel {
 			}
 		}
 		return $list;
+	}
+
+	function getPeople($ids = null) {
+		if(is_array($ids)) {
+			$people = array();
+			$i = 0;
+			foreach($ids as $id => $schedule_id) {
+				$people[$i][0]['schedule_id'] = $schedule_id;
+				$people[$i]['Person']['id'] = $id;
+				$i++;
+			}
+		} else {
+			$this->recursive = -1;
+			$people = $this->find('all',array(
+			'fields' => array(
+				'Person.id',
+				'MAX(Person.schedule_id) as schedule_id'
+			),
+			'group' => 'Person.id',
+			));
+		}
+		$allPeople = array();
+		foreach ($people as $person) {
+			$this->schedule_id = $person[0]['schedule_id'];
+			$this->ResidentCategory->schedule_id = $person[0]['schedule_id'];
+			$this->sContain('ResidentCategory');
+			$this->id = $person['Person']['id'];
+			$allPeople[] = $this->sFind('first');
+		}
+		return $allPeople;
 	}
 
 }

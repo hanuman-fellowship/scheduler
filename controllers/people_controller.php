@@ -3,7 +3,18 @@ class PeopleController extends AppController {
 
 	var $name = 'People';
 	var $helpers = array('schedule');
-		
+	var $components = array(
+		'Attachment' => array(
+			'rm_tmp_file' => true,
+			'allow_non_image_files' => false,
+			'images_size' => array(
+				'icon' => array(75,75,true),
+				'profile' => array(250,250,true),
+				'big' => array(500,500,true),
+			)
+		)
+	);
+
 	/**
 	 * Displays the schedule for the specified person.
 	 * 
@@ -16,14 +27,48 @@ class PeopleController extends AppController {
 			$this->set('changes', $this->Change->getChangesForMenu());
 			$this->set('bounds', $this->Boundary->getBounds());
 		} else {
-			$this->redirect(array('action'=>'select'));
+			$this->redirect(array('action'=>'selectSchedule'));
 		}
 	}	
 
-    function select() {
+	function profile($id = null, $schedule_id = null) {
+		if (!$id) {
+			$this->redirect(array('action'=>'selectProfile'));
+		}
+		$file = glob(WWW_ROOT.'img'.DS.'photos'.DS.'profile'.DS.$id.'.*');
+		$image = (isset($file[0])) ? 
+			$id.strrchr($file[0],'.') : // get just the extension and append to filename (id))
+			'no_image.jpg';
+		$this->set('image',$image);
+		if ($schedule_id) {
+			$this->Person->schedule_id = $schedule_id;	
+			$this->Person->ResidentCategory->schedule_id = $schedule_id;
+		}
+		$this->Person->sContain('ResidentCategory');
+		$this->Person->id = $id;
+		$this->set('person',$this->Person->find('first'));
+	}
+	
+	function uploadImage($id = null) {
+		if (!empty($this->data)) {
+			$this->Attachment->upload($this->data['Profile'],$this->data['Profile']['id'],'profile');
+			$this->redirect(array('action' => 'view',$this->data['Profile']['id']));
+		}
+		$this->set('id',$id);
+	}
+
+    function selectSchedule() {
 		$this->Person->sContain('ResidentCategory');
 		$this->Person->order = 'Person.resident_category_id, Person.name';	
 		$this->set('people',$this->Person->sFind('all'));
+	}
+
+	/**
+	*
+	* Finds the latest version of each person and passes that to the view for selection
+	*/
+    function selectProfile() {
+		$this->set('people',$this->Person->getPeople());
 	}
 
 	function add() {
