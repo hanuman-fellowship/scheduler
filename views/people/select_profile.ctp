@@ -1,5 +1,6 @@
 <fieldset>
 	<legend><?php __('View Profile');?></legend>
+<div style="max-height:500px;overflow:auto">
 <?
 foreach($people as $person) {
 	echo $html->link(
@@ -13,4 +14,5 @@ foreach($people as $person) {
 	echo '<br/>';
 }
 ?>
+</div>
 </fieldset>

@@ -1,10 +1,11 @@
-<strong>Change History</strong><br/><br/>
-<div style="height:500px;overflow:auto">
+<fieldset>
+	<legend><?php __('Change History');?></legend>
+<div style="max-height:500px;overflow:auto">
 <?
-echo '<i>';
+echo '<div style="color:#CCCCCC">';
 foreach($changes as $change) {
 	if ($change['Change']['id'] == 0) {
-		echo '</i><br/>**You are Here**<br/><br/>';
+		echo '</div><br/>';
 	}
 	echo $ajax->link($change['Change']['description'],array('action'=>'jump',$change['Change']['id']),array(
 		'before' => "progress_start('Applying Changes')",
@@ -13,4 +14,5 @@ foreach($changes as $change) {
 	<br/>';
 }
 ?>
+</fieldset>
 </div>
