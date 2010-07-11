@@ -58,8 +58,9 @@ class PeopleController extends AppController {
 	function uploadImage($id = null) {
 		if (!empty($this->data)) {
 			$this->Attachment->upload($this->data['Person'],$this->data['Person']['id'],'person');
-			$this->redirect(array('action' => 'profile',$this->data['Person']['id']));
+			$this->redirect($this->loadPage());
 		}
+		$this->savePage();
 		$this->set('id',$id);
 	}
 
