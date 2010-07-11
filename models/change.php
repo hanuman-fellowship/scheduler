@@ -218,6 +218,7 @@ class Change extends AppModel {
     } 
      
 	function getChangesForMenu() {
+		$user = Authsome::get('id');
 		$menuData = array();
 		$directions = array('undo','redo');
 		foreach($directions as $direction) {
@@ -235,7 +236,7 @@ class Change extends AppModel {
 				$menuData[$direction][$change['Change']['description']] = array(
 					'url' => array('controller' => 'changes', 'action' => 'jump', $change['Change']['id']),
 					'ajax' => array(
-						'before' => 'progress_start()',
+						'before' => "progress_start('{$user}')",
 						'complete' => "window.location.reload()"
 					)
 				);
@@ -261,8 +262,9 @@ class Change extends AppModel {
 	 *
 	 */
 	function jumpTo($id) {
+		$user = Authsome::get('id');
 		$this->message = 'Applying Changes...';
-		$this->writeProgressFile(0);
+		$this->writeProgressFile($user,0);
 		$direction = 'redo';
 		$distance = abs($id);
 		if ($id >= 0) {
@@ -275,14 +277,14 @@ class Change extends AppModel {
 			} else {
 				$this->doRedo();
 			}
-			$this->writeProgressFile(100*($i/$distance));
+			$this->writeProgressFile($user, 100*($i/$distance));
 		}
-		unlink("progress.txt");
+		unlink("progress{$user}.txt");
 	}
 
-	function writeProgressFile($percent, $message = null) {
+	function writeProgressFile($user, $percent, $message = null) {
 		$this->message = ($message) ? $message : $this->message;
-		$fp = fopen("progress.txt", "w");
+		$fp = fopen("progress{$user}.txt", "w");
 		fwrite($fp, $this->message.'|'.$percent);
 		fclose($fp);
 	}

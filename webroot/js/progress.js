@@ -1,9 +1,11 @@
 var progress;   // progress element reference
 var request;    // request object
 var intervalID; // interval ID
+var user;       // user id for progress file name
 
 // button actions
-function progress_start() {
+function progress_start(u) {
+	user = u;
 	intervalID = window.setInterval('send_request()',50)
 }
 function progress_stop()  {window.clearInterval(intervalID)}
@@ -27,7 +29,7 @@ function initXMLHttpClient(){
 function send_request(){
 	progress = get('progress');
 	request  = initXMLHttpClient();
-	request.open('GET','/newscheduler/app/webroot/progress.php', true); // open asynchronus request
+	request.open('GET','/newscheduler/app/webroot/progress.php?user='+user, true); // open asynchronus request
 	request.onreadystatechange = request_handler;          // set request handler
 	request.send(null);                                    // send request
 }

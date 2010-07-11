@@ -1,6 +1,6 @@
 <?
 //get data from the progress file
-$fileatt = 'progress.txt';
+$fileatt = "progress{$_GET['user']}.txt";
 $file = fopen($fileatt,'rb'); 
 $data = fread($file,filesize($fileatt)); 
 fclose($file);
