@@ -33,7 +33,7 @@
 			),
 			'View Profile...' => array(
 				'role' => array('operations'),
-				'url' => array('controller' => 'profiles', 'action' => 'view'),
+				'url' => array('controller' => 'people', 'action' => 'profile'),
 				'ajax' => array(
 					'update' => 'dialog_content',
 					'complete' => "openDialog('person_view_profile','true')",

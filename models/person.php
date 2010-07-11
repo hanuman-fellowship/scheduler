@@ -120,6 +120,7 @@ class Person extends AppModel {
 			}
 		} else {
 			$this->recursive = -1;
+			$this->order = 'Person.name';
 			$people = $this->find('all',array(
 			'fields' => array(
 				'Person.id',

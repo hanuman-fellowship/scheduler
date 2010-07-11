@@ -8,7 +8,7 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 			$type = 'ajax';
 			$attributes = array(
 				'update' => 'dialog_content',
-				'complete' => "openDialog('1_1','#FFF','true')"
+				'complete' => "openDialog('1_1','true')"
 			);
 		} else {
 			$type = 'html';

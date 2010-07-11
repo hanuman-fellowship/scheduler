@@ -3,6 +3,10 @@ class PeopleController extends AppController {
 
 	var $name = 'People';
 	var $helpers = array('schedule');
+	var $paginate = array(
+		'limit' => 25,
+		'order' => 'Person.name'
+	);
 	var $components = array(
 		'Attachment' => array(
 			'rm_tmp_file' => true,
@@ -47,12 +51,14 @@ class PeopleController extends AppController {
 		$this->Person->sContain('ResidentCategory');
 		$this->Person->id = $id;
 		$this->set('person',$this->Person->find('first'));
+		$this->set('id',$this->Person->id);
+		$this->set('schedule_id',$this->Person->schedule_id);
 	}
 	
 	function uploadImage($id = null) {
 		if (!empty($this->data)) {
-			$this->Attachment->upload($this->data['Profile'],$this->data['Profile']['id'],'profile');
-			$this->redirect(array('action' => 'view',$this->data['Profile']['id']));
+			$this->Attachment->upload($this->data['Person'],$this->data['Person']['id'],'person');
+			$this->redirect(array('action' => 'profile',$this->data['Person']['id']));
 		}
 		$this->set('id',$id);
 	}
