@@ -17,19 +17,13 @@ class Person extends AppModel {
 	function sSave($data) {
 		$changes = parent::sSave($data);
 		$this->setDescription($changes);
-		if(!isset($data['Person']['id'])) { // if this is a new person, create a profile
-			$profileData = array('Profile' => array(
-				'person_id' => $this->id,
-				'first' => $data['Person']['name']
-			));
-			$this->Profile->create();
-			$this->Profile->save($profileData);
+		if(!isset($data['Person']['id'])) { // if this is a new person, create a profile note
 			$noteData = array('ProfileNote' => array(
-				'profile_id' => $this->Profile->id,
-				'note' => 'Profile Created'
+				'profile_id' => $this->id,
+				'note' => 'Person Created'
 			));
-			$this->Profile->ProfileNote->create();
-			$this->Profile->ProfileNote->save($noteData);
+			$this->ProfileNote->create();
+			$this->ProfileNote->save($noteData);
 		}
 	}
 	

@@ -44,7 +44,6 @@ class ScheduleHelper extends AppHelper {
 			$people_displayed = 0;
 			foreach ($shift['Assignment'] as $assignment) {
 				$people_displayed++;
-			
 				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;

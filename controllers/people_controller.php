@@ -80,7 +80,7 @@ class PeopleController extends AppController {
 				$this->stop($this->Person->description);
 				if ($this->data['Person']['edit_profile']) {
 					$this->set('url',
-						array('controller' => 'profiles', 'action' => 'view', $this->Person->Profile->id));
+						array('action' => 'profile', $this->Person->Profile->id));
 				} else {
 					$this->set('url', 
 						array('action' => 'schedule', $this->Person->id));
