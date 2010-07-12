@@ -1,22 +1,26 @@
-<div class="floatingShifts form">
-<?php echo $form->create('FloatingShift');?>
+<?= $ajax->form($this->action,'post',array('model'=>'FloatingShift','update'=>'dialog_content','before'=>'saveScroll()'));?>
 	<fieldset>
- 		<legend><?php __('Add FloatingShift');?></legend>
+ 		<legend><?php __('New Floating Shift');?></legend>
 	<?php
-		echo $form->input('person_id');
-		echo $form->input('area_id');
-		echo $form->input('hours');
-		echo $form->input('note');
+		echo $form->input('area_id', array(
+			'default' => $area_id,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('person_id', array(
+			'default' => $person_id,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('hours', array(
+			'interval' => 15,
+			'default' => 1,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('note', array(
+			'interval' => 15,
+			'between' => '&nbsp;'
+		));
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
-</div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('List FloatingShifts', true), array('action' => 'index'));?></li>
-		<li><?php echo $html->link(__('List People', true), array('controller' => 'people', 'action' => 'index')); ?> </li>
-		<li><?php echo $html->link(__('New Person', true), array('controller' => 'people', 'action' => 'add')); ?> </li>
-		<li><?php echo $html->link(__('List Areas', true), array('controller' => 'areas', 'action' => 'index')); ?> </li>
-		<li><?php echo $html->link(__('New Area', true), array('controller' => 'areas', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?= $form->submit('Submit');?>
+<?php echo $form->end();?>
+<?=$this->element('validate',array('default_field'=>'name'));?>

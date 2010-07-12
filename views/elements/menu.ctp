@@ -102,7 +102,11 @@
 		'url' => '#',
 		'sub' => array(
 			'New Shift...' => array(
-				'url' => array('controller' => 'shifts', 'action' => 'add'),
+				'url' => array(
+					'controller' => 'shifts',
+					'action' => 'add',
+					(isset($area)) ? $area : null 
+				),
 				'ajax' => array(
 					'update'=>'dialog_content',
 					'complete'=>"openDialog('shift_new','true')",
@@ -110,7 +114,12 @@
 				)
 			),
 			'New Floating Shift...' => array(
-				'url' => array('controller' => 'floating_shifts', 'action' => 'add'),
+				'url' => array(
+					'controller' => 'floating_shifts',
+					'action' => 'add',
+					(isset($area)) ? $area : 0, 
+					(isset($person)) ? $person : 0 
+				),
 				'ajax' => array(
 					'update'=>'dialog_content',
 					'complete'=>"openDialog('floating_shift_new','true')",

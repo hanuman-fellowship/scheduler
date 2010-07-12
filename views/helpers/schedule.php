@@ -141,7 +141,7 @@ class ScheduleHelper extends AppHelper {
 			$hours = $floating_shift['hours'];
 			$this->total_hours['total'] += $hours;
 			$hours = ($hours == 1) ? 
-				"$hours hour" :
+				"$hours hour " :
 				"$hours hours ";
 			$link_title = $floating_shift['Area']['name'];
 			$link_url = array('controller'=>'areas','action'=>'schedule',$floating_shift['Area']['id']);
@@ -174,7 +174,7 @@ class ScheduleHelper extends AppHelper {
 			$link_title = $floating_shift['Person']['name'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);
 			$note = $floating_shift['note'];
-			$output[] = $hours . "w/ " . $this->html->link(
+			$output[] = $hours . " w/ " . $this->html->link(
 				$link_title, $link_url, array(
 					'class' => 'RC_' . $floating_shift['Person']['resident_category_id']
 				)
