@@ -1,13 +1,14 @@
 TODO:
 
-	- Person Profile
-		- images/people/{id}.jpg
-		- find a good image uploader and resizer
-	
 	- Menu
-		- Can the submenu width ba automatic?
+		- Can the submenu width be automatic?
 	
 	- Popup menu for person schedule
 		- Use the old script from scheduler?
 
+	- Changes
+		- views/changes/history needs work
+			- maybe two columns, one for redos and one for undos
+	
+	- Merge Branch?
 	
