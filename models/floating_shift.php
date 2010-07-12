@@ -2,15 +2,77 @@
 class FloatingShift extends AppModel {
 
 	var $name = 'FloatingShift';
-	var $validate = array(
-		'person_id' => array('numeric'),
-		'area_id' => array('numeric')
-	);
 
 	var $belongsTo = array(
 		'Person',
 		'Area'
 	);
 
+	function valid($data) {
+		$hours = $data['FloatingShift']['hours'];
+		if (!is_numeric($hours) || $hours < 1) {
+			$this->errorField = 'hours';
+			$this->errorMessage = "Invalid # of hours";
+			return false;
+		}
+		return true;
+	}
+
+	function sSave($data) {
+		$changes = parent::sSave($data);
+		$this->setDescription($changes);
+	}
+	
+	function sDelete($id) {
+		$changes = parent::sDelete($id);
+		$this->setDescription($changes);
+	}
+	
+	function setDescription($changes) {
+		if (isset($changes['newData'])) {	
+			$newData = $this->format($changes['newData']);
+			if ($changes['oldData']['id'] == '') {
+				$this->description = "New floating shift: {$newData['name']}";
+			} else {
+				$oldData = $this->format($changes['oldData']);				
+				$this->description = 'Floating shift changed: '.
+				"{$oldData['name']}";
+				$listed = false;
+				foreach($changes['newData'] as $field => $val) {
+					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
+						$this->description .= $listed ? ', ' : ' ';
+						$this->description .= 
+							Inflector::humanize($field).' is now '.$val;
+						$listed = true;
+					}
+				}
+			}
+		} else {
+			$oldData = $this->format($changes);
+			$this->description = "Floating shift deleted: {$oldData['name']}";
+		}
+	}
+
+	function format($data) {
+		$this->Area->id = $data['area_id'];
+		$this->Area->recursive = -1;
+		$this->Area->schedule_id = $this->schedule_id;
+		$area = $this->Area->sFind('first');
+		$data['area_id'] = $area['Area']['short_name'];
+		$this->Person->id = $data['person_id'];
+		$this->Person->recursive = -1;
+		$this->Person->schedule_id = $this->schedule_id;
+		$person = $this->Person->sFind('first');
+		$data['person_id'] = $person['Person']['name'];
+		$data['name'] = 
+			$data['area_id'].'; '.
+			$data['hours'];
+		$data['name'] .=
+			($data['hours'] == 1) ? ' hr ' : ' hrs ';
+		$data['name'] .= 
+			' w/ '.$data['person_id'];
+		$data['name'] .= ($data['note'] != '') ? ' ('.$data['note'].')' : '';
+		return $data;
+	}
 }
 ?>

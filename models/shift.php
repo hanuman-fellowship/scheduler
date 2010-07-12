@@ -63,11 +63,11 @@ class Shift extends AppModel {
 	
 	function setDescription($changes) {
 		if (isset($changes['newData'])) {
-			$newData = $this->formatShift($changes['newData']);
+			$newData = $this->format($changes['newData']);
 			if ($changes['oldData']['id'] == '') {
 				$this->description = "New Shift created: {$newData['name']}";
 			} else {
-				$oldData = $this->formatShift($changes['oldData']);				
+				$oldData = $this->format($changes['oldData']);				
 				$this->description = "Shift changed: ({$oldData['name']})";
 				$listed = false;
 				foreach($changes['newData'] as $field => $val) {
@@ -104,12 +104,12 @@ class Shift extends AppModel {
 				}
 			}
 		} else {
-			$oldData = $this->formatShift($changes);
+			$oldData = $this->format($changes);
 			$this->description = "Shift deleted: {$oldData['name']}";
 		}
 	}
 	
-	function formatShift($data) {
+	function format($data) {
 		$this->Area->id = $data['area_id'];
 		$this->Area->recursive = -1;
 		$this->Area->schedule_id = $this->schedule_id;

@@ -14,5 +14,7 @@ TODO:
 
 	- Floating Shift
 		- Make hours a link to edit floating shift
+		- Make sure description is set correctly for update and delete
+		- Add '+' to add floating shift
 
 	- Constant Shift

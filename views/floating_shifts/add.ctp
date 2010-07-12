@@ -11,16 +11,15 @@
 			'between' => '&nbsp;'
 		));
 		echo $form->input('hours', array(
-			'interval' => 15,
+			'id' => 'hours',
 			'default' => 1,
 			'between' => '&nbsp;'
 		));
 		echo $form->input('note', array(
-			'interval' => 15,
 			'between' => '&nbsp;'
 		));
 	?>
 	</fieldset>
 <?= $form->submit('Submit');?>
 <?php echo $form->end();?>
-<?=$this->element('validate',array('default_field'=>'name'));?>
+<?=$this->element('validate',array('default_field'=>'hours'));?>

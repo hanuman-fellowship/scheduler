@@ -38,7 +38,7 @@ class Assignment extends AppModel {
 			$person = $this->Person->sFind('first');
 			$person = $person['Person'];
 		}
-		$formatted = $this->Shift->formatShift($shift['Shift']);		
+		$formatted = $this->Shift->format($shift['Shift']);		
 		$this->description = "{$person['name']} {$assignedOrRemoved} {$formatted['name']}";
 	}
 	
