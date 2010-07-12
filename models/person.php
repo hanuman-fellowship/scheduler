@@ -19,7 +19,7 @@ class Person extends AppModel {
 		$this->setDescription($changes);
 		if(!isset($data['Person']['id'])) { // if this is a new person, create a profile note
 			$noteData = array('ProfileNote' => array(
-				'profile_id' => $this->id,
+				'person_id' => $this->id,
 				'note' => 'Person Created'
 			));
 			$this->ProfileNote->create();
