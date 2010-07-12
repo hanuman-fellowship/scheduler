@@ -50,9 +50,11 @@ class PeopleController extends AppController {
 		}
 		$this->Person->sContain('ResidentCategory');
 		$this->Person->id = $id;
-		$this->set('person',$this->Person->find('first'));
+		$this->set('person',$this->Person->sFind('first'));
 		$this->set('id',$this->Person->id);
 		$this->set('schedule_id',$this->Person->schedule_id);
+		$this->loadModel('Change');
+		$this->set('changes', $this->Change->getChangesForMenu());
 	}
 	
 	function uploadImage($id = null) {

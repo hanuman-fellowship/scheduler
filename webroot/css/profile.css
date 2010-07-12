@@ -1,0 +1,21 @@
+.profile_content {
+	padding:20px;
+}
+
+.profile_image {
+	float:left;
+	padding-right:20px;
+}
+
+.upload_image {
+	clear:both;
+	padding:10px;
+}
+
+.info {
+	font-size:24px;
+}
+
+.info div {
+	padding-bottom:20px;
+}
