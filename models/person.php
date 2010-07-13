@@ -3,17 +3,25 @@ class Person extends AppModel {
 
 	var $name = 'Person';
 
-	var $belongsTo = array(
-		'ResidentCategory'
-	);
-
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
 		'OffDay',
 		'ProfileNote'
 	);
+	
+	var $hasOne = array(
+		'PeopleSchedules'
+	);
 
+	function sFind($type, $params = array()) {
+		$this->sContain('PeopleSchedules.ResidentCategory');
+		$person = $this->find($type, $params);
+		$newPerson = $person['Person'];
+		$newPerson['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
+		debug($newPerson);
+	}
+	
 	function sSave($data) {
 		$changes = parent::sSave($data);
 		$this->setDescription($changes);

@@ -19,6 +19,11 @@ class PeopleController extends AppController {
 		)
 	);
 
+	function test() {
+		$this->Person->id = 1;
+		debug($this->Person->sFind('first'));
+	}
+
 	/**
 	 * Displays the schedule for the specified person.
 	 * 

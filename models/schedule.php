@@ -11,7 +11,7 @@ class Schedule extends AppModel {
 		'FloatingShift',
 		'OffDay',
 		'Assignment',
-		'Person',
+		'PeopleSchedules',
 		'ResidentCategory',
 		'Slot',
 		'Shift',
