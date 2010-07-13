@@ -150,16 +150,32 @@
  	</tr> 
 	<tr> 
 	<? } ?>	
-		<td align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
+		<td id="0_0" onmouseover='showAddShift(0,0)' onmouseout='hideAddShift("0_0")' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 		<? if (isset($area)) { ?>
 			<?=$schedule->displayAreaFloating($area['FloatingShift']);?>
+			<? $area_id = $area['Area']['id']; ?>
+			<? $person_id = 0; ?>
 		<? } else { ?>
 			<?=$schedule->displayPersonFloating($person['FloatingShift']);?>
+			<? $person_id = $person['Person']['id']; ?>
+			<? $area_id = 0; ?>
 			<?// now that the total hours are added up, sneak them in at the top
 			?>
 			<script type="text/javascript">
 				document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
+		<? } ?>
+		<? if (Authsome::get('role') == 'operations') { ?>
+			<?=$ajax->link(
+				' + ',
+				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),
+				array(
+					'id'=>"add_0_0", 
+					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
+					'update' => 'dialog_content',
+					'complete' => "openDialog('add_0_0','true')"
+				)
+			);?>
 		<? } ?>
 			<br/>
 			<a class="extra_blank" id="hide" href="javascript:openpopup('add_extra.php','Extra','width=580,height=208')"> 
