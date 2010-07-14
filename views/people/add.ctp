@@ -3,27 +3,20 @@
 	<fieldset>
  		<legend><?php __('Add Person');?></legend>
 	<?php
-		echo $form->input('name',array(
+		echo $form->input('first',array(
 			'between' => '&nbsp;',
-			'id' => 'name'
+			'id' => 'first'
 		));
-		echo $form->input('resident_category_id',array(
+		echo $form->input('middle',array(
 			'between' => '&nbsp;',
-			'id' => 'name'
+			'id' => 'middle'
 		));
-		echo '<br>';
-		echo $form->radio('edit_profile',
-			array(
-				true => 'Yes',
-				false => 'No'
-			),
-			array(
-				'value' => (isset($this->data)) ? $this->data['Person']['edit_profile'] : false,
-				'separator' => '&nbsp;'
-			)
-		);
+		echo $form->input('last',array(
+			'between' => '&nbsp;',
+			'id' => 'last'
+		));
 	?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
 </div>
-<?=$this->element('validate',array('default_field'=>'name'));?>
+<?=$this->element('validate',array('default_field'=>'first'));?>

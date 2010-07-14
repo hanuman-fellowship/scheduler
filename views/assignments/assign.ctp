@@ -9,12 +9,12 @@ $rcId = 0;
 echo "<div style='float:left;padding:10px;'>";
 	foreach($people as $person) {
 		if ($person['available'] || $list == 'all') {
-			if ($rcId != $person['resident_category_id']) {
+			if ($rcId != $person['ResidentCategory']['id']) {
 				echo "</div><div style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
-				$rcId = $person['resident_category_id'];
+				$rcId = $person['ResidentCategory']['id'];
 			}
-			echo $html->link($person['name'],array($shift,$person['id']),array(
-				'class' => 'RC_' . $person['resident_category_id'],
+			echo $html->link($person['first'],array($shift,$person['id']),array(
+				'class' => 'RC_' . $person['ResidentCategory']['id'],
 				'onclick'=>'saveScroll()'
 			)) . '<br>';
 		}

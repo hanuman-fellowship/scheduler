@@ -32,14 +32,14 @@ class Assignment extends AppModel {
 			$assignedOrRemoved = 'removed from';
 			$this->Shift->id = $data['shift_id'];
 			$shift = $this->Shift->sFind('first');
-			$this->Person->schedule_id = $this->schedule_id;
-			$this->Person->id = $data['person_id'];
 			$this->Person->recursive = -1;
-			$person = $this->Person->sFind('first');
+			$person = $this->Person->find('first',array(
+				'conditions' => array('Person.id' => $data['person_id'])
+			));
 			$person = $person['Person'];
 		}
 		$formatted = $this->Shift->format($shift['Shift']);		
-		$this->description = "{$person['name']} {$assignedOrRemoved} {$formatted['name']}";
+		$this->description = "{$person['first']} {$assignedOrRemoved} {$formatted['name']}";
 	}
 	
 }

@@ -14,24 +14,30 @@ class Person extends AppModel {
 		'PeopleSchedules'
 	);
 
-	function sFind($type, $params = array()) {
-		$this->sContain('PeopleSchedules.ResidentCategory');
-		$person = $this->find($type, $params);
-		$newPerson = $person['Person'];
-		$newPerson['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
-		debug($newPerson);
-	}
+//	function sFind($type, $params = array()) {
+//		$this->sContain('PeopleSchedules.ResidentCategory');
+//		$person = $this->find($type, $params);
+//		$newPerson['Person'] = $person['Person'];
+//		$newPerson['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
+//		return $newPerson;
+//	}
 	
 	function sSave($data) {
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
-		if(!isset($data['Person']['id'])) { // if this is a new person, create a profile note
+		$changes = $this->save($data);
+		if(!isset($data['Person']['id'])) { // if this is a new person
 			$noteData = array('ProfileNote' => array(
 				'person_id' => $this->id,
-				'note' => 'Person Created'
+				'note' =>      'Person Created'
 			));
 			$this->ProfileNote->create();
 			$this->ProfileNote->save($noteData);
+			$this->PeopleSchedules->schedule_id = $this->schedule_id;
+			$this->PeopleSchedules->sSave(array(
+				'PeopleSchedules' => array(
+					'person_id' =>            $this->id,
+					'resident_category_id' => 1
+				)
+			));
 		}
 	}
 	
@@ -71,9 +77,15 @@ class Person extends AppModel {
 	
 	
 	function getPerson($id) {
-		$this->id = $id;
-		$this->sContain('Assignment.Shift.Area','ResidentCategory','OffDay','FloatingShift.Area');
-		$person = $this->sFind('first');
+		$this->sContain(
+			'Assignment.Shift.Area',
+			'PeopleSchedules.ResidentCategory',
+			'OffDay',
+			'FloatingShift.Area'
+		);
+		$person = $this->find('first',array(
+			'conditions' => array('Person.id'=>$id)
+		));
 		return $person;
 	}	
 
@@ -81,13 +93,13 @@ class Person extends AppModel {
 		$this->Assignment->Shift->id = $shift_id;
 		$this->Assignment->Shift->recursive = -1;
 		$shift = $this->Assignment->Shift->sFind('first');
-		$this->sContain('OffDay','Assignment.Shift','ResidentCategory');
-		$this->order = array('Person.resident_category_id','Person.name');
-		$people = $this->sFind('all');
+		$this->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory');
+		$this->order = array('Person.first');
+		$people = $this->find('all');
 		$list = array();
 		foreach($people as $person_num => $person) {
 			$list[$person_num] = $person['Person'];
-			$list[$person_num]['ResidentCategory'] = $person['ResidentCategory'];
+			$list[$person_num]['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
 			$list[$person_num]['available'] = true; // benefit of the doubt
 			foreach($person['OffDay'] as $OffDay) {
 				
