@@ -1,6 +1,6 @@
 <div class="people form">
 	<fieldset>
- 		<legend><?php __('Delete Person');?></legend>
+ 		<legend><?php __('Retire Person');?></legend>
 <?
 $rcId = 0;
 echo "<div style='float:left;padding:10px;'>";

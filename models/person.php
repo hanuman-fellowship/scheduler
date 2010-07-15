@@ -14,14 +14,15 @@ class Person extends AppModel {
 		'PeopleSchedules'
 	);
 
-//	function sFind($type, $params = array()) {
-//		$this->sContain('PeopleSchedules.ResidentCategory');
-//		$person = $this->find($type, $params);
-//		$newPerson['Person'] = $person['Person'];
-//		$newPerson['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
-//		return $newPerson;
-//	}
-	
+	function valid($data) {
+		if ($data['Person']['first'] == '') {
+			$this->errorField = 'first';
+			$this->errorMessage = "First name must not be blank";
+			return false;
+		}	
+		return true;
+	}
+
 	function sSave($data) {
 		$changes = $this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
@@ -41,7 +42,7 @@ class Person extends AppModel {
 		}
 	}
 	
-	function sDelete($id) {
+	function retire($id) {
 		$this->id = $id;
 		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment');
@@ -49,30 +50,10 @@ class Person extends AppModel {
 		foreach($person['Assignment'] as $assignment) {
 			$this->Assignment->sDelete($assignment['id']);
 		}
+		$this->PeopleSchedules->schedule_id = $this->schedule_id;
+		$this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
+		$this->description = $this->PeopleSchedules->description;
 	}
-	
-	function setDescription($changes) {
-		if (isset($changes['newData'])) {
-			if ($changes['oldData']['id'] == '') {
-				$this->description = "New person created: {$changes['newData']['name']}";
-			} else {
-				$this->description = 'Person changed: '.
-				"{$changes['oldData']['name']}";
-				$listed = false;
-				foreach($changes['newData'] as $field => $val) {
-					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
-						$this->description .= $listed ? ', ' : ' ';
-						$this->description .= 
-							Inflector::humanize($field).' is now '.$val;
-						$listed = true;
-					}
-				}
-			}
-		} else {
-			$this->description = "Person deleted: {$changes['name']}";
-		}
-	}
-	
 	
 	function getPerson($id,$simple = false) {
 		if ($simple) {
@@ -169,5 +150,11 @@ class Person extends AppModel {
 		return $currentPeople;
 	}
 
+	function getPeopleSchedulesId($id) {
+		return $this->PeopleSchedules->field('id',array(
+			'PeopleSchedules.person_id' => $id,
+			'PeopleSchedules.schedule_id' => $this->schedule_id
+		));
+	}
 }
 ?>

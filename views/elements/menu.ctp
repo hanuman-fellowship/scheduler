@@ -52,13 +52,22 @@
 					'id' => 'person_add'
 				)
 			),
-			'Delete Person...' => array(
+			'Restore Person...' => array(
 				'role' => array('operations'),
-				'url' => array('controller' => 'people', 'action' => 'delete'),
+				'url' => array('controller' => 'people', 'action' => 'restore'),
 				'ajax' => array(
 					'update' => 'dialog_content',
-					'complete' => "openDialog('person_delete','true')",
-					'id' => 'person_delete'
+					'complete' => "openDialog('person_restore','true')",
+					'id' => 'person_restore'
+				)
+			),
+			'Retire Person...' => array(
+				'role' => array('operations'),
+				'url' => array('controller' => 'people', 'action' => 'retire'),
+				'ajax' => array(
+					'update' => 'dialog_content',
+					'complete' => "openDialog('person_retire','true')",
+					'id' => 'person_retire'
 				)
 			)
 		)

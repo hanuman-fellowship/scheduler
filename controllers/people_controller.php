@@ -80,7 +80,7 @@ class PeopleController extends AppController {
 				$this->Person->create();
 				$this->record();
 				$this->Person->sSave($this->data);
-				$this->stop($this->Person->description);
+				$this->stop($this->Person->PeopleSchedules->description);
 				$this->set('url',array('action' => 'schedule', $this->Person->id));
 			} else {
 				$this->set('errorField',$this->Person->errorField);
@@ -113,17 +113,11 @@ class PeopleController extends AppController {
 		$this->set(compact('residentCategories'));
 	}
 
-	function delete($id = null) {
+	function retire($id = null) {
 		if ($id) {
-			$PeopleSchedulesId = $this->Person->PeopleSchedules->field('id',array(
-				'PeopleSchedules.person_id' => $id,
-				'PeopleSchedules.schedule_id' => $this->Person->schedule_id
-			));
 			$this->record();
-			$this->Person->sDelete($id);
-			$this->Person->PeopleSchedules->schedule_id = $this->Person->schedule_id;
-			$this->Person->PeopleSchedules->sDelete($PeopleSchedulesId);
-			$this->stop($this->Person->PeopleSchedules->description);
+			$this->Person->retire($id);
+			$this->stop($this->Person->description);
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
