@@ -6,6 +6,7 @@ class AreasController extends AppController {
 
 	function schedule($id = null) {
 		if ($id) {
+			$this->redirectIfNotValid($id);
 			$this->set('area',$this->Area->getArea($id));
 			$this->loadModel('Boundary');
 			$this->set('bounds', $this->Boundary->getBounds());

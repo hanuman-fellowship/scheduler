@@ -19,17 +19,13 @@ class PeopleController extends AppController {
 		)
 	);
 
-	function test() {
-		$this->Person->id = 1;
-		debug($this->Person->sFind('first'));
-	}
-
 	/**
 	 * Displays the schedule for the specified person.
 	 * 
 	 */
 	function schedule($id = null) {	
 		if ($id) {
+			$this->redirectIfNotValid($id);
 			$this->set('person',$this->Person->getPerson($id));		
 			$this->loadModel('Boundary');
 			$this->loadModel('Change');
@@ -40,24 +36,17 @@ class PeopleController extends AppController {
 		}
 	}	
 
-	function profile($id = null, $schedule_id = null) {
+	function profile($id = null) {
 		if (!$id) {
 			$this->redirect(array('action'=>'selectProfile'));
 		}
+		$this->redirectIfNotValid($id);
 		$file = glob(WWW_ROOT.'img'.DS.'photos'.DS.'profile'.DS.$id.'.*');
 		$image = (isset($file[0])) ? 
 			$id.strrchr($file[0],'.') : // get just the extension and append to filename (id))
 			'no_image.jpg';
 		$this->set('image',$image);
-		if ($schedule_id) {
-			$this->Person->schedule_id = $schedule_id;	
-			$this->Person->ResidentCategory->schedule_id = $schedule_id;
-		}
-		$this->Person->sContain('ResidentCategory');
-		$this->Person->id = $id;
-		$this->set('person',$this->Person->sFind('first'));
-		$this->set('id',$this->Person->id);
-		$this->set('schedule_id',$this->Person->schedule_id);
+		$this->set('person',$this->Person->getPerson($id, true));
 		$this->loadModel('Change');
 		$this->set('changes', $this->Change->getChangesForMenu());
 	}
@@ -109,15 +98,15 @@ class PeopleController extends AppController {
 				$this->record();
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->description);
-				$this->set('url', array('controller' => 'people', 'action' => 'schedule', $this->data['Person']['id']));
+				$this->set('url', 
+					array('controller' => 'people', 'action' => 'schedule', $this->data['Person']['id']));
 			 } else {
 				$this->set('errorField',$this->Person->errorField);
 				$this->set('errorMessage',$this->Person->errorMessage);
 			}
 		}
 		if (empty($this->data)) {
-			$this->id = $id;
-			$this->data = $this->Person->sFind('first');
+			$this->data = $this->Person->getPerson($id, true);
 		}
 		$this->loadModel('ResidentCategory');
 		$residentCategories = $this->ResidentCategory->sFind('list');
@@ -126,15 +115,18 @@ class PeopleController extends AppController {
 
 	function delete($id = null) {
 		if ($id) {
+			$PeopleSchedulesId = $this->Person->PeopleSchedules->field('id',array(
+				'PeopleSchedules.person_id' => $id,
+				'PeopleSchedules.schedule_id' => $this->Person->schedule_id
+			));
 			$this->record();
-			$this->Person->sDelete($id);
-			$this->stop($this->Person->description);
+			$this->Person->PeopleSchedules->schedule_id = $this->Person->schedule_id;
+			$this->Person->PeopleSchedules->sDelete($PeopleSchedulesId);
+			$this->stop($this->Person->PeopleSchedules->description);
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
-		$this->Person->sContain('ResidentCategory');
-		$this->Person->order = 'Person.resident_category_id, Person.name';
-		$this->set('people',$this->Person->sFind('all'));
+		$this->set('people',$this->Person->getPeople());
 	}
 }
 	

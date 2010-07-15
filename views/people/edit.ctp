@@ -4,16 +4,20 @@
  		<legend><?php __('Edit Person');?></legend>
 	<?php
 		echo $form->hidden('id');
-		echo $form->input('name',array(
-			'between' => '&nbsp',
-			'id' => 'name'
+		echo $form->input('first',array(
+			'between' => '&nbsp;',
+			'id' => 'first'
 		));
-		echo $form->input('resident_category_id',array(
-			'between' => '&nbsp',
-			'id' => 'name'
+		echo $form->input('middle',array(
+			'between' => '&nbsp;',
+			'id' => 'middle'
+		));
+		echo $form->input('last',array(
+			'between' => '&nbsp;',
+			'id' => 'last'
 		));
 	?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
 </div>
-<?=$this->element('validate',array('default_field'=>'name'));?>
+<?=$this->element('validate',array('default_field'=>'first'));?>
