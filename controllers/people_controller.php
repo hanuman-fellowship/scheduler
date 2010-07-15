@@ -120,6 +120,7 @@ class PeopleController extends AppController {
 				'PeopleSchedules.schedule_id' => $this->Person->schedule_id
 			));
 			$this->record();
+			$this->Person->sDelete($id);
 			$this->Person->PeopleSchedules->schedule_id = $this->Person->schedule_id;
 			$this->Person->PeopleSchedules->sDelete($PeopleSchedulesId);
 			$this->stop($this->Person->PeopleSchedules->description);

@@ -45,12 +45,10 @@ class Person extends AppModel {
 		$this->id = $id;
 		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment');
-		$person = $this->sFind('first');
+		$person = $this->find('first');
 		foreach($person['Assignment'] as $assignment) {
 			$this->Assignment->sDelete($assignment['id']);
 		}
-		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
 	}
 	
 	function setDescription($changes) {
