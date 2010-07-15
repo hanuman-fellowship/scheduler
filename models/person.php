@@ -93,9 +93,25 @@ class Person extends AppModel {
 		$this->Assignment->Shift->id = $shift_id;
 		$this->Assignment->Shift->recursive = -1;
 		$shift = $this->Assignment->Shift->sFind('first');
+
+		$currentPeople = $this->PeopleSchedules->find('all',array(
+			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
+			'fields' => array('PeopleSchedules.person_id')
+		));
+		$currentPeople = Set::combine(
+			$currentPeople,
+			'{n}.PeopleSchedules.person_id',
+			'{n}.PeopleSchedules.person_id'
+		);
+
 		$this->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory');
 		$this->order = array('Person.first');
-		$people = $this->find('all');
+		$people = $this->find('all',array(
+			'conditions' => array(
+				'Person.id' => $currentPeople
+			)
+		));
+
 		$list = array();
 		foreach($people as $person_num => $person) {
 			$list[$person_num] = $person['Person'];

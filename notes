@@ -1,5 +1,7 @@
 TODO:
 
+	- Only get People that have a curren PeopleSchedule entry.
+
 	- Menu
 		- Can the submenu width be automatic?
 	

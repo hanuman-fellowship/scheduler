@@ -17,7 +17,9 @@ class AppModel extends Model {
 						"{$model}.schedule_id =" => $this->schedule_id
 					)
 				);
-				if ($model == 'Person') unset($next_arg[$model]['conditions']);
+				if ($model == 'Person') {
+					unset($next_arg[$model]['conditions']);
+				}
 				$next_arg =& $next_arg[$model];
 			}
 			$new_args = array_merge($new_args, $arg);
