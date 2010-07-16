@@ -61,9 +61,7 @@ class PeopleController extends AppController {
 	}
 
     function selectSchedule() {
-		$this->Person->sContain('ResidentCategory');
-		$this->Person->order = 'Person.resident_category_id, Person.name';	
-		$this->set('people',$this->Person->sFind('all'));
+		$this->set('people',$this->Person->listByResidentCategory());
 	}
 
 	/**

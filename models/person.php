@@ -156,6 +156,21 @@ class Person extends AppModel {
 		return $people;
 	}
 
+	function listByResidentCategory() {	
+		$currentPeople = $this->getCurrent();
+
+		$this->order = array('PeopleSchedules.resident_category_id','Person.first');
+		$this->sContain(
+			'PeopleSchedules.ResidentCategory'
+		);
+		$people = $this->find('all',array(
+			'conditions' => array(
+				'Person.id' => $currentPeople
+			)
+		));
+		return $people;
+	}
+
 	function getCurrent() {
 		$currentPeople = $this->PeopleSchedules->find('all',array(
 			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
