@@ -141,6 +141,21 @@ class Person extends AppModel {
 		return $people;
 	}
 
+	function getList() {
+		$currentPeople = $this->getCurrent();
+
+		$this->order = array('Person.first');
+		$this->recursive = -1;
+		$people = $this->find('all',array(
+			'conditions' => array(
+				'Person.id' => $currentPeople
+			),
+			'fields' => array('Person.id', 'Person.first')
+		));
+		$people = Set::combine($people, '{n}.Person.id', '{n}.Person.first');
+		return $people;
+	}
+
 	function getCurrent() {
 		$currentPeople = $this->PeopleSchedules->find('all',array(
 			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),

@@ -21,8 +21,7 @@ class FloatingShiftsController extends AppController {
 		$this->set('areas',$this->Area->sFind('list'));
 		$this->set('area_id',$area_id);
 		$this->loadModel('Person');
-		$this->Person->order = 'first';
-		$this->set('people',$this->Person->find('list'));
+		$this->set('people',$this->Person->getList());
 		$this->set('person_id',$person_id);
 	}
 

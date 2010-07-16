@@ -62,7 +62,7 @@ class FloatingShift extends AppModel {
 		$this->Person->id = $data['person_id'];
 		$this->Person->recursive = -1;
 		$person = $this->Person->find('first');
-		$data['person_id'] = $person['Person']['name'];
+		$data['person_id'] = $person['Person']['first'];
 		$data['name'] = 
 			$data['area_id'].'; '.
 			$data['hours'];
