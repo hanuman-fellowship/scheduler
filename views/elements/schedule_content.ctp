@@ -33,7 +33,7 @@
 				),$this->params['isAjax']);?>
 				</span>
 			<? } else { ?>
-				<?= $person['ResidentCategory']['name'] ?>
+				<?= $person['PeopleSchedules']['ResidentCategory']['name'] ?>
 			<? } ?>
 				<br />
 				Schedule
@@ -51,7 +51,7 @@
 			<span style="font-size:24px;"> 
 			<? if (isset($person)) { ?>
 				<span id='person_name'>
-				<?=$role->link($person['Person']['name'],array(
+				<?=$role->link($person['Person']['first'],array(
 					'operations' => array(
 						'url' => array('action'=>'edit',$person['Person']['id']),
 						'attributes'=>array(

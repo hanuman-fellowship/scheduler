@@ -25,6 +25,7 @@ class PeopleController extends AppController {
 	 */
 	function schedule($id = null) {	
 		if ($id) {
+			$this->redirectIfNotValid($id);
 			$this->set('person',$this->Person->getPerson($id));		
 			$this->loadModel('Boundary');
 			$this->loadModel('Change');
@@ -35,24 +36,17 @@ class PeopleController extends AppController {
 		}
 	}	
 
-	function profile($id = null, $schedule_id = null) {
+	function profile($id = null) {
 		if (!$id) {
 			$this->redirect(array('action'=>'selectProfile'));
 		}
+		$this->redirectIfNotValid($id);
 		$file = glob(WWW_ROOT.'img'.DS.'photos'.DS.'profile'.DS.$id.'.*');
 		$image = (isset($file[0])) ? 
 			$id.strrchr($file[0],'.') : // get just the extension and append to filename (id))
 			'no_image.jpg';
 		$this->set('image',$image);
-		if ($schedule_id) {
-			$this->Person->schedule_id = $schedule_id;	
-			$this->Person->ResidentCategory->schedule_id = $schedule_id;
-		}
-		$this->Person->sContain('ResidentCategory');
-		$this->Person->id = $id;
-		$this->set('person',$this->Person->sFind('first'));
-		$this->set('id',$this->Person->id);
-		$this->set('schedule_id',$this->Person->schedule_id);
+		$this->set('person',$this->Person->getPerson($id, true));
 		$this->loadModel('Change');
 		$this->set('changes', $this->Change->getChangesForMenu());
 	}
@@ -67,9 +61,7 @@ class PeopleController extends AppController {
 	}
 
     function selectSchedule() {
-		$this->Person->sContain('ResidentCategory');
-		$this->Person->order = 'Person.resident_category_id, Person.name';	
-		$this->set('people',$this->Person->sFind('all'));
+		$this->set('people',$this->Person->listByResidentCategory());
 	}
 
 	/**
@@ -86,14 +78,8 @@ class PeopleController extends AppController {
 				$this->Person->create();
 				$this->record();
 				$this->Person->sSave($this->data);
-				$this->stop($this->Person->description);
-				if ($this->data['Person']['edit_profile']) {
-					$this->set('url',
-						array('action' => 'profile', $this->Person->Profile->id));
-				} else {
-					$this->set('url', 
-						array('action' => 'schedule', $this->Person->id));
-				}
+				$this->stop($this->Person->PeopleSchedules->description);
+				$this->set('url',array('action' => 'schedule', $this->Person->id));
 			} else {
 				$this->set('errorField',$this->Person->errorField);
 				$this->set('errorMessage',$this->Person->errorMessage);
@@ -110,32 +96,43 @@ class PeopleController extends AppController {
 				$this->record();
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->description);
-				$this->set('url', array('controller' => 'people', 'action' => 'schedule', $this->data['Person']['id']));
+				$this->set('url', 
+					array('controller' => 'people', 'action' => 'schedule', $this->data['Person']['id']));
 			 } else {
 				$this->set('errorField',$this->Person->errorField);
 				$this->set('errorMessage',$this->Person->errorMessage);
 			}
 		}
 		if (empty($this->data)) {
-			$this->id = $id;
-			$this->data = $this->Person->sFind('first');
+			$this->data = $this->Person->getPerson($id, true);
 		}
 		$this->loadModel('ResidentCategory');
 		$residentCategories = $this->ResidentCategory->sFind('list');
 		$this->set(compact('residentCategories'));
 	}
 
-	function delete($id = null) {
+	function retire($id = null) {
 		if ($id) {
 			$this->record();
-			$this->Person->sDelete($id);
+			$this->Person->retire($id);
 			$this->stop($this->Person->description);
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
-		$this->Person->sContain('ResidentCategory');
-		$this->Person->order = 'Person.resident_category_id, Person.name';
-		$this->set('people',$this->Person->sFind('all'));
+		$this->set('people',$this->Person->getPeople());
+	}
+
+	function restore($id = null) {
+		if ($id) {
+			$this->record();
+			$this->Person->restore($id);
+			$this->stop($this->Person->description);
+			$this->redirect($this->loadPage());
+		}
+		$this->savePage();
+		$this->Person->recursive = -1;
+		$this->Person->order = array('Person.last', 'Person.first');
+		$this->set('people',$this->Person->find('all'));
 	}
 }
 	

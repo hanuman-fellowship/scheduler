@@ -4,11 +4,10 @@
 <?
 foreach($people as $person) {
 	echo $html->link(
-		$person['Person']['name'],
+		$person['Person']['first'],
 		array(
 			'action' => 'profile', 
-			$person['Person']['id'],
-			$person['Person']['schedule_id']
+			$person['Person']['id']
 		)
 	);
 	echo '<br/>';

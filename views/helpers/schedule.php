@@ -55,15 +55,15 @@ class ScheduleHelper extends AppHelper {
 						'onmouseout' => "hideElement('goto_{$assignment['id']}')"
 					));
 				}
-				$people .= $this->role->link($assignment['Person']['name'],array(
+				$people .= $this->role->link($assignment['Person']['first'],array(
 					'' => array(
 						'url' => array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
-						'attributes' => array('class' => 'RC_' . $assignment['Person']['resident_category_id'])
+						'attributes' => array('class' => 'RC_' . $assignment['Person']['PeopleSchedules']['resident_category_id'])
 					),
 					'operations' => array(
 						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['id']),
 						'attributes' => array(
-							'class' => 'remove_RC_'.$assignment['Person']['resident_category_id'],
+							'class' => 'remove_RC_'.$assignment['Person']['PeopleSchedules']['resident_category_id'],
 							'style' => 'margin:10px',
 							'onmouseover' => "showElement('goto_{$assignment['id']}')",
 							'onmouseout' => "hideElement('goto_{$assignment['id']}')",
@@ -171,12 +171,12 @@ class ScheduleHelper extends AppHelper {
 			$hours = ($hours == 1) ? 
 				"$hours hour" :
 				"$hours hours ";
-			$link_title = $floating_shift['Person']['name'];
+			$link_title = $floating_shift['Person']['first'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);
 			$note = $floating_shift['note'];
 			$output[] = $hours . " w/ " . $this->html->link(
 				$link_title, $link_url, array(
-					'class' => 'RC_' . $floating_shift['Person']['resident_category_id']
+					'class' => 'RC_' . $floating_shift['Person']['PeopleSchedules']['resident_category_id']
 				)
 			) . " " . $note;
 		}	

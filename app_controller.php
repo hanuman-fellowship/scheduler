@@ -71,6 +71,20 @@ class AppController extends Controller {
 		return $this->Session->read('referer');
 	}
 	
-	
+	function redirectIfNotValid($id) {
+		$model = $this->modelNames[0];
+		$this->{$model}->id = $id;
+		if (!$this->{$model}->field('id')) {
+			$this->redirect('/');
+		}
+		if ($model == 'Person') {
+			if (!$this->Person->PeopleSchedules->field('id',array(
+				'PeopleSchedules.person_id' => $id,
+				'PeopleSchedules.schedule_id' => $this->Person->schedule_id
+			))) {
+				$this->redirect('/');
+			}
+		}
+	}
 }
 ?>

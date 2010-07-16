@@ -1,5 +1,5 @@
 <? $P = $person['Person']; ?>
-<? $this->pageTitle=$P['name']."'s Profile"; ?>
+<? $this->set('title_for_layout', $P['first']."'s Profile"); ?>
 <?=$html->css("profile") ?>
 <?=$this->element('menu');?>
 <div class='profile_content'>
@@ -9,7 +9,7 @@
 ));?>
 <div>
 <?= "{$P['first']} {$P['middle']} {$P['last']}<br/>".
-	"({$P['name']}) {$person['ResidentCategory']['name']}"; ?>
+	"{$person['PeopleSchedules']['ResidentCategory']['name']}"; ?>
 </div>
 
 <div>
@@ -19,7 +19,7 @@
 </div>
 <? if (Authsome::get('role') == 'operations') { ?>
 <div class='upload_image'>
-	<?= $ajax->link('Upload Image',array('action'=>'uploadImage',$id,$schedule_id),array(
+	<?= $ajax->link('Upload Image',array('action'=>'uploadImage',$P['id']),array(
 		'update' => 'dialog_content',
 		'complete' => "openDialog('upload','true')",
 		'id' => 'upload',

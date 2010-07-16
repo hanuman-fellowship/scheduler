@@ -61,9 +61,8 @@ class FloatingShift extends AppModel {
 		$data['area_id'] = $area['Area']['short_name'];
 		$this->Person->id = $data['person_id'];
 		$this->Person->recursive = -1;
-		$this->Person->schedule_id = $this->schedule_id;
-		$person = $this->Person->sFind('first');
-		$data['person_id'] = $person['Person']['name'];
+		$person = $this->Person->find('first');
+		$data['person_id'] = $person['Person']['first'];
 		$data['name'] = 
 			$data['area_id'].'; '.
 			$data['hours'];

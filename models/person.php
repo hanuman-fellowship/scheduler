@@ -3,69 +3,78 @@ class Person extends AppModel {
 
 	var $name = 'Person';
 
-	var $belongsTo = array(
-		'ResidentCategory'
-	);
-
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
 		'OffDay',
 		'ProfileNote'
 	);
+	
+	var $hasOne = array(
+		'PeopleSchedules'
+	);
+
+	function valid($data) {
+		if ($data['Person']['first'] == '') {
+			$this->errorField = 'first';
+			$this->errorMessage = "First name must not be blank";
+			return false;
+		}	
+		return true;
+	}
 
 	function sSave($data) {
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
-		if(!isset($data['Person']['id'])) { // if this is a new person, create a profile note
+		$changes = $this->save($data);
+		if(!isset($data['Person']['id'])) { // if this is a new person
 			$noteData = array('ProfileNote' => array(
 				'person_id' => $this->id,
-				'note' => 'Person Created'
+				'note' =>      'Person Created'
 			));
 			$this->ProfileNote->create();
 			$this->ProfileNote->save($noteData);
+			$this->PeopleSchedules->schedule_id = $this->schedule_id;
+			$this->PeopleSchedules->sSave(array(
+				'PeopleSchedules' => array(
+					'person_id' =>            $this->id,
+					'resident_category_id' => 1
+				)
+			));
 		}
 	}
 	
-	function sDelete($id) {
+	function retire($id) {
 		$this->id = $id;
 		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment');
-		$person = $this->sFind('first');
+		$person = $this->find('first');
 		foreach($person['Assignment'] as $assignment) {
 			$this->Assignment->sDelete($assignment['id']);
 		}
-		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
+		$this->PeopleSchedules->schedule_id = $this->schedule_id;
+		$this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
+		$this->description = $this->PeopleSchedules->description;
 	}
 	
-	function setDescription($changes) {
-		if (isset($changes['newData'])) {
-			if ($changes['oldData']['id'] == '') {
-				$this->description = "New person created: {$changes['newData']['name']}";
-			} else {
-				$this->description = 'Person changed: '.
-				"{$changes['oldData']['name']}";
-				$listed = false;
-				foreach($changes['newData'] as $field => $val) {
-					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
-						$this->description .= $listed ? ', ' : ' ';
-						$this->description .= 
-							Inflector::humanize($field).' is now '.$val;
-						$listed = true;
-					}
-				}
-			}
+	function restore($id) {
+		
+	}
+
+	function getPerson($id,$simple = false) {
+		if ($simple) {
+			$this->sContain(
+				'PeopleSchedules.ResidentCategory'
+			);
 		} else {
-			$this->description = "Person deleted: {$changes['name']}";
+			$this->sContain(
+				'Assignment.Shift.Area',
+				'PeopleSchedules.ResidentCategory',
+				'OffDay',
+				'FloatingShift.Area'
+			);
 		}
-	}
-	
-	
-	function getPerson($id) {
-		$this->id = $id;
-		$this->sContain('Assignment.Shift.Area','ResidentCategory','OffDay','FloatingShift.Area');
-		$person = $this->sFind('first');
+		$person = $this->find('first',array(
+			'conditions' => array('Person.id' => $id)
+		));
 		return $person;
 	}	
 
@@ -73,13 +82,21 @@ class Person extends AppModel {
 		$this->Assignment->Shift->id = $shift_id;
 		$this->Assignment->Shift->recursive = -1;
 		$shift = $this->Assignment->Shift->sFind('first');
-		$this->sContain('OffDay','Assignment.Shift','ResidentCategory');
-		$this->order = array('Person.resident_category_id','Person.name');
-		$people = $this->sFind('all');
+
+		$currentPeople = $this->getCurrent();
+
+		$this->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory');
+		$this->order = array('Person.first');
+		$people = $this->find('all',array(
+			'conditions' => array(
+				'Person.id' => $currentPeople
+			)
+		));
+
 		$list = array();
 		foreach($people as $person_num => $person) {
 			$list[$person_num] = $person['Person'];
-			$list[$person_num]['ResidentCategory'] = $person['ResidentCategory'];
+			$list[$person_num]['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
 			$list[$person_num]['available'] = true; // benefit of the doubt
 			foreach($person['OffDay'] as $OffDay) {
 				
@@ -109,36 +126,69 @@ class Person extends AppModel {
 		return $list;
 	}
 
-	function getPeople($ids = null) {
-		if(is_array($ids)) {
-			$people = array();
-			$i = 0;
-			foreach($ids as $id => $schedule_id) {
-				$people[$i][0]['schedule_id'] = $schedule_id;
-				$people[$i]['Person']['id'] = $id;
-				$i++;
-			}
-		} else {
-			$this->recursive = -1;
-			$this->order = 'Person.name';
-			$people = $this->find('all',array(
-			'fields' => array(
-				'Person.id',
-				'MAX(Person.schedule_id) as schedule_id'
-			),
-			'group' => 'Person.id',
-			));
-		}
-		$allPeople = array();
-		foreach ($people as $person) {
-			$this->schedule_id = $person[0]['schedule_id'];
-			$this->ResidentCategory->schedule_id = $person[0]['schedule_id'];
-			$this->sContain('ResidentCategory');
-			$this->id = $person['Person']['id'];
-			$allPeople[] = $this->sFind('first');
-		}
-		return $allPeople;
+	function getPeople() {
+		$currentPeople = $this->getCurrent();
+
+		$this->order = array('Person.first');
+		$this->sContain(
+			'PeopleSchedules.ResidentCategory'
+		);
+		$people = $this->find('all',array(
+			'conditions' => array(
+				'Person.id' => $currentPeople
+			)
+		));
+		return $people;
 	}
 
+	function getList() {
+		$currentPeople = $this->getCurrent();
+
+		$this->order = array('Person.first');
+		$this->recursive = -1;
+		$people = $this->find('all',array(
+			'conditions' => array(
+				'Person.id' => $currentPeople
+			),
+			'fields' => array('Person.id', 'Person.first')
+		));
+		$people = Set::combine($people, '{n}.Person.id', '{n}.Person.first');
+		return $people;
+	}
+
+	function listByResidentCategory() {	
+		$currentPeople = $this->getCurrent();
+
+		$this->order = array('PeopleSchedules.resident_category_id','Person.first');
+		$this->sContain(
+			'PeopleSchedules.ResidentCategory'
+		);
+		$people = $this->find('all',array(
+			'conditions' => array(
+				'Person.id' => $currentPeople
+			)
+		));
+		return $people;
+	}
+
+	function getCurrent() {
+		$currentPeople = $this->PeopleSchedules->find('all',array(
+			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
+			'fields' => array('PeopleSchedules.person_id')
+		));
+		$currentPeople = Set::combine(
+			$currentPeople,
+			'{n}.PeopleSchedules.person_id',
+			'{n}.PeopleSchedules.person_id'
+		);
+		return $currentPeople;
+	}
+
+	function getPeopleSchedulesId($id) {
+		return $this->PeopleSchedules->field('id',array(
+			'PeopleSchedules.person_id' => $id,
+			'PeopleSchedules.schedule_id' => $this->schedule_id
+		));
+	}
 }
 ?>
