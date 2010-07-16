@@ -55,6 +55,10 @@ class Person extends AppModel {
 		$this->description = $this->PeopleSchedules->description;
 	}
 	
+	function restore($id) {
+		
+	}
+
 	function getPerson($id,$simple = false) {
 		if ($simple) {
 			$this->sContain(

@@ -17,4 +17,3 @@ echo "<div style='float:left;padding:10px;'>";
 	</div>
 	</fieldset>
 </div>
-

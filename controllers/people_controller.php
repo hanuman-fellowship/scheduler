@@ -123,6 +123,19 @@ class PeopleController extends AppController {
 		$this->savePage();
 		$this->set('people',$this->Person->getPeople());
 	}
+
+	function restore($id = null) {
+		if ($id) {
+			$this->record();
+			$this->Person->restore($id);
+			$this->stop($this->Person->description);
+			$this->redirect($this->loadPage());
+		}
+		$this->savePage();
+		$this->Person->recursive = -1;
+		$this->Person->order = array('Person.last', 'Person.first');
+		$this->set('people',$this->Person->find('all'));
+	}
 }
 	
 ?>

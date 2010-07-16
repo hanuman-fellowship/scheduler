@@ -21,4 +21,8 @@ TODO:
 
 	- Constant Shift
 
-	- Redesign db for one person and one area.. etc.
+	- Person
+		- Restore
+			- The view should be a search box that populates the list using ajax.
+
+
