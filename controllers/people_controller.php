@@ -119,7 +119,7 @@ class PeopleController extends AppController {
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
-		$this->set('people',$this->Person->getPeople());
+		$this->set('people',$this->Person->listByResidentCategory());
 	}
 
 	function restore($id = null) {

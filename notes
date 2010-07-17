@@ -1,6 +1,26 @@
 TODO:
 
-	- Only get People that have a curren PeopleSchedule entry.
+	- Houses!!
+
+	- Floating Shift
+		- Make hours a link to edit floating shift
+		- Make sure description is set correctly for update and delete
+
+	- Constant Shift
+
+	- Users
+		- Create, modify, delete...
+
+	- Person
+		- Restore
+			- The view should be a search box that populates the list using ajax.
+
+		- when retireving a person in the model, add an array element "name" which is the first name plus the last enitial if necessary.
+
+	- Schedules
+		- Save as... instead of "new"
+		- Open...
+			- Schedules will not have owners, but when you open one, the user id goes in the schedule so that no one else can edit. They can read only. When you open another schedule, your user id is taken off of it.
 
 	- Menu
 		- Can the submenu width be automatic?
@@ -11,24 +31,7 @@ TODO:
 	- Changes
 		- views/changes/history needs work
 			- maybe two columns, one for redos and one for undos
+		- jump is slow. could it do all of the calculations first, and then update the database all at once?
 	
 	- Merge Branch?
 
-	- Floating Shift
-		- Make hours a link to edit floating shift
-		- Make sure description is set correctly for update and delete
-
-	- Constant Shift
-
-<<<<<<< HEAD
-	- Redesign db for one person and one area.. etc.
-
-	- Users
-		- Create, modify, delete...
-=======
-	- Person
-		- Restore
-			- The view should be a search box that populates the list using ajax.
-
-
->>>>>>> people

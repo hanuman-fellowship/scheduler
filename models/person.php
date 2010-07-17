@@ -11,7 +11,8 @@ class Person extends AppModel {
 	);
 	
 	var $hasOne = array(
-		'PeopleSchedules'
+		'PeopleSchedules',
+		'House'
 	);
 
 	function valid($data) {

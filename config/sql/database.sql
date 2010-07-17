@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 15, 2010 at 10:07 PM
+-- Generation Time: Jul 17, 2010 at 04:16 PM
 -- Server version: 5.0.41
 -- PHP Version: 5.2.6
 
@@ -62,6 +62,10 @@ CREATE TABLE `assignments` (
 -- Dumping data for table `assignments`
 --
 
+INSERT INTO `assignments` VALUES(1, 2, 1, 1);
+INSERT INTO `assignments` VALUES(2, 1, 1, 1);
+INSERT INTO `assignments` VALUES(3, 3, 1, 1);
+INSERT INTO `assignments` VALUES(4, 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -133,8 +137,12 @@ CREATE TABLE `changes` (
 -- Dumping data for table `changes`
 --
 
-INSERT INTO `changes` VALUES(1, 'New person created: Jason', '2010-07-15 22:05:52', 1);
-INSERT INTO `changes` VALUES(0, 'New floating shift: CB; 1 hr  w/ Jason', '2010-07-15 22:05:58', 1);
+INSERT INTO `changes` VALUES(4, 'New Shift created: K Mon 1-2', '2010-07-15 22:10:20', 1);
+INSERT INTO `changes` VALUES(5, NULL, '2010-07-15 22:09:44', 1);
+INSERT INTO `changes` VALUES(3, 'New person created: Mr. Davis', '2010-07-15 22:10:32', 1);
+INSERT INTO `changes` VALUES(2, 'Mr. Davis assigned to K Mon 1-2', '2010-07-15 22:11:03', 1);
+INSERT INTO `changes` VALUES(1, NULL, '2010-07-16 11:29:47', 1);
+INSERT INTO `changes` VALUES(0, 'Shift changed: (K Mon 1-2) # of people -> 5', '2010-07-17 13:18:14', 1);
 
 -- --------------------------------------------------------
 
@@ -159,16 +167,29 @@ CREATE TABLE `change_fields` (
 -- Dumping data for table `change_fields`
 --
 
-INSERT INTO `change_fields` VALUES(1, 1, 1, 'person_id', NULL, '1', 1);
-INSERT INTO `change_fields` VALUES(2, 1, 1, 'resident_category_id', NULL, '1', 1);
-INSERT INTO `change_fields` VALUES(3, 1, 1, 'schedule_id', NULL, '1', 1);
-INSERT INTO `change_fields` VALUES(4, 1, 1, 'id', NULL, '1', 1);
-INSERT INTO `change_fields` VALUES(5, 0, 2, 'area_id', NULL, '2', 1);
-INSERT INTO `change_fields` VALUES(6, 0, 2, 'person_id', NULL, '1', 1);
-INSERT INTO `change_fields` VALUES(7, 0, 2, 'hours', NULL, '1', 1);
-INSERT INTO `change_fields` VALUES(8, 0, 2, 'note', NULL, '', 1);
-INSERT INTO `change_fields` VALUES(9, 0, 2, 'schedule_id', NULL, '1', 1);
-INSERT INTO `change_fields` VALUES(10, 0, 2, 'id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(10, 3, 2, 'schedule_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(4, 4, 1, 'end', NULL, '14:00:00', 1);
+INSERT INTO `change_fields` VALUES(5, 4, 1, 'num_people', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(6, 4, 1, 'schedule_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(7, 4, 1, 'id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(3, 4, 1, 'start', NULL, '13:00:00', 1);
+INSERT INTO `change_fields` VALUES(2, 4, 1, 'day_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(1, 4, 1, 'area_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(9, 3, 2, 'resident_category_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(8, 3, 2, 'person_id', NULL, '2', 1);
+INSERT INTO `change_fields` VALUES(11, 3, 2, 'id', NULL, '2', 1);
+INSERT INTO `change_fields` VALUES(12, 2, 3, 'shift_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(13, 2, 3, 'person_id', NULL, '2', 1);
+INSERT INTO `change_fields` VALUES(14, 2, 3, 'schedule_id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(15, 2, 3, 'id', NULL, '1', 1);
+INSERT INTO `change_fields` VALUES(16, 0, 4, 'id', '1', '1', 1);
+INSERT INTO `change_fields` VALUES(17, 0, 4, 'area_id', '1', '1', 1);
+INSERT INTO `change_fields` VALUES(18, 0, 4, 'day_id', '1', '1', 1);
+INSERT INTO `change_fields` VALUES(19, 0, 4, 'start', '13:00:00', '13:00:00', 1);
+INSERT INTO `change_fields` VALUES(20, 0, 4, 'end', '14:00:00', '14:00:00', 1);
+INSERT INTO `change_fields` VALUES(21, 0, 4, 'num_people', '1', '5', 1);
+INSERT INTO `change_fields` VALUES(22, 0, 4, 'schedule_id', '1', '1', 1);
+INSERT INTO `change_fields` VALUES(23, 0, 4, 'id', '1', '1', 1);
 
 -- --------------------------------------------------------
 
@@ -192,8 +213,10 @@ CREATE TABLE `change_models` (
 -- Dumping data for table `change_models`
 --
 
-INSERT INTO `change_models` VALUES(1, 1, 'PeopleSchedules', 1, 1, 1);
-INSERT INTO `change_models` VALUES(2, 0, 'FloatingShift', 1, 1, 1);
+INSERT INTO `change_models` VALUES(2, 3, 'PeopleSchedules', 1, 2, 1);
+INSERT INTO `change_models` VALUES(1, 4, 'Shift', 1, 1, 1);
+INSERT INTO `change_models` VALUES(3, 2, 'Assignment', 1, 1, 1);
+INSERT INTO `change_models` VALUES(4, 0, 'Shift', 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -266,7 +289,46 @@ CREATE TABLE `floating_shifts` (
 -- Dumping data for table `floating_shifts`
 --
 
-INSERT INTO `floating_shifts` VALUES(1, 1, 2, 1, '', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `houses`
+--
+
+CREATE TABLE `houses` (
+  `id` int(11) NOT NULL auto_increment,
+  `house_category_id` int(11) NOT NULL,
+  `person_id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `cat` tinyint(1) NOT NULL,
+  `size` smallint(6) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `house_category_id` (`house_category_id`),
+  KEY `person_id` (`person_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `houses`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `house_categories`
+--
+
+CREATE TABLE `house_categories` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `house_categories`
+--
+
 
 -- --------------------------------------------------------
 
@@ -297,16 +359,18 @@ CREATE TABLE `off_days` (
 CREATE TABLE `people` (
   `id` int(11) NOT NULL auto_increment,
   `first` varchar(30) NOT NULL,
-  `middle` varchar(30) NOT NULL,
   `last` varchar(30) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `people`
 --
 
-INSERT INTO `people` VALUES(1, 'Jason', '', '');
+INSERT INTO `people` VALUES(1, 'Jason', '');
+INSERT INTO `people` VALUES(2, 'Mr. Davis', '');
+INSERT INTO `people` VALUES(3, 'Morrie', 'Mack');
+INSERT INTO `people` VALUES(4, 'Lemon', 'Water');
 
 -- --------------------------------------------------------
 
@@ -322,13 +386,16 @@ CREATE TABLE `people_schedules` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `schedule_id` (`schedule_id`,`person_id`),
   KEY `resident_category_id` (`resident_category_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `people_schedules`
 --
 
-INSERT INTO `people_schedules` VALUES(1, 1, 1, 1);
+INSERT INTO `people_schedules` VALUES(2, 2, 1, 1);
+INSERT INTO `people_schedules` VALUES(3, 1, 1, 1);
+INSERT INTO `people_schedules` VALUES(4, 3, 2, 1);
+INSERT INTO `people_schedules` VALUES(5, 4, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -343,13 +410,14 @@ CREATE TABLE `profile_notes` (
   `updated` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `profile_id` (`person_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `profile_notes`
 --
 
 INSERT INTO `profile_notes` VALUES(1, 1, 'Person Created', '2010-07-15 22:05:52');
+INSERT INTO `profile_notes` VALUES(2, 2, 'Person Created', '2010-07-15 22:10:32');
 
 -- --------------------------------------------------------
 
@@ -420,6 +488,7 @@ CREATE TABLE `shifts` (
 -- Dumping data for table `shifts`
 --
 
+INSERT INTO `shifts` VALUES(1, 1, 1, '13:00:00', '14:00:00', 5, 1);
 
 -- --------------------------------------------------------
 

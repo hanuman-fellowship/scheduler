@@ -7,10 +7,6 @@
 			'between' => '&nbsp;',
 			'id' => 'first'
 		));
-		echo $form->input('middle',array(
-			'between' => '&nbsp;',
-			'id' => 'middle'
-		));
 		echo $form->input('last',array(
 			'between' => '&nbsp;',
 			'id' => 'last'
