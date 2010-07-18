@@ -55,7 +55,7 @@ class ScheduleHelper extends AppHelper {
 						'onmouseout' => "hideElement('goto_{$assignment['id']}')"
 					));
 				}
-				$people .= $this->role->link($assignment['Person']['first'],array(
+				$people .= $this->role->link($assignment['Person']['name'],array(
 					'' => array(
 						'url' => array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						'attributes' => array('class' => 'RC_' . $assignment['Person']['PeopleSchedules']['resident_category_id'])
@@ -171,7 +171,7 @@ class ScheduleHelper extends AppHelper {
 			$hours = ($hours == 1) ? 
 				"$hours hour" :
 				"$hours hours ";
-			$link_title = $floating_shift['Person']['first'];
+			$link_title = $floating_shift['Person']['name'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);
 			$note = $floating_shift['note'];
 			$output[] = $hours . " w/ " . $this->html->link(

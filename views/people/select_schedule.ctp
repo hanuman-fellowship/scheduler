@@ -21,7 +21,7 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 			echo "</div><div style='float:left;padding:10px'><strong>{$person['PeopleSchedules']['ResidentCategory']['name']}</strong><br/>";	
 			$rcId = $person['PeopleSchedules']['resident_category_id'];
 		}
-		echo ${$type}->link($person['Person']['first'],array('action'=>'schedule',$person['Person']['id']),$attributes) . '<br>';
+		echo ${$type}->link($person['Person']['name'],array('action'=>'schedule',$person['Person']['id']),$attributes) . '<br>';
 	}
 	echo '</div></div>';
 }

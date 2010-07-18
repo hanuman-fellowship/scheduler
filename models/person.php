@@ -3,6 +3,8 @@ class Person extends AppModel {
 
 	var $name = 'Person';
 
+	var $names = null;
+
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
@@ -130,7 +132,7 @@ class Person extends AppModel {
 	function getPeople() {
 		$currentPeople = $this->getCurrent();
 
-		$this->order = array('Person.first');
+		$this->order = 'Person.first, Person.last';
 		$this->sContain(
 			'PeopleSchedules.ResidentCategory'
 		);
@@ -169,6 +171,9 @@ class Person extends AppModel {
 				'Person.id' => $currentPeople
 			)
 		));
+		foreach ($people as &$person) {
+			$this->addDisplayName($person['Person']);
+		}
 		return $people;
 	}
 
@@ -191,5 +196,34 @@ class Person extends AppModel {
 			'PeopleSchedules.schedule_id' => $this->schedule_id
 		));
 	}
+
+	function addDisplayName(&$person) {
+		// first time this function is called, set up a list of people's last names grouped by first name
+		$person['name'] = ($person['name']) ? $person['name'] : $person['first'];
+		$this->names = (!$this->names) ?
+			Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first') 
+			: $this->names;
+
+		// now find out how many letters of the last name we need for each first name
+		$lastNames = &$this->names[$person['first']];
+		if (!isset($lastNames['numLetters'])) {
+			$others = $lastNames;
+			unset($others[$person['id']]); // don't compare with itself
+			$numLetters = 0;
+			if (count($others) != 0) {	
+				$numLetters++; // there's another with this first name, so at least use 1 letter of last
+			}
+			foreach ($others as $id => $other) {
+				while (substr($person['last'], 0, $numLetters) == substr($other, 0, $numLetters)) {
+					$numLetters++; // up to this letter the lasts are the same, so use one more
+				}
+			$lastNames['numLetters'] = $numLetters;
+			}
+		}
+		$lastNames['numLetters'] = (isset($lastNames['numLetters'])) ? $lastNames['numLetters'] : 0;
+		$shortLast = substr($person['last'], 0, $lastNames['numLetters']);
+		$person['name'] .= ($lastNames['numLetters'] > 0) ? " {$shortLast}" : '';
+	}
+
 }
 ?>
