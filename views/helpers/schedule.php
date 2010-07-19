@@ -51,22 +51,22 @@ class ScheduleHelper extends AppHelper {
 				if (Authsome::get('role') == 'operations' && !$this->params['isAjax']) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
-						'onmouseover' => "showElement('goto_{$assignment['id']}')",
-						'onmouseout' => "hideElement('goto_{$assignment['id']}')"
+						'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
+						'onmouseout' => "hideElement('goto_{$assignment['Assignment']['id']}')"
 					));
 				}
 				$people .= $this->role->link($assignment['Person']['name'],array(
 					'' => array(
 						'url' => array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
-						'attributes' => array('class' => 'RC_' . $assignment['Person']['PeopleSchedules']['resident_category_id'])
+						'attributes' => array('class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id'])
 					),
 					'operations' => array(
-						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['id']),
+						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['Assignment']['id']),
 						'attributes' => array(
-							'class' => 'remove_RC_'.$assignment['Person']['PeopleSchedules']['resident_category_id'],
+							'class' => 'remove_RC_'.$assignment['PeopleSchedules']['resident_category_id'],
 							'style' => 'margin:10px',
-							'onmouseover' => "showElement('goto_{$assignment['id']}')",
-							'onmouseout' => "hideElement('goto_{$assignment['id']}')",
+							'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
+							'onmouseout' => "hideElement('goto_{$assignment['Assignment']['id']}')",
 							'onclick' => 'saveScroll()'
 						)
 					)
@@ -76,7 +76,7 @@ class ScheduleHelper extends AppHelper {
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
 							'style'=>'display:none;position:absolute;top:0;right:-3.0em;background-color:#DDDDDD;padding:5px',
-							'id'=>"goto_{$assignment['id']}"
+							'id'=>"goto_{$assignment['Assignment']['id']}"
 						)
 					)."</span>";
 				}

@@ -89,7 +89,7 @@ class Person extends AppModel {
 		$currentPeople = $this->getCurrent();
 
 		$this->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory');
-		$this->order = array('Person.first');
+		$this->order = 'PeopleSchedules.resident_category_id, Person.first, Person.last';
 		$people = $this->find('all',array(
 			'conditions' => array(
 				'Person.id' => $currentPeople
@@ -98,6 +98,7 @@ class Person extends AppModel {
 
 		$list = array();
 		foreach($people as $person_num => $person) {
+			$this->addDisplayName($person['Person']);
 			$list[$person_num] = $person['Person'];
 			$list[$person_num]['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
 			$list[$person_num]['available'] = true; // benefit of the doubt

@@ -13,13 +13,24 @@ class Area extends AppModel {
 	function getArea($id) {
 		$this->id = $id;
 		$this->Shift->Assignment->Person->schedule_id = $this->schedule_id;
-		$this->sContain('Shift.Assignment.Person.PeopleSchedules.ResidentCategory','FloatingShift.Person');
+		$this->sContain('Shift.Assignment','FloatingShift.Person');
 		$area = $this->sFind('first');
 		if (isset($area['Shift'])) {
 			foreach($area['Shift'] as &$shift) {
+				$people_ids = array();
 				foreach($shift['Assignment'] as &$assignment) {
-					$this->Shift->Assignment->Person->addDisplayName($assignment['Person']);
+					$people_ids[$assignment['id']] = $assignment['person_id'];
 				}
+				$this->Shift->Assignment->Person->sContain('PeopleSchedules.ResidentCategory');
+				$people = $this->Shift->Assignment->Person->find('all',array(
+					'conditions' => array('Person.id' => $people_ids),
+					'order' => 'PeopleSchedules.resident_category_id, Person.first, Person.last'
+				));
+				foreach($people as &$person) {
+					$this->Shift->Assignment->Person->addDisplayName($person['Person']);
+					$person['Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
+				}
+				$shift['Assignment'] = $people;
 			}
 		}
 		return $area;

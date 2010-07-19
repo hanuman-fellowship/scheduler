@@ -13,7 +13,7 @@ echo "<div style='float:left;padding:10px;'>";
 				echo "</div><div style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
 				$rcId = $person['ResidentCategory']['id'];
 			}
-			echo $html->link($person['first'],array($shift,$person['id']),array(
+			echo $html->link($person['name'],array($shift,$person['id']),array(
 				'class' => 'RC_' . $person['ResidentCategory']['id'],
 				'onclick'=>'saveScroll()'
 			)) . '<br>';
