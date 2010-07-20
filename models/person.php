@@ -29,19 +29,7 @@ class Person extends AppModel {
 	function sSave($data) {
 		$changes = $this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
-			$noteData = array('ProfileNote' => array(
-				'person_id' => $this->id,
-				'note' =>      'Person Created'
-			));
-			$this->ProfileNote->create();
-			$this->ProfileNote->save($noteData);
-			$this->PeopleSchedules->schedule_id = $this->schedule_id;
-			$this->PeopleSchedules->sSave(array(
-				'PeopleSchedules' => array(
-					'person_id' =>            $this->id,
-					'resident_category_id' => 1
-				)
-			));
+			$this->addPeopleSchedules($this->id, 'Person created');
 		}
 	}
 	
@@ -60,7 +48,33 @@ class Person extends AppModel {
 	}
 	
 	function restore($id) {
-		
+		// get the latest PeopleSchedules entry for this person
+		$latest = $this->PeopleSchedules->find('first', array(
+			'conditions' => array('PeopleSchedules.person_id' => $id),
+			'order' => 'PeopleSchedules.schedule_id desc',
+			'recursive' => -1
+		));
+		if (!$latest) { // if there is no entry, make one. Otherwise copy the latest
+			$this->addPeopleSchedules($id, 'Person restored');	
+		} else {
+			$this->addPeopleSchedules($id, 'Person restored', $latest['PeopleSchedules']['resident_category_id']);	
+		}
+	}
+
+	function addPeopleSchedules($person_id, $note, $rcId = 1) {
+		$noteData = array('ProfileNote' => array(
+			'person_id' => $person_id,
+			'note' =>      $note 
+		));
+		$this->ProfileNote->create();
+		$this->ProfileNote->save($noteData);
+		$this->PeopleSchedules->save(array(
+			'PeopleSchedules' => array(
+				'person_id' =>            $person_id,
+				'resident_category_id' => $rcId,
+				'schedule_id' =>          $this->schedule_id
+			)
+		));
 	}
 
 	function getPerson($id,$simple = false) {
