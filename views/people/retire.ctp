@@ -9,7 +9,7 @@ echo "<div style='float:left;padding:10px;'>";
 			echo "</div><div style='float:left;padding:10px'><strong>{$person['PeopleSchedules']['ResidentCategory']['name']}</strong><br/>";	
 			$rcId = $person['PeopleSchedules']['resident_category_id'];
 		}
-		echo $html->link($person['Person']['first'],array($person['Person']['id']),array(
+		echo $html->link($person['Person']['name'],array($person['Person']['id']),array(
 			'class' => 'remove_RC_' . $person['PeopleSchedules']['resident_category_id']
 		)) . '<br>';
 	}

@@ -79,12 +79,13 @@ class PeopleController extends AppController {
 				$this->record();
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->PeopleSchedules->description);
-				$this->set('url',array('action' => 'schedule', $this->Person->id));
+				$this->set('url', $this->loadPage());
 			} else {
 				$this->set('errorField',$this->Person->errorField);
 				$this->set('errorMessage',$this->Person->errorMessage);
 			}
 		}
+		$this->savePage();
 		$this->loadModel('ResidentCategory');
 		$residentCategories = $this->ResidentCategory->sFind('list');
 		$this->set(compact('residentCategories'));
@@ -130,9 +131,7 @@ class PeopleController extends AppController {
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
-		$this->Person->recursive = -1;
-		$this->Person->order = array('Person.last', 'Person.first');
-		$this->set('people',$this->Person->find('all'));
+		$this->set('people',$this->Person->getRestorable());
 	}
 }
 	

@@ -46,10 +46,11 @@ class Person extends AppModel {
 	}
 	
 	function retire($id) {
-		$this->id = $id;
 		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment');
-		$person = $this->find('first');
+		$person = $this->find('first',array(
+			'conditions' => array('Person.id' => $id)
+		));
 		foreach($person['Assignment'] as $assignment) {
 			$this->Assignment->sDelete($assignment['id']);
 		}
@@ -134,13 +135,12 @@ class Person extends AppModel {
 		$currentPeople = $this->getCurrent();
 
 		$this->order = 'Person.first, Person.last';
+		$conditions = array('Person.id' => $currentPeople);
 		$this->sContain(
 			'PeopleSchedules.ResidentCategory'
 		);
 		$people = $this->find('all',array(
-			'conditions' => array(
-				'Person.id' => $currentPeople
-			)
+			'conditions' => $conditions
 		));
 		return $people;
 	}
@@ -224,6 +224,15 @@ class Person extends AppModel {
 		$lastNames['numLetters'] = (isset($lastNames['numLetters'])) ? $lastNames['numLetters'] : 0;
 		$shortLast = substr($person['last'], 0, $lastNames['numLetters']);
 		$person['name'] .= ($lastNames['numLetters'] > 0) ? " {$shortLast}" : '';
+	}
+
+	function getRestorable() {
+		$currentPeople = $this->getCurrent();
+		return $this->find('all',array(
+			'conditions' => array('NOT' => array('Person.id' => $currentPeople)),
+			'recursive' => -1,
+			'order' => array('Person.last', 'Person.first')
+		));
 	}
 
 }
