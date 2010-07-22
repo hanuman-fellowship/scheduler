@@ -1,12 +1,18 @@
 TODO:
 
+
+	- Instead of popup menus for person schedule like old one
+		- maybe plus signs like in area schedule to see a list of shifts they could do...
+			- in that case should they all just be rollover popup menus for areas and people?
+				- probably not... the plus is nice.
+
 	- Flash messages next to menu
 		- description of actions, etc...
 
 	- Houses!!
 
 	- Floating Shift
-		- Make hours a link to edit floating shift
+		- edit, delete
 		- Make sure description is set correctly for update and delete
 
 	- Constant Shift
@@ -24,13 +30,11 @@ TODO:
 		- Save as... instead of "new"
 		- Open...
 			- Schedules will not have owners, but when you open one, the user id goes in the schedule so that no one else can edit. They can read only. When you open another schedule, your user id is taken off of it.
+		- Publish
 
 	- Menu
 		- Can the submenu width be automatic?
 	
-	- Popup menu for person schedule
-		- Use the old script from scheduler?
-
 	- Changes
 		- views/changes/history needs work
 			- maybe two columns, one for redos and one for undos
@@ -38,3 +42,6 @@ TODO:
 	
 	- Merge Branch?
 
+	- Make colors (css) of resident caegories configurable.
+		- figure out how to automatically lighten links? or maybe find another way to highlight on hover.
+		- perhaps no color behind the person schedule, but just their name is colored.
