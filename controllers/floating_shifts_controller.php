@@ -16,6 +16,7 @@ class FloatingShiftsController extends AppController {
 				$this->set('errorMessage',$this->FloatingShift->errorMessage);
 			}
 		}
+		$this->savePage();
 		$this->loadModel('Area');
 		$this->Area->order = 'name';
 		$this->set('areas',$this->Area->sFind('list'));

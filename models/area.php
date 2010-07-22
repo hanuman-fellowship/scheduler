@@ -14,9 +14,14 @@ class Area extends AppModel {
 		$this->id = $id;
 		$this->Person = &$this->Shift->Assignment->Person;
 		$this->Person->schedule_id = $this->schedule_id;
-		$this->sContain('Shift.Assignment','FloatingShift.Person');
+		$this->sContain('Shift.Assignment','FloatingShift.Person.PeopleSchedules.ResidentCategory');
 		$area = $this->sFind('first');
 		$currentPeople = $this->Person->getCurrent();
+		if (isset($area['FloatingShift'])) {
+			foreach($area['FloatingShift'] as &$floating_shift) {
+				$this->Person->addDisplayName($floating_shift['Person']);
+			}
+		}
 		if (isset($area['Shift'])) {
 			foreach($area['Shift'] as &$shift) {
 				$people_ids = array();

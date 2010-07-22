@@ -3,6 +3,7 @@ class PeopleSchedules extends AppModel {
 
 	var $name = 'PeopleSchedules';
 
+	var $restore = false;
 	var $belongsTo = array(
 		'ResidentCategory',
 		'Person'
@@ -22,7 +23,9 @@ class PeopleSchedules extends AppModel {
 		if (isset($changes['newData'])) {
 			$person = $this->Person->getPerson($changes['newData']['person_id'],true);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New person created: {$person['Person']['first']}";
+				$this->description = $this->restore ? 
+					"Person restored: {$person['Person']['first']}" :
+					"New person created: {$person['Person']['first']}";
 			} else {
 				$this->description = 'Person changed: '.
 				"{$person['Person']['first']}";

@@ -48,6 +48,7 @@ class Person extends AppModel {
 	}
 	
 	function restore($id) {
+		$this->PeopleSchedules->restore = true;
 		// get the latest PeopleSchedules entry for this person
 		$latest = $this->PeopleSchedules->find('first', array(
 			'conditions' => array('PeopleSchedules.person_id' => $id),
@@ -59,6 +60,7 @@ class Person extends AppModel {
 		} else {
 			$this->addPeopleSchedules($id, 'Person restored', $latest['PeopleSchedules']['resident_category_id']);	
 		}
+		$this->description = $this->PeopleSchedules->description;
 	}
 
 	function addPeopleSchedules($person_id, $note, $rcId = 1) {
@@ -68,11 +70,11 @@ class Person extends AppModel {
 		));
 		$this->ProfileNote->create();
 		$this->ProfileNote->save($noteData);
-		$this->PeopleSchedules->save(array(
+		$this->PeopleSchedules->schedule_id = $this->schedule_id;
+		$this->PeopleSchedules->sSave(array(
 			'PeopleSchedules' => array(
 				'person_id' =>            $person_id,
-				'resident_category_id' => $rcId,
-				'schedule_id' =>          $this->schedule_id
+				'resident_category_id' => $rcId
 			)
 		));
 	}
