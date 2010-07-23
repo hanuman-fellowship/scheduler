@@ -251,5 +251,29 @@ class Person extends AppModel {
 		));
 	}
 
+	function addAssignedPeople(&$data) {
+		if (!isset($data['Shift'])) {
+			return;
+		}
+		$currentPeople = $this->getCurrent();
+		foreach($data['Shift'] as &$shift) {
+			$people_ids = array();
+			foreach($shift['Assignment'] as &$assignment) {
+				if (in_array($assignment['person_id'], $currentPeople)) {
+					$people_ids[$assignment['id']] = $assignment['person_id'];
+				}
+			}
+			$this->sContain('PeopleSchedules.ResidentCategory');
+			$people = $this->find('all',array(
+				'conditions' => array('Person.id' => $people_ids),
+				'order' => 'PeopleSchedules.resident_category_id, Person.first, Person.last'
+			));
+			foreach($people as &$person) {
+				$this->addDisplayName($person['Person']);
+				$person['Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
+			}
+			$shift['Assignment'] = $people;
+		}
+	}
 }
 ?>

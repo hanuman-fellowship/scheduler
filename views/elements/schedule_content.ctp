@@ -103,18 +103,25 @@
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person)) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
-		<? if (Authsome::get('role') == 'operations' && (isset($area)) && !$this->params['isAjax']) { ?>
+		<? if (Authsome::get('role') == 'operations' && !$this->params['isAjax']) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
-			<?=$ajax->link(
-				' + ',
-				array('controller'=>'shifts','action'=>'add',$area['Area']['id'],$day,str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start'])),
-				array(
-					'id'=>"add_{$slot_num}_{$day}", 
-					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
-					'update' => 'dialog_content',
-					'complete' => "openDialog('{$slot_num}_{$day}','true')"
-				)
-			);?>
+			<? $url = (isset($area)) ? 
+				array('controller'=>'shifts','action'=>'add',$area['Area']['id'],
+					$day,
+					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start'])) 
+				:
+				array('controller'=>'shifts','action'=>'listBySlot',
+					$person['Person']['id'],
+					$day,
+					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start']),
+					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['end']));
+			?>
+			<?=$ajax->link(' + ',$url,array(
+				'id'=>"add_{$slot_num}_{$day}", 
+				'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
+				'update' => 'dialog_content',
+				'complete' => "openDialog('{$slot_num}_{$day}','true')"
+			));?>
 		<? } else { ?>
 		<td <?=$off_day;?> >
 		<? } ?>

@@ -144,5 +144,29 @@ class Shift extends AppModel {
 		);
 	}
 		
+	function listBySlot($person,$day,$start,$end) {
+		$this->id = '';
+		$this->Assignment->Person->schedule_id = $this->schedule_id;
+		$this->sContain('Area','Assignment.Person.PeopleSchedules');
+		$shifts = $this->sFind('all', array(
+			'conditions' => array(
+				'Shift.start BETWEEN ? AND ?' => array($start,$end),
+				'Shift.day_id' => $day
+			),
+			'order' => 'Area.short_name, Shift.start, Shift.end'
+		));
+		$unassigned = array();
+		foreach($shifts as $num => &$shift) {
+			if (!$shift['Assignment']) {
+				$unassigned[] = $shift;
+				unset($shifts[$num]);
+				continue;
+			}
+			foreach($shift['Assignment'] as &$assignment) {
+				$this->Assignment->Person->addDisplayName($assignment['Person']);
+			}
+		}
+		return array('unassigned' => $unassigned, 'assigned' => $shifts);
+	}
 }
 ?>

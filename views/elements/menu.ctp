@@ -203,4 +203,6 @@
 		)
 	)
 ));?>
+<? $session->flash();?>
 <!-- <?="Updated: " . $time->format('F jS, Y @ g:ia',$session->read('Schedule.updated')); ?> -->
+

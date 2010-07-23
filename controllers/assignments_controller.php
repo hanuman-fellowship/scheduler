@@ -29,6 +29,5 @@ class AssignmentsController extends AppController {
 		$this->stop($this->Assignment->description);
 		$this->redirect($this->referer());
 	}
-		
 }
 ?>

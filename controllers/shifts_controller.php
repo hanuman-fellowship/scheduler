@@ -72,6 +72,12 @@ class ShiftsController extends AppController {
 		$this->stop($this->Shift->description);
 		$this->redirect('/areas/schedule/'.$shift['Shift']['area_id']);
 	}
+		
+	function listBySlot($person,$day,$start,$end) {
+		$start = str_replace("-",":",$start);
+		$end = str_replace("-",":",$end);
+		$this->set('shifts',$this->Shift->listBySlot($person,$day,$start,$end));
+	}
 	
 }
 ?>
