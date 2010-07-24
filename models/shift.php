@@ -109,17 +109,29 @@ class Shift extends AppModel {
 		}
 	}
 	
-	function format($data) {
+	function format($data, $rich = false, $show_day = true) {
+		$tags = $rich ?
+			array(
+				'short_name' => array('<b>','</b>')
+			)
+		:
+			array(
+				'short_name' => array('','')
+			);
 		$this->Area->id = $data['area_id'];
 		$this->Area->recursive = -1;
 		$this->Area->schedule_id = $this->schedule_id;
 		$area = $this->Area->sFind('first');
-		$data['area_id'] = $area['Area']['short_name'];
-		$this->Day->id = $data['day_id'];
-		$this->Day->recursive = -1;
-		$this->Day->schedule_id = $this->schedule_id;
-		$day = $this->Day->sFind('first');
-		$data['day_id'] = substr($day['Day']['name'],0,3);
+		$data['area_id'] = $tags['short_name'][0].$area['Area']['short_name'].$tags['short_name'][1];
+		if ($show_day) {
+			$this->Day->id = $data['day_id'];
+			$this->Day->recursive = -1;
+			$this->Day->schedule_id = $this->schedule_id;
+			$day = $this->Day->sFind('first');
+			$data['day_id'] = substr($day['Day']['name'],0,3);
+		} else {
+			$data['day_id'] = '';
+		}
 		$start = strtotime($data['start']);
 		$minutes = (date('i',$start) == '00') ? '' : ':i';
 		$data['start'] = date("g{$minutes}",$start);
@@ -150,19 +162,27 @@ class Shift extends AppModel {
 		$this->sContain('Area','Assignment.Person.PeopleSchedules');
 		$shifts = $this->sFind('all', array(
 			'conditions' => array(
-				'Shift.start BETWEEN ? AND ?' => array($start,$end),
+				'Shift.start <' => $end,
+				'AND' => array(
+					'Shift.start >=' => $start
+				),
 				'Shift.day_id' => $day
 			),
 			'order' => 'Area.short_name, Shift.start, Shift.end'
 		));
 		$unassigned = array();
 		foreach($shifts as $num => &$shift) {
+			$shift['Shift'] = $this->format($shift['Shift'],true,false);
 			if (!$shift['Assignment']) {
 				$unassigned[] = $shift;
 				unset($shifts[$num]);
 				continue;
 			}
-			foreach($shift['Assignment'] as &$assignment) {
+			foreach($shift['Assignment'] as $num => &$assignment) {
+				if ($assignment['Person']['id'] == $person) {
+					unset($shift['Assignment'][$num]);
+					continue;
+				}
 				$this->Assignment->Person->addDisplayName($assignment['Person']);
 			}
 		}

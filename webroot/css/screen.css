@@ -4,6 +4,11 @@
 	padding-top:10px;
 }
 
+.select_shift {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
 #hide {
 	display:none;
 }
