@@ -98,7 +98,7 @@ class Person extends AppModel {
 		return $person;
 	}	
 
-	function available($shift_id) {
+	function getAvailable($shift_id) {
 		$this->Assignment->Shift->id = $shift_id;
 		$this->Assignment->Shift->recursive = -1;
 		$shift = $this->Assignment->Shift->sFind('first');
@@ -118,33 +118,33 @@ class Person extends AppModel {
 			$this->addDisplayName($person['Person']);
 			$list[$person_num] = $person['Person'];
 			$list[$person_num]['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
-			$list[$person_num]['available'] = true; // benefit of the doubt
-			foreach($person['OffDay'] as $OffDay) {
-				
-				if ($shift['Shift']['day_id'] == $OffDay['day']) {
-					$list[$person_num]['available'] = false; // it's their off day
-					continue;
-				}
-			}
-			foreach($person['Assignment'] as $assignment) {
-				$a = $shift['Shift'];
-				$b = $assignment['Shift'];
-				if ($a['id'] == $b['id']) {
-					$list[$person_num]['available'] = false; // they are already on that shift
-					continue;
-				}
-				if (
-					($a['day_id'] == $b['day_id']) && ( // the shifts are on the same day AND
-						($a['start'] >= $b['start'] && $a['start'] <= $b['end']) || // a starts during b or
-						($b['start'] >= $a['start'] && $b['start'] <= $a['end'])    // b starts during a
-					)
-				) {
-					$list[$person_num]['available'] = false; // they have are on a conflicting shift
-					continue;
-				}
-			}
+			$list[$person_num]['available'] = $this->available($person, $shift); 
 		}
 		return $list;
+	}
+		
+	function available($person, $shift) {
+		foreach($person['OffDay'] as $OffDay) {
+			if ($shift['Shift']['day_id'] == $OffDay['day']) {
+				return false;
+			}
+		}
+		foreach($person['Assignment'] as $assignment) {
+			$a = $shift['Shift'];
+			$b = $assignment['Shift'];
+			if ($a['id'] == $b['id']) {
+				return false;
+			}
+			if (
+				($a['day_id'] == $b['day_id']) && ( // the shifts are on the same day AND
+					($a['start'] >= $b['start'] && $a['start'] <= $b['end']) || // a starts during b or
+					($b['start'] >= $a['start'] && $b['start'] <= $a['end'])    // b starts during a
+				)
+			) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	function getPeople() {

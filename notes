@@ -1,10 +1,10 @@
 TODO:
 
+	- Make dialog styles consistent
 
-	- Instead of popup menus for person schedule like old one
-		- maybe plus signs like in area schedule to see a list of shifts they could do...
-			- in that case should they all just be rollover popup menus for areas and people?
-				- probably not... the plus is nice.
+	BUGS:
+
+		- Why does it save two id entries in the change_fields when doing assignments::swap?
 
 	- Flash messages next to menu
 		- description of actions, etc...
@@ -23,8 +23,6 @@ TODO:
 	- Person
 		- Restore
 			- The view should be a search box that populates the list using ajax.
-
-		- when retireving a person in the model, add an array element "name" which is the first name plus the last enitial if necessary.
 
 	- Schedules
 		- Save as... instead of "new"

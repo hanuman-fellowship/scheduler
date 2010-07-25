@@ -26,7 +26,9 @@ class PeopleController extends AppController {
 	function schedule($id = null) {	
 		if ($id) {
 			$this->redirectIfNotValid($id);
-			$this->set('person',$this->Person->getPerson($id));		
+			$person = $this->Person->getPerson($id);
+			$this->Person->addDisplayName($person['Person']);
+			$this->set('person',$person);		
 			$this->loadModel('Boundary');
 			$this->loadModel('Change');
 			$this->set('changes', $this->Change->getChangesForMenu());

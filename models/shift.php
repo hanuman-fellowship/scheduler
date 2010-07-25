@@ -141,7 +141,7 @@ class Shift extends AppModel {
 		$data['name'] = 
 			$data['area_id'].' '.
 			$data['day_id'].' '.
-			$data['start'].'-'.
+			$data['start'].' - '.
 			$data['end'];
 		return $data;
 	}
@@ -156,9 +156,16 @@ class Shift extends AppModel {
 		);
 	}
 		
-	function listBySlot($person,$day,$start,$end) {
+	function listBySlot($person_id,$day,$start,$end) {
+		$this->Person = &$this->Assignment->Person;
+		$this->Person->schedule_id = $this->schedule_id;
+		$this->Person->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory');
+		$person = $this->Person->find('first',array(
+			'conditions' => array(
+				'Person.id' => $person_id
+			)
+		));
 		$this->id = '';
-		$this->Assignment->Person->schedule_id = $this->schedule_id;
 		$this->sContain('Area','Assignment.Person.PeopleSchedules');
 		$shifts = $this->sFind('all', array(
 			'conditions' => array(
@@ -172,18 +179,21 @@ class Shift extends AppModel {
 		));
 		$unassigned = array();
 		foreach($shifts as $num => &$shift) {
+			$shift['available'] = $this->Person->available($person, $shift);
 			$shift['Shift'] = $this->format($shift['Shift'],true,false);
-			if (!$shift['Assignment']) {
+			if (count($shift['Assignment']) < $shift['Shift']['num_people']) {
 				$unassigned[] = $shift;
-				unset($shifts[$num]);
-				continue;
+				if (!$shift['Assignment']) {
+					unset($shifts[$num]);
+					continue;
+				}
 			}
 			foreach($shift['Assignment'] as $num => &$assignment) {
-				if ($assignment['Person']['id'] == $person) {
+				if ($assignment['Person']['id'] == $person_id) {
 					unset($shift['Assignment'][$num]);
 					continue;
 				}
-				$this->Assignment->Person->addDisplayName($assignment['Person']);
+				$this->Person->addDisplayName($assignment['Person']);
 			}
 		}
 		return array('unassigned' => $unassigned, 'assigned' => $shifts);

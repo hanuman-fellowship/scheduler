@@ -20,6 +20,7 @@ class Assignment extends AppModel {
 
 	function setDescription($changes) {
 		$this->Shift->schedule_id = $this->schedule_id;
+		$this->Person->schedule_id = $this->schedule_id;
 		if (isset($changes['newData'])) {
 			$data = $changes['newData'];
 			$assignedOrRemoved = 'assigned to';
@@ -27,6 +28,15 @@ class Assignment extends AppModel {
 			$this->id = $data['id'];
 			$shift = $this->sFind('first');
 			$person = $shift['Person'];
+			if ($changes['oldData']['id']) {
+				$data = $changes['oldData'];
+				$oldPerson = $this->Person->find('first',array(
+					'conditions' => array('Person.id' => $data['person_id']),
+					'recursive' => -1
+				));
+				$this->Person->addDisplayName($oldPerson['Person']);
+				$assignedOrRemoved = "replaced {$oldPerson['Person']['name']} on";
+			}
 		} else {
 			$data = $changes;
 			$assignedOrRemoved = 'removed from';
@@ -39,7 +49,8 @@ class Assignment extends AppModel {
 			$person = $person['Person'];
 		}
 		$formatted = $this->Shift->format($shift['Shift']);		
-		$this->description = "{$person['first']} {$assignedOrRemoved} {$formatted['name']}";
+		$this->Person->addDisplayName($person);
+		$this->description = "{$person['name']} {$assignedOrRemoved} {$formatted['name']}";
 	}
 	
 }

@@ -51,7 +51,7 @@
 			<span style="font-size:24px;"> 
 			<? if (isset($person)) { ?>
 				<span id='person_name'>
-				<?=$role->link($person['Person']['first'],array(
+				<?=$role->link($person['Person']['name'],array(
 					'operations' => array(
 						'url' => array('action'=>'edit',$person['Person']['id']),
 						'attributes'=>array(
@@ -120,7 +120,7 @@
 				'id'=>"add_{$slot_num}_{$day}", 
 				'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 				'update' => 'dialog_content',
-				'complete' => "openDialog('{$slot_num}_{$day}','true')"
+				'complete' => "openDialog('add_{$slot_num}_{$day}','true')"
 			));?>
 		<? } else { ?>
 		<td <?=$off_day;?> >

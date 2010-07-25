@@ -3,21 +3,57 @@
 <span class='select_shift'>
 <?=$day."<br><br>";?>
 <?
-foreach($shifts['unassigned'] as $shift) {
-	echo $html->link($shift['Shift']['name'],array('controller'=>'assignments','action'=>'assign',$shift['Shift']['id'],$person_id),array(
-		'onclick'=>'saveScroll()',
-		'escape'=>false
-	)) . '<br>';
-}
-foreach($shifts['assigned'] as $shift) {
-	foreach($shift['Assignment'] as $assignment) {
-		echo $html->link(
-			"<span class='taken'>{$shift['Shift']['name']}</span> <span class='menu_RC_{$assignment['Person']['PeopleSchedules']['resident_category_id']}'>({$assignment['Person']['name']})</span>",array('controller'=>'assignments','action'=>'swap',$shift['Shift']['id'],$assignment['Person']['id'],$person_id),array(
-		'onclick'=>'saveScroll()',
-		'escape'=>false
-	)) . '<br>';
+$lists = array('available','all');
+foreach($lists as $list) {
+	?><div id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
+	foreach($shifts['unassigned'] as $shift) {
+		if ($shift['available'] || $list == 'all') {
+			echo $html->link(
+				$shift['Shift']['name'],
+				array(
+					'controller'=>'assignments',
+					'action'=>'assign',
+					$shift['Shift']['id'],
+					$person_id
+				),
+				array(
+					'onclick'=>'saveScroll()',
+					'escape'=>false
+				)
+			) . '<br>';
+		}
 	}
+	foreach($shifts['assigned'] as $shift) {
+		foreach($shift['Assignment'] as $assignment) {
+			if ($shift['available'] || $list == 'all') {
+				echo $html->link(
+					"<span class='taken'>
+						{$shift['Shift']['name']}
+					</span> 
+					<span class='menu_RC_{$assignment['Person']['PeopleSchedules']['resident_category_id']}'>
+						({$assignment['Person']['name']})
+					</span>",
+					array(
+						'controller'=>'assignments',
+						'action'=>'swap',
+						$assignment['id'],
+						$person_id
+					),
+					array(
+						'onclick'=>'saveScroll()',
+						'escape'=>false
+					)
+				) . '<br>';
+			}
+		}
+	}
+	?></div><?
 }
 ?>
+<br>
+<div style="clear:both;float:right;">
+	<input type="checkbox" id="conflictsBox" value="0" onclick="toggleConflicts()" />
+	<label for='conflictsBox'>Ignore Conflicts</label>
+</div>
 </span>
 </fieldset>

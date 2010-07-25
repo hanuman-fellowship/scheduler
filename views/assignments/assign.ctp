@@ -1,6 +1,5 @@
-<div class="assignments form">
-	<fieldset>
- 		<legend><?php __('Assign Person');?></legend>
+<fieldset>
+	<legend><?php __('Assign Person');?></legend>
 <?
 $lists = array('available','all');
 foreach($lists as $list) {
@@ -27,6 +26,4 @@ echo "<div style='float:left;padding:10px;'>";
 		<input type="checkbox" id="conflictsBox" value="0" onclick="toggleConflicts()" />
 		<label for='conflictsBox'>Ignore Conflicts</label>
 	</div>
-	</fieldset>
-</div>
-
+</fieldset>
