@@ -155,12 +155,17 @@ class ScheduleHelper extends AppHelper {
 				"$hours hours ";
 			$hours = $this->role->link($hours, array(
 				'operations' => array(
-					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id'])
-				),'ajax'));
+					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
+					'attributes' => array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('floating_{$floating_shift['id']}')",
+					),
+					'ajax'
+				)));
 			$link_title = $floating_shift['Area']['name'];
 			$link_url = array('controller'=>'areas','action'=>'schedule',$floating_shift['Area']['id']);
-			$note = ($floating_shift['note'] == '') ? '' : ' ';
-			$note .= $floating_shift['note'];
+			$note = " ({$floating_shift['note']})";
+			$note = ($note == ' ()') ? ' ' : $note;
 			
 			// need to make sure floating shifts are in the legend as well.
 			// replace spaces with &nbsp; so that line breaks are not in the middle of something
@@ -172,7 +177,8 @@ class ScheduleHelper extends AppHelper {
 				$this->legend[$floating_shift['Area']['id']]['manager'] = 
 					str_replace(' ', '&nbsp;', $floating_shift['Area']['manager']);
 			}
-			$output[] = $hours . $this->html->link($link_title, $link_url) . $note;
+			$output[] = "<span id='floating_".$floating_shift['id']."'>"
+			. $hours . $this->html->link($link_title, $link_url) . $note . '</span>';
 			
 		}
 		return (!$output ? '' : 'Plus ' . $this->text->toList($output));	
@@ -188,17 +194,23 @@ class ScheduleHelper extends AppHelper {
 				"$hours hours ";
 			$hours = $this->role->link($hours, array(
 				'operations' => array(
-					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id'])
-				),'ajax'));
+					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
+					'attributes' => array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('floating_{$floating_shift['id']}')",
+					),
+					'ajax'
+				)));
 			$link_title = $floating_shift['Person']['name'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);
-			$note = ($floating_shift['note'] == '') ? '' : ' ';
-			$note .= $floating_shift['note'];
-			$output[] = $hours . " w/ " . $this->html->link(
+			$note = " ({$floating_shift['note']})";
+			$note = ($note == ' ()') ? ' ' : $note;
+			$output[] = "<span id='floating_".$floating_shift['id']."'>"
+			. $hours . " w/ " . $this->html->link(
 				$link_title, $link_url, array(
 					'class' => 'RC_' . $floating_shift['Person']['PeopleSchedules']['resident_category_id']
 				)
-			) . $note;
+			) . $note . '</span>';
 		}	
 		return (!$output ? '' : 'Also ' . $this->text->toList($output));	
 	}

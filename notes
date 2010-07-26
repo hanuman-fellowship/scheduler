@@ -2,6 +2,9 @@ TODO:
 
 	- Constant Shift
 
+	- schedule helper
+		- combine displayAreaFloating and DisplayPersonFloating
+
 	- write a function to convert legacy data
 
 	- Make dialog styles consistent

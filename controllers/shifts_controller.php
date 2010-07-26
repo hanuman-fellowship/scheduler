@@ -37,7 +37,6 @@ class ShiftsController extends AppController {
 	
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid Shift', true));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {

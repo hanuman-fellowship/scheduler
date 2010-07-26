@@ -26,5 +26,32 @@ class FloatingShiftsController extends AppController {
 		$this->set('person_id',$person_id);
 	}
 
+	function edit($id = null) {
+		if (!$id && empty($this->data)) {
+			$this->redirect(array('action' => 'index'));
+		}
+		if (!empty($this->data)) {
+			if ($this->FloatingShift->valid($this->data)) {
+				$this->record();
+				$this->FloatingShift->sSave($this->data);
+				$this->stop($this->FloatingShift->description);
+				$this->set('url',$this->loadPage() );
+			} else {
+				$this->set('errorField',$this->FloatingShift->errorField);
+				$this->set('errorMessage',$this->FloatingShift->errorMessage);
+			}
+		}
+		if (empty($this->data)) {
+			$this->id = $id;
+			$this->data = $this->FloatingShift->sFind('first');
+		}
+		$this->savePage();
+		$this->loadModel('Area');
+		$this->Area->order = 'name';
+		$this->set('areas',$this->Area->sFind('list'));
+		$this->loadModel('Person');
+		$this->set('people',$this->Person->getList());
+	}
+	
 }
 ?>
