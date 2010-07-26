@@ -35,12 +35,16 @@ class Person extends AppModel {
 	
 	function retire($id) {
 		$this->Assignment->schedule_id = $this->schedule_id;
-		$this->sContain('Assignment');
+		$this->FloatingShift->schedule_id = $this->schedule_id;
+		$this->sContain('Assignment','FloatingShift');
 		$person = $this->find('first',array(
 			'conditions' => array('Person.id' => $id)
 		));
 		foreach($person['Assignment'] as $assignment) {
 			$this->Assignment->sDelete($assignment['id']);
+		}
+		foreach($person['FloatingShift'] as $floatingShift) {
+			$this->FloatingShift->sDelete($floatingShift['id']);
 		}
 		$this->PeopleSchedules->schedule_id = $this->schedule_id;
 		$this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
@@ -171,15 +175,15 @@ class Person extends AppModel {
 	function getList() {
 		$currentPeople = $this->getCurrent();
 
-		$this->order = array('Person.first');
+		$this->order = 'Person.first, Person.last';
 		$this->recursive = -1;
 		$people = $this->find('all',array(
 			'conditions' => array(
 				'Person.id' => $currentPeople
-			),
-			'fields' => array('Person.id', 'Person.first')
+			)
 		));
-		$people = Set::combine($people, '{n}.Person.id', '{n}.Person.first');
+		$this->addDisplayNamesAll($people);
+		$people = Set::combine($people, '{n}.Person.id', '{n}.Person.name');
 		return $people;
 	}
 
@@ -195,9 +199,7 @@ class Person extends AppModel {
 				'Person.id' => $currentPeople
 			)
 		));
-		foreach ($people as &$person) {
-			$this->addDisplayName($person['Person']);
-		}
+		$this->addDisplayNamesAll($people);
 		return $people;
 	}
 
@@ -247,6 +249,12 @@ class Person extends AppModel {
 		$lastNames['numLetters'] = (isset($lastNames['numLetters'])) ? $lastNames['numLetters'] : 0;
 		$shortLast = substr($person['last'], 0, $lastNames['numLetters']);
 		$person['name'] .= ($lastNames['numLetters'] > 0) ? " {$shortLast}" : '';
+	}
+
+	function addDisplayNamesAll(&$people) {
+		foreach($people as &$person) {
+			$this->addDisplayName($person['Person']);
+		}
 	}
 
 	function getRestorable() {

@@ -186,6 +186,10 @@ class ScheduleHelper extends AppHelper {
 			$hours = ($hours == 1) ? 
 				"$hours hour" :
 				"$hours hours ";
+			$hours = $this->role->link($hours, array(
+				'operations' => array(
+					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id'])
+				),'ajax'));
 			$link_title = $floating_shift['Person']['name'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);
 			$note = ($floating_shift['note'] == '') ? '' : ' ';

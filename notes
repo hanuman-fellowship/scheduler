@@ -1,5 +1,7 @@
 TODO:
 
+	- Constant Shift
+
 	- write a function to convert legacy data
 
 	- Make dialog styles consistent
@@ -16,8 +18,6 @@ TODO:
 	- Floating Shift
 		- edit, delete
 		- Make sure description is set correctly for update and delete
-
-	- Constant Shift
 
 	- Users
 		- Create, modify, delete...
