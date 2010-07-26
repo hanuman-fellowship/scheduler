@@ -7,6 +7,7 @@ $rcId = 0;
 ?><div id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
 echo "<div style='float:left;padding:10px;'>";
 	foreach($people as $person) {
+		if ($person['available'] === -1) {continue;} // already on this shift so don't ever show.
 		if ($person['available'] || $list == 'all') {
 			if ($rcId != $person['ResidentCategory']['id']) {
 				echo "</div><div style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	

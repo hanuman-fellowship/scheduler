@@ -122,18 +122,20 @@ class Person extends AppModel {
 		}
 		return $list;
 	}
-		
+	
+	/**
+	 * returns true if the person is available for the shift or -1 if the person is on the shift
+	 * $person must contain 'Person', 'OffDay', 'Assignment.Shift'
+	 * $shift must contain 'Shift'
+	 *
+	 */
 	function available($person, $shift) {
-		foreach($person['OffDay'] as $OffDay) {
-			if ($shift['Shift']['day_id'] == $OffDay['day']) {
-				return false;
-			}
-		}
+		$result = true;
 		foreach($person['Assignment'] as $assignment) {
 			$a = $shift['Shift'];
 			$b = $assignment['Shift'];
 			if ($a['id'] == $b['id']) {
-				return false;
+				return -1; // don't even show when ignoring conflicts
 			}
 			if (
 				($a['day_id'] == $b['day_id']) && ( // the shifts are on the same day AND
@@ -141,10 +143,15 @@ class Person extends AppModel {
 					($b['start'] >= $a['start'] && $b['start'] <= $a['end'])    // b starts during a
 				)
 			) {
-				return false;
+				$result = false;
 			}
 		}
-		return true;
+		foreach($person['OffDay'] as $OffDay) {
+			if ($shift['Shift']['day_id'] == $OffDay['day']) {
+				$result = false;
+			}
+		}
+		return $result;
 	}
 
 	function getPeople() {

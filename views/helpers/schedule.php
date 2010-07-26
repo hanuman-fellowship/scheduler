@@ -6,13 +6,14 @@ class ScheduleHelper extends AppHelper {
 		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
 	var $helpers = array('html','text','role');
 		
-	function displayPersonShift($shift,$bound,$day) {
+	function displayPersonShift($shift,$assignment_id,$bound,$day) {
 		// if the shift is within the bounds for this day and time
 		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day_id'] == $day) {
-			$link_title = $shift['Area']['short_name'];
-			$link_url = array('controller'=>'areas','action'=>'schedule',$shift['Area']['id']);
-			$time = $this->displayTime($shift['start']) . " - " . 
+			$area_title = $shift['Area']['short_name'];
+			$area_url = array('controller'=>'areas','action'=>'schedule',$shift['Area']['id']);
+			$time_title = $this->displayTime($shift['start']) . " - " . 
 				$this->displayTime($shift['end']);
+			$time_url = array('controller'=>'assignments','action'=>'unassign',$assignment_id);
 		
 			$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 			$this->total_hours[$day] += $length;
@@ -32,7 +33,16 @@ class ScheduleHelper extends AppHelper {
  					str_replace(' ', '&nbsp;', $shift['Area']['manager']);
  			}
 		}
-	if (isset($link_title)) return "<b>" . $this->html->link($link_title, $link_url) . "</b> " . $time . "<br/>";
+		if (isset($area_title)) {
+			$output = "<b>" . $this->html->link($area_title, $area_url) . "</b> ";
+			$output .= $this->role->link($time_title,array(
+				'operations' => array(
+					'url' => $time_url,
+					'attributes' => array('class'=>'remove')
+				)
+			)) . "<br/>";
+			return $output;
+		}
 	}
 
 	function displayAreaShift($shift,$bound,$day) {
