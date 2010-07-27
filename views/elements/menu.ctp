@@ -20,6 +20,46 @@
 	array(
 		'title' => ' | '
 	),
+	'Schedules' => array(
+		'role' => array('operations'),
+		'url' => '#',
+		'sub' => array(
+			'Select Schedule...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'selectBranch'),
+				'ajax'
+			),
+			"<hr/>",
+			'New Schedule...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'doNewBranch'),
+				'ajax'
+			),
+			'Delete Schedule...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'doDeleteBranch'),
+				'ajax'
+			),
+			'Merge Schedule...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'doMergeBranch'),
+				'ajax'
+			)
+		)
+	),
+	array(
+		'title' => ' | '
+	),
+	'Undo' => array(
+		'role' => array('operations'),
+		'url' => array('controller' => 'changes', 'action' => 'undo'),
+		'sub' => $changes['undo']
+	),
+	'Redo' => array(
+		'role' => array('operations'),
+		'url' => array('controller' => 'changes', 'action' => 'redo'),
+		'sub' => $changes['redo']
+	),
+	array(
+		'title' => ' | ',
+		'role' => array('operations')
+	),
 	'People' => array(
 		'url' => '#',
 		'sub' => array(
@@ -97,47 +137,6 @@
 			),
 			'New Constant Shift...' => array(
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
-				'ajax'
-			)
-		)
-	),
-	array(
-		'title' => ' | ',
-		'role' => array('operations')
-	),
-	'Undo' => array(
-		'role' => array('operations'),
-		'url' => array('controller' => 'changes', 'action' => 'undo'),
-		'sub' => $changes['undo']
-	),
-	'Redo' => array(
-		'role' => array('operations'),
-		'url' => array('controller' => 'changes', 'action' => 'redo'),
-		'sub' => $changes['redo']
-	),
-	array(
-		'title' => ' | ',
-		'role' => array('operations')
-	),
-	'Schedules' => array(
-		'role' => array('operations'),
-		'url' => '#',
-		'sub' => array(
-			'Select Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'selectBranch'),
-				'ajax'
-			),
-			"<hr/>",
-			'New Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'doNewBranch'),
-				'ajax'
-			),
-			'Delete Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'doDeleteBranch'),
-				'ajax'
-			),
-			'Merge Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'doMergeBranch'),
 				'ajax'
 			)
 		)
