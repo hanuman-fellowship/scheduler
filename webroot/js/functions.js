@@ -36,24 +36,51 @@ function hideDialog() {
 	stopClick = false;
 }
 
-function openDialog(id,noHighlight) {
+function openDialog(id,noHighlight,position) {
 	get('dialog').style.display = 'table';
 	if (!noHighlight) {
 		get(id).style.backgroundColor = '#FFF8BA';
 		highlighted = id;
 	}
+
+	if (!position) {
+		position = 'right';
+	}
+	// find the the object that we're positioning relative to
 	loc = findPos(get(id));
+	objX = loc[0];
+	objY = loc[1];
+	objWidth = get(id).offsetWidth;
+	
+	// get the window dimensions
 	windowWidth = f_clientWidth();
 	windowHeight = f_clientHeight();
+
+	// get the dialog dimensions
 	dialogWidth = get('dialog').offsetWidth;
 	dialogHeight = get('dialog').offsetHeight;
-	linkWidth = get(id).offsetWidth;
-	newLeft = loc[0]-f_scrollLeft()+linkWidth+20;
-	newTop = loc[1]-f_scrollTop()-30;
+
+	if (position == 'left') {
+		newLeft = objX - f_scrollLeft() - dialogWidth - 20;
+		newTop = objY - f_scrollTop() - 30;
+		// if it's off screen to the left, move the dialog to the other side of the element
+		if (newLeft < 0) { 
+			newLeft = 0;
+		}
+	}
+
+	if (position == 'right') {
+		newLeft = objX - f_scrollLeft() + objWidth + 20;
+		newTop = objY - f_scrollTop() - 30;
+		// if it's off screen to the right, move the dialog to the other side of the element
+		if (newLeft + dialogWidth > windowWidth) { 
+			newLeft = newLeft - dialogWidth - objWidth - 40;
+		}
+	}
 	
-	// if it's off screen to the right, move the dialog to the other side of the element
-	if (newLeft + dialogWidth > windowWidth) { 
-		newLeft = newLeft - dialogWidth - linkWidth - 40;
+	if (position == 'top') {
+		newLeft = objX - f_scrollLeft() + 20;
+		newTop = objY - f_scrollTop() - dialogHeight;
 	}
 	
 	// if it's below the bottom of the window, move it up

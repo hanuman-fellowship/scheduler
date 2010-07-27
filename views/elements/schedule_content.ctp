@@ -120,7 +120,7 @@
 				'id'=>"add_{$slot_num}_{$day}", 
 				'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 				'update' => 'dialog_content',
-				'complete' => "openDialog('add_{$slot_num}_{$day}','true')"
+				'complete' => "openDialog('{$slot_num}_{$day}')"
 			));?>
 		<? } else { ?>
 		<td <?=$off_day;?> >
@@ -180,7 +180,7 @@
 					'id'=>"add_0_0", 
 					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 					'update' => 'dialog_content',
-					'complete' => "openDialog('add_0_0','true')"
+					'complete' => "openDialog('0_0',null,'top')"
 				)
 			);?>
 		<? } ?>

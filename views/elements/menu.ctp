@@ -25,20 +25,12 @@
 		'sub' => array(
 			'View Schedule...' => array(
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('view_person_schedule','true')",
-					'id' => 'view_person_schedule'
-				)
+				'ajax'
 			),
 			'View Profile...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'profile'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('person_view_profile','true')",
-					'id' => 'person_view_profile'
-				)
+				'ajax'
 			),
 			"<hr/>" => array(
 				'role' => array('operations')
@@ -46,29 +38,17 @@
 			'New Person...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'add'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('person_add','true')",
-					'id' => 'person_add'
-				)
+				'ajax'
 			),
 			'Restore Person...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'restore'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('person_restore','true')",
-					'id' => 'person_restore'
-				)
+				'ajax'
 			),
 			'Retire Person...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'retire'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('person_retire','true')",
-					'id' => 'person_retire'
-				)
+				'ajax'
 			)
 		)
 	),
@@ -77,11 +57,7 @@
 		'sub' => array(
 			'View Schedule...' => array(
 				'url' => array('controller' => 'areas', 'action' => 'schedule'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('view_area_schedule','true')",
-					'id' => 'view_area_schedule'
-				)
+				'ajax'
 			),
 			"<hr/>" => array(
 				'role' => array('operations')
@@ -89,20 +65,12 @@
 			'New Area...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'areas', 'action' => 'add'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('area_add','true')",
-					'id' => 'area_add'
-				)
+				'ajax'
 			),
 			'Delete Area...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'areas', 'action' => 'delete'),
-				'ajax' => array(
-					'update' => 'dialog_content',
-					'complete' => "openDialog('area_delete','true')",
-					'id' => 'area_delete'
-				)
+				'ajax'
 			),
 		)
 	),
@@ -116,11 +84,7 @@
 					'action' => 'add',
 					(isset($area)) ? $area : null 
 				),
-				'ajax' => array(
-					'update'=>'dialog_content',
-					'complete'=>"openDialog('shift_new','true')",
-					'id' => 'shift_new'
-				)
+				'ajax'
 			),
 			'New Floating Shift...' => array(
 				'url' => array(
@@ -129,19 +93,11 @@
 					(isset($area)) ? $area : 0, 
 					(isset($person)) ? $person : 0 
 				),
-				'ajax' => array(
-					'update'=>'dialog_content',
-					'complete'=>"openDialog('floating_shift_new','true')",
-					'id' => 'floating_shift_new'
-				)
+				'ajax'
 			),
 			'New Constant Shift...' => array(
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
-				'ajax' => array(
-					'update'=>'dialog_content',
-					'complete'=>"openDialog('constant_shift_new','true')",
-					'id' => 'constant_shift_new'
-				)
+				'ajax'
 			)
 		)
 	),
@@ -169,36 +125,20 @@
 		'sub' => array(
 			'Select Schedule...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'selectBranch'),
-				'ajax' => array(
-					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_select','true')",
-					'id' => 'schedule_select'
-				)
+				'ajax'
 			),
 			"<hr/>",
 			'New Schedule...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'doNewBranch'),
-				'ajax' => array(
-					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_add','true')",
-					'id' => 'schedule_add'
-				)
+				'ajax'
 			),
 			'Delete Schedule...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'doDeleteBranch'),
-				'ajax' => array(
-					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_delete','true')",
-					'id' => 'schedule_delete'
-				)
+				'ajax'
 			),
 			'Merge Schedule...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'doMergeBranch'),
-				'ajax' => array(
-					'update'=>'dialog_content',
-					'complete'=>"openDialog('schedule_merge','true')",
-					'id' => 'schedule_merge'
-				)
+				'ajax'
 			)
 		)
 	)
