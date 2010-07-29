@@ -52,7 +52,7 @@ class RoleHelper extends AppHelper {
 					$type = 'ajax';
 					$attributes = array_merge($attributes,array(
 						'update' => 'dialog_content',
-						'complete' => "openDialog('menu_{$title}',true,'bottom')",
+						'complete' => "openDialog('menu_{$title}',false,'bottom')",
 					));
 				} else {
 					$type = 'html';

@@ -159,7 +159,6 @@ class ScheduleHelper extends AppHelper {
 					'attributes' => array(
 						'update' => 'dialog_content',
 						'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
-						'id' => "floating_{$floating_shift['id']}"
 					),
 					'ajax'
 				)));
@@ -199,7 +198,6 @@ class ScheduleHelper extends AppHelper {
 					'attributes' => array(
 						'update' => 'dialog_content',
 						'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
-						'id' => "floating_{$floating_shift['id']}"
 					),
 					'ajax'
 				)));

@@ -29,7 +29,7 @@ function hideElement(id) {
 function hideDialog() {
 	if (!stopClick) {
 		if(highlighted != '') {
-			get(highlighted).style.backgroundColor = '#FFFFFF';
+			get(highlighted).style.backgroundColor = '';
 		}
 		get('dialog').style.display = 'none';
 	}
