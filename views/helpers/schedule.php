@@ -120,10 +120,7 @@ class ScheduleHelper extends AppHelper {
 			),$this->params['isAjax']);
 			;
 			return "<span id='{$shift['id']}'><b>" .
-				"<span id='time1'>{$time}</span>"  . "</b><br/>" . $people . "</span><br/><br/>".
-				$this->ajax->drag($shift['id'],array(
-					'revert'=>true,
-				));
+				$time . "</b><br/>" . $people . "</span><br/><br/>";
 		}
 	}
 	
