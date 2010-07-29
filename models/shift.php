@@ -198,5 +198,26 @@ class Shift extends AppModel {
 		}
 		return array('unassigned' => $unassigned, 'assigned' => $shifts);
 	}
+
+	function addAssignedShifts(&$data) {
+		if (!isset($data['Assignment'])) {
+			return;
+		}
+		$shift_ids = array();
+		foreach($data['Assignment'] as &$assignment) {
+			$shift_ids[$assignment['id']] = $assignment['shift_id'];
+		}
+		$this->sContain('Area');
+		$shifts = $this->find('all',array(
+			'conditions' => array('Shift.id' => $shift_ids),
+			'order' => 'Shift.start, Shift.end, Area.short_name'
+		));
+		foreach($shifts as &$assignment) {
+			$assignment['assignment_id'] = array_search($assignment['Shift']['id'],$shift_ids);
+			$assignment['Shift']['Area'] = $assignment['Area'];
+			unset($assignment['Area']);
+		}
+		$data['Assignment'] = $shifts;
+	}
 }
 ?>

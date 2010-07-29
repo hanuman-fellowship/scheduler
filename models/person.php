@@ -92,7 +92,7 @@ class Person extends AppModel {
 			);
 		} else {
 			$this->sContain(
-				'Assignment.Shift.Area',
+				'Assignment',
 				'PeopleSchedules.ResidentCategory',
 				'OffDay',
 				'FloatingShift.Area'
@@ -101,6 +101,8 @@ class Person extends AppModel {
 		$person = $this->find('first',array(
 			'conditions' => array('Person.id' => $id)
 		));
+		$this->Assignment->Shift->schedule_id = $this->schedule_id;
+		$this->Assignment->Shift->addAssignedShifts($person);
 		return $person;
 	}	
 
