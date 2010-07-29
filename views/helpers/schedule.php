@@ -4,7 +4,7 @@ class ScheduleHelper extends AppHelper {
 	var $legend = array();
 	var $total_hours = array(
 		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
-	var $helpers = array('html','text','role');
+	var $helpers = array('html','text','role','ajax');
 		
 	function displayPersonShift($shift,$assignment_id,$bound,$day) {
 		// if the shift is within the bounds for this day and time
@@ -118,7 +118,12 @@ class ScheduleHelper extends AppHelper {
 					'ajax'
 				)
 			),$this->params['isAjax']);
-			return "<span id='{$shift['id']}'><b>" . $time . "</b><br/>" . $people . "</span><br/><br/>";
+			;
+			return "<span id='{$shift['id']}'><b>" .
+				"<span id='time1'>{$time}</span>"  . "</b><br/>" . $people . "</span><br/><br/>".
+				$this->ajax->drag($shift['id'],array(
+					'revert'=>true,
+				));
 		}
 	}
 	

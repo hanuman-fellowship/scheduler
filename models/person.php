@@ -27,9 +27,11 @@ class Person extends AppModel {
 	}
 
 	function sSave($data) {
+		$resident_category_id = $data['Person']['resident_category_id'];
+		unset($data['Person']['resident_category_id']);
 		$changes = $this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
-			$this->addPeopleSchedules($this->id, 'Person created');
+			$this->addPeopleSchedules($this->id, 'Person created', $resident_category_id);
 		}
 	}
 	

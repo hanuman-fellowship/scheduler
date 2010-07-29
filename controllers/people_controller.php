@@ -89,8 +89,8 @@ class PeopleController extends AppController {
 		}
 		$this->savePage();
 		$this->loadModel('ResidentCategory');
-		$residentCategories = $this->ResidentCategory->sFind('list');
-		$this->set(compact('residentCategories'));
+		$resident_category = $this->ResidentCategory->sFind('list');
+		$this->set(compact('resident_category'));
 	}
 	
 	function edit($id = null) {

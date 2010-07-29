@@ -11,6 +11,7 @@
 			'between' => '&nbsp;',
 			'id' => 'last'
 		));
+		echo $form->select('resident_category_id',$resident_category,null,array('empty'=>false));
 	?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
