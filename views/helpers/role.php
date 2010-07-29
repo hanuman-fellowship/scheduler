@@ -48,9 +48,12 @@ class RoleHelper extends AppHelper {
 			$menuData .= '<li class="top">';			
 			if (isset($top['url'])) {
 				$attributes = array('class'=>'top_link','id'=>"menu_{$title}");
-				if (array_key_exists('ajax',$top)) {
+				if (in_array('ajax',$top)) {
 					$type = 'ajax';
-					$attributes = array_merge($attributes,$top['ajax']);
+					$attributes = array_merge($attributes,array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('menu_{$title}',true,'bottom')",
+					));
 				} else {
 					$type = 'html';
 				}				
@@ -59,43 +62,52 @@ class RoleHelper extends AppHelper {
 				$menuData .= "<span>{$title}</span>";
 			}
 			if (isset($top['sub'])) {
-				$menuData .= '<ul class="sub">';
-				foreach($top['sub'] as $sub_title => $sub) {
-					if (!is_array($sub)) { // no link or role, so draw and move on
-						$menuData .= '<li>';
-						$menuData .= "<span>{$sub}</span>";
-						$menuData .= '</li>';					
-						continue;
+				$showSub = true;
+				if (array_key_exists('role',$top['sub'])) {
+					if (!in_array($cur_role,$top['sub']['role'])) { // skip the submenu if it's not our role
+						$showSub = false;
 					}
-					if (array_key_exists('role',$sub)) {
-						if (!in_array($cur_role,$sub['role'])) { // skip this one if it's not our role
+					unset($top['sub']['role']);
+				}
+				if ($showSub) {
+					$menuData .= "<ul class='sub' id='{$title}_sub'>";
+					foreach($top['sub'] as $sub_title => $sub) {
+						if (!is_array($sub)) { // no link or role, so draw and move on
+							$menuData .= '<li>';
+							$menuData .= "<span>{$sub}</span>";
+							$menuData .= '</li>';					
 							continue;
 						}
-					} // if there's no role, specification, then we can display it
-					$menuData .= '<li>';
-					if (array_key_exists('url',$sub)) {
-						if (array_key_exists('ajax',$sub)) {
-							$type = 'ajax';
-							$attributes = $sub['ajax'];
-						} else {
-							if (in_array('ajax',$sub)) {
-								$type = 'ajax';
-								$attributes = array(
-									'update' => 'dialog_content',
-									'complete' => "openDialog('menu_{$title}','true','left')",
-								);
-							} else {				
-								$type = 'html';
-								$attributes = null;
+						if (array_key_exists('role',$sub)) {
+							if (!in_array($cur_role,$sub['role'])) { // skip this one if it's not our role
+								continue;
 							}
-						}				
-						$menuData .= $this->{$type}->link($sub_title,$sub['url'],$attributes);
-					} else {
-						$menuData .= "<span>{$sub_title}</span>";
+						} // if there's no role, specification, then we can display it
+						$menuData .= '<li>';
+						if (array_key_exists('url',$sub)) {
+							if (array_key_exists('ajax',$sub)) {
+								$type = 'ajax';
+								$attributes = $sub['ajax'];
+							} else {
+								if (in_array('ajax',$sub)) {
+									$type = 'ajax';
+									$attributes = array(
+										'update' => 'dialog_content',
+										'complete' => "openDialog('menu_{$title}','true','left')",
+									);
+								} else {				
+									$type = 'html';
+									$attributes = null;
+								}
+							}				
+							$menuData .= $this->{$type}->link($sub_title,$sub['url'],$attributes);
+						} else {
+							$menuData .= "<span>{$sub_title}</span>";
+						}
+						$menuData .= '</li>';
 					}
-					$menuData .= '</li>';
+					$menuData .= '</ul>';
 				}
-				$menuData .= '</ul>';
 			}
 			$menuData .= '</li>';
 		}

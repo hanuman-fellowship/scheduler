@@ -4,11 +4,7 @@
 	'Login' => array(
 		'role' => array(''),
 		'url' => array('controller' => 'users', 'action' => 'login'),
-		'ajax' => array(
-			'update'=>'dialog_content',
-			'complete'=>"openDialog('menu_Login','true')",
-			'id' => 'menu_Login'
-		)
+		'ajax'
 	),
 	"Hello, ".Inflector::humanize(Authsome::get('username')) => array(
 		'role' => array('operations')
@@ -44,7 +40,8 @@
 		)
 	),
 	array(
-		'title' => ' | '
+		'title' => ' | ',
+		'role' => array('operations')
 	),
 	'Undo' => array(
 		'role' => array('operations'),
@@ -61,9 +58,12 @@
 		'role' => array('operations')
 	),
 	'People' => array(
-		'url' => '#',
+		'url' => array('controller' => 'people', 'action' => 'schedule'),
+		'ajax',
 		'sub' => array(
+			'role' => array('operations'),
 			'View Schedule...' => array(
+				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
 				'ajax'
 			),
@@ -93,8 +93,10 @@
 		)
 	),
 	'Areas' => array(
-		'url' => '#',
+		'url' => array('controller' => 'areas', 'action' => 'schedule'),
+		'ajax',
 		'sub' => array(
+			'role' => array('operations'),
 			'View Schedule...' => array(
 				'url' => array('controller' => 'areas', 'action' => 'schedule'),
 				'ajax'

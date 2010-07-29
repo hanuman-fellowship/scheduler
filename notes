@@ -1,8 +1,10 @@
 TODO:
 
-	- Constant Shift
+	- make it so that the menu is done with javascript
+		- onhover show submenu
+		- openDialog should hide the menu
 
-	- change highlighted square when shift hours change on new shift. maybe.
+	- Constant Shift
 
 	- change highlighted square when shift hours change on new shift. maybe.
 

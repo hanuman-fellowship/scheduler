@@ -51,6 +51,7 @@ function openDialog(id,noHighlight,position) {
 	objX = loc[0];
 	objY = loc[1];
 	objWidth = get(id).offsetWidth;
+	objHeight = get(id).offsetHeight;
 	
 	// get the window dimensions
 	windowWidth = f_clientWidth();
@@ -63,19 +64,11 @@ function openDialog(id,noHighlight,position) {
 	if (position == 'left') {
 		newLeft = objX - f_scrollLeft() - dialogWidth - 20;
 		newTop = objY - f_scrollTop() - 30;
-		// if it's off screen to the left, move the dialog to the other side of the element
-		if (newLeft < 0) { 
-			newLeft = 0;
-		}
 	}
 
 	if (position == 'right') {
 		newLeft = objX - f_scrollLeft() + objWidth + 20;
 		newTop = objY - f_scrollTop() - 30;
-		// if it's off screen to the right, move the dialog to the other side of the element
-		if (newLeft + dialogWidth > windowWidth) { 
-			newLeft = newLeft - dialogWidth - objWidth - 40;
-		}
 	}
 	
 	if (position == 'top') {
@@ -83,6 +76,21 @@ function openDialog(id,noHighlight,position) {
 		newTop = objY - f_scrollTop() - dialogHeight;
 	}
 	
+	if (position == 'bottom') {
+		newLeft = objX - f_scrollLeft() - (dialogWidth/2) + (objWidth/2);
+		newTop = objY - f_scrollTop() + objHeight;
+	}
+
+	// if it's off screen to the right, move the dialog to the other side of the element
+	if (newLeft + dialogWidth > windowWidth) { 
+		newLeft = newLeft - dialogWidth - objWidth - 40;
+	}
+
+	// if it's off screen to the left, move the dialog to the other side of the element
+	if (newLeft < 0) { 
+		newLeft = 10;
+	}
+
 	// if it's below the bottom of the window, move it up
 	if (newTop + dialogHeight > windowHeight) {
 		newTop = windowHeight - dialogHeight;
