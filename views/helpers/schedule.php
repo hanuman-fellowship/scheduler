@@ -158,7 +158,8 @@ class ScheduleHelper extends AppHelper {
 					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
 					'attributes' => array(
 						'update' => 'dialog_content',
-						'complete' => "openDialog('floating_{$floating_shift['id']}')",
+						'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
+						'id' => "floating_{$floating_shift['id']}"
 					),
 					'ajax'
 				)));
@@ -197,7 +198,8 @@ class ScheduleHelper extends AppHelper {
 					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
 					'attributes' => array(
 						'update' => 'dialog_content',
-						'complete' => "openDialog('floating_{$floating_shift['id']}')",
+						'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
+						'id' => "floating_{$floating_shift['id']}"
 					),
 					'ajax'
 				)));

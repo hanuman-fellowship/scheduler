@@ -63,16 +63,16 @@ function openDialog(id,noHighlight,position) {
 
 	if (position == 'left') {
 		newLeft = objX - f_scrollLeft() - dialogWidth - 20;
-		newTop = objY - f_scrollTop() - 30;
+		newTop = objY - f_scrollTop() - (dialogHeight/2) + (objHeight/2);
 	}
 
 	if (position == 'right') {
 		newLeft = objX - f_scrollLeft() + objWidth + 20;
-		newTop = objY - f_scrollTop() - 30;
+		newTop = objY - f_scrollTop() - (dialogHeight/2) + (objHeight/2);
 	}
 	
 	if (position == 'top') {
-		newLeft = objX - f_scrollLeft() + 20;
+		newLeft = objX - f_scrollLeft() - (dialogWidth/2) + (objWidth/2);
 		newTop = objY - f_scrollTop() - dialogHeight;
 	}
 	
@@ -98,7 +98,7 @@ function openDialog(id,noHighlight,position) {
 	
 	// if it's above the top of the window, move it down
 	if (newTop < 0) {
-		newTop = 0;
+		newTop = 10;
 	}
 	get('dialog').style.left = newLeft+'px';
 	get('dialog').style.top = newTop+'px';
