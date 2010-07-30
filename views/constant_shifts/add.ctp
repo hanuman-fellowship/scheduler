@@ -1,22 +1,32 @@
-<div style='background-color:#ccc'>
-<?php echo $form->create('ConstantShift');?>
+<?= $ajax->form($this->action,'post',array('model'=>'ConstantShift','update'=>'dialog_content','before'=>'saveScroll()'));?>
 	<fieldset>
- 		<legend><?php __('Add ConstantShift');?></legend>
+ 		<legend><?php __('New Constant Shift');?></legend>
 	<?php
-		echo $form->input('resident_category_id');
-		echo $form->input('name');
-		echo $form->input('day');
-		echo $form->input('start');
-		echo $form->input('end');
-		echo $form->input('length');
+		echo $form->input('name', array(
+			'id' => 'name',
+			'between' => '&nbsp;'
+		));
+		echo $form->input('resident_category_id', array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('day_id', array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('start', array(
+			'interval' => 15,
+			'selected' => $start,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('end', array(
+			'interval' => 15,
+			'selected' => $end,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('ignore_hours', array(
+			'between' => '&nbsp;'
+		));
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
-</div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('List ConstantShifts', true), array('action' => 'index'));?></li>
-		<li><?php echo $html->link(__('List Resident Categories', true), array('controller' => 'resident_categories', 'action' => 'index')); ?> </li>
-		<li><?php echo $html->link(__('New Resident Category', true), array('controller' => 'resident_categories', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?= $form->submit('Submit');?>
+<?php echo $form->end();?>
+<?=$this->element('validate',array('default_field'=>'name'));?>

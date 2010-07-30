@@ -145,6 +145,16 @@ class AppModel extends Model {
 		return true;
 	}
 		
+	function dbTime($time) {
+		return  date('H:i:00',
+			strtotime(
+				$time['hour'].":".
+				sprintf("%02d",$time['min'])." ".
+				$time['meridian']
+			)
+		);
+	}
+		
 	function array_fill_keys($keys, $value) {
 		return array_combine($keys,array_fill(0,count($keys),$value));	
 	}

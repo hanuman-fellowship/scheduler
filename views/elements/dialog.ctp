@@ -2,6 +2,4 @@
 	<div id="dialog_content" class='in ltin tpin' onclick="clickInDialog()">
 	</div>
 </div></div>
-<script type="text/javascript">
-	new Draggable('dialog', { scroll: window });
-</script>
+<?= $this->ajax->drag('dialog', array('scroll' => 'window'));?>

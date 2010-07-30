@@ -65,7 +65,7 @@ class Shift extends AppModel {
 		if (isset($changes['newData'])) {
 			$newData = $this->format($changes['newData']);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New Shift created: {$newData['name']}";
+				$this->description = "New Shift: {$newData['name']}";
 			} else {
 				$oldData = $this->format($changes['oldData']);				
 				$this->description = "Shift changed: ({$oldData['name']})";
@@ -146,16 +146,6 @@ class Shift extends AppModel {
 		return $data;
 	}
 
-	function dbTime($time) {
-		return  date('H:i:00',
-			strtotime(
-				$time['hour'].":".
-				sprintf("%02d",$time['min'])." ".
-				$time['meridian']
-			)
-		);
-	}
-		
 	function listBySlot($person_id,$day,$start,$end) {
 		$this->Person = &$this->Assignment->Person;
 		$this->Person->schedule_id = $this->schedule_id;

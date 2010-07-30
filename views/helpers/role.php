@@ -47,12 +47,15 @@ class RoleHelper extends AppHelper {
 			} // if there's no role, specification, then we can display it
 			$menuData .= '<li class="top">';			
 			if (isset($top['url'])) {
-				$attributes = array('class'=>'top_link','id'=>"menu_{$title}");
+				$attributes = array(
+					'class'=>'top_link',
+					'id'=>"menu_{$title}"
+				);
 				if (in_array('ajax',$top)) {
 					$type = 'ajax';
 					$attributes = array_merge($attributes,array(
 						'update' => 'dialog_content',
-						'complete' => "openDialog('menu_{$title}',false,'bottom')",
+						'complete' => "openDialog('menu_{$title}',false,'bottom')"
 					));
 				} else {
 					$type = 'html';
@@ -70,7 +73,7 @@ class RoleHelper extends AppHelper {
 					unset($top['sub']['role']);
 				}
 				if ($showSub) {
-					$menuData .= "<ul class='sub' id='{$title}_sub'>";
+					$menuData .= "<ul class='sub' id='menu_{$title}_sub'>";
 					foreach($top['sub'] as $sub_title => $sub) {
 						if (!is_array($sub)) { // no link or role, so draw and move on
 							$menuData .= '<li>';
@@ -93,7 +96,7 @@ class RoleHelper extends AppHelper {
 									$type = 'ajax';
 									$attributes = array(
 										'update' => 'dialog_content',
-										'complete' => "openDialog('menu_{$title}','true','left')",
+										'complete' => "openDialog('menu_{$title}',true,'bottom')",
 									);
 								} else {				
 									$type = 'html';
