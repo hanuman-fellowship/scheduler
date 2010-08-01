@@ -17,7 +17,7 @@
 			'id' => 'manager'
 		));
 	?>
+<?=$this->element('validate',array('default_field'=>'name'));?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
 </div>
-<?=$this->element('validate',array('default_field'=>'name'));?>

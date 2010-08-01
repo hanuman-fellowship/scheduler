@@ -41,6 +41,12 @@ class ConstantShift extends AppModel {
 		$this->setDescription($changes);
 	}
 	
+	function sDelete($id) {
+		$this->id = $id;
+		$changes = parent::sDelete($id);
+		$this->setDescription($changes);
+	}
+	
 	function setDescription($changes) {
 		if (isset($changes['newData'])) {
 			$newData = $this->format($changes['newData']);
@@ -78,6 +84,11 @@ class ConstantShift extends AppModel {
 								$this->description .= 
 									'end -> '.$newData['end'];
 								break;		
+							case 'specify_hours':
+								$this->description .= $listed ? ', ' : ' ';
+								$this->description .= 'specify hours -> ';
+								$this->description .= $newData['specify_hours'] ? 'yes' : 'no';
+								break;	
 							case 'hours':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
@@ -90,7 +101,7 @@ class ConstantShift extends AppModel {
 			}
 		} else {
 			$oldData = $this->format($changes);
-			$this->description = "Constant Shift deleted: {$oldData['name']}";
+			$this->description = "Constant Shift deleted: {$oldData['details']}";
 		}
 	}
 	

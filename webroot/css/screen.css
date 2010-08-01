@@ -21,8 +21,12 @@
 	display:none;
 }
 
-.const  {
+.const, span.const a {
 	color:#999999;
+}
+
+span.const a:hover {
+	color:#777777;
 }
 
 span.RC_1 {

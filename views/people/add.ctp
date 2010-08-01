@@ -13,7 +13,7 @@
 		));
 		echo $form->select('resident_category_id',$resident_category,null,array('empty'=>false));
 	?>
+<?=$this->element('validate',array('default_field'=>'first'));?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
 </div>
-<?=$this->element('validate',array('default_field'=>'first'));?>

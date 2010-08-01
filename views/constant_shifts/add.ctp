@@ -41,7 +41,7 @@
 				'float:left;display:none'
 		));
 	?>
+<?=$this->element('validate',array('default_field'=>'name'));?>
 	</fieldset>
 <?= $form->submit('Submit');?>
 <?php echo $form->end();?>
-<?=$this->element('validate',array('default_field'=>'name'));?>

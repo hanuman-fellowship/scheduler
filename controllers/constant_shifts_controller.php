@@ -57,5 +57,12 @@ class ConstantShiftsController extends AppController {
 		$this->set('days',$this->Day->sFind('list'));
 	}
 	
+	function delete($id) {
+		$this->record();
+		$this->ConstantShift->sDelete($id);
+		$this->stop($this->ConstantShift->description);
+		$this->redirect($this->referer());
+	}
+		
 }
 ?>
