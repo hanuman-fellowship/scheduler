@@ -1,24 +1,52 @@
-<div class="constantShifts form">
-<?php echo $form->create('ConstantShift');?>
+<?= $ajax->form($this->action,'post',array('model'=>'ConstantShift','update'=>'dialog_content','before'=>'saveScroll()'));?>
 	<fieldset>
- 		<legend><?php __('Edit ConstantShift');?></legend>
+ 		<legend><?php __('Edit Constant Shift');?></legend>
 	<?php
-		echo $form->input('id');
-		echo $form->input('resident_category_id');
-		echo $form->input('name');
-		echo $form->input('day');
-		echo $form->input('start');
-		echo $form->input('end');
-		echo $form->input('length');
+		echo $form->hidden('id');
+		echo $form->input('name', array(
+			'id' => 'name',
+			'between' => '&nbsp;'
+		));
+		echo $form->input('resident_category_id', array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('day_id', array(
+			'between' => '&nbsp;'
+		));
+		echo $form->input('start', array(
+			'interval' => 15,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('end', array(
+			'interval' => 15,
+			'between' => '&nbsp;'
+		));
+		echo $form->input('specify_hours', array(
+			'between' => '&nbsp;',
+			'size' => 1,
+			'onClick' => "toggleDisplay('hours');document.getElementById('hours').focus()",
+			'div' => array(
+				'style' => 'float:left'
+			),
+			'after' => '&nbsp;'
+		));
+		echo $form->input('hours', array(
+			'between' => '&nbsp;',
+			'id' => 'hours',
+			'size' => 1,
+			'label' => false,
+			'style' => $this->data['ConstantShift']['specify_hours'] ?
+				'float:left;' :
+				'float:left;display:none'
+		));
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
-</div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('Delete', true), array('action' => 'delete', $form->value('ConstantShift.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $form->value('ConstantShift.id'))); ?></li>
-		<li><?php echo $html->link(__('List ConstantShifts', true), array('action' => 'index'));?></li>
-		<li><?php echo $html->link(__('List Resident Categories', true), array('controller' => 'resident_categories', 'action' => 'index')); ?> </li>
-		<li><?php echo $html->link(__('New Resident Category', true), array('controller' => 'resident_categories', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?= $form->submit('Submit');?>
+<?php echo $form->end();?>
+<?=$html->link('Delete Constant Shift',array('action'=>'delete',$this->data['ConstantShift']['id']),
+	array(
+		'style'=>'position:relative;top:5px',
+		'onclick'=>'saveScroll()'
+	)
+);?>
+<?=$this->element('validate',array('default_field'=>'name'));?>

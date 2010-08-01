@@ -93,7 +93,7 @@ class Person extends AppModel {
 		} else {
 			$this->sContain(
 				'Assignment',
-				'PeopleSchedules.ResidentCategory',
+				'PeopleSchedules.ResidentCategory.ConstantShift',
 				'OffDay',
 				'FloatingShift.Area'
 			);
@@ -103,6 +103,30 @@ class Person extends AppModel {
 		));
 		$this->Assignment->Shift->schedule_id = $this->schedule_id;
 		$this->Assignment->Shift->addAssignedShifts($person);
+
+		// move the constant shifts into place with the other shifts
+		foreach($person['PeopleSchedules']['ResidentCategory']['ConstantShift'] as $constant) {
+			foreach($person['Assignment'] as $offset => $assignment) {
+				if (!isset($assignment['Shift'])) {
+					continue;
+				}
+				if ($assignment['Shift']['day_id'] === $constant['day_id']) {
+					if ($assignment['Shift']['start'] >= $constant['start']) {
+						continue;
+					}
+					$insert = $offset + 1;
+					break;
+				}
+			}
+			if (isset($insert)) {
+				array_splice($person['Assignment'],
+					$insert,0,array(array('ConstantShift'=>$constant)));
+				unset($insert);
+			} else {
+				$person['Assignment'][] = array('ConstantShift'=>$constant);
+			}
+		}
+		unset ($person['PeopleSchedules']['ResidentCategory']['ConstantShift']);
 		return $person;
 	}	
 

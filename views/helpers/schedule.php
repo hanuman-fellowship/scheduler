@@ -6,42 +6,76 @@ class ScheduleHelper extends AppHelper {
 		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
 	var $helpers = array('html','text','role','ajax');
 		
-	function displayPersonShift($shift,$assignment_id,$bound,$day) {
-		// if the shift is within the bounds for this day and time
-		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day_id'] == $day) {
-			$area_title = $shift['Area']['short_name'];
-			$area_url = array('controller'=>'areas','action'=>'schedule',$shift['Area']['id']);
-			$time_title = $this->displayTime($shift['start']) . " - " . 
-				$this->displayTime($shift['end']);
-			$time_url = array('controller'=>'assignments','action'=>'unassign',$assignment_id);
-		
-			$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
-			$this->total_hours[$day] += $length;
-			$this->total_hours['total'] += $length;
+	function displayPersonShift($assignment,$bound,$day) {
+		if (isset($assignment['Shift'])) {
+			$assignment_id = $assignment['assignment_id'];
+			$shift = $assignment['Shift'];	
+			// if the shift is within the bounds for this day and time
+			if ($shift['start'] >= $bound['start'] && 
+			$shift['start'] < $bound['end'] && 
+			$shift['day_id'] == $day) {
+				$area_title = $shift['Area']['short_name'];
+				$area_url = array('controller'=>'areas','action'=>'schedule',$shift['Area']['id']);
+				$time_title = $this->displayTime($shift['start']) . " - " . 
+					$this->displayTime($shift['end']);
+				$time_url = array('controller'=>'assignments','action'=>'unassign',$assignment_id);
 			
-			/**
-			 * Make $legend an array of area ids, each of which is an array (short_name, name, manager)
-			 * for displaying the key (legend) at the bottom. Only one key needs to be made for each
-			 * area that is on this schedule, thus the "if !isset"
-			 */
- 			if (!isset($this->legend[$shift['Area']['id']])) {
- 				$this->legend[$shift['Area']['id']]['short_name'] = 
- 					str_replace(' ', '&nbsp;', $shift['Area']['short_name']);
- 				$this->legend[$shift['Area']['id']]['name'] = 
- 					str_replace(' ', '&nbsp;', $shift['Area']['name']);
- 				$this->legend[$shift['Area']['id']]['manager'] = 
- 					str_replace(' ', '&nbsp;', $shift['Area']['manager']);
- 			}
+				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
+				$this->total_hours[$day] += $length;
+				$this->total_hours['total'] += $length;
+				
+				/**
+				 * Make $legend an array of area ids, each of which is an array (short_name, name, manager)
+				 * for displaying the key (legend) at the bottom. Only one key needs to be made for each
+				 * area that is on this schedule, thus the "if !isset"
+				 */
+				if (!isset($this->legend[$shift['Area']['id']])) {
+					$this->legend[$shift['Area']['id']]['short_name'] = 
+						str_replace(' ', '&nbsp;', $shift['Area']['short_name']);
+					$this->legend[$shift['Area']['id']]['name'] = 
+						str_replace(' ', '&nbsp;', $shift['Area']['name']);
+					$this->legend[$shift['Area']['id']]['manager'] = 
+						str_replace(' ', '&nbsp;', $shift['Area']['manager']);
+				}
+			}
+			if (isset($area_title)) {
+				$output = "<b>" . $this->html->link($area_title, $area_url) . "</b> ";
+				$output .= $this->role->link($time_title,array(
+					'operations' => array(
+						'url' => $time_url,
+						'attributes' => array('class'=>'remove')
+					)
+				)) . "<br/>";
+				return $output;
+			}
 		}
-		if (isset($area_title)) {
-			$output = "<b>" . $this->html->link($area_title, $area_url) . "</b> ";
-			$output .= $this->role->link($time_title,array(
-				'operations' => array(
-					'url' => $time_url,
-					'attributes' => array('class'=>'remove')
-				)
-			)) . "<br/>";
-			return $output;
+		if (isset($assignment['ConstantShift'])) {
+			$shift = $assignment['ConstantShift'];
+			// if the shift is within the bounds for this day and time
+			if ($shift['start'] >= $bound['start'] && 
+			$shift['start'] < $bound['end'] && 
+			$shift['day_id'] == $day) {
+				$title = "<b>{$shift['name']}</b><br>".
+					$this->displayTime($shift['start']) . " - " . $this->displayTime($shift['end']);
+				$url = array('controller'=>'constant_shifts','action'=>'edit',$shift['id']);
+				$length = ($shift['specify_hours']) ? 
+					$shift['hours'] :
+					$this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
+				$this->total_hours[$day] += $length;
+				$this->total_hours['total'] += $length;
+				$output = "<span class='const'>".$this->role->link($title,array(
+					'operations' => array(
+						'url' => $url,
+						'attributes' => array(
+							'escape' => false,
+							'update'=>'dialog_content',
+							'complete'=>"openDialog('constant_{$shift['id']}')"
+						),
+						'ajax'
+					)
+				)) . "</span><br/>";
+				return "<span id='constant_{$shift['id']}'>{$output}</span>";
+			}
 		}
 	}
 
@@ -67,11 +101,19 @@ class ScheduleHelper extends AppHelper {
 				}
 				$people .= $this->role->link($assignment['Person']['name'],array(
 					'' => array(
-						'url' => array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
-						'attributes' => array('class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id'])
+						'url' => array(
+							'controller'=>'people','action'=>'schedule',$assignment['Person']['id']
+						),
+						'attributes' => array(
+							'class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id']
+						)
 					),
 					'operations' => array(
-						'url' => array('controller'=>'assignments','action'=>'unassign',$assignment['Assignment']['id']),
+						'url' => array(
+							'controller'=>'assignments',
+							'action'=>'unassign',
+							$assignment['Assignment']['id']
+						),
 						'attributes' => array(
 							'class' => 'remove_RC_'.$assignment['PeopleSchedules']['resident_category_id'],
 							'style' => 'margin:10px',
@@ -85,7 +127,13 @@ class ScheduleHelper extends AppHelper {
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
-							'style'=>'display:none;position:absolute;top:0;right:-3.0em;background-color:#DDDDDD;padding:5px',
+							'style'=>
+								'display:none;
+								position:absolute;
+								top:0;
+								right:-3.0em;
+								background-color:#DDDDDD;
+								padding:5px',
 							'id'=>"goto_{$assignment['Assignment']['id']}"
 						)
 					)."</span>";
@@ -216,7 +264,7 @@ class ScheduleHelper extends AppHelper {
 		}	
 		return (!$output ? '' : 'Also ' . $this->text->toList($output));	
 	}
-	
+
 	// this to be called after all shifts have been displayed so that $this->legend is accurate
 	function displayLegend() {
 		$output = '';

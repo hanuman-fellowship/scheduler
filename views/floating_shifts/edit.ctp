@@ -18,7 +18,12 @@
 			'between' => '&nbsp;'
 		));
 	?>
+	<?=$form->end('Submit');?>
 	</fieldset>
-<?= $form->submit('Submit');?>
-<?php echo $form->end();?>
+<?=$html->link('Delete Floating Shift',array('action'=>'delete',$this->data['FloatingShift']['id']),
+	array(
+		'style'=>'position:relative;top:5px',
+		'onclick'=>'saveScroll()'
+	)
+);?>
 <?=$this->element('validate',array('default_field'=>'hours'));?>

@@ -133,7 +133,8 @@
 			<? } ?>
 		<? } else { ?>
 			<? foreach ($person['Assignment'] as $assignment) { ?>
-						<?=$schedule->displayPersonShift($assignment['Shift'],$assignment['assignment_id'],$bounds['bounds'][$slot_num][$day],$day);?>
+						<?=$schedule->displayPersonShift($assignment,
+							$bounds['bounds'][$slot_num][$day],$day);?>
 			<? } ?>		
 		<? } ?>
 				</p> 

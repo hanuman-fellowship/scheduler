@@ -1,9 +1,7 @@
-<div class="shifts form">
 <?= $ajax->form($this->action,'post',array('model'=>'Shift','update'=>'dialog_content','before'=>'saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Shift');?></legend>
 	<?php
-
 		echo $form->hidden('id');
 		echo $form->input('area_id',array(
 			'between' => '&nbsp;'
@@ -20,12 +18,13 @@
 			'between' => '&nbsp;'
 		));
 		echo $form->input('num_people', array(
+			'size' => 1,
 			'id' => 'num_people',
 			'label' => '# of People',
 			'between' => '&nbsp;'
 		));
 	?>
-	<?php echo '<span style="float:right">'.$form->end('Submit').'</span>';?>
+	<?= $form->end('Submit');?>
 	</fieldset>
 <?=$html->link('Delete Shift',array('action'=>'delete',$this->data['Shift']['id']),
 	array(
@@ -33,5 +32,4 @@
 		'onclick'=>'saveScroll()'
 	)
 );?>
-</div>
 <?=$this->element('validate',array('default_field'=>'name'));?>

@@ -2,11 +2,6 @@
 class ConstantShift extends AppModel {
 
 	var $name = 'ConstantShift';
-	var $validate = array(
-		'resident_category_id' => array('numeric'),
-		'name' => array('notempty'),
-		'day' => array('numeric')
-	);
 
 	var $belongsTo = array(
 		'ResidentCategory',
@@ -14,14 +9,27 @@ class ConstantShift extends AppModel {
 	);
 
 	function valid($data) {
-		$start = $this->dbTime($data['ConstantShift']['start']);
-		$end = $this->dbTime($data['ConstantShift']['end']);
+		foreach($data['ConstantShift'] as $key=>$val) {
+			$$key=$val;
+		}
+		$start = $this->dbTime($start);
+		$end = $this->dbTime($end);
+		if (!$name) {
+			$this->errorField = 'name';
+			$this->errorMessage = "Name must not be blank";
+			return false;
+		}
 		if ($end <= $start) {	
 			$this->errorField = 'start';
 			$this->errorMessage = "Start must be before end";
 			return false;
 		}
-		if (parent::valid($data)) return true;
+		if(!is_numeric($hours) && $hours != '') {
+			$this->errorField = 'hours';
+			$this->errorMessage = "Hours must be a number";
+			return false;
+		}
+		return true;
 	}
 
 	function sSave($data) {
@@ -37,18 +45,23 @@ class ConstantShift extends AppModel {
 		if (isset($changes['newData'])) {
 			$newData = $this->format($changes['newData']);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New Constant Shift: {$newData['name']}";
+				$this->description = "New Constant Shift: {$newData['details']}";
 			} else {
 				$oldData = $this->format($changes['oldData']);				
-				$this->description = "Shift changed: ({$oldData['name']})";
+				$this->description = "Constant Shift changed: ({$oldData['name']})";
 				$listed = false;
 				foreach($changes['newData'] as $field => $val) {
 					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
 						switch ($field) {
-							case 'area_id':
+							case 'name':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'area -> '.$newData['area_id'];
+									'name -> '.$newData['name'];
+								break;
+							case 'resident_category_id':
+								$this->description .= $listed ? ', ' : ' ';
+								$this->description .= 
+									'category -> '.$newData['resident_category_id'];
 								break;
 							case 'day_id':
 								$this->description .= $listed ? ', ' : ' ';
@@ -65,10 +78,10 @@ class ConstantShift extends AppModel {
 								$this->description .= 
 									'end -> '.$newData['end'];
 								break;		
-							case 'num_people':
+							case 'hours':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'# of people -> '.$newData['num_people'];
+									'hours -> '.$newData['hours'];
 								break;	
 						}
 						$listed = true;
@@ -77,7 +90,7 @@ class ConstantShift extends AppModel {
 			}
 		} else {
 			$oldData = $this->format($changes);
-			$this->description = "Shift deleted: {$oldData['name']}";
+			$this->description = "Constant Shift deleted: {$oldData['name']}";
 		}
 	}
 	
@@ -98,7 +111,8 @@ class ConstantShift extends AppModel {
 		$end = strtotime($data['end']);
 		$minutes = (date('i',$end) == '00') ? '' : ':i';
 		$data['end'] = date("g{$minutes}",$end);
-		$data['name'] = 
+		$data['details'] = 
+			$data['name'].' '.
 			$data['resident_category_id'].' '.
 			$data['day_id'].' '.
 			$data['start'].' - '.

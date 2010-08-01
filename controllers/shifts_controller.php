@@ -63,13 +63,10 @@ class ShiftsController extends AppController {
 	}
 	
 	function delete($id) {
-		$this->Shift->id = $id;
-		$this->Shift->recursive = -1;
-		$shift = $this->Shift->sFind('first');
 		$this->record();
 		$this->Shift->sDelete($id);
 		$this->stop($this->Shift->description);
-		$this->redirect('/areas/schedule/'.$shift['Shift']['area_id']);
+		$this->redirect($this->referer());
 	}
 		
 	function listBySlot($person_id,$day_id,$start,$end) {

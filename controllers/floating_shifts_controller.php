@@ -53,5 +53,12 @@ class FloatingShiftsController extends AppController {
 		$this->set('people',$this->Person->getList());
 	}
 	
+	function delete($id) {
+		$this->record();
+		$this->FloatingShift->sDelete($id);
+		$this->stop($this->FloatingShift->description);
+		$this->redirect($this->referer());
+	}
+		
 }
 ?>

@@ -22,8 +22,23 @@
 			'selected' => $end,
 			'between' => '&nbsp;'
 		));
-		echo $form->input('ignore_hours', array(
-			'between' => '&nbsp;'
+		echo $form->input('specify_hours', array(
+			'between' => '&nbsp;',
+			'size' => 1,
+			'onClick' => "toggleDisplay('hours');document.getElementById('hours').focus()",
+			'div' => array(
+				'style' => 'float:left'
+			),
+			'after' => '&nbsp;'
+		));
+		echo $form->input('hours', array(
+			'between' => '&nbsp;',
+			'id' => 'hours',
+			'size' => 1,
+			'label' => false,
+			'style' => $this->data['ConstantShift']['specify_hours'] ?
+				'float:left;' :
+				'float:left;display:none'
 		));
 	?>
 	</fieldset>

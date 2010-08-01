@@ -30,5 +30,32 @@ class ConstantShiftsController extends AppController {
 		$this->set('days',$this->Day->sFind('list'));
 	}
 
+	function edit($id = null) {
+		if (!$id && empty($this->data)) {
+			$this->redirect(array('action' => 'index'));
+		}
+		if (!empty($this->data)) {
+			if ($this->ConstantShift->valid($this->data)) {
+				$this->record();
+				$this->ConstantShift->sSave($this->data);
+				$this->stop($this->ConstantShift->description);
+				$this->set('url',$this->referer());
+			} else {
+				$this->set('errorField',$this->ConstantShift->errorField);
+				$this->set('errorMessage',$this->ConstantShift->errorMessage);
+			}
+		}
+		if (empty($this->data)) {
+			$this->id = $id;
+			$this->data = $this->ConstantShift->sFind('first');
+		}
+		$this->loadModel('ResidentCategory');
+		$this->ResidentCategory->order = 'id';
+		$this->set('residentCategories',$this->ResidentCategory->sFind('list'));
+		$this->loadModel('Day');
+		$this->Day->order = 'id';
+		$this->set('days',$this->Day->sFind('list'));
+	}
+	
 }
 ?>

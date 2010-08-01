@@ -200,7 +200,7 @@ class Shift extends AppModel {
 		$this->sContain('Area');
 		$shifts = $this->find('all',array(
 			'conditions' => array('Shift.id' => $shift_ids),
-			'order' => 'Shift.start, Shift.end, Area.short_name'
+			'order' => 'Shift.day_id, Shift.start, Shift.end, Area.short_name'
 		));
 		foreach($shifts as &$assignment) {
 			$assignment['assignment_id'] = array_search($assignment['Shift']['id'],$shift_ids);
