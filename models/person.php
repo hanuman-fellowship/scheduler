@@ -85,6 +85,17 @@ class Person extends AppModel {
 		));
 	}
 
+	function getName($person_id) {
+		$person = $this->find('first',array(
+			'recursive' => -1,
+			'conditions' => array(
+				'Person.id' => $person_id
+			)
+		));
+		$this->addDisplayName($person['Person']);
+		return $person['Person']['name'];
+	}
+
 	function getPerson($id,$simple = false) {
 		if ($simple) {
 			$this->sContain(

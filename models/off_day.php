@@ -20,15 +20,24 @@ class OffDay extends AppModel {
 		}
 	}
 
+	function sDelete($id) {
+		$changes = parent::sDelete($id);
+		$this->setDescription($changes);
+	}
+	
 	function setDescription($changes) {
+		$this->Person->Assignment->Shift->Day->schedule_id = $this->schedule_id;
+		$this->Person->schedule_id = $this->schedule_id;
 		if (isset($changes['newData'])) {
-			$person = $this->Person->getPerson($changes['newData']['person_id'],true);
+			$personName = $this->Person->getName($changes['newData']['person_id']);
+			$day = $this->Person->Assignment->Shift->Day->getShortName($changes['newData']['day_id']);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "{$person['Person']['name']} now off {$day}";
+				$this->description = "{$personName} now has {$day} off";
 			}
 		} else {
-			$person = $this->Person->getPerson($changes['person_id'],true);
-			$this->description = "{$person['Person']['name']} no longer off {$day}";
+			$personName = $this->Person->getName($changes['person_id']);
+			$day = $this->Person->Assignment->Shift->Day->getShortName($changes['day_id']);
+			$this->description = "{$personName} no longer has {$day} off";
 		}
 	}
 }
