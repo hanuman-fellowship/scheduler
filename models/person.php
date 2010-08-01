@@ -105,6 +105,9 @@ class Person extends AppModel {
 		$this->Assignment->Shift->addAssignedShifts($person);
 
 		// move the constant shifts into place with the other shifts
+		if (!isset($person['PeopleSchedules']['ResidentCategory']['ConstantShift'])) {
+			$person['PeopleSchedules']['ResidentCategory']['ConstantShift'] = array();
+		}
 		foreach($person['PeopleSchedules']['ResidentCategory']['ConstantShift'] as $constant) {
 			foreach($person['Assignment'] as $offset => $assignment) {
 				if (!isset($assignment['Shift'])) {
