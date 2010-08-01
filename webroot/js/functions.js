@@ -36,8 +36,8 @@ function hideDialog() {
 	stopClick = false;
 }
 
-function openDialog(id,noHighlight,position,menu) {
-	if (menu) {
+function openDialog(id,noHighlight,position) {
+	if (get(id+'_sub')) {
 		get(id+'_sub').style.display = 'none';
 	}
 	get('dialog').style.display = 'table';
