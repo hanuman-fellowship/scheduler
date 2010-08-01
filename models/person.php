@@ -182,7 +182,7 @@ class Person extends AppModel {
 			}
 		}
 		foreach($person['OffDay'] as $OffDay) {
-			if ($shift['Shift']['day_id'] == $OffDay['day']) {
+			if ($shift['Shift']['day_id'] == $OffDay['day_id']) {
 				$result = false;
 			}
 		}

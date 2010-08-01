@@ -86,10 +86,21 @@
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		</td> 
-<? foreach ($bounds['days'] as $day) { ?>
+<? foreach ($bounds['days'] as $day_id => $day) { ?>
 		<td width="75" bordercolor="#000000"> 
 			<div align="center"> 
-				<p><?=$day?></p> 
+				<p>
+				<? if (Authsome::get('role') == 'operations' && isset($person)) { ?>
+					<?=$html->link($day,array(
+						'controller'=>'off_days',
+						'action'=>'toggle',
+						$person['Person']['id'],
+						$day_id
+					)); ?>
+				<? } else { ?>
+					<?=$day;?>
+				<? } ?>
+				</p> 
 			</div> 
 		</td>
 <? } ?>
