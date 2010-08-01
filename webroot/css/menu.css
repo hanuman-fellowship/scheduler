@@ -17,9 +17,9 @@
 .menu :hover ul ul, 
 .menu :hover ul :hover ul ul,
 .menu :hover ul :hover ul :hover ul ul,
-.menu :hover ul :hover ul :hover ul :hover ul ul {position:absolute; left:-9999px; top:-9999px; width:0; height:0; margin:0; padding:0; list-style:none;}
+.menu :hover ul :hover ul :hover ul :hover ul ul {position:absolute; top:-9999px; left:-9999px; display:none; list-style:none;}
 
-.menu :hover ul.sub {left:-2px; top:35px; right:2px; background: #FFFFE6; padding:3px 0; white-space:nowrap; width:300px; height:auto;}
+.menu :hover ul.sub {display:block; left:-2px; top:35px; right:2px; background: #FFFFE6; padding:3px 0; white-space:nowrap; width:300px; height:auto;}
 .menu :hover ul.sub li {display:block; height:20px; position:relative; float:left; width:250px;}
 .menu :hover ul.sub li span {font-weight:normal;display:block; font-size:11px; height:20px; width:286px; line-height:20px; text-indent:5px; color:#bbb; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}
 .menu :hover ul.sub li a {font-weight:normal;display:block; font-size:11px; height:20px; width:297px; line-height:20px; text-indent:10px; color:#000; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}

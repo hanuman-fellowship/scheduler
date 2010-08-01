@@ -1,5 +1,6 @@
 var highlighted = '';
 var stopClick = false;
+var hidden = '';
 
 function get(id) {
 	return document.getElementById(id);
@@ -37,6 +38,11 @@ function hideDialog() {
 }
 
 function openDialog(id,noHighlight,position) {
+	menu = id.split('_');
+	if (menu[0] == 'menu') {
+		get(id+'_sub').style.display = 'none';
+		hidden = id+'_sub';
+	}
 	get('dialog').style.display = 'table';
 	if (!noHighlight) {
 		get(id).style.backgroundColor = '#FFF8BA';

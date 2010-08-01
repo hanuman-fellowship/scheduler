@@ -49,6 +49,7 @@ class RoleHelper extends AppHelper {
 			if (isset($top['url'])) {
 				$attributes = array(
 					'class'=>'top_link',
+					'onmouseover' => "showElement('menu_{$title}_sub')",
 					'id'=>"menu_{$title}"
 				);
 				if (in_array('ajax',$top)) {
