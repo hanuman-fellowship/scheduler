@@ -4,13 +4,13 @@
 $lists = array('available','all');
 foreach($lists as $list) {
 $rcId = 0;
-?><div id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
-echo "<div style='float:left;padding:10px;'>";
+?><div class='tall' id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
 	foreach($people as $person) {
 		if ($person['available'] === -1) {continue;} // already on this shift so don't ever show.
 		if ($person['available'] || $list == 'all') {
 			if ($rcId != $person['ResidentCategory']['id']) {
-				echo "</div><div style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
+				if ($rcId != 0) { echo "</div>";};
+				echo "<div class='left' style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
 				$rcId = $person['ResidentCategory']['id'];
 			}
 			echo $html->link($person['name'],array($shift,$person['id']),array(

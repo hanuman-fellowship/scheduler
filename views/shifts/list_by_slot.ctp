@@ -5,7 +5,7 @@
 <?
 $lists = array('available','all');
 foreach($lists as $list) {
-	?><div id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
+	?><div class='tall left' id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
 	foreach($shifts['unassigned'] as $shift) {
 		if ($shift['available'] === -1 ) continue; // the person is on that shift, so don't show it
 		if ($shift['available'] || $list == 'all') {

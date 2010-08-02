@@ -33,6 +33,7 @@ class PeopleController extends AppController {
 			$this->loadModel('Change');
 			$this->set('changes', $this->Change->getChangesForMenu());
 			$this->set('bounds', $this->Boundary->getBounds());
+			$this->Session->write('last_person',$id);
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));
 		}

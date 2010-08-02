@@ -1,10 +1,12 @@
+<? $last = $session->check('last_person') ?
+	$session->read('last_person') : '';
+?>
 <fieldset>
 	<legend><?php __('View Person Schedule');?></legend>
 <?
 foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
-	echo "<div id='{$overlay}' style='display:{$disp}'>";
+	echo "<div id='{$overlay}' class='tall' style='display:{$disp}'>";
 	$rcId = 0;
-	echo "<div style='float:left;padding:10px;'>";
 	foreach($people as $person) {
         if($overlay == 'overlay_0') {
 			$type = 'ajax';
@@ -18,10 +20,13 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 		}
 		$attributes['class'] = 'RC_' . $person['PeopleSchedules']['resident_category_id'];
 		if ($rcId != $person['PeopleSchedules']['resident_category_id']) {
-			echo "</div><div style='float:left;padding:10px'><strong>{$person['PeopleSchedules']['ResidentCategory']['name']}</strong><br/>";	
+			if ($rcId != 0) { echo "</div>";};
+			echo "<div class='left' style='float:left;padding:10px'><strong>{$person['PeopleSchedules']['ResidentCategory']['name']}</strong><br>";	
 			$rcId = $person['PeopleSchedules']['resident_category_id'];
 		}
-		echo ${$type}->link($person['Person']['name'],array('action'=>'schedule',$person['Person']['id']),$attributes) . '<br>';
+		$last_style = ($last == $person['Person']['id']) ? array('<i>','</i>') : array('','');
+		echo $last_style[0].
+		${$type}->link($person['Person']['name'],array('action'=>'schedule',$person['Person']['id']),$attributes) . $last_style[1].'<br>';
 	}
 	echo '</div></div>';
 }

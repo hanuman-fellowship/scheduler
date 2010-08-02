@@ -1,10 +1,10 @@
 <fieldset>
 	<legend><?php __('View Profile');?></legend>
-<div style="max-height:500px;overflow:auto">
+<div class='tall left'>
 <?
 foreach($people as $person) {
 	echo $html->link(
-		$person['Person']['first'],
+		$person['Person']['name'],
 		array(
 			'action' => 'profile', 
 			$person['Person']['id']

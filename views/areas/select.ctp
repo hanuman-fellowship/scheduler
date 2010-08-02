@@ -1,8 +1,11 @@
+<? $last = $session->check('last_area') ?
+	$session->read('last_area') : '';
+?>
 <fieldset>
 	<legend><?php __('View Area Schedule');?></legend>
 <?
 foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
-	echo "<div id='{$overlay}' style='display:{$disp}'>";
+	echo "<div id='{$overlay}' class='tall left'  style='display:{$disp}'>";
 	foreach($areas as $id => $name) {
 		if($overlay == 'overlay_0') {
 			$type = 'ajax';
@@ -14,7 +17,11 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 			$type = 'html';
 			$attributes = null;
 		}
-		echo ${$type}->link($name,array('action'=>'schedule',$id),$attributes).'<br/>';
+		$last_style = ($last == $id) ? array('<i>','</i>') : array('','');
+		echo $last_style[0].
+		${$type}->link($name,array('action'=>'schedule',$id),$attributes).
+		$last_style[1].'<br/>';
+		
 	}
 	echo "</div>";
 }

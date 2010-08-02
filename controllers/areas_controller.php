@@ -13,6 +13,7 @@ class AreasController extends AppController {
 			$this->loadModel('Change');
 			$this->set('changes', $this->Change->getChangesForMenu());
 			if ($this->params['isAjax']) $this->render('/elements/schedule_content');
+			$this->Session->write('last_area',$id);
 		} else {
 			$this->redirect(array('action'=>'select'));
 		}

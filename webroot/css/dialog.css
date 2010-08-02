@@ -11,6 +11,18 @@
 	font-weight:normal;
 	padding:10px;
 }
+.tall {
+	max-height:300px;
+	overflow:auto;
+}
+.left {
+	text-align:left;
+}
+fieldset div {
+	padding:2px;
+}
+
+
 .ltin {
 	left:-5px;
 }

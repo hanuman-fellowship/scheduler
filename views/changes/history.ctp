@@ -1,6 +1,6 @@
 <fieldset>
-	<legend><?php __('Change History');?></legend>
-<div style="max-height:500px;overflow:auto">
+	<legend><?php __('History');?></legend>
+<div class='tall left'>
 <?
 $user = Authsome::get('id');
 echo '<div style="color:#CCCCCC">';

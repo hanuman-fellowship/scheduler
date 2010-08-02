@@ -282,8 +282,10 @@ class Person extends AppModel {
 				$numLetters++; // there's another with this first name, so at least use 1 letter of last
 			}
 			foreach ($others as $id => $other) {
-				while (substr($person['last'], 0, $numLetters) == substr($other, 0, $numLetters)) {
-					$numLetters++; // up to this letter the lasts are the same, so use one more
+				if ($person['last']) {
+					while (substr($person['last'], 0, $numLetters) == substr($other, 0, $numLetters)) {
+						$numLetters++; // up to this letter the lasts are the same, so use one more
+					}
 				}
 			$lastNames['numLetters'] = $numLetters;
 			}
