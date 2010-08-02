@@ -26,15 +26,15 @@
 			),
 			"<hr/>",
 			'New Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'doNewBranch'),
+				'url' => array('controller' => 'schedules', 'action' => 'newBranch'),
 				'ajax'
 			),
 			'Delete Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'doDeleteBranch'),
+				'url' => array('controller' => 'schedules', 'action' => 'deleteBranch'),
 				'ajax'
 			),
 			'Merge Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'doMergeBranch'),
+				'url' => array('controller' => 'schedules', 'action' => 'mergeBranch'),
 				'ajax'
 			)
 		)
