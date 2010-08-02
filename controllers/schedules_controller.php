@@ -3,7 +3,7 @@ class SchedulesController extends AppController {
 
 	var $name = 'Schedules';
 	
-	function doNewBranch() {
+	function newBranch() {
 		if ($user = Authsome::get('id') && !empty($this->data)) {
 			$this->setSchedule($this->Schedule->newBranch($user, $this->data['name']));	
 			$this->redirect($this->loadPage());
@@ -11,7 +11,7 @@ class SchedulesController extends AppController {
 		$this->savePage();
 	}
 	
-	function doDeleteBranch($id = null) {
+	function deleteBranch($id = null) {
 		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
 			$this->setSchedule($this->Schedule->deleteBranch($id));	
    		    $this->redirect($this->loadPage());
@@ -40,7 +40,7 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',$this->Schedule->schedule_id);		
 	}
 	
-	function doMergeBranch($id = null) {
+	function mergeBranch($id = null) {
 		if ($id) {
 			$this->Schedule->mergeBranch($id);
 			$this->redirect($this->loadPage());
