@@ -21,20 +21,20 @@
 		'url' => '#',
 		'sub' => array(
 			'Select Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'selectBranch'),
+				'url' => array('controller' => 'schedules', 'action' => 'select'),
 				'ajax'
 			),
 			"<hr/>",
 			'New Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'newBranch'),
+				'url' => array('controller' => 'schedules', 'action' => 'add'),
 				'ajax'
 			),
 			'Delete Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'deleteBranch'),
+				'url' => array('controller' => 'schedules', 'action' => 'delete'),
 				'ajax'
 			),
 			'Merge Schedule...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'mergeBranch'),
+				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax'
 			)
 		)

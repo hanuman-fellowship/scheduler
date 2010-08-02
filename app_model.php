@@ -155,6 +155,19 @@ class AppModel extends Model {
 		);
 	}
 		
+	function updateProgress($percent, $message = null) {
+		$user = Authsome::get('id');
+		$this->message = ($message) ? $message : $this->message;
+		$fp = fopen("progress{$user}.txt", "w");
+		fwrite($fp, $this->message.'|'.$percent);
+		fclose($fp);
+	}
+
+	function stopProgress() {
+		$user = Authsome::get('id');
+		unlink("progress{$user}.txt");
+	}
+
 	function array_fill_keys($keys, $value) {
 		return array_combine($keys,array_fill(0,count($keys),$value));	
 	}

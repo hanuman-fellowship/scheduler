@@ -3,15 +3,22 @@ class SchedulesController extends AppController {
 
 	var $name = 'Schedules';
 	
-	function newBranch() {
-		if ($user = Authsome::get('id') && !empty($this->data)) {
-			$this->setSchedule($this->Schedule->newBranch($user, $this->data['name']));	
-			$this->redirect($this->loadPage());
+	function add() {
+		if (!empty($this->data)) {
+			if ($this->Schedule->valid($this->data)) {
+				$this->setSchedule($this->Schedule->newBranch(
+					Authsome::get('id'),
+					$this->data['Schedule']['name']
+				));	
+				$this->set('url', $this->referer());
+			} else {
+				$this->set('errorField',$this->Schedule->errorField);
+				$this->set('errorMessage',$this->Schedule->errorMessage);
+			}
 		}
-		$this->savePage();
 	}
 	
-	function deleteBranch($id = null) {
+	function delete($id = null) {
 		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
 			$this->setSchedule($this->Schedule->deleteBranch($id));	
    		    $this->redirect($this->loadPage());
@@ -23,7 +30,7 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',$this->Schedule->schedule_id);			
 	}
 	
-	function selectBranch($id = null) {
+	function select($id = null) {
 		if ($id && in_array($this->Schedule->field('user_id', array('id' => $id)),
 			array(
 				Authsome::get('id'),
@@ -40,7 +47,7 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',$this->Schedule->schedule_id);		
 	}
 	
-	function mergeBranch($id = null) {
+	function merge($id = null) {
 		if ($id) {
 			$this->Schedule->mergeBranch($id);
 			$this->redirect($this->loadPage());

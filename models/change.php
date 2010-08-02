@@ -262,9 +262,8 @@ class Change extends AppModel {
 	 *
 	 */
 	function jumpTo($id) {
-		$user = Authsome::get('id');
 		$this->message = 'Applying Changes...';
-		$this->writeProgressFile($user,0);
+		$this->updateProgress(0);
 		$direction = 'redo';
 		$distance = abs($id);
 		if ($id >= 0) {
@@ -277,16 +276,9 @@ class Change extends AppModel {
 			} else {
 				$this->doRedo();
 			}
-			$this->writeProgressFile($user, 100*($i/$distance));
+			$this->updateProgress(100*($i/$distance));
 		}
-		unlink("progress{$user}.txt");
-	}
-
-	function writeProgressFile($user, $percent, $message = null) {
-		$this->message = ($message) ? $message : $this->message;
-		$fp = fopen("progress{$user}.txt", "w");
-		fwrite($fp, $this->message.'|'.$percent);
-		fclose($fp);
+		$this->stopProgress();
 	}
 
 } 

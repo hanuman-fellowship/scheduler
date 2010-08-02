@@ -107,6 +107,11 @@ function openDialog(id,noHighlight,position) {
 	get('dialog').style.top = newTop+'px';
 }
 
+function wait() {
+	hideElement('error');
+	showElement('wait');
+}
+
 function toggleConflicts() {
 	if (get('conflictsBox').checked) {
 		get('available').style.display = 'none';

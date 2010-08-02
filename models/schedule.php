@@ -20,6 +20,21 @@ class Schedule extends AppModel {
 		'ChangeField'
 	);
 
+	function valid($data) {
+		if ($data['Schedule']['name'] == '') {
+			$this->errorField = 'name';
+			$this->errorMessage = "Name must not be blank";
+			return false;
+		}	
+		if ($this->field('id',array('name' => $data['Schedule']['name']))) {
+			$this->errorField = 'name';
+			$this->errorMessage = "That name already exists";
+			return false;
+		}
+		return true;
+	}
+
+
 	function newBranch($user_id, $name) {
 		$old_parent_id = $this->field('parent_id', array('id' => $this->schedule_id));
 		if (is_null($old_parent_id)) { // it has been published
@@ -42,6 +57,9 @@ class Schedule extends AppModel {
 		$this->save($branch_data);
 		$branch_id = $this->id;
 		$original = $this->findById($this->schedule_id);
+		$this->message = "Copying Published Schedule...";
+		$i = 0; $max = count($original);
+		$this->updateProgress(0);
 		foreach($original as $model => $record) {
 			switch ($model) {
 				case 'Schedule':
@@ -63,7 +81,10 @@ class Schedule extends AppModel {
 						$this->{$model}->forceSave($data);
 					}
 			}
+			$this->updateProgress(100*($i/$max));
+			$i++;
 		}
+		$this->stopProgress();
 		return $branch_id;
 	}
 

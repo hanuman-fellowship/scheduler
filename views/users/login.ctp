@@ -1,7 +1,11 @@
 <fieldset>
 	<legend><?php __('Login');?></legend>
 <?php
-echo $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content'));
+echo $ajax->form($this->action,'post',array(
+	'model'=>'User',
+	'update'=>'dialog_content',
+	'before'=>"wait()"
+));
 echo $form->input('username', array(
 	'label' => 'Username',
 	'id'=>'username',
