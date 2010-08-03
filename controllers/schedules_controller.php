@@ -21,12 +21,15 @@ class SchedulesController extends AppController {
 	function delete($id = null) {
 		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
 			$this->setSchedule($this->Schedule->deleteBranch($id));	
-   		    $this->redirect($this->loadPage());
+   		    $this->redirect($this->referer());
 		}
-		$this->savePage();
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
-		$this->set('schedules',$this->Schedule->find('all'));
+		$this->set('schedules',$this->Schedule->find('all',array(
+			'conditions' => array(
+				'Schedule.user_id' => Authsome::get('id')
+			)
+		)));
 		$this->set('schedule_id',$this->Schedule->schedule_id);			
 	}
 	
