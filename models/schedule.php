@@ -20,6 +20,10 @@ class Schedule extends AppModel {
 		'ChangeField'
 	);
 
+	var $belongsTo = array(
+		'User'
+	);
+
 	function valid($data) {
 		if ($data['Schedule']['name'] == '') {
 			$this->errorField = 'name';

@@ -6,11 +6,13 @@ if ($role == '') {
 }
 if ($role == 'operations') {
 	if ($session->read('Schedule.editable')) {
-		echo "Editing: ";
+		echo "Editing: ".$session->read('Schedule.name');
 	} else {
-		echo "Viewing: ";
+		echo "Viewing: ".$session->read('Schedule.name');
+		if ($session->read('Schedule.username') != '') {
+			echo " (".$session->read('Schedule.username').")";
+		}
 	}
-	echo $session->read('Schedule.name');
 }
 ?>
 </div>

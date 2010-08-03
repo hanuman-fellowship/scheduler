@@ -26,10 +26,11 @@ class AppController extends Controller {
 				array(
 					'conditions' => array('user_id' => null),
 					'order' => 'id desc',
-					'recursive' => -1
+					'contain' => 'User' 
 				)
 			);
 			$this->Session->write('Schedule', $schedule['Schedule']);
+			$this->Session->write('Schedule.username', $schedule['User']['username']);
 		}
 		if ($this->Session->read('Schedule.user_id') == Authsome::get('id')) {
 			$this->Session->write('Schedule.editable',true);
@@ -46,8 +47,14 @@ class AppController extends Controller {
 	
 	function setSchedule($id) {
 		$this->loadModel('Schedule');
-		$schedule = $this->Schedule->findById($id);
+		$this->Schedule->contain('User');
+		$schedule = $this->Schedule->find('first',
+			array(
+				'conditions' => array('Schedule.id' => $id)
+			)
+		);
 		$this->Session->write('Schedule', $schedule['Schedule']);	
+		$this->Session->write('Schedule.username', $schedule['User']['username']);
 	}
 	
 	function record() {
