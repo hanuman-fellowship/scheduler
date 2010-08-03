@@ -38,6 +38,23 @@ class Schedule extends AppModel {
 		return true;
 	}
 
+	function viewList() {
+		$user_id = Authsome::get('id');
+		$this->contain('User');
+		$schedules = $this->find('all',array(
+			'conditions' => array(
+				'Schedule.user_id <>' => null 
+			),
+			'order' => 'Schedule.user_id, Schedule.name'
+		));
+
+		$byUser = Set::combine($schedules,'{n}.Schedule.id','{n}','{n}.Schedule.user_id');
+		$mine = isset($byUser[$user_id]) ? $byUser[$user_id] : array();
+		return array(
+			'mine' => $mine,
+			'all' => $schedules
+		);
+	}
 
 	function newBranch($user_id, $name) {
 		$old_parent_id = $this->field('parent_id', array('id' => $this->schedule_id));
@@ -48,10 +65,6 @@ class Schedule extends AppModel {
 			// give the new one the same parent
 			$parent_id = $this->field('parent_id', array('id' => $this->schedule_id));
 		}
-//		if ($this->find('count', array('name' => $name)) > 0) {
-//			$this->error = "That name is already taken. Please choose a different one.";
-//			return false;
-//		}
 		$branch_data = array(
 			'user_id'   => $user_id,
 			'parent_id' => $parent_id,
@@ -61,12 +74,11 @@ class Schedule extends AppModel {
 		$this->save($branch_data);
 		$branch_id = $this->id;
 		$original = $this->findById($this->schedule_id);
-		$this->message = "Copying Published Schedule...";
-		$i = 0; $max = count($original);
-		$this->updateProgress(0);
 		foreach($original as $model => $record) {
 			switch ($model) {
 				case 'Schedule':
+					continue;
+				case 'User':
 					continue;
 				case 'ChangeField':
 					foreach($record as &$field_data) {
@@ -85,10 +97,7 @@ class Schedule extends AppModel {
 						$this->{$model}->forceSave($data);
 					}
 			}
-			$this->updateProgress(100*($i/$max));
-			$i++;
 		}
-		$this->stopProgress();
 		return $branch_id;
 	}
 

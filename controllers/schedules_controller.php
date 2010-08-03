@@ -34,19 +34,13 @@ class SchedulesController extends AppController {
 	}
 	
 	function select($id = null) {
-		if ($id && in_array($this->Schedule->field('user_id', array('id' => $id)),
-			array(
-				Authsome::get('id'),
-				null
-			)
-		)) {
+		if ($id) {
 			$this->setSchedule($id);
-   		    $this->redirect($this->loadPage());
+   		    $this->redirect($this->referer());
 		}
-		$this->savePage();		
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
-		$this->set('schedules',$this->Schedule->find('all'));
+		$this->set('schedules',$this->Schedule->viewList());
 		$this->set('schedule_id',$this->Schedule->schedule_id);		
 	}
 	

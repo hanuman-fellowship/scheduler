@@ -21,16 +21,7 @@ class AppController extends Controller {
 	
 		// put the latest published schedule into the session
 		if (!$this->Session->check('Schedule')) {
-			$this->loadModel('Schedule');
-			$schedule = $this->Schedule->find('first',
-				array(
-					'conditions' => array('user_id' => null),
-					'order' => 'id desc',
-					'contain' => 'User' 
-				)
-			);
-			$this->Session->write('Schedule', $schedule['Schedule']);
-			$this->Session->write('Schedule.username', $schedule['User']['username']);
+			$this->setSchedule('latest');
 		}
 		if ($this->Session->read('Schedule.user_id') == Authsome::get('id')) {
 			$this->Session->write('Schedule.editable',true);
@@ -48,11 +39,15 @@ class AppController extends Controller {
 	function setSchedule($id) {
 		$this->loadModel('Schedule');
 		$this->Schedule->contain('User');
-		$schedule = $this->Schedule->find('first',
+		$params = ($id == 'latest') ? 
+			array(
+				'conditions' => array('Schedule.user_id' => null),
+				'order' => 'Schedule.id desc'
+			):
 			array(
 				'conditions' => array('Schedule.id' => $id)
-			)
-		);
+			);		
+		$schedule = $this->Schedule->find('first',$params);
 		$this->Session->write('Schedule', $schedule['Schedule']);	
 		$this->Session->write('Schedule.username', $schedule['User']['username']);
 	}

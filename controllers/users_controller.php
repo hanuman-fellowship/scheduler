@@ -22,7 +22,7 @@ class UsersController extends AppController {
     public function logout() {
     	if (Authsome::get()) {
 			Authsome::logout();
-			$this->Session->setFlash('You have been logged out');
+			$this->setSchedule('latest');
 		}
 	 	$this->redirect($this->referer());
     }
