@@ -20,20 +20,20 @@
 		'role' => array('operations'),
 		'url' => '#',
 		'sub' => array(
-			'Select Schedule...' => array(
+			'Select...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
 				'ajax'
 			),
 			"<hr/>",
-			'New Schedule...' => array(
+			'New Working Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
 				'ajax'
 			),
-			'Delete Schedule...' => array(
+			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
 				'ajax'
 			),
-			'Merge Schedule...' => array(
+			'Merge...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax'
 			)
