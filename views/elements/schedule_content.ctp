@@ -21,16 +21,20 @@
 			<div align="center" class="title"> 
 			<? if (isset($area)) { ?>
 				<span id='area_name'>
-				<?=$role->link($area['Area']['name'],array(
-					'operations' => array(
-						'url' => array('action'=>'edit',$area['Area']['id']),
-						'attributes'=>array(
-							'update'=>'dialog_content',
-							'complete'=>"openDialog('area_name')"
-						),
-						'ajax'
-					)
-				),$this->params['isAjax']);?>
+				<?=$role->link(
+					$area['Area']['name'],
+					array(
+						'operations' => array(
+							'url' => array('action'=>'edit',$area['Area']['id']),
+							'attributes'=>array(
+								'update'=>'dialog_content',
+								'complete'=>"openDialog('area_name')"
+							),
+							'ajax'
+						)
+					),
+					($this->params['isAjax'] || !$this->session->read('Schedule.editable'))
+				);?>
 				</span>
 			<? } else { ?>
 				<?= $person['PeopleSchedules']['ResidentCategory']['name'] ?>
@@ -51,16 +55,20 @@
 			<span style="font-size:24px;"> 
 			<? if (isset($person)) { ?>
 				<span id='person_name'>
-				<?=$role->link($person['Person']['name'],array(
-					'operations' => array(
-						'url' => array('action'=>'edit',$person['Person']['id']),
-						'attributes'=>array(
-							'update'=>'dialog_content',
-							'complete'=>"openDialog('person_name')"
-						),
-						'ajax'
-					)
-				),$this->params['isAjax']);?>
+				<?=$role->link(
+					$person['Person']['name'],
+					array(
+						'operations' => array(
+							'url' => array('action'=>'edit',$person['Person']['id']),
+							'attributes'=>array(
+								'update'=>'dialog_content',
+								'complete'=>"openDialog('person_name')"
+							),
+							'ajax'
+						)
+					),
+					($this->params['isAjax'] || !$this->session->read('Schedule.editable'))
+				);?>
 				</span>
 			<? } ?>
 			</span>
@@ -90,7 +98,8 @@
 		<td width="75" bordercolor="#000000"> 
 			<div align="center"> 
 				<p>
-				<? if (Authsome::get('role') == 'operations' && isset($person)) { ?>
+				<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')
+				&& isset($person)) { ?>
 					<?=$html->link($day,array(
 						'controller'=>'off_days',
 						'action'=>'toggle',
@@ -114,7 +123,8 @@
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person)) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
-		<? if (Authsome::get('role') == 'operations' && !$this->params['isAjax']) { ?>
+		<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')
+		&& !$this->params['isAjax']) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
 			<? $url = (isset($area)) ? 
 				array('controller'=>'shifts','action'=>'add',$area['Area']['id'],
@@ -184,7 +194,7 @@
 				document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
-		<? if (Authsome::get('role') == 'operations') { ?>
+		<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')) { ?>
 			<?=$ajax->link(
 				' + ',
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),

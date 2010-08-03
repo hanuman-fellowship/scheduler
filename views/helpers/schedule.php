@@ -4,7 +4,7 @@ class ScheduleHelper extends AppHelper {
 	var $legend = array();
 	var $total_hours = array(
 		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
-	var $helpers = array('html','text','role','ajax');
+	var $helpers = array('html','text','role','ajax','session');
 		
 	function displayPersonShift($assignment,$bound,$day) {
 		if (isset($assignment['Shift'])) {
@@ -40,12 +40,16 @@ class ScheduleHelper extends AppHelper {
 			}
 			if (isset($area_title)) {
 				$output = "<b>" . $this->html->link($area_title, $area_url) . "</b> ";
-				$output .= $this->role->link($time_title,array(
-					'operations' => array(
-						'url' => $time_url,
-						'attributes' => array('class'=>'remove')
-					)
-				)) . "<br/>";
+				$output .= $this->role->link(
+					$time_title,
+					array(
+						'operations' => array(
+							'url' => $time_url,
+							'attributes' => array('class'=>'remove')
+						)
+					),
+					!$this->session->read('Schedule.editable')
+				) . "<br/>";
 				return $output;
 			}
 		}
@@ -63,17 +67,21 @@ class ScheduleHelper extends AppHelper {
 					$this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
-				$output = "<span class='const'>".$this->role->link($title,array(
-					'operations' => array(
-						'url' => $url,
-						'attributes' => array(
-							'escape' => false,
-							'update'=>'dialog_content',
-							'complete'=>"openDialog('constant_{$shift['id']}')"
-						),
-						'ajax'
-					)
-				)) . "</span><br/>";
+				$output = "<span class='const'>".$this->role->link(
+					$title,
+					array(
+						'operations' => array(
+							'url' => $url,
+							'attributes' => array(
+								'escape' => false,
+								'update'=>'dialog_content',
+								'complete'=>"openDialog('constant_{$shift['id']}')"
+							),
+							'ajax'
+						)
+					),
+					!$this->session->read('Schedule.editable')
+				) . "</span><br/>";
 				return "<span id='constant_{$shift['id']}'>{$output}</span>";
 			}
 		}
@@ -92,38 +100,43 @@ class ScheduleHelper extends AppHelper {
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
 				
-				if (Authsome::get('role') == 'operations' && !$this->params['isAjax']) {
+				if (Authsome::get('role') == 'operations' && !$this->params['isAjax'] &&
+				$this->session->read('Schedule.editable')) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
 						'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
 						'onmouseout' => "hideElement('goto_{$assignment['Assignment']['id']}')"
 					));
 				}
-				$people .= $this->role->link($assignment['Person']['name'],array(
-					'' => array(
-						'url' => array(
-							'controller'=>'people','action'=>'schedule',$assignment['Person']['id']
+				$people .= $this->role->link(
+					$assignment['Person']['name'],
+					array(
+						'' => array(
+							'url' => array(
+								'controller'=>'people','action'=>'schedule',$assignment['Person']['id']
+							),
+							'attributes' => array(
+								'class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id']
+							)
 						),
-						'attributes' => array(
-							'class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id']
+						'operations' => array(
+							'url' => array(
+								'controller'=>'assignments',
+								'action'=>'unassign',
+								$assignment['Assignment']['id']
+							),
+							'attributes' => array(
+								'class' => 'remove_RC_'.$assignment['PeopleSchedules']['resident_category_id'],
+								'style' => 'margin:10px',
+								'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
+								'onmouseout' => "hideElement('goto_{$assignment['Assignment']['id']}')",
+								'onclick' => 'saveScroll()'
+							)
 						)
 					),
-					'operations' => array(
-						'url' => array(
-							'controller'=>'assignments',
-							'action'=>'unassign',
-							$assignment['Assignment']['id']
-						),
-						'attributes' => array(
-							'class' => 'remove_RC_'.$assignment['PeopleSchedules']['resident_category_id'],
-							'style' => 'margin:10px',
-							'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
-							'onmouseout' => "hideElement('goto_{$assignment['Assignment']['id']}')",
-							'onclick' => 'saveScroll()'
-						)
-					)
-				),$this->params['isAjax']) . '<br/>';
-				if (Authsome::get('role') == 'operations') {				
+					($this->params['isAjax'] || !$this->session->read('Schedule.editable')) 
+				) . '<br/>';
+				if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')) {
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
@@ -142,31 +155,38 @@ class ScheduleHelper extends AppHelper {
 				
 			}
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {
-				$unassigned = $this->role->link('________',array(
+				$unassigned = $this->role->link(
+					'________',
+					array(
+						'operations' => array(
+							'url' => array('controller'=>'assignments','action'=>'assign',$shift['id']),
+							'attributes'=>array(
+								'update'=>'dialog_content',
+								'complete'=>"openDialog({$shift['id']})"
+							),
+							'ajax'
+						)
+					),
+					($this->params['isAjax'] || !$this->session->read('Schedule.editable')) 
+				);
+				$people .= "{$unassigned}<br/>";
+			}
+		}
+		if (isset($time)) {
+			$time = $this->role->link(
+				$time,
+				array(
 					'operations' => array(
-						'url' => array('controller'=>'assignments','action'=>'assign',$shift['id']),
+						'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog({$shift['id']})"
 						),
 						'ajax'
 					)
-				),$this->params['isAjax']);
-				$people .= "{$unassigned}<br/>";
-			}
-		}
-		if (isset($time)) {
-			$time = $this->role->link($time,array(
-				'operations' => array(
-					'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
-					'attributes'=>array(
-						'update'=>'dialog_content',
-						'complete'=>"openDialog({$shift['id']})"
-					),
-					'ajax'
-				)
-			),$this->params['isAjax']);
-			;
+				),
+				($this->params['isAjax'] || !$this->session->read('Schedule.editable')) 
+			);
 			return "<span id='{$shift['id']}'><b>" .
 				$time . "</b><br/>" . $people . "</span><br/><br/>";
 		}
@@ -203,15 +223,20 @@ class ScheduleHelper extends AppHelper {
 			$hours = ($hours == 1) ? 
 				"$hours hour " :
 				"$hours hours ";
-			$hours = $this->role->link($hours, array(
-				'operations' => array(
-					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
-					'attributes' => array(
-						'update' => 'dialog_content',
-						'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
-					),
-					'ajax'
-				)));
+			$hours = $this->role->link(
+				$hours,
+				array(
+					'operations' => array(
+						'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
+						'attributes' => array(
+							'update' => 'dialog_content',
+							'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
+						),
+						'ajax'
+					)
+				),
+				!$this->session->read('Schedule.editable')
+			);
 			$link_title = $floating_shift['Area']['name'];
 			$link_url = array('controller'=>'areas','action'=>'schedule',$floating_shift['Area']['id']);
 			$note = " ({$floating_shift['note']})";
@@ -242,15 +267,20 @@ class ScheduleHelper extends AppHelper {
 			$hours = ($hours == 1) ? 
 				"$hours hour" :
 				"$hours hours ";
-			$hours = $this->role->link($hours, array(
-				'operations' => array(
-					'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
-					'attributes' => array(
-						'update' => 'dialog_content',
-						'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
-					),
-					'ajax'
-				)));
+			$hours = $this->role->link(
+				$hours,
+				array(
+					'operations' => array(
+						'url' => array('controller' => 'floating_shifts', 'action' => 'edit', $floating_shift['id']),
+						'attributes' => array(
+							'update' => 'dialog_content',
+							'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
+						),
+						'ajax'
+					)
+				),
+				!$this->session->read('Schedule.editable')
+			);
 			$link_title = $floating_shift['Person']['name'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);
 			$note = " ({$floating_shift['note']})";

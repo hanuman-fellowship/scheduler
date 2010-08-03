@@ -31,6 +31,11 @@ class AppController extends Controller {
 			);
 			$this->Session->write('Schedule', $schedule['Schedule']);
 		}
+		if ($this->Session->read('Schedule.user_id') == Authsome::get('id')) {
+			$this->Session->write('Schedule.editable',true);
+		} else {
+			$this->Session->write('Schedule.editable',false);
+		}	
 	}	
 	
     function loadModel($modelClass = null, $id = null) {
