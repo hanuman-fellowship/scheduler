@@ -104,7 +104,8 @@ class RoleHelper extends AppHelper {
 									$attributes = null;
 								}
 							}				
-							$menuData .= $this->{$type}->link($sub_title,$sub['url'],$attributes);
+							$confirm = array_key_exists('confirm',$sub) ? $sub['confirm'] : null;
+							$menuData .= $this->{$type}->link($sub_title,$sub['url'],$attributes,$confirm);
 						} else {
 							$menuData .= "<span>{$sub_title}</span>";
 						}

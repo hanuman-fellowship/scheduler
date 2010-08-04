@@ -36,6 +36,12 @@
 			'Merge...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax'
+			),
+			"<hr/>",
+			'Publish...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'publish'),
+				'ajax',
+				'confirm' => 'Publish the current schedule?'
 			)
 		)
 	),

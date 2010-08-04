@@ -57,5 +57,11 @@ class SchedulesController extends AppController {
 		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => $this->Schedule->schedule_id)));		
 	}
 	
+	function publish() {
+		if (Authsome::get('id') == $this->Session->read('Schedule.user_id')) {
+			$this->setSchedule($this->Schedule->publish());
+		}
+		$this->redirect($this->referer());
+	}
 }
 ?>

@@ -331,5 +331,25 @@ class Schedule extends AppModel {
 		while($this->Change->doRedo()) {
 		}
 	}
+
+	function publish() {
+		$this->save(array(
+			'Schedule' => array(
+				'id' => $this->schedule_id,
+				'name' => 'Published',
+				'user_id' => null,
+				'parent_id' => null
+			)
+		));
+		$models = array('Change','ChangeModel','ChangeField');
+		foreach($models as $model) {
+			$this->{$model}->deleteAll(
+				array(
+					"{$model}.schedule_id" => $this->schedule_id
+				),false,false
+			); 
+		}
+		return $this->schedule_id;
+	}
 }
 ?>

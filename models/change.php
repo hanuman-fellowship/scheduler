@@ -222,7 +222,7 @@ class Change extends AppModel {
 		$menuData = array();
 		$directions = array('undo','redo');
 		foreach($directions as $direction) {
-			$changeData = $this->find('all',array(
+			$changeData = $this->sFind('all',array(
 				'recursive' => -1,
 				'conditions' => ($direction == 'undo') ? 
 					array('Change.id BETWEEN ? AND ?' => array(0,11)) :
