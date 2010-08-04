@@ -33,10 +33,14 @@ class Area extends AppModel {
 	function sDelete($id) {
 		$this->id = $id;
 		$this->Shift->schedule_id = $this->schedule_id;
-		$this->sContain('Shift');
+		$this->FloatingShift->schedule_id = $this->schedule_id;
+		$this->sContain('Shift','FloatingShift');
 		$area = $this->sFind('first');
 		foreach($area['Shift'] as $shift) {
 			$this->Shift->sDelete($shift['id']);
+		}
+		foreach($area['FloatingShift'] as $floatingShift) {
+			$this->FloatingShift->sDelete($floatingShift['id']);
 		}
 		$changes = parent::sDelete($id);
 		$this->setDescription($changes);

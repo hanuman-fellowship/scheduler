@@ -1,6 +1,10 @@
 TODO:
 
+	- view past schedules
+	- "load this schedule when logging in" checkbox when loading schedule
 	- show schedules as a tree going down from pubished based on which they were copied from
+
+	- order working copies by date or by name in the select schedule dialog
 	
 	- schedule helper
 		- combine displayAreaFloating and DisplayPersonFloating

@@ -3,6 +3,10 @@ class User extends AppModel {
 
 	var $name = 'User';
 	
+	var $hasMany = array(
+		'Setting'
+	);
+
     public function authsomeLogin($type, $credentials = array()) {
         switch ($type) {
             case 'guest':
