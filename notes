@@ -1,8 +1,7 @@
 TODO:
 
-	- Schedules
-		- certain menus should be available only when editing
-
+	- show schedules as a tree going down from pubished based on which they were copied from
+	
 	- schedule helper
 		- combine displayAreaFloating and DisplayPersonFloating
 

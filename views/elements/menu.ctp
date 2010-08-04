@@ -1,6 +1,7 @@
 <?=$javascript->link(array('functions','progress'));?>
 <?=$html->css("dialog") ?>
 <? $hidden = !$this->session->read('Schedule.editable');?>
+<? $scheduleName = $this->session->read('Schedule.name');?>
 <?=$role->menu(array(
 	'Login' => array(
 		'role' => array(''),
@@ -44,8 +45,7 @@
 			),
 			'Publish...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'publish'),
-				'ajax',
-				'confirm' => 'Publish the current schedule?',
+				'confirm' => "Publish the schedule: \"{$scheduleName}\"? \nThis action can't be undone.",
 				'hidden' => $hidden
 			)
 		)

@@ -118,7 +118,7 @@ class RoleHelper extends AppHelper {
 									);
 								} else {				
 									$type = 'html';
-									$attributes = null;
+									$attributes = array();
 								}
 							}				
 							$confirm = array_key_exists('confirm',$sub) ? $sub['confirm'] : null;
