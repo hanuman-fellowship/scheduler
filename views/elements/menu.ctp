@@ -20,7 +20,8 @@
 	),
 	'Schedules' => array(
 		'role' => array('operations'),
-		'url' => '#',
+		'url' => array('controller' => 'schedules', 'action' => 'select'),
+		'ajax',
 		'sub' => array(
 			'Select...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
@@ -135,7 +136,12 @@
 	'Shifts' => array(
 		'hidden' => $hidden,
 		'role' => array('operations'),
-		'url' => '#',
+		'url' => array(
+			'controller' => 'shifts',
+			'action' => 'add',
+			(isset($area)) ? $area : null 
+		),
+		'ajax',
 		'sub' => array(
 			'New Shift...' => array(
 				'url' => array(
