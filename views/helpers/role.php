@@ -44,7 +44,12 @@ class RoleHelper extends AppHelper {
 				if (!in_array($cur_role,$top['role'])) { // skip this one if it's not our role
 					continue;
 				}
-			} // if there's no role, specification, then we can display it
+			} 
+			if (array_key_exists('hidden',$top)) {
+				if ($top['hidden']) {
+					continue;
+				}
+			}
 			$menuData .= '<li class="top">';			
 			if (isset($top['url'])) {
 				$attributes = array(
@@ -73,6 +78,12 @@ class RoleHelper extends AppHelper {
 					}
 					unset($top['sub']['role']);
 				}
+				if (array_key_exists('hidden',$top['sub'])) {
+					if ($top['sub']['hidden']) { // skip the submenu if it's hidden
+						$showSub = false;
+					}
+					unset($top['sub']['hidden']);
+				}
 				if ($showSub) {
 					$menuData .= "<ul class='sub' id='menu_{$title}_sub'>";
 					foreach($top['sub'] as $sub_title => $sub) {
@@ -82,11 +93,17 @@ class RoleHelper extends AppHelper {
 							$menuData .= '</li>';					
 							continue;
 						}
+						$sub_title = array_key_exists('title',$sub) ? $sub['title'] : $sub_title;
 						if (array_key_exists('role',$sub)) {
 							if (!in_array($cur_role,$sub['role'])) { // skip this one if it's not our role
 								continue;
 							}
-						} // if there's no role, specification, then we can display it
+						} 
+						if (array_key_exists('hidden',$sub)) {
+							if ($sub['hidden']) {
+								continue;
+							}
+						}
 						$menuData .= '<li>';
 						if (array_key_exists('url',$sub)) {
 							if (array_key_exists('ajax',$sub)) {

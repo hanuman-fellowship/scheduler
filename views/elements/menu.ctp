@@ -1,5 +1,6 @@
 <?=$javascript->link(array('functions','progress'));?>
 <?=$html->css("dialog") ?>
+<? $hidden = !$this->session->read('Schedule.editable');?>
 <?=$role->menu(array(
 	'Login' => array(
 		'role' => array(''),
@@ -37,11 +38,15 @@
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax'
 			),
-			"<hr/>",
+			array(
+				'title' => "<hr/>",
+				'hidden' => $hidden,
+			),
 			'Publish...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'publish'),
 				'ajax',
-				'confirm' => 'Publish the current schedule?'
+				'confirm' => 'Publish the current schedule?',
+				'hidden' => $hidden
 			)
 		)
 	),
@@ -52,21 +57,25 @@
 	'Undo' => array(
 		'role' => array('operations'),
 		'url' => array('controller' => 'changes', 'action' => 'undo'),
-		'sub' => $changes['undo']
+		'sub' => $changes['undo'],
+		'hidden' => $hidden
 	),
 	'Redo' => array(
 		'role' => array('operations'),
 		'url' => array('controller' => 'changes', 'action' => 'redo'),
-		'sub' => $changes['redo']
+		'sub' => $changes['redo'],
+		'hidden' => $hidden
 	),
 	array(
 		'title' => ' | ',
-		'role' => array('operations')
+		'role' => array('operations'),
+		'hidden' => $hidden
 	),
 	'People' => array(
 		'url' => array('controller' => 'people', 'action' => 'schedule'),
 		'ajax',
 		'sub' => array(
+			'hidden' => $hidden,
 			'role' => array('operations'),
 			'View Schedule...' => array(
 				'role' => array('operations'),
@@ -102,6 +111,7 @@
 		'url' => array('controller' => 'areas', 'action' => 'schedule'),
 		'ajax',
 		'sub' => array(
+			'hidden' => $hidden,
 			'role' => array('operations'),
 			'View Schedule...' => array(
 				'url' => array('controller' => 'areas', 'action' => 'schedule'),
@@ -123,6 +133,7 @@
 		)
 	),
 	'Shifts' => array(
+		'hidden' => $hidden,
 		'role' => array('operations'),
 		'url' => '#',
 		'sub' => array(

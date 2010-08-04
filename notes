@@ -1,7 +1,7 @@
 TODO:
 
-	BIG BUG:
-		changes are showing up from other schedules!!!
+	- Schedules
+		- certain menus should be available only when editing
 
 	- schedule helper
 		- combine displayAreaFloating and DisplayPersonFloating
@@ -28,10 +28,6 @@ TODO:
 	- Person
 		- Restore
 			- The view should be a search box that populates the list using ajax.
-
-	- Schedules
-		- Make working copy...
-		- Publish
 
 	- Menu
 		- Can the submenu width be automatic?
