@@ -10,6 +10,7 @@
 	position:relative; 
 	font-weight:normal;
 	padding:10px;
+	font-size:15px;
 }
 .tall {
 	max-height:400px;

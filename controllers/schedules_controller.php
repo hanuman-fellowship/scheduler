@@ -6,7 +6,7 @@ class SchedulesController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
-				$this->setSchedule($this->Schedule->newBranch(
+				$this->setSchedule($this->Schedule->copy(
 					Authsome::get('id'),
 					$this->data['Schedule']['name']
 				));	
@@ -20,7 +20,7 @@ class SchedulesController extends AppController {
 	
 	function delete($id = null) {
 		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
-			$this->setSchedule($this->Schedule->deleteBranch($id));	
+			$this->setSchedule($this->Schedule->delete($id));	
    		    $this->redirect($this->referer());
 		}
 		$this->Schedule->order = 'id';
@@ -33,8 +33,11 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',$this->Schedule->schedule_id);			
 	}
 	
-	function select($id = null) {
+	function select($id = null, $autoSelect = 0) {
 		if ($id) {
+			if ($autoSelect) {
+				$this->saveSetting('auto_select',$id);
+			}
 			$this->setSchedule($id);
    		    $this->redirect($this->referer());
 		}
@@ -46,7 +49,7 @@ class SchedulesController extends AppController {
 	
 	function merge($id = null) {
 		if ($id) {
-			$this->Schedule->mergeBranch($id);
+			$this->Schedule->merge($id);
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();

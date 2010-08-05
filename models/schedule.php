@@ -56,7 +56,7 @@ class Schedule extends AppModel {
 		);
 	}
 
-	function newBranch($user_id, $name) {
+	function copy($user_id, $name) {
 		$old_parent_id = $this->field('parent_id', array('id' => $this->schedule_id));
 		if (is_null($old_parent_id)) { // it has been published
 			// make the old one the parent of the new one
@@ -101,23 +101,27 @@ class Schedule extends AppModel {
 		return $branch_id;
 	}
 
-	function deleteBranch($id) {
+	function delete($id) {
 		$this->id = $id;
 		$parent_id = $this->field('parent_id');
-		$this->delete();
+		parent::delete();
 		$models = array_keys($this->hasMany);
 		foreach($models as $model) {
 			$this->{$model}->deleteAll(array(
 				"{$model}.schedule_id" => $id
 			),false,false);
 		}
+		$this->User->Setting->deleteAll(array(
+			'Setting.key' => 'auto_select',
+			'Setting.val' => $id
+		),false,false);
 		return $parent_id;
 	}
 	
 	/**
 	 * Merge the branch passed into the current schedule
 	 */
-	function mergeBranch($id) {
+	function merge($id) {
 		// Todo: add a check that the schedule is not published.
 
 		$this->id = $this->schedule_id;

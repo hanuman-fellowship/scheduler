@@ -41,6 +41,35 @@ class AppController extends Controller {
 		return $modelObject;
 	}	
 	
+	function saveSetting($key, $val) {
+		$this->loadModel('Setting');
+		$user_id = Authsome::get('id');
+		$id = $this->Setting->field('id', array(
+			'Setting.key' => $key,
+			'Setting.user_id' => $user_id
+		));
+		$setting = array(
+			'Setting' => array(
+				'user_id' => $user_id,
+				'key' => $key,
+				'val' => $val
+			)
+		);
+		if ($id) {
+			$setting['Setting']['id'] = $id;
+		}
+		$this->Setting->save($setting);
+	}
+
+	function loadSetting($key) {
+		$this->loadModel('Setting');
+		$user_id = Authsome::get('id');
+		return $this->Setting->field('val', array(
+			'Setting.key' => $key,
+			'Setting.user_id' => $user_id
+		));
+	}
+
 	function setSchedule($id) {
 		$this->loadModel('Schedule');
 		$this->Schedule->contain('User');

@@ -5,7 +5,6 @@ class UsersController extends AppController {
 		
     public function login() {
 		if (empty($this->data)) {
-			$this->savePage();
 			return;
 		}
 
@@ -16,7 +15,10 @@ class UsersController extends AppController {
 			$this->set('errorMessage','Unknown user or wrong password');
             return;
         }
-		$this->set('url', $this->loadPage());
+		if ($autoSelect = $this->loadSetting('auto_select')) {
+			$this->setSchedule($autoSelect);
+		}
+		$this->set('url', $this->referer());
     }
     
     public function logout() {
