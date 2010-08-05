@@ -1,4 +1,4 @@
-<? $this->pageTitle=$area['Area']['name']." Schedule"; ?>
+<? $this->set('title_for_layout', $area['Area']['name']." Schedule"); ?>
 <div style='float:left'>
 	<?=$this->element('menu',array('area'=>$area['Area']['id']));?>
 </div>
