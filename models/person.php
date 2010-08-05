@@ -171,11 +171,23 @@ class Person extends AppModel {
 	
 	/**
 	 * returns true if the person is available for the shift or -1 if the person is on the shift
-	 * $person must contain 'Person', 'OffDay', 'Assignment.Shift'
+	 * $person must contain 'Person.PeopleSchedules', 'OffDay', 'Assignment.Shift'
 	 * $shift must contain 'Shift'
 	 *
 	 */
 	function available($person, $shift) {
+		$this->ConstantShift = &$this->PeopleSchedules->ResidentCategory->ConstantShift;
+		$this->ConstantShift->schedule_id = $this->schedule_id;
+		$constantShifts = $this->ConstantShift->sFind('all', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'ConstantShift.resident_category_id' => $person['PeopleSchedules']['resident_category_id']
+			)
+		));
+		// add constant shifts into the person array as regular shifts for the sake of conflicts
+		foreach($constantShifts as $constantShift) {
+			$person['Assignment'][] = array('Shift' => $constantShift['ConstantShift']);
+		}
 		$result = true;
 		foreach($person['Assignment'] as $assignment) {
 			$a = $shift['Shift'];
