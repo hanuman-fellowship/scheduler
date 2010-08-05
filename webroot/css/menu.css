@@ -33,11 +33,12 @@
 .menu :hover ul :hover ul :hover ul :hover ul :hover ul
 {left:90px; top:-4px; background: #fff; padding:3px 0; border:1px solid 999999; white-space:nowrap; width:93px; z-index:200; height:auto;}
 
-
-.schedule_message {
-	float:left;
+.schedule_message, .schedule_message a {
 	font-size:13px;
 	color:#CCC;
+}
+.schedule_message {
+	float:left;
 	position:relative;
 	left:10px;
 	top:10px;

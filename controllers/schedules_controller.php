@@ -47,6 +47,13 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',$this->Schedule->schedule_id);		
 	}
 	
+	function past() {
+		$this->set('schedules',$this->Schedule->find('all', array(
+			'conditions' => array('Schedule.name' => 'Published'),
+			'order' => 'Schedule.updated desc'
+		)));
+	}
+
 	function merge($id = null) {
 		if ($id) {
 			$this->Schedule->merge($id);

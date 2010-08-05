@@ -2,7 +2,12 @@
 <? 
 $role = Authsome::get('role');
 if ($role == '') {
-	echo "Publishd on " . $time->format('F jS, Y g:ia',$session->read('Schedule.updated'));
+	echo ' '.$this->ajax->link(
+		"Publishd on " . $time->format('F jS, Y g:ia',$session->read('Schedule.updated')),
+		array('controller'=>'schedules','action'=>'past'),
+		array('update' => 'dialog_content', 'complete' => "openDialog('past',true,'bottom')", 'id' =>'past')
+	);
+
 }
 if ($role == 'operations') {
 	if ($session->read('Schedule.editable')) {

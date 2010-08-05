@@ -3,7 +3,7 @@ $database = mysql_connect('localhost', 'root', 'root') or trigger_error(mysql_er
 mysql_select_db('scheduler_public', $database);
 
 /////////////
-//die;
+die;
 /////////////
 
 

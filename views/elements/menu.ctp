@@ -27,6 +27,10 @@
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
 				'ajax'
 			),
+			'View Past...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'past'),
+				'ajax'
+			),
 			"<hr/>",
 			'New Working Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
