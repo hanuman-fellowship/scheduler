@@ -151,7 +151,7 @@ class Person extends AppModel {
 
 		$currentPeople = $this->getCurrent();
 
-		$this->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory');
+		$this->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory.ConstantShift');
 		$this->order = 'PeopleSchedules.resident_category_id, Person.first, Person.last';
 		$people = $this->find('all',array(
 			'conditions' => array(
