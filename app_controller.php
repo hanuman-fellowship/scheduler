@@ -15,7 +15,7 @@ class AppController extends Controller {
 		
 		// if this page was not reached by clicking a link, redirect to home
 		if ($this->referer() == '/' && !in_array($this->params['url']['url'], array('areas/schedule/1','/'))) {
-//			$this->redirect('/');
+			$this->redirect('/');
 		}
 
 		// if the session has timed out, redirect to the login

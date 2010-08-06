@@ -2,10 +2,12 @@
 	<legend><?php __('Select Schedule');?></legend>
 <?
 foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
-	echo "<div id='autoSelect_{$autoSelect}' class='tall left'  style='display:{$disp}'>";
+	echo "<div id='autoSelect_{$autoSelect}' class='tall'  style='display:{$disp}'>";
+	echo "<div style='clear:both'>";
 	echo $html->link('Published',array('latest',$autoSelect));
+	echo "</div>";
 ?>
-	<div style='float:left;padding:10px'>
+	<div class='left' style='float:left;padding:10px'>
 	<b>My Schedules</b><br/>
 <?
 	foreach($schedules['mine'] as $schedule) {
@@ -19,8 +21,8 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 	}
 	?>
 	</div>
-	<div style='float:left;padding:10px'>
-	<br><b>Other Schedules</b><br/>
+	<div class='left' style='float:left;padding:10px'>
+	<b>Other Schedules</b><br/>
 	<?
 	foreach($schedules['all'] as $schedule) {
 		if( $schedule['Schedule']['user_id'] == Authsome::get('id')) {
@@ -39,12 +41,12 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 	}
 	?>
 	</div>
+	</div>
 	<?
-	echo "</div>";
 }
 ?>
-</fieldset>
-<div style='position:relative;top:3px'>
+<div style='clear:both;position:relative;top:3px'>
 <input id="autoSelect" type="checkbox" onclick="swap('autoSelect_1','autoSelect_0')" />
 <label for='autoSelect'>Load this schedule when I login</label>
 </div>
+</fieldset>
