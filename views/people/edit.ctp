@@ -1,4 +1,3 @@
-<div class="people form">
 <?= $ajax->form($this->action,'post',array('model'=>'Person','update'=>'dialog_content','before'=>'saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Person');?></legend>
@@ -12,8 +11,9 @@
 			'between' => '&nbsp;',
 			'id' => 'last'
 		));
+		echo $form->select('resident_category_id',$residentCategory,
+			$this->data['Person']['resident_category_id'],array('empty'=>false));
 	?>
+<?=$this->element('validate',array('default_field'=>'first'));?>
 	</fieldset>
 <?php echo $form->end('Submit');?>
-</div>
-<?=$this->element('validate',array('default_field'=>'first'));?>

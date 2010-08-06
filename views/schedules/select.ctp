@@ -4,7 +4,7 @@
 foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 	echo "<div id='autoSelect_{$autoSelect}' class='tall'  style='display:{$disp}'>";
 	echo "<div style='clear:both'>";
-	echo $html->link('Published',array('latest',$autoSelect));
+	echo $html->link('Latest Published',array('latest',$autoSelect));
 	echo "</div>";
 ?>
 	<div class='left' style='float:left;padding:10px'>

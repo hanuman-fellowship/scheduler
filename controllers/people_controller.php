@@ -90,8 +90,8 @@ class PeopleController extends AppController {
 		}
 		$this->savePage();
 		$this->loadModel('ResidentCategory');
-		$resident_category = $this->ResidentCategory->sFind('list');
-		$this->set(compact('resident_category'));
+		$residentCategory = $this->ResidentCategory->sFind('list');
+		$this->set(compact('residentCategory'));
 	}
 	
 	function edit($id = null) {
@@ -109,10 +109,12 @@ class PeopleController extends AppController {
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Person->getPerson($id, true);
+			$this->data['Person']['resident_category_id'] = 
+				$this->data['PeopleSchedules']['resident_category_id'];
 		}
 		$this->loadModel('ResidentCategory');
-		$residentCategories = $this->ResidentCategory->sFind('list');
-		$this->set(compact('residentCategories'));
+		$residentCategory = $this->ResidentCategory->sFind('list');
+		$this->set(compact('residentCategory'));
 	}
 
 	function retire($id = null) {
