@@ -44,13 +44,11 @@ class UsersController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
+			$this->data['User']['password'] = Authsome::hash($this->data['User']['password']);
 			$this->User->create();
-			if ($this->User->save($this->data)) {
-				$this->Session->setFlash(__('The User has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
-			}
+			$this->User->save($this->data);
+			$this->Session->setFlash(__('The User has been saved', true));
+			$this->redirect(array('action' => 'index'));
 		}
 	}
 
