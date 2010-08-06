@@ -1,11 +1,12 @@
 <div class='schedule_message'>
 <? 
 $role = Authsome::get('role');
+$latest = $session->read('Schedule.latest') ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";
 if ($role == '') {
 	echo ' '.$this->ajax->link(
-		"Publishd on " . $time->format('F jS, Y g:ia',$session->read('Schedule.updated')),
+		$latest."Publishd on " . $time->format('F jS, Y g:ia',$session->read('Schedule.updated')),
 		array('controller'=>'schedules','action'=>'past'),
-		array('update' => 'dialog_content', 'complete' => "openDialog('past',true,'bottom')", 'id' =>'past')
+		array('escape'=>false,'update' => 'dialog_content', 'complete' => "openDialog('past',true,'bottom')", 'id' =>'past')
 	);
 
 }

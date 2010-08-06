@@ -84,6 +84,13 @@ class AppController extends Controller {
 		$schedule = $this->Schedule->find('first',$params);
 		$this->Session->write('Schedule', $schedule['Schedule']);	
 		$this->Session->write('Schedule.username', $schedule['User']['username']);
+		$latestSchedule = $this->Schedule->field(
+			'id',
+			array('Schedule.name' => 'Published'),
+			'Schedule.updated desc'
+		);
+		$latest = ($id == 'latest' || $id == $latestSchedule) ? true : false;
+		$this->Session->write('Schedule.latest', $latest);
 	}
 	
 	function record() {
