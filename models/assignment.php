@@ -34,7 +34,11 @@ class Assignment extends AppModel {
 					'conditions' => array('Person.id' => $data['person_id']),
 					'recursive' => -1
 				));
-				$this->Person->addDisplayName($oldPerson['Person']);
+				if ($changes['OldData']['person_id'] != 0) {
+					$this->Person->addDisplayName($oldPerson['Person']);
+				} else {
+					$oldPerson['Person']['name'] = $changes['oldData']['name'];
+				}
 				$assignedOrRemoved = "replaced {$oldPerson['Person']['name']} on";
 			}
 		} else {
@@ -49,7 +53,11 @@ class Assignment extends AppModel {
 			$person = $person['Person'];
 		}
 		$formatted = $this->Shift->format($shift['Shift']);		
-		$this->Person->addDisplayName($person);
+		if ($data['person_id'] != 0) {
+			$this->Person->addDisplayName($person);
+		} else {
+			$person['name'] = $data['name'];
+		}
 		$this->description = "{$person['name']} {$assignedOrRemoved} {$formatted['name']}";
 	}
 	

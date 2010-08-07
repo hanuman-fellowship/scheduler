@@ -294,7 +294,7 @@ class Person extends AppModel {
 
 		// now find out how many letters of the last name we need for each first name
 		$lastNames = &$this->names[$person['first']];
-		if (!isset($lastNames['numLetters'])) {
+		if (!isset($lastNames['numLetters']) && $lastNames) {
 			$others = $lastNames;
 			unset($others[$person['id']]); // don't compare with itself
 			$numLetters = 0;
@@ -337,9 +337,22 @@ class Person extends AppModel {
 		$currentPeople = $this->getCurrent();
 		foreach($data['Shift'] as &$shift) {
 			$people_ids = array();
+			$other_assignments = array();
 			foreach($shift['Assignment'] as &$assignment) {
 				if (in_array($assignment['person_id'], $currentPeople)) {
 					$people_ids[$assignment['id']] = $assignment['person_id'];
+				}
+				if ($assignment['person_id'] == 0) {
+					$other_assignments[] = array(
+						'Person' => array(
+							'id' => 0,
+							'name' => $assignment['name']
+						),
+						'PeopleSchedules' => array(
+							'resident_category_id' => 0
+						),
+						'Assignment' => array('id' => $assignment['id'])
+					);
 				}
 			}
 			$this->sContain('PeopleSchedules.ResidentCategory');
@@ -351,7 +364,7 @@ class Person extends AppModel {
 				$this->addDisplayName($person['Person']);
 				$person['Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
 			}
-			$shift['Assignment'] = $people;
+			$shift['Assignment'] = array_merge($people, $other_assignments);
 		}
 	}
 }

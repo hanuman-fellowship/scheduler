@@ -91,17 +91,17 @@ a:hover.remove {
 	text-decoration:line-through;
 }
 
-a:link.other, a:visited.other, a:link.remove_other, a:visited.remove_other, #other {
+a:link.RC_0, a:visited.RC_0, a:link.remove_RC_0, a:visited.remove_RC_0, .RC_0 {
 	text-decoration: none;
 	color: #777777;
 }
 
-a:hover.other {
+a:hover.RC_0 {
 	text-decoration: none;
 	color: #999999;
 }
 
-a:hover.remove_other {
+a:hover.remove_RC_0 {
 	color: #777777;
 	text-decoration:line-through;
 }

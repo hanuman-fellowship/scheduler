@@ -19,7 +19,9 @@ class RoleHelper extends AppHelper {
 			$url =  $roles[$cur_role]['url'];
 			$type = in_array('ajax',$roles[$cur_role]) ?
 				'ajax' : 'html';
-			return $this->{$type}->link($title,$url,$attributes);
+			return $url ? 
+				$this->{$type}->link($title,$url,$attributes) : 
+				$this->html->tag('span',$title,$attributes);
 		} else {
 			return $title;
 		}

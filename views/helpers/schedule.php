@@ -111,8 +111,8 @@ class ScheduleHelper extends AppHelper {
 				$people .= $this->role->link(
 					$assignment['Person']['name'],
 					array(
-						'' => array(
-							'url' => array(
+						'' =>  array( 
+							'url' => ($assignment['Person']['id'] == 0) ? null : array(
 								'controller'=>'people','action'=>'schedule',$assignment['Person']['id']
 							),
 							'attributes' => array(
@@ -136,7 +136,8 @@ class ScheduleHelper extends AppHelper {
 					),
 					($this->params['isAjax'] || !$this->session->read('Schedule.editable')) 
 				) . '<br/>';
-				if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')) {
+				if (Authsome::get('role') == 'operations' && 
+				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0) {
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
@@ -237,20 +238,24 @@ class ScheduleHelper extends AppHelper {
 				),
 				!$this->session->read('Schedule.editable')
 			);
-			$link_title = $floating_shift['Area']['name'];
-			$link_url = array('controller'=>'areas','action'=>'schedule',$floating_shift['Area']['id']);
+			$link_title = $floating_shift['Area'] ? $floating_shift['Area']['name'] : '';
+			$link_url = $floating_shift['Area'] ? 
+				array('controller'=>'areas','action'=>'schedule',$floating_shift['Area']['id']) :
+				array();
 			$note = " ({$floating_shift['note']})";
 			$note = ($note == ' ()') ? ' ' : $note;
 			
 			// need to make sure floating shifts are in the legend as well.
 			// replace spaces with &nbsp; so that line breaks are not in the middle of something
-			if (!isset($this->legend[$floating_shift['Area']['id']])) {
-				$this->legend[$floating_shift['Area']['id']]['short_name'] = 
-					str_replace(' ', '&nbsp;', $floating_shift['Area']['short_name']);
-				$this->legend[$floating_shift['Area']['id']]['name'] = 
-					str_replace(' ', '&nbsp;', $floating_shift['Area']['name']);
-				$this->legend[$floating_shift['Area']['id']]['manager'] = 
-					str_replace(' ', '&nbsp;', $floating_shift['Area']['manager']);
+			if ($floating_shift['Area']) {
+				if (!isset($this->legend[$floating_shift['Area']['id']])) {
+					$this->legend[$floating_shift['Area']['id']]['short_name'] = 
+						str_replace(' ', '&nbsp;', $floating_shift['Area']['short_name']);
+					$this->legend[$floating_shift['Area']['id']]['name'] = 
+						str_replace(' ', '&nbsp;', $floating_shift['Area']['name']);
+					$this->legend[$floating_shift['Area']['id']]['manager'] = 
+						str_replace(' ', '&nbsp;', $floating_shift['Area']['manager']);
+				}
 			}
 			$output[] = "<span id='floating_".$floating_shift['id']."'>"
 			. $hours . $this->html->link($link_title, $link_url) . $note . '</span>';
