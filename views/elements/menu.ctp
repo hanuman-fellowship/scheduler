@@ -2,18 +2,37 @@
 <?=$html->css("dialog") ?>
 <? $hidden = !$this->session->read('Schedule.editable');?>
 <? $scheduleName = $this->session->read('Schedule.name');?>
+<? $userName = Inflector::humanize(Authsome::get('username')); ?>
 <?=$role->menu(array(
 	'Login' => array(
 		'role' => array(''),
 		'url' => array('controller' => 'users', 'action' => 'login'),
 		'ajax'
 	),
-	"Hello, ".Inflector::humanize(Authsome::get('username')) => array(
+	"Hello, {$userName}" => array(
 		'role' => array('operations')
 	),	
-	'Logout' => array(
+	'Operations' => array(
 		'role' => array('operations'),
-		'url' => array('controller' => 'users', 'action' => 'logout')
+		'url' => '',
+		'sub' => array(
+			'New User...' => array(
+				'url' => array('controller' => 'users', 'action' => 'add'),
+				'ajax'
+			),
+			'Edit User...' => array(
+				'url' => array('controller' => 'users', 'action' => 'edit'),
+				'ajax'
+			),
+			'Delete User...' => array(
+				'url' => array('controller' => 'users', 'action' => 'delete'),
+				'ajax'
+			),
+			"<hr/>",
+			'Logout' => array(
+				'url' => array('controller' => 'users', 'action' => 'logout'),
+			)
+		)
 	),	
 	array(
 		'title' => ' | '

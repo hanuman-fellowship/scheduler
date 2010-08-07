@@ -82,13 +82,12 @@ class PeopleController extends AppController {
 				$this->record();
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->PeopleSchedules->description);
-				$this->set('url', $this->loadPage());
+				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Person->errorField);
 				$this->set('errorMessage',$this->Person->errorMessage);
 			}
 		}
-		$this->savePage();
 		$this->loadModel('ResidentCategory');
 		$residentCategory = $this->ResidentCategory->sFind('list');
 		$this->set(compact('residentCategory'));

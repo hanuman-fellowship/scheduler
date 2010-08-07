@@ -14,9 +14,9 @@ class ShiftsController extends AppController {
 			} else {
 				$this->set('errorField',$this->Shift->errorField);
 				$this->set('errorMessage',$this->Shift->errorMessage);
-				$start = $this->data['Shift']['start'];
-				$end = $this->data['Shift']['end'];
 			}
+			$start = $this->data['Shift']['start'];
+			$end = $this->data['Shift']['end'];
 		} else {
 			$start = str_replace("-",":",$start);
 		}

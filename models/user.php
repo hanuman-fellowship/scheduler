@@ -7,6 +7,11 @@ class User extends AppModel {
 		'Setting'
 	);
 
+	function save($data) {
+		$data['User']['password'] = Authsome::hash($data['User']['password']);
+		return parent::save($data);
+	}
+
     public function authsomeLogin($type, $credentials = array()) {
         switch ($type) {
             case 'guest':
