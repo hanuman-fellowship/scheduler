@@ -75,6 +75,17 @@ class UsersController extends AppController {
 		$this->set(compact('groups'));
 	}
 
+	function changePassword() {
+		if (!empty($this->data)) {
+			if ($this->User->changePassword($this->data)) {
+				$this->set('url',$this->referer());
+			} else {
+				$this->set('errorField',$this->User->errorField);
+				$this->set('errorMessage',$this->User->errorMessage);
+			}
+		}
+	}
+
 	function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for User', true));

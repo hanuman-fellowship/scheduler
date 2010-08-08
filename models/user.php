@@ -33,6 +33,31 @@ class User extends AppModel {
 
         return $this->find('first', compact('conditions'));
     }
-	 
+	
+	function changePassword($data) {
+		if(Authsome::hash($data['User']['old_password']) != Authsome::get('password')) {
+			$this->errorMessage = 'Incorrect Password';
+			$this->errorField = 'old_password';
+			return false;
+		}
+		if($data['User']['new_password'] != $data['User']['retype']) {
+			$this->errorMessage = 'Passwords do not match';
+			$this->errorField = 'new_password';
+			return false;
+		}	
+		if($data['User']['new_password'] == '') {
+			$this->errorMessage = 'Please enter a new password';
+			$this->errorField = 'new_password';
+			return false;
+		}	
+		$this->save(array(
+			'User' => array(
+				'id' => Authsome::get('id'),
+				'password' => $data['User']['new_password']
+			)
+		));
+		return true;
+	}
+
 }
 ?>

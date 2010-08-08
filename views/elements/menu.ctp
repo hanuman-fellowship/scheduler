@@ -29,6 +29,10 @@
 				'ajax'
 			),
 			"<hr/>",
+			'Change Password...' => array(
+				'url' => array('controller' => 'users', 'action' => 'changePassword'),
+				'ajax'
+			),
 			'Logout' => array(
 				'url' => array('controller' => 'users', 'action' => 'logout'),
 			)
