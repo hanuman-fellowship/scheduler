@@ -35,6 +35,7 @@ class AssignmentsController extends AppController {
 			'recursive' => -1
 		));
 		$assignment['Assignment']['person_id'] = $person_id;
+		$assignment['Assignment']['name'] = '';
 		$this->record();
 		$this->Assignment->sSave($assignment);
 		$this->stop($this->Assignment->description);

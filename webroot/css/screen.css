@@ -91,7 +91,7 @@ a:hover.remove {
 	text-decoration:line-through;
 }
 
-a:link.RC_0, a:visited.RC_0, a:link.remove_RC_0, a:visited.remove_RC_0, .RC_0 {
+.menu_RC_0, a:link.RC_0, a:visited.RC_0, a:link.remove_RC_0, a:visited.remove_RC_0, .RC_0 {
 	text-decoration: none;
 	color: #777777;
 }

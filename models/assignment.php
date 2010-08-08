@@ -34,7 +34,7 @@ class Assignment extends AppModel {
 					'conditions' => array('Person.id' => $data['person_id']),
 					'recursive' => -1
 				));
-				if ($changes['OldData']['person_id'] != 0) {
+				if ($changes['oldData']['person_id'] != 0) {
 					$this->Person->addDisplayName($oldPerson['Person']);
 				} else {
 					$oldPerson['Person']['name'] = $changes['oldData']['name'];
@@ -53,7 +53,7 @@ class Assignment extends AppModel {
 			$person = $person['Person'];
 		}
 		$formatted = $this->Shift->format($shift['Shift']);		
-		if ($data['person_id'] != 0) {
+		if ($data['person_id'] != 0 || $data != $changes) {
 			$this->Person->addDisplayName($person);
 		} else {
 			$person['name'] = $data['name'];

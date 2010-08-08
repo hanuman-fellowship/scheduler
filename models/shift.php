@@ -179,11 +179,17 @@ class Shift extends AppModel {
 				}
 			}
 			foreach($shift['Assignment'] as $num => &$assignment) {
-				if ($assignment['Person']['id'] == $person_id) {
-					unset($shift['Assignment'][$num]);
-					continue;
+				if ($assignment['person_id'] == 0) {
+					$assignment['Person']['name'] = $assignment['name'];
+					$assignment['Person']['id'] = 0; 
+					$assignment['Person']['PeopleSchedules']['resident_category_id'] = 0;
+				} else {
+					if ($assignment['Person']['id'] == $person_id) {
+						unset($shift['Assignment'][$num]);
+						continue;
+					}
+					$this->Person->addDisplayName($assignment['Person']);
 				}
-				$this->Person->addDisplayName($assignment['Person']);
 			}
 		}
 		return array('unassigned' => $unassigned, 'assigned' => $shifts);
