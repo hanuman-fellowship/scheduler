@@ -58,6 +58,7 @@ class Assignment extends AppModel {
 		} else {
 			$person['name'] = $data['name'];
 		}
+		$person['name'] = $person['name'] ? $person['name'] : $data['name'];
 		$this->description = "{$person['name']} {$assignedOrRemoved} {$formatted['name']}";
 	}
 	

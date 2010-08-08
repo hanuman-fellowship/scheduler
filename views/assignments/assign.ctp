@@ -1,9 +1,14 @@
 <fieldset>
 	<legend><?php __('Assign Person');?></legend>
+	<div style="float:left;">
+		<input type="checkbox" id="conflictsBox" value="0" onclick="toggleConflicts()" />
+		<label for='conflictsBox'>Ignore Conflicts</label>
+	</div>
 <?
 $lists = array('available','all');
 foreach($lists as $list) {
 $rcId = 0;
+?><div style='clear:both'><?
 ?><div class='tall' id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
 	foreach($people as $person) {
 		if ($person['available'] === -1) {continue;} // already on this shift so don't ever show.
@@ -23,8 +28,12 @@ $rcId = 0;
 ?></div><?
 }
 ?>
-	<div style="clear:both;float:right;">
-		<input type="checkbox" id="conflictsBox" value="0" onclick="toggleConflicts()" />
-		<label for='conflictsBox'>Ignore Conflicts</label>
+	</div>
+	<div style="clear:both">
+		<?=$form->create('Assignment',array('type'=>'post'));?>
+		Other: <?=$form->text('other',array('id' => 'other'));?>
+		<?=$form->hidden('shift',array('value'=>$shift));?>
+		<?=$form->end();?>
 	</div>
 </fieldset>
+<?=$javascript->codeBlock("document.getElementById('other').select();");?>

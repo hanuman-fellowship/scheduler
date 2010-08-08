@@ -4,12 +4,18 @@ class AssignmentsController extends AppController {
 	var $name = 'Assignments';
 	var $helpers = array('schedule');
 
-	function assign($shift_id, $person_id = null) {
-		if ($person_id) {
+	function assign($shift_id = null, $person_id = null) {
+		if ($this->data) {
+			$shift_id = $this->data['Assignment']['shift'];
+			$person_id = 0;
+			$name = $this->data['Assignment']['other'];
+		}
+		if (!is_null($person_id)) {
 			$this->Assignment->create();
 			$this->data = array('Assignment' => array(
 				'shift_id'  => $shift_id,
-				'person_id' => $person_id
+				'person_id' => $person_id,
+				'name' => isset($name) ? $name : ''
 			));
 			$this->record();
 			$this->Assignment->sSave($this->data);
