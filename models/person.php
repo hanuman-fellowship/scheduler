@@ -266,16 +266,19 @@ class Person extends AppModel {
 	}
 
 	function getCurrent() {
+		if (isset($this->currentPeople)) {
+			return $this->currentPeople;
+		}
 		$currentPeople = $this->PeopleSchedules->find('all',array(
 			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
 			'fields' => array('distinct PeopleSchedules.person_id')
 		));
-		$currentPeople = Set::combine(
+		$this->currentPeople = Set::combine(
 			$currentPeople,
 			'{n}.PeopleSchedules.person_id',
 			'{n}.PeopleSchedules.person_id'
 		);
-		return $currentPeople;
+		return $this->currentPeople;
 	}
 
 	function getPeopleSchedulesId($id) {
