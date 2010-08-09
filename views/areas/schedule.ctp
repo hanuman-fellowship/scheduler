@@ -9,4 +9,3 @@
 <?=$this->element('schedule_content');?>
 </div>
 <?=$this->element('dialog');?>
-<?=$this->element('sql_dump');?>
