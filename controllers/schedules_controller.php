@@ -50,7 +50,8 @@ class SchedulesController extends AppController {
 	function past() {
 		$this->set('schedules',$this->Schedule->find('all', array(
 			'conditions' => array('Schedule.name' => 'Published'),
-			'order' => 'Schedule.updated desc'
+			'order' => 'Schedule.updated desc',
+			'recursive' => -1
 		)));
 	}
 
