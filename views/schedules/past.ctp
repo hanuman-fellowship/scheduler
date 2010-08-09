@@ -14,4 +14,6 @@ foreach($schedules as $schedule) {
 ?>
 </div>
 </fieldset>
-
+<div class='left tall'>
+<?=$this->element('sql_dump');?>
+</div>
