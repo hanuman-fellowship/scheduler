@@ -8,7 +8,7 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 		array('<i>','</i>') :
 		array(null,null);
 	echo $style[0];
-	echo $html->link('Latest Published',array('latest',$autoSelect));
+	echo $html->link('Latest Published',array('latest',$autoSelect),array('onClick'=>'wait()'));
 	echo $style[1];
 	echo "</div>";
 ?>
@@ -20,7 +20,9 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 			array('<i>','</i>') :
 			array(null,null);
 		echo $style[0];
-		echo $html->link($schedule['Schedule']['name'],array($schedule['Schedule']['id'],$autoSelect));
+		echo $html->link($schedule['Schedule']['name'],
+			array($schedule['Schedule']['id'],$autoSelect),
+			array('onClick'=>'wait()'));
 		echo $style[1];
 		echo '<br/>';
 	}
@@ -39,7 +41,8 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 		echo $style[0];
 		echo $html->link(
 			"{$schedule['Schedule']['name']} ({$schedule['User']['username']})",
-			array($schedule['Schedule']['id'],$autoSelect)
+			array($schedule['Schedule']['id'],$autoSelect),
+			array('onClick'=>'wait()')
 		);
 		echo $style[1];
 		echo '<br/>';
@@ -55,3 +58,4 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 <label for='autoSelect'>Load this schedule when I login</label>
 </div>
 </fieldset>
+<?=$this->element('message');?>

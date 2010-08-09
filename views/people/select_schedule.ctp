@@ -11,12 +11,15 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
         if($overlay == 'overlay_0') {
 			$type = 'ajax';
 			$attributes = array(
+				'before' => 'wait()',
 				'update' => 'dialog_content',
 				'complete' => "openDialog('1_1','#FFF','true')"
 			);
 		} else {
 			$type = 'html';
-			$attributes = null;
+			$attributes = array(
+				'onClick' => 'wait()'
+			);
 		}
 		$attributes['class'] = 'RC_' . $person['PeopleSchedules']['resident_category_id'];
 		if ($rcId != $person['PeopleSchedules']['resident_category_id']) {
@@ -36,4 +39,4 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 		<label for='overlay'>Overlay</label>
 	</div>
 </fieldset>
-
+<?=$this->element('message');?>

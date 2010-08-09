@@ -13,5 +13,5 @@
 		));
 	?>
 <?php echo $form->end('Submit');?>
-<?=$this->element('validate',array('default_field'=>'name'));?>
 </fieldset>
+<?=$this->element('message',array('default_field'=>'name'));?>

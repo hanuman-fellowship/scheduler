@@ -9,10 +9,12 @@ foreach($areas as $id => $name) {
 	$last_style = ($last == $id) ? array('<i>','</i>') : array('','');
 	echo $last_style[0].
 		$html->link($name,array($id),array(
-			'class' => 'remove'
+			'class' => 'remove',
+			'onClick' => 'wait()'
 		)).'<br/>'.
 		$last_style[1];
 }
 ?>
 </div>
 </fieldset>
+<?=$this->element('message');?>

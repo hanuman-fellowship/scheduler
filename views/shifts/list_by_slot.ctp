@@ -18,7 +18,7 @@ foreach($lists as $list) {
 					$person_id
 				),
 				array(
-					'onclick'=>'saveScroll()',
+					'onclick'=>'wait();saveScroll()',
 					'escape'=>false
 				)
 			) . '<br>';
@@ -42,7 +42,7 @@ foreach($lists as $list) {
 						$person_id
 					),
 					array(
-						'onclick'=>'saveScroll()',
+						'onclick'=>'wait();saveScroll()',
 						'escape'=>false
 					)
 				) . '<br>';
@@ -59,3 +59,4 @@ foreach($lists as $list) {
 </div>
 </span>
 </fieldset>
+<?=$this->element('message');?>

@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'Shift','update'=>'dialog_content','before'=>'saveScroll()'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Shift','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Shift');?></legend>
 	<?php
@@ -32,4 +32,4 @@
 		'onclick'=>'saveScroll()'
 	)
 );?>
-<?=$this->element('validate',array('default_field'=>'name'));?>
+<?=$this->element('message',array('default_field'=>'name'));?>

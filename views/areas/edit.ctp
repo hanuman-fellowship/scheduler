@@ -1,5 +1,4 @@
-<div class="areas form">
-<?= $ajax->form($this->action,'post',array('model'=>'Area','update'=>'dialog_content','before'=>'saveScroll()'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Area','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Area');?></legend>
 	<?php
@@ -17,7 +16,7 @@
 			'id' => 'manager'
 		));
 	?>
-<?=$this->element('validate',array('default_field'=>'name'));?>
-	</fieldset>
 <?php echo $form->end('Submit');?>
-</div>
+	</fieldset>
+<?=$this->element('message',array('default_field'=>'name'));?>
+

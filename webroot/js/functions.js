@@ -27,11 +27,12 @@ function hideElement(id) {
 }
 
 function hideDialog() {
-	if (!stopClick) {
+	if (!stopClick && get('dialog').style.zIndex != 999) {
 		if(highlighted != '') {
 			get(highlighted).style.backgroundColor = '';
 		}
 		get('dialog').style.display = 'none';
+		get('behind_dialog').style.display = 'none';
 	}
 	stopClick = false;
 }
@@ -40,6 +41,11 @@ function openDialog(id,noHighlight,position) {
 	if (get(id+'_sub')) {
 		get(id+'_sub').style.display = 'none';
 	}
+	behind = get('behind_dialog');
+	behind.style.height = document.body.offsetHeight + 5 + 'px';
+	behind.style.width = document.body.offsetWidth + 'px';
+	behind.style.display = 'table';
+	behind.style.zIndex = 1000;
 	get('dialog').style.display = 'table';
 	if (!noHighlight) {
 		get(id).style.backgroundColor = '#FFF8BA';
@@ -105,9 +111,11 @@ function openDialog(id,noHighlight,position) {
 	}
 	get('dialog').style.left = newLeft+'px';
 	get('dialog').style.top = newTop+'px';
+	get('dialog').style.zIndex = 1001;
 }
 
 function wait() {
+	get('dialog').style.zIndex = 999;
 	hideElement('error');
 	showElement('wait');
 }

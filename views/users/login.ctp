@@ -4,6 +4,7 @@
 echo $ajax->form($this->action,'post',array(
 	'model'=>'User',
 	'update'=>'dialog_content',
+	'before'=>'wait()'
 ));
 echo $form->input('username', array(
 	'label' => 'Username',
@@ -18,4 +19,4 @@ echo $form->submit('Login');
 echo $form->end();
 ?>
 </fieldset>
-<?=$this->element('validate',array('default_field'=>'username'));?>
+<?=$this->element('message',array('default_field'=>'username'));?>

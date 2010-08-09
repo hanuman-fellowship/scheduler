@@ -1,12 +1,14 @@
-<div class="people form">
 	<fieldset>
  		<legend><?php __('Restore Person');?></legend>
 <?
-echo "<div style='float:left;padding:10px;'>";
+echo "<div class='left tall'>";
 	foreach($people as $person) {
-		echo $html->link("{$person['Person']['last']}, {$person['Person']['first']}",array($person['Person']['id'])) . '<br>';
+		echo $html->link("{$person['Person']['last']}, {$person['Person']['first']}",
+			array($person['Person']['id']),
+			array('onClick' => 'wait()')
+		) . '<br>';
 	}
 ?>
 	</div>
 	</fieldset>
-</div>
+<?=$this->element('message');?>

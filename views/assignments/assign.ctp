@@ -20,7 +20,7 @@ $rcId = 0;
 			}
 			echo $html->link($person['name'],array($shift,$person['id']),array(
 				'class' => 'RC_' . $person['ResidentCategory']['id'],
-				'onclick'=>'saveScroll()'
+				'onclick'=>'wait();saveScroll()'
 			)) . '<br>';
 		}
 	}
@@ -30,10 +30,10 @@ $rcId = 0;
 ?>
 	</div>
 	<div style="clear:both">
-		<?=$form->create('Assignment',array('type'=>'post'));?>
+		<?=$form->create('Assignment',array('type'=>'post','onSubmit'=>'wait()'));?>
 		Other: <?=$form->text('other',array('id' => 'other'));?>
 		<?=$form->hidden('shift',array('value'=>$shift));?>
 		<?=$form->end();?>
 	</div>
 </fieldset>
-<?=$javascript->codeBlock("document.getElementById('other').select();");?>
+<?=$this->element('message',array('default_field'=>'other'));?>

@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'FloatingShift','update'=>'dialog_content','before'=>'saveScroll()'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'FloatingShift','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Floating Shift');?></legend>
 	<?php
@@ -23,7 +23,7 @@
 <?=$html->link('Delete Floating Shift',array('action'=>'delete',$this->data['FloatingShift']['id']),
 	array(
 		'style'=>'position:relative;top:5px',
-		'onclick'=>'saveScroll()'
+		'onclick'=>'wait();saveScroll()'
 	)
 );?>
-<?=$this->element('validate',array('default_field'=>'hours'));?>
+<?=$this->element('message',array('default_field'=>'hours'));?>

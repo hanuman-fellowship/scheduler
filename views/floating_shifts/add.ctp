@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'FloatingShift','update'=>'dialog_content','before'=>'saveScroll()'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'FloatingShift','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('New Floating Shift');?></legend>
 	<?php
@@ -22,4 +22,4 @@
 	</fieldset>
 <?= $form->submit('Submit');?>
 <?php echo $form->end();?>
-<?=$this->element('validate',array('default_field'=>'hours'));?>
+<?=$this->element('message',array('default_field'=>'hours'));?>

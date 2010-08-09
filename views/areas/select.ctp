@@ -10,12 +10,15 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 		if($overlay == 'overlay_0') {
 			$type = 'ajax';
 			$attributes = array(
+				'before' => 'wait()',
 				'update' => 'dialog_content',
 				'complete' => "openDialog('1_1','true')"
 			);
 		} else {
 			$type = 'html';
-			$attributes = null;
+			$attributes = array(
+				'onClick' => 'wait()'
+			);;
 		}
 		$last_style = ($last == $id) ? array('<i>','</i>') : array('','');
 		echo $last_style[0].
@@ -32,3 +35,4 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 <label for='overlay'>Overlay</label>
 </span>
 </fieldset>
+<?=$this->element('message');?>

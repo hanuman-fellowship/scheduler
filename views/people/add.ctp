@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'Person','update'=>'dialog_content'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Person','update'=>'dialog_content','before'=>'wait()'));?>
 	<fieldset>
  		<legend><?php __('Add Person');?></legend>
 	<?php
@@ -12,6 +12,6 @@
 		));
 		echo $form->select('resident_category_id',$residentCategory,null,array('empty'=>false));
 	?>
-<?=$this->element('validate',array('default_field'=>'first'));?>
-	</fieldset>
 <?php echo $form->end('Submit');?>
+	</fieldset>
+<?=$this->element('message',array('default_field'=>'first'));?>

@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'Shift','update'=>'dialog_content','before'=>'saveScroll()'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Shift','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('New Shift');?></legend>
 	<?php
@@ -30,4 +30,4 @@
 	</fieldset>
 <?= $form->submit('Submit');?>
 <?php echo $form->end();?>
-<?=$this->element('validate',array('default_field'=>'name'));?>
+<?=$this->element('message',array('default_field'=>'name'));?>

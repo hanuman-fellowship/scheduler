@@ -7,7 +7,10 @@ class DialogHelper extends AppHelper {
 		if ($url) {
 			return $this->javascript->codeBlock("window.location.href='{$url}'");
 		} else {
-			return $this->javascript->codeBlock("get('{$first_field}').select()");
+			return $this->javascript->codeBlock("
+				get('dialog').style.zIndex=1001;
+				get('{$first_field}').select();
+			");
 		}
 	}
 }

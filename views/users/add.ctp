@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content','before'=>'wait()'));?>
 	<fieldset>
  		<legend><?php __('Add User');?></legend>
 	<?php
@@ -18,6 +18,6 @@
 			array('empty' => false)
 		);
 	?>
-<?=$this->element('validate',array('default_field'=>'username'));?>
-	</fieldset>
 <?php echo $form->end('Submit');?>
+	</fieldset>
+<?=$this->element('message',array('default_field'=>'username'));?>

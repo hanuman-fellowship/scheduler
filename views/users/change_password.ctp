@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content','before'=>'wait()'));?>
 	<fieldset>
  		<legend><?php __('Change Password');?></legend>
 	<?php
@@ -15,6 +15,6 @@
 			'id' => 'retype'
 		));
 	?>
-<?=$this->element('validate',array('default_field'=>'old_password'));?>
-	</fieldset>
 <?php echo $form->end('Submit');?>
+	</fieldset>
+<?=$this->element('message',array('default_field'=>'old_password'));?>

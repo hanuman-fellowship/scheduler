@@ -11,6 +11,7 @@ echo "<div class='tall'>";
 			$rcId = $person['PeopleSchedules']['resident_category_id'];
 		}
 		echo $html->link($person['Person']['name'],array($person['Person']['id']),array(
+			'onClick' => 'wait()',
 			'class' => 'remove_RC_' . $person['PeopleSchedules']['resident_category_id']
 		)) . '<br>';
 	}
@@ -18,3 +19,4 @@ echo "<div class='tall'>";
 	</div>
 	</fieldset>
 </div>
+<?=$this->element('message');?>

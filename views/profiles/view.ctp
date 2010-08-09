@@ -6,6 +6,7 @@
 		'update' => 'dialog_content',
 		'complete' => "openDialog('upload','true')",
 		'id' => 'upload'
+		
 	)); ?>
 <? } ?>
 <?=$this->element('dialog');?>

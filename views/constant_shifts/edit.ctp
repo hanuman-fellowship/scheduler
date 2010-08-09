@@ -1,4 +1,4 @@
-<?= $ajax->form($this->action,'post',array('model'=>'ConstantShift','update'=>'dialog_content','before'=>'saveScroll()'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'ConstantShift','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Edit Constant Shift');?></legend>
 	<?php
@@ -40,13 +40,13 @@
 				'float:left;display:none'
 		));
 	?>
-<?=$this->element('validate',array('default_field'=>'name'));?>
 	</fieldset>
 <?= $form->submit('Submit');?>
 <?php echo $form->end();?>
 <?=$html->link('Delete Constant Shift',array('action'=>'delete',$this->data['ConstantShift']['id']),
 	array(
 		'style'=>'position:relative;top:5px',
-		'onclick'=>'saveScroll()'
+		'onclick'=>'wait();saveScroll()'
 	)
 );?>
+<?=$this->element('message',array('default_field'=>'name'));?>

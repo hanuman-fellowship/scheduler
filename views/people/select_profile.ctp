@@ -8,10 +8,12 @@ foreach($people as $person) {
 		array(
 			'action' => 'profile', 
 			$person['Person']['id']
-		)
+		),
+		array('onClick' => 'wait()')
 	);
 	echo '<br/>';
 }
 ?>
 </div>
 </fieldset>
+<?=$this->element('message');?>

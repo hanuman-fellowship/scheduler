@@ -1,5 +1,4 @@
-<div class="areas form">
-<?= $ajax->form($this->action,'post',array('model'=>'Area','update'=>'dialog_content'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Area','onSubmit'=>'wait()','update'=>'dialog_content'));?>
 	<fieldset>
  		<legend><?php __('New Area');?></legend>
 	<?php
@@ -16,7 +15,6 @@
 			'id' => 'manager'
 		));
 	?>
-<?=$this->element('validate',array('default_field'=>'name'));?>
-	</fieldset>
 <?=$form->end('Submit');?>
-</div>
+	</fieldset>
+<?=$this->element('message',array('default_field'=>'name'));?>
