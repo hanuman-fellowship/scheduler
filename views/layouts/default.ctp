@@ -16,9 +16,6 @@
 			<? } ?>
 			<!-- content -->
 			<?=$content_for_layout?>
-<div class='left tall'>
-<?=$this->element('sql_dump');?>
-</div>
 		</div>
 	</div>
 </body>

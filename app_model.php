@@ -115,23 +115,15 @@ class AppModel extends Model {
 		return $this->Change->oldData[$this->name];
 	}
 	
-	/**
-	 * cake automatically does an update if the id exists, and we
-	 * want a new record with the same id and a different schedule id
-	 * so we force cake to do an insert by making the id -1, then
-	 * we change the id to what it should be.
-	 */
 	function forceSave($data) {
-		$schedule_id = $data['schedule_id'];
-		$real_id = $data['id'];
-		$data['id'] = -1;
-		$this->create(); 
-		$this->save($data);
-		$data = array("{$this->name}.id" => $real_id);
-		$this->updateAll($data, array(
-			"{$this->name}.id"          => -1,
-			"{$this->name}.schedule_id" => $schedule_id
-		));               	
+		$keys = "schedule_id";
+		$values = "'{$data['schedule_id']}'";
+		unset($data['schedule_id']);
+		foreach($data as $key => $val) {
+			$keys .= ",{$key}";
+			$values .= ",'{$val}'";
+		}
+		$this->query("INSERT INTO {$this->table} ({$keys}) VALUES ({$values})");
 	}
 	
 	function valid($data) {
