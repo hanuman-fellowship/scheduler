@@ -32,7 +32,7 @@ CREATE TABLE `areas` (
   `manager` varchar(30) NOT NULL,
   `notes` text NOT NULL,
   `schedule_id` int(11) NOT NULL,
-  UNIQUE KEY `branch_id` (`schedule_id`,`id`)
+  UNIQUE KEY `schedule_id` (`schedule_id`,`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `boundaries` (
   `start` time NOT NULL,
   `end` time NOT NULL,
   `schedule_id` int(11) NOT NULL,
-  KEY `branch_id` (`schedule_id`,`id`),
+  KEY `schedule_id` (`schedule_id`,`id`),
   KEY `day_id` (`day_id`),
   KEY `time_id` (`slot_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -196,7 +196,7 @@ CREATE TABLE `constant_shifts` (
   `specify_hours` tinyint(1) NOT NULL,
   `hours` double default NULL,
   `schedule_id` int(11) NOT NULL,
-  UNIQUE KEY `branch_id` (`schedule_id`,`id`),
+  UNIQUE KEY `schedule_id` (`schedule_id`,`id`),
   KEY `resident_category_id` (`resident_category_id`),
   KEY `day_id` (`day_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -216,7 +216,7 @@ CREATE TABLE `days` (
   `id` int(1) NOT NULL auto_increment,
   `name` varchar(30) NOT NULL,
   `schedule_id` int(11) NOT NULL,
-  UNIQUE KEY `branch_id` (`schedule_id`,`id`)
+  UNIQUE KEY `schedule_id` (`schedule_id`,`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
@@ -244,7 +244,7 @@ CREATE TABLE `floating_shifts` (
   `hours` float NOT NULL,
   `note` tinytext NOT NULL,
   `schedule_id` int(11) NOT NULL,
-  UNIQUE KEY `branch_id` (`schedule_id`,`id`),
+  UNIQUE KEY `schedule_id` (`schedule_id`,`id`),
   KEY `person_id` (`person_id`),
   KEY `area_id` (`area_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -305,7 +305,7 @@ CREATE TABLE `off_days` (
   `day_id` int(11) NOT NULL,
   `person_id` int(11) NOT NULL,
   `schedule_id` int(11) NOT NULL,
-  UNIQUE KEY `branch_id` (`schedule_id`,`id`),
+  UNIQUE KEY `schedule_id` (`schedule_id`,`id`),
   KEY `person_id` (`person_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
