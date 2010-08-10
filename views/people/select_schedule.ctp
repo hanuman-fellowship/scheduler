@@ -2,7 +2,7 @@
 	$session->read('last_person') : '';
 ?>
 <fieldset>
-	<legend><?php __('View Person Schedule');?></legend>
+	<legend><span id='drag_handle'><?php __('View Person Schedule');?></span></legend>
 <?
 foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 	echo "<div id='{$overlay}' class='tall' style='display:{$disp}'>";
