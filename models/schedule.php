@@ -107,9 +107,8 @@ class Schedule extends AppModel {
 		parent::delete();
 		$models = array_keys($this->hasMany);
 		foreach($models as $model) {
-			$this->{$model}->deleteAll(array(
-				"{$model}.schedule_id" => $id
-			),false,false);
+			$table = $this->{$model}->table;
+			$this->{$model}->query("DELETE FROM {$table} WHERE {$table}.schedule_id = {$id}");
 		}
 		$this->User->Setting->deleteAll(array(
 			'Setting.key' => 'auto_select',
