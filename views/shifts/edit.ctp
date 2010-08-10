@@ -29,7 +29,7 @@
 <?=$html->link('Delete Shift',array('action'=>'delete',$this->data['Shift']['id']),
 	array(
 		'style'=>'position:relative;top:5px',
-		'onclick'=>'saveScroll()'
+		'onclick'=>'wait();saveScroll()'
 	)
 );?>
 <?=$this->element('message',array('default_field'=>'name'));?>
