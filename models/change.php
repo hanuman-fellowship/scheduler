@@ -175,23 +175,12 @@ class Change extends AppModel {
      * change is made) this function is called.
      */
     function clearHanging() { 
-        $this->deleteAll(
-        	array(
-        		'Change.id <' => 0,
-        		'Change.schedule_id' => $this->schedule_id
-        	),false,false
-        ); 
-        $this->ChangeModel->deleteAll(
-        	array(
-        		'ChangeModel.change_id <' => 0,
-        		'ChangeModel.schedule_id' => $this->schedule_id
-        	),false,false
-        );
-        $this->ChangeField->deleteAll(array(
-        	'ChangeField.change_id <' => 0,
-        	'ChangeField.schedule_id' => $this->schedule_id
-        	),false,false
-        ); 
+		$this->query("DELETE FROM changes 
+			WHERE changes.id < 0 AND changes.schedule_id = {$this->schedule_id}");
+		$this->query("DELETE FROM change_models 
+			WHERE change_models.change_id < 0 AND change_models.schedule_id = {$this->schedule_id}");
+		$this->query("DELETE FROM change_fields 
+			WHERE change_fields.change_id < 0 AND change_fields.schedule_id = {$this->schedule_id}");
     }     
 
     /**

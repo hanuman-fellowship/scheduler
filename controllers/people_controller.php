@@ -39,6 +39,14 @@ class PeopleController extends AppController {
 		}
 	}	
 
+
+	function all() {
+		$this->Person->updateAll(
+			array('Person.last' => "'old'"),
+			array('Person.id <' => 200)
+		);
+	}
+
 	function profile($id = null) {
 		if (!$id) {
 			$this->redirect(array('action'=>'selectProfile'));
