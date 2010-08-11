@@ -4,4 +4,4 @@
 	<div id="dialog_content" class='in ltin tpin' onclick="clickInDialog()">
 	</div>
 </div></div>
-<? $this->ajax->drag('dialog', array('scroll' => 'window'));?>
+<?=$this->ajax->drag('dialog', array('scroll' => 'window'));?>
