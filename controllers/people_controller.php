@@ -30,7 +30,6 @@ class PeopleController extends AppController {
 			$this->Person->addDisplayName($person['Person']);
 			$this->set('person',$person);		
 			$this->loadModel('Boundary');
-			$this->loadModel('Change');
 //			$this->set('changes', $this->Change->getChangesForMenu());
 			$this->set('bounds', $this->Boundary->getBounds());
 			$this->Session->write('last_person',$id);
