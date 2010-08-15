@@ -5,7 +5,6 @@
 $current_schedule = $session->read('Schedule.id');
 foreach($schedules as $schedule) {
 	$current = $schedule['Schedule']['id'] == $current_schedule ? true : false;
-	echo $current ? '<b>' : '';
 	echo $this->html->link(
 		$this->Time->niceShort($schedule['Schedule']['updated']),
 		array('action'=>'select',$schedule['Schedule']['id']),
@@ -14,10 +13,13 @@ foreach($schedules as $schedule) {
 			'id' => $current ? 'current' : ''
 		)
 	)."<br>";
-	echo $current ? '</b>' : '';
 }
 ?>
-<?=$this->javascript->codeBlock("get('current').scrollIntoView(true)");?>
+<?=$this->javascript->codeBlock("
+	get('current').scrollIntoView(true);
+	get('current').style.fontWeight = 'bold';
+	get('current').innerHTML += '&nbsp;&nbsp;<----';
+");?>
 </div>
 </fieldset>
 <?=$this->element('message');?>
