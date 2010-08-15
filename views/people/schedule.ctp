@@ -3,3 +3,5 @@
 <?=$this->element('schedule_message');?>
 <?=$this->element('schedule_content');?>
 <?=$this->element('dialog');?>
+<?=$this->element('sql_dump');?>
+<? debug($this->Session->read());?>
