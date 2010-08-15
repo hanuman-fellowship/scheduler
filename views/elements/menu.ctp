@@ -85,13 +85,11 @@
 	'Undo' => array(
 		'role' => array('operations'),
 		'url' => array('controller' => 'changes', 'action' => 'undo'),
-		'sub' => $changes['undo'],
 		'hidden' => $hidden
 	),
 	'Redo' => array(
 		'role' => array('operations'),
 		'url' => array('controller' => 'changes', 'action' => 'redo'),
-		'sub' => $changes['redo'],
 		'hidden' => $hidden
 	),
 	array(
