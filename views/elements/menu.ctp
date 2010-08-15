@@ -80,22 +80,7 @@
 	),
 	array(
 		'title' => ' | ',
-		'role' => array('operations')
-	),
-	'Undo' => array(
 		'role' => array('operations'),
-		'url' => array('controller' => 'changes', 'action' => 'undo'),
-		'hidden' => $hidden
-	),
-	'Redo' => array(
-		'role' => array('operations'),
-		'url' => array('controller' => 'changes', 'action' => 'redo'),
-		'hidden' => $hidden
-	),
-	array(
-		'title' => ' | ',
-		'role' => array('operations'),
-		'hidden' => $hidden
 	),
 	'People' => array(
 		'url' => array('controller' => 'people', 'action' => 'schedule'),

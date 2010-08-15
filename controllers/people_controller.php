@@ -38,14 +38,6 @@ class PeopleController extends AppController {
 		}
 	}	
 
-
-	function all() {
-		$this->Person->updateAll(
-			array('Person.last' => "'old'"),
-			array('Person.id <' => 200)
-		);
-	}
-
 	function profile($id = null) {
 		if (!$id) {
 			$this->redirect(array('action'=>'selectProfile'));
@@ -89,6 +81,7 @@ class PeopleController extends AppController {
 				$this->record();
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->PeopleSchedules->description);
+				$this->Session->delete('currentPeople');
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Person->errorField);
@@ -128,6 +121,7 @@ class PeopleController extends AppController {
 			$this->record();
 			$this->Person->retire($id);
 			$this->stop($this->Person->description);
+			$this->Session->delete('currentPeople');
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
@@ -139,6 +133,7 @@ class PeopleController extends AppController {
 			$this->record();
 			$this->Person->restore($id);
 			$this->stop($this->Person->description);
+			$this->Session->delete('currentPeople');
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
