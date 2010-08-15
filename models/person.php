@@ -24,10 +24,6 @@ class Person extends AppModel {
 		return true;
 	}
 
-	function beforeSave() {
-		debug($this-data);
-	}
-
 	function sSave($data) {
 		$resident_category_id = $data['Person']['resident_category_id'];
 		unset($data['Person']['resident_category_id']);
