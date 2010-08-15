@@ -92,6 +92,7 @@ class AppController extends Controller {
 		);
 		$latest = ($id == 'latest' || $id == $latestSchedule) ? true : false;
 		$this->Session->write('Schedule.latest', $latest);
+		$this->Session->delete('currentPeople');
 	}
 	
 	function record() {
