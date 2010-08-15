@@ -1,3 +1,6 @@
+<div class = 'tall left'>
+<? debug($shifts); ?>
+</div>
 <fieldset>
 	<legend><?php __('Assign Shift');?></legend>
 <span class='select_shift'>
