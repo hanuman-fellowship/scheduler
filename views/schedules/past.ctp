@@ -19,6 +19,7 @@ foreach($schedules as $schedule) {
 	get('current').scrollIntoView(true);
 	get('current').style.fontWeight = 'bold';
 	get('current').innerHTML += '&nbsp;&nbsp;<----';
+	setScroll();
 ");?>
 </div>
 </fieldset>
