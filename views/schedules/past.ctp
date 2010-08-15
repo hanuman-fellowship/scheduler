@@ -1,6 +1,6 @@
 <fieldset>
 	<legend><?php __('Past Schedules');?></legend>
-<div class='tall left' style='width:auto'>
+<div class='tall left' style='width:15em'>
 <?
 $current_schedule = $session->read('Schedule.id');
 foreach($schedules as $schedule) {
