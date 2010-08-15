@@ -3,7 +3,7 @@
 
 var tabdropdown={
 	disappeardelay: 200, //set delay in miliseconds before menu disappears onmouseout
-	disablemenuclick: false, //when user clicks on a menu item with a drop down menu, disable menu item's link?
+	disablemenuclick: true, //when user clicks on a menu item with a drop down menu, disable menu item's link?
 	enableiframeshim: 1, //1 or 0, for true or false
 
 	//No need to edit beyond here////////////////////////
