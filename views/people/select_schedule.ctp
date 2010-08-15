@@ -27,7 +27,7 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 			echo "<div class='left' style='float:left;padding:10px'><strong>{$person['PeopleSchedules']['ResidentCategory']['name']}</strong><br>";	
 			$rcId = $person['PeopleSchedules']['resident_category_id'];
 		}
-		$last_style = ($last == $person['Person']['id']) ? array('<i>','</i>') : array('','');
+		$last_style = ($last == $person['Person']['id']) ? array('<b><i>','</i></b>') : array('','');
 		echo $last_style[0].
 		${$type}->link($person['Person']['name'],array('action'=>'schedule',$person['Person']['id']),$attributes) . $last_style[1].'<br>';
 	}

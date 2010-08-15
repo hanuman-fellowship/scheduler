@@ -20,7 +20,7 @@ foreach(array('overlay_0'=>'none','overlay_1'=>'') as $overlay => $disp) {
 				'onClick' => 'wait()'
 			);;
 		}
-		$last_style = ($last == $id) ? array('<i>','</i>') : array('','');
+		$last_style = ($last == $id) ? array('<b><i>','</i></b>') : array('','');
 		echo $last_style[0].
 		${$type}->link($name,array('action'=>'schedule',$id),$attributes).
 		$last_style[1].'<br/>';
