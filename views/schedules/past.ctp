@@ -17,7 +17,7 @@ foreach($schedules as $schedule) {
 	echo $current ? '</i>' : '';
 }
 ?>
-<?=$this->javascript->codeBlock("get('current').scrollIntoView(true)");
+<?=$this->javascript->codeBlock("get('current').scrollIntoView(true)");?>
 </div>
 </fieldset>
 <?=$this->element('message');?>
