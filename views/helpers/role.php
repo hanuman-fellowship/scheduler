@@ -1,7 +1,7 @@
 <?
 class RoleHelper extends AppHelper {
 
-	var $helpers = array('html','ajax');
+	var $helpers = array('html','ajax','javascript');
 	
 	function wrap($content, $roles) {
 		foreach ($roles as $role => $wrapper) {
@@ -30,11 +30,14 @@ class RoleHelper extends AppHelper {
 	function menu($data) {
 		$cur_role = Authsome::get('role');
 		$menuData = $this->html->css("menu");
-		$menuData .= '<span>';
-		$menuData .= '<ul class="menu">';
+		$subMenus = array();
+		$menuNum = 0;
+		$menuData .= "<div id='menu' class='top'>";
+		$menuData .= '<ul>';
 		foreach($data as $title => $top) {
+			$menuNum++;
 			if (!is_array($top)) { // no link, role, or submenus so draw it and move on
-				$menuData .= '<li class="top">';
+				$menuData .= '<li>';
 				$menuData .= "<span>{$top}</span>";
 				$menuData .= '</li>';
 				continue;
@@ -52,12 +55,11 @@ class RoleHelper extends AppHelper {
 					continue;
 				}
 			}
-			$menuData .= '<li class="top">';			
+			$menuData .= '<li>';			
 			if (isset($top['url'])) {
 				$attributes = array(
-					'class'=>'top_link',
-					'onmouseover' => "showElement('menu_{$title}_sub')",
-					'id'=>"menu_{$title}"
+					'id'=>"menu_{$title}",
+					'rel'=>"sub{$menuNum}"
 				);
 				if (in_array('ajax',$top)) {
 					$type = 'ajax';
@@ -87,12 +89,10 @@ class RoleHelper extends AppHelper {
 					unset($top['sub']['hidden']);
 				}
 				if ($showSub) {
-					$menuData .= "<ul class='sub' id='menu_{$title}_sub'>";
+					$subMenus[$menuNum] = "<div id='sub{$menuNum}' class='sub'>";
 					foreach($top['sub'] as $sub_title => $sub) {
 						if (!is_array($sub)) { // no link or role, so draw and move on
-							$menuData .= '<li>';
-							$menuData .= "<span>{$sub}</span>";
-							$menuData .= '</li>';					
+							$subMenus[$menuNum] .= "<span>{$sub}</span>";
 							continue;
 						}
 						$sub_title = array_key_exists('title',$sub) ? $sub['title'] : $sub_title;
@@ -106,7 +106,6 @@ class RoleHelper extends AppHelper {
 								continue;
 							}
 						}
-						$menuData .= '<li>';
 						if (array_key_exists('url',$sub)) {
 							if (array_key_exists('ajax',$sub)) {
 								$type = 'ajax';
@@ -124,19 +123,22 @@ class RoleHelper extends AppHelper {
 								}
 							}				
 							$confirm = array_key_exists('confirm',$sub) ? $sub['confirm'] : null;
-							$menuData .= $this->{$type}->link($sub_title,$sub['url'],$attributes,$confirm);
+							$subMenus[$menuNum] .= $this->{$type}->link($sub_title,$sub['url'],$attributes,$confirm);
 						} else {
-							$menuData .= "<span>{$sub_title}</span>";
+							$subMenus[$menuNum] .= "<span>{$sub_title}</span>";
 						}
-						$menuData .= '</li>';
 					}
-					$menuData .= '</ul>';
+					$subMenus[$menuNum] .= '</div>';
 				}
 			}
 			$menuData .= '</li>';
 		}
 		$menuData .= '</ul>';
-		$menuData .= '</span>';
+		$menuData .= '</div>';
+		foreach($subMenus as $subMenu) {
+			$menuData .= $subMenu;
+		}
+		$menuData .= $this->javascript->codeBlock("tabdropdown.init('menu')");
 		return $menuData;
 	}
 	

@@ -228,3 +228,15 @@ a.redo {
 	left:0;
 	padding:2px;
 }
+
+.schedule_message, .schedule_message a {
+	font-size:13px;
+	color:#CCC;
+}
+.schedule_message {
+	clear:both;
+	position:relative;
+	top:-10px;
+	left:7px;
+}
+

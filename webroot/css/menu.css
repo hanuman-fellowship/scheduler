@@ -1,46 +1,86 @@
-.menu {padding:0 12px 0 12px; margin:0; list-style:none; height:35px; display:table; background:#FFFFE6 repeat-x; position:relative; font-family:arial, verdana, sans-serif; }
-.menu li.top {display:block; float:left; position:relative;}
-.menu li span {display:block; float:left; height:35px; line-height:35px; color:#999; text-decoration:none; font-size:13px; font-weight:bold; padding:0 6px 0 6px;}
-.menu li a.top_link {display:block; float:left; height:35px; line-height:35px; color:#bbb; text-decoration:none; font-size:13px; font-weight:bold; padding:0 6px 0 6px; cursor:pointer;}
-.menu li a.top_link span {float:left; font-weight:bold; display:block; padding:0 24px 0 12px; height:35px;}
-.menu li a.top_link span.down {float:left; display:block; padding:0 24px 0 12px; height:40px; background:url(images/down.gif) no-repeat right top;}
-.menu li a.top_link:hover {color:#000; }
-
-.menu li:hover > a.top_link {color:#000;}
-
-.menu table {border-collapse:collapse; width:0; height:0; position:absolute; top:0; left:0;}
-
-.menu a:hover {visibility:visible;}
-.menu li:hover {position:relative; z-index:200;}
-
-.menu ul, 
-.menu :hover ul ul, 
-.menu :hover ul :hover ul ul,
-.menu :hover ul :hover ul :hover ul ul,
-.menu :hover ul :hover ul :hover ul :hover ul ul {position:absolute; top:-9999px; left:-9999px; display:none; list-style:none;}
-
-.menu :hover ul.sub {display:block; left:-2px; top:35px; right:2px; background: #FFFFE6; padding:3px 0; white-space:nowrap; width:300px; height:auto;}
-.menu :hover ul.sub li {display:block; height:20px; position:relative; float:left; width:250px;}
-.menu :hover ul.sub li span {font-weight:normal;display:block; font-size:11px; height:20px; width:286px; line-height:20px; text-indent:5px; color:#bbb; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}
-.menu :hover ul.sub li a {font-weight:normal;display:block; font-size:11px; height:20px; width:297px; line-height:20px; text-indent:10px; color:#000; text-decoration:none; border:3px solid #fff; border-width:0 0 0 3px;}
-.menu :hover ul.sub li a:hover {background:#999999; color:#fff;}
-.menu :hover ul.sub li a.fly:hover {background:#999999; color:#fff;}
-.menu :hover ul li:hover > a.fly {background:#999999; color:#fff;} 
-
-.menu :hover ul :hover ul,
-.menu :hover ul :hover ul :hover ul,
-.menu :hover ul :hover ul :hover ul :hover ul,
-.menu :hover ul :hover ul :hover ul :hover ul :hover ul
-{left:90px; top:-4px; background: #fff; padding:3px 0; border:1px solid 999999; white-space:nowrap; width:93px; z-index:200; height:auto;}
-
-.schedule_message, .schedule_message a {
-	font-size:13px;
-	color:#CCC;
-}
-.schedule_message {
-	float:left;
-	position:relative;
-	left:10px;
-	top:10px;
+.top{
+border-bottom: 1px solid gray;
+margin-bottom:15px;
 }
 
+.top ul{
+padding: 3px 0;
+margin-left: 0;
+margin-top: 1px;
+margin-bottom: 0;
+font-size:13px;
+font-weight:bold;
+font-family:arial, verdana, sans-serif;
+list-style-type: none;
+text-align: left; /*set to left, center, or right to align the menu as desired*/
+}
+
+.top li{
+display: inline;
+margin: 0;
+}
+
+.top li a {
+text-decoration: none;
+padding: 3px 7px;
+margin-right: 3px;
+color:#BBB;
+}
+
+.top li span {
+padding: 3px 7px;
+margin-right: 3px;
+color:#999;
+}
+
+.top li a:visited {
+}
+
+.top li a:hover {
+color: black;
+}
+
+.top li.selected{
+}
+
+.top li.selected a{ /*selected main tab style */
+color:black;
+border-bottom-color: white;
+}
+
+.top li.selected a:hover { /*selected main tab style */
+text-decoration: none;
+}
+
+/* ######### Style for Drop Down Menu ######### */
+
+.sub{
+position:absolute;
+top: 0;
+border: 1px solid #918d8d; /*THEME CHANGE HERE*/
+border-width: 0 1px 1px;
+line-height:18px;
+z-index:100;
+background-color: #FFFFE6;
+width: 200px;
+font-size:11px;
+visibility: hidden;
+}
+
+
+.sub a, .sub span {
+width: auto;
+display: block;
+text-indent: 5px;
+padding: 2px 0;
+text-decoration: none;
+color: black;
+}
+
+* html .sub a{ /*IE only hack*/
+width: 100%;
+}
+
+.sub a:hover { /*THEME CHANGE HERE*/
+background-color: #CCC;
+}
