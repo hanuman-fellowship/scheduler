@@ -3,8 +3,6 @@ class Person extends AppModel {
 
 	var $name = 'Person';
 
-	var $names = null;
-
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
@@ -295,12 +293,12 @@ class Person extends AppModel {
 	function addDisplayName(&$person) {
 		// first time this function is called, set up a list of people's last names grouped by first name
 		$person['name'] = ($person['name']) ? $person['name'] : $person['first'];
-		$this->names = (!$this->names) ?
+		$_SESSION['names'] = !isset($_SESSION['names']) ?
 			Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first') 
-			: $this->names;
+			: $_SESSION['names'];
 
 		// now find out how many letters of the last name we need for each first name
-		$lastNames = &$this->names[$person['first']];
+		$lastNames = &$_SESSION['names'][$person['first']];
 		if (!isset($lastNames['numLetters']) && $lastNames) {
 			$others = $lastNames;
 			unset($others[$person['id']]); // don't compare with itself

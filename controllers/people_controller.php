@@ -82,6 +82,7 @@ class PeopleController extends AppController {
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->PeopleSchedules->description);
 				$this->Session->delete('currentPeople');
+				$this->Session->delete('names');
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Person->errorField);
@@ -122,6 +123,7 @@ class PeopleController extends AppController {
 			$this->Person->retire($id);
 			$this->stop($this->Person->description);
 			$this->Session->delete('currentPeople');
+			$this->Session->delete('names');
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
@@ -134,6 +136,7 @@ class PeopleController extends AppController {
 			$this->Person->restore($id);
 			$this->stop($this->Person->description);
 			$this->Session->delete('currentPeople');
+			$this->Session->delete('names');
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
