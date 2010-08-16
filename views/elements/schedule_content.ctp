@@ -222,3 +222,4 @@
 	</tr> 
 	<? } ?>	
 </table> 
+<? debug($session->read());?>

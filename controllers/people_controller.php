@@ -29,9 +29,8 @@ class PeopleController extends AppController {
 			$person = $this->Person->getPerson($id);
 			$this->Person->addDisplayName($person['Person']);
 			$this->set('person',$person);		
-			$this->loadModel('Boundary');
 //			$this->set('changes', $this->Change->getChangesForMenu());
-			$this->set('bounds', $this->Boundary->getBounds());
+			$this->set('bounds', $this->getBounds());
 			$this->Session->write('last_person',$id);
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));
@@ -81,8 +80,7 @@ class PeopleController extends AppController {
 				$this->record();
 				$this->Person->sSave($this->data);
 				$this->stop($this->Person->PeopleSchedules->description);
-				$this->Session->delete('currentPeople');
-				$this->Session->delete('names');
+				$this->Session->delete('cache.people');
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Person->errorField);
@@ -122,8 +120,7 @@ class PeopleController extends AppController {
 			$this->record();
 			$this->Person->retire($id);
 			$this->stop($this->Person->description);
-			$this->Session->delete('currentPeople');
-			$this->Session->delete('names');
+			$this->Session->delete('cache.people');
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();
@@ -135,8 +132,7 @@ class PeopleController extends AppController {
 			$this->record();
 			$this->Person->restore($id);
 			$this->stop($this->Person->description);
-			$this->Session->delete('currentPeople');
-			$this->Session->delete('names');
+			$this->Session->delete('cache.people');
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();

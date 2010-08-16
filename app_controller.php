@@ -92,8 +92,7 @@ class AppController extends Controller {
 		);
 		$latest = ($id == 'latest' || $id == $latestSchedule) ? true : false;
 		$this->Session->write('Schedule.latest', $latest);
-		$this->Session->delete('currentPeople');
-		$this->Session->delete('names');
+		$this->Session->delete('cache');
 	}
 	
 	function record() {
@@ -136,6 +135,14 @@ class AppController extends Controller {
 				$this->redirect('/');
 			}
 		}
+	}
+
+	function getBounds() {
+		if (!$this->Session->check('cache.bounds')) {
+			$this->loadModel('Boundary');
+			$this->Session->write('cache.bounds',$this->Boundary->getBounds());
+		}
+		return $this->Session->read('cache.bounds');
 	}
 }
 ?>

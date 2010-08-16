@@ -264,19 +264,19 @@ class Person extends AppModel {
 	}
 
 	function getCurrent() {
-		if (isset($_SESSION['currentPeople'])) {
-			return $_SESSION['currentPeople'];
+		if (isset($_SESSION['cache']['people']['current'])) {
+			return $_SESSION['cache']['people']['current'];
 		}
 		$currentPeople = $this->PeopleSchedules->find('all',array(
 			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
 			'fields' => array('distinct PeopleSchedules.person_id')
 		));
-		$_SESSION['currentPeople'] = Set::combine(
+		$_SESSION['cache']['people']['current'] = Set::combine(
 			$currentPeople,
 			'{n}.PeopleSchedules.person_id',
 			'{n}.PeopleSchedules.person_id'
 		);
-		return $_SESSION['currentPeople'];
+		return $_SESSION['cache']['people']['current'];
 	}
 
 	function getPeopleSchedulesId($id) {
@@ -289,12 +289,12 @@ class Person extends AppModel {
 	function addDisplayName(&$person) {
 		// first time this function is called, set up a list of people's last names grouped by first name
 		$person['name'] = ($person['name']) ? $person['name'] : $person['first'];
-		$_SESSION['names'] = !isset($_SESSION['names']) ?
+		$_SESSION['cache']['people']['names'] = !isset($_SESSION['cache']['people']['names']) ?
 			Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first') 
-			: $_SESSION['names'];
+			: $_SESSION['cache']['people']['names'];
 
 		// now find out how many letters of the last name we need for each first name
-		$lastNames = &$_SESSION['names'][$person['first']];
+		$lastNames = &$_SESSION['cache']['people']['names'][$person['first']];
 		if (!isset($lastNames['numLetters']) && $lastNames) {
 			$others = $lastNames;
 			unset($others[$person['id']]); // don't compare with itself
