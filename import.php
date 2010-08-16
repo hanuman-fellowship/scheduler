@@ -143,7 +143,7 @@ if ($_GET['a'] == '6') {
 				VALUES (
 					'{$people['id']}',
 					'{$people['name']}',
-					'{$people['name']}'
+					'{$people['id']}''
 				)";
 			if (!mysql_query($query,$database)) {
 				die('Error: ' . mysql_error()."<br>".$query);
@@ -155,7 +155,7 @@ if ($_GET['a'] == '6') {
 	$first = mysql_fetch_array($get);	
 	$from = $first['id'];
 	$to = $from + 100;
-	echo "importing shifts from ($from} to {$to}...<br>";
+	echo "importing shifts from {$from} to {$to}...<br>";
 	$location = "import.php?a=7&from={$from}&to={$to}";
 }
 
