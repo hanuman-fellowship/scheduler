@@ -139,11 +139,10 @@ if ($_GET['a'] == '6') {
 		}
 		if (!in_array($people['id'],$people_ids)) {
 			$people_ids[] = $people['id'];
-			$query = "INSERT INTO krishna.people (id,first,last)
+			$query = "INSERT INTO krishna.people (id,first)
 				VALUES (
 					'{$people['id']}',
-					'{$people['name']}',
-					'{$people['id']}''
+					'{$people['name']}'
 				)";
 			if (!mysql_query($query,$database)) {
 				die('Error: ' . mysql_error()."<br>".$query);
