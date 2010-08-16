@@ -13,7 +13,7 @@
 	font-size:15px;
 }
 .tall {
-	max-height:400px;
+	height:400px;
 	overflow:auto;
 }
 .left {

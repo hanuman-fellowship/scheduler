@@ -2,6 +2,8 @@ TODO:
 
 	- show schedules as a tree going down from pubished based on which they were copied from
 
+	- when undoing or redoing, need to check if PeopleSchedules is changed, and delete the session caches
+
 	- order working copies by date or by name in the select schedule dialog
 	
 	- schedule helper
