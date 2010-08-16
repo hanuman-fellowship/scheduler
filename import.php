@@ -143,7 +143,7 @@ if ($_GET['a'] == '6') {
 				VALUES (
 					'{$people['id']}',
 					'{$people['name']}',
-					'Not Specified'
+					'{$people['name']}'
 				)";
 			if (!mysql_query($query,$database)) {
 				die('Error: ' . mysql_error()."<br>".$query);
