@@ -177,7 +177,7 @@ class Person extends AppModel {
 	
 	/**
 	 * returns true if the person is available for the shift or -1 if the person is on the shift
-	 * $person must contain 'Person.PeopleSchedules', 'OffDay', 'Assignment.Shift'
+	 * $person must contain 'Person', 'PeopleSchedules', 'OffDay', 'Assignment.Shift'
 	 * $shift must contain 'Shift'
 	 *
 	 */

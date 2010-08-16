@@ -168,13 +168,14 @@ class Shift extends AppModel {
 			'order' => 'Area.short_name, Shift.start, Shift.end'
 		));
 		$unassigned = array();
+		$noAssignment = array();
 		foreach($shifts as $num => &$shift) {
 			$shift['available'] = $this->Person->available($person, $shift);
 			$shift['Shift'] = $this->format($shift['Shift'],true,false);
 			if (count($shift['Assignment']) < $shift['Shift']['num_people']) {
 				$unassigned[] = $shift;
 				if (!$shift['Assignment']) {
-					unset($shifts[$num]);
+					$noAssignment[] = $num;
 					continue;
 				}
 			}
@@ -191,6 +192,9 @@ class Shift extends AppModel {
 					$this->Person->addDisplayName($assignment['Person']);
 				}
 			}
+		}
+		foreach($noAssignment as $num) {
+			unset($shifts[$num]);
 		}
 		return array('unassigned' => $unassigned, 'assigned' => $shifts);
 	}
