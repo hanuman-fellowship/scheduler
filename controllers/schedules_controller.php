@@ -4,6 +4,7 @@ class SchedulesController extends AppController {
 	var $name = 'Schedules';
 	
 	function add() {
+		$scheduleName = $this->Session->read('Schedule.name');
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
 				$this->setSchedule($this->Schedule->copy(
@@ -15,7 +16,8 @@ class SchedulesController extends AppController {
 				$this->set('errorField',$this->Schedule->errorField);
 				$this->set('errorMessage',$this->Schedule->errorMessage);
 			}
-		}
+		} 
+		$this->set('scheduleName',$scheduleName);
 	}
 	
 	function delete($id = null) {
