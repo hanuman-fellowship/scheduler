@@ -222,4 +222,4 @@
 	</tr> 
 	<? } ?>	
 </table> 
-<? debug($session->read());?>
+<?=$this->element('sql_dump');?>
