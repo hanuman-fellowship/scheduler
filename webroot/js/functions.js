@@ -113,6 +113,7 @@ function openDialog(id,noHighlight,position) {
 	get('dialog').style.top = newTop+'px';
 	get('dialog').style.zIndex = 1001;
 	document.onclick = hideDialog;
+	get('dialog').onclick = clickInDialog; 
 }
 
 function wait() {
