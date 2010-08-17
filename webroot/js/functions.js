@@ -112,6 +112,7 @@ function openDialog(id,noHighlight,position) {
 	get('dialog').style.left = newLeft+'px';
 	get('dialog').style.top = newTop+'px';
 	get('dialog').style.zIndex = 1001;
+	document.onclick = hideDialog;
 }
 
 function wait() {
