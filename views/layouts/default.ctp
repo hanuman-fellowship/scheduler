@@ -6,7 +6,8 @@
 	</title>	
 	<?=$html->css("screen") ?>
 	<?=$javascript->link('prototype');?>
-	<?=$javascript->link('scriptaculous');?> 
+	<?=$javascript->link('scriptaculous');?>
+	<?=$javascript->link('resizeable');?>
 </head>
 <body  onload="setScroll()">  
 	<div id="container">

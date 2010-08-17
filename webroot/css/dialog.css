@@ -42,9 +42,6 @@
 	cursor:move;
 }
 
-.cursor {
-}
-
 .tall {
 	max-height:400px;
 	overflow:auto;
