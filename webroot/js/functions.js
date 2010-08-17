@@ -112,6 +112,8 @@ function openDialog(id,noHighlight,position) {
 	get('dialog').style.left = newLeft+'px';
 	get('dialog').style.top = newTop+'px';
 	get('dialog').style.zIndex = 1001;
+	get('drag_here').style.width = dialogWidth + 'px';
+	new Draggable('dialog',{scroll:window,handle:'drag_here'});
 	document.onclick = hideDialog;
 	get('dialog').onclick = clickInDialog; 
 }

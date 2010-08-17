@@ -1,9 +1,15 @@
-.out {
+#dialog {
+	position:fixed;
+	display:none;
+}
+
+#outer {
 	background: url('black50.png'); 
 	position:relative;
 	margin:1em 0;
 }
-.in {
+
+#dialog_content {
 	background-color:#DFDBC3;
 	text-align:center; 
 	border:1px solid #555; 
@@ -11,23 +17,31 @@
 	font-weight:normal;
 	padding:10px;
 	font-size:15px;
+	left:-5px;
+	top:-5px;
 }
+
+#drag_here {
+	position:absolute;
+	top:-5px;
+	left:-5px;
+	height:30px;
+	z-index:1000;
+	cursor:move;
+}
+
+.cursor {
+}
+
 .tall {
 	max-height:400px;
 	overflow:auto;
 }
+
 .left {
 	text-align:left;
 }
+
 fieldset div {
 	padding:2px;
 }
-
-
-.ltin {
-	left:-5px;
-}
-.tpin {
-	top:-5px;
-}
-.narrow {width:8em;} /* change to suit */
