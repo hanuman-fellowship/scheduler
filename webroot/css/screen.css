@@ -233,6 +233,11 @@ a.redo {
 	font-size:13px;
 	color:#CCC;
 }
+
+.schedule_message a:hover {
+	color:#777;
+}
+
 .schedule_message {
 	clear:both;
 	position:relative;

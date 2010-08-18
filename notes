@@ -1,5 +1,13 @@
 TODO:
 
+	- CRUD resident categories
+
+	- edit times
+
+	- publish multiple schedules (for retreats, etc.)
+		- auto publish times?
+
+
 	- show schedules as a tree going down from pubished based on which they were copied from
 
 	- when undoing or redoing, need to check if PeopleSchedules is changed, and delete the session caches
@@ -9,12 +17,7 @@ TODO:
 	- schedule helper
 		- combine displayAreaFloating and DisplayPersonFloating
 
-	- write a function to convert legacy data
-
-	- Make dialog styles consistent
-
 	BUGS:
-
 		- Why does it save two id entries in the change_fields when doing assignments::swap?
 
 	- Flash messages next to menu
@@ -31,13 +34,9 @@ TODO:
 	- Person
 		- Restore
 			- The view should be a search box that populates the list using ajax.
-
-	- Menu
-		- Can the submenu width be automatic?
 	
 	- Changes
 		- views/changes/history needs work
-			- maybe two columns, one for redos and one for undos
 		- jump is slow. could it do all of the calculations first, and then update the database all at once?
 	
 	- Merge Branch?
