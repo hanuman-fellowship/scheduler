@@ -28,7 +28,8 @@ class AppController extends Controller {
 		if (!$this->Session->check('Schedule')) {
 			$this->setSchedule('latest');
 		}
-		if ($this->Session->read('Schedule.user_id') == Authsome::get('id')) {
+		if ($this->Session->read('Schedule.user_id') == Authsome::get('id') && 
+		Authsome::get('role') == 'operations') {
 			$this->Session->write('Schedule.editable',true);
 		} else {
 			$this->Session->write('Schedule.editable',false);
