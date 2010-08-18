@@ -100,8 +100,7 @@ class ScheduleHelper extends AppHelper {
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
 				
-				if (Authsome::get('role') == 'operations' && !$this->params['isAjax'] &&
-				$this->session->read('Schedule.editable')) {
+				if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
 						'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
@@ -134,7 +133,7 @@ class ScheduleHelper extends AppHelper {
 							)
 						)
 					),
-					($this->params['isAjax'] || !$this->session->read('Schedule.editable')) 
+					(!$this->session->read('Schedule.editable')) 
 				) . '<br/>';
 				if (Authsome::get('role') == 'operations' && 
 				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0) {
@@ -168,7 +167,7 @@ class ScheduleHelper extends AppHelper {
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$this->session->read('Schedule.editable')) 
+					(!$this->session->read('Schedule.editable')) 
 				);
 				$people .= "{$unassigned}<br/>";
 			}
@@ -186,7 +185,7 @@ class ScheduleHelper extends AppHelper {
 						'ajax'
 					)
 				),
-				($this->params['isAjax'] || !$this->session->read('Schedule.editable')) 
+				(!$this->session->read('Schedule.editable')) 
 			);
 			return "<span id='{$shift['id']}'><b>" .
 				$time . "</b><br/>" . $people . "</span><br/><br/>";
