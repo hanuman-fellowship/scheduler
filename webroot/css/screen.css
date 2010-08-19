@@ -232,6 +232,7 @@ a.redo {
 .schedule_message, .schedule_message a {
 	font-size:13px;
 	color:#CCC;
+	font-weight:bold;
 }
 
 .schedule_message a:hover {

@@ -20,7 +20,7 @@ display: inline;
 margin: 0;
 }
 
-.top li a {
+.top li a, .changes a {
 text-decoration: none;
 padding: 3px 7px;
 margin-right: 3px;
@@ -36,7 +36,7 @@ color:#999;
 .top li a:visited {
 }
 
-.top li a:hover {
+.top li a:hover, .changes a:hover {
 color: black;
 }
 
@@ -87,22 +87,26 @@ background-color: #CCC;
 
 .changes {
 	position:absolute;
-	right:0;
-	top:0;
+	right:3px;
+	top:3px;
 	margin-top: 8px;
 	font-size:13px;
 	font-weight:bold;
 	font-family:arial, verdana, sans-serif;
-	padding: 3px 7px;
-	margin-right: 3px;
-	color:#999;
+	color:white;
 }
 
-.changes span {
+.changes span.no_link {
+	padding: 3px 7px;
+	margin-right: 3px;
+}
+
+.changes span.change_message {
 	display:none;
 	position:absolute;
-	right:6px;
+	right:10px;
 	top:25px;
 	font-size:11px;
 	white-space:nowrap;
+	color: #CCC;
 }
