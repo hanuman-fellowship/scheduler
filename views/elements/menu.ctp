@@ -177,19 +177,28 @@
 		)
 	)
 ));
-if (!($change_messages['undo'] == '' && $change_messages['redo'] == '')) {
+if ($session->read('Schedule.editable')) {
 ?>
 <div class='changes'>
 	<span id='undo_message'><?=$change_messages['undo']?></span>
 	<span id='redo_message'><?=$change_messages['redo']?></span>
-	<?=$html->link('Undo',array('controller'=>'changes','action'=>'undo'),array(
+	<?=$ajax->link('View History',
+		array('controller'=>'changes','action'=>'history'),
+		array(
+			'update'=>'dialog_content',
+			'complete' => "openDialog('history_link',true,'bottom')",
+			'id'=>'history_link'
+		)
+	);?>
+	|
+	<?= $change_messages['undo'] ? $html->link('Undo',array('controller'=>'changes','action'=>'undo'),array(
 		'onmouseover' => "showElement('undo_message')",
 		'onmouseout' => "hideElement('undo_message')"
-	));?>
-	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'),array(
+	)) : "Undo";?>
+	<?= $change_messages['redo'] ? $html->link('Redo',array('controller'=>'changes','action'=>'redo'),array(
 		'onmouseover' => "showElement('redo_message')",
 		'onmouseout' => "hideElement('redo_message')"
-	));?>
+	)) : "Redo";?>
 </div>
 <?
 }
