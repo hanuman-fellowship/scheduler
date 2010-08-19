@@ -65,7 +65,11 @@ class SchedulesController extends AppController {
 		$this->savePage();
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
-		$this->set('schedules',$this->Schedule->find('all'));
+		$this->set('schedules',$this->Schedule->find('all',array(
+			'conditions' => array(
+				'Schedule.name <>' => 'Published'
+			)
+		)));
 		$this->set('schedule_id',$this->Schedule->schedule_id);		
 		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => $this->Schedule->schedule_id)));		
 	}

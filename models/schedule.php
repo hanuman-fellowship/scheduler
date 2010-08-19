@@ -292,46 +292,48 @@ class Schedule extends AppModel {
 			}
 		}
 		
-		echo 'Conflicts merging b into a<br><br>';
-		debug($conflicts);
-		die;
 		
 		
 		// save changes from b as redos for a
-		$new_change_id = 0;		
-		foreach($changes['b'] as $change) {
-			$new_change_id --;
-			$change['Change']['id']          = $new_change_id;
-			$change['Change']['schedule_id'] = $sched_ids['a'];
-			$this->Change->create();
-			$this->Change->save(array('Change' => $change['Change']));
-			foreach($change['ChangeModel'] as $change_model) {
-				$change_model_data = array('ChangeModel' => $change_model);
-				$change_model_data['ChangeModel']['change_id']   = $new_change_id;
-				$change_model_data['ChangeModel']['schedule_id'] = $sched_ids['a'];
-				unset($change_model_data['ChangeModel']['ChangeField']);
-				unset($change_model_data['ChangeModel']['id']);
-				$this->Change->ChangeModel->create();
-				$this->Change->ChangeModel->save($change_model_data);
-				$change_model_id = $this->Change->ChangeModel->getLastInsertId();
-				foreach($change_model['ChangeField'] as $field) {
-					$field['change_id']       = $new_change_id;
-					$field['change_model_id'] = $change_model_id;
-					$field['schedule_id']     = $sched_ids['a'];
-					if ($field['field_key'] == 'schedule_id') {
-						$field['field_old_val'] = $field['field_old_val'] ? $sched_ids['a'] : null;
-						$field['field_new_val'] = $field['field_new_val'] ? $sched_ids['a'] : null;
+		if (!$conflicts) {
+			$new_change_id = 0;		
+			foreach($changes['b'] as $change) {
+				$new_change_id --;
+				$change['Change']['id']          = $new_change_id;
+				$change['Change']['schedule_id'] = $sched_ids['a'];
+				$this->Change->create();
+				$this->Change->save(array('Change' => $change['Change']));
+				foreach($change['ChangeModel'] as $change_model) {
+					$change_model_data = array('ChangeModel' => $change_model);
+					$change_model_data['ChangeModel']['change_id']   = $new_change_id;
+					$change_model_data['ChangeModel']['schedule_id'] = $sched_ids['a'];
+					unset($change_model_data['ChangeModel']['ChangeField']);
+					unset($change_model_data['ChangeModel']['id']);
+					$this->Change->ChangeModel->create();
+					$this->Change->ChangeModel->save($change_model_data);
+					$change_model_id = $this->Change->ChangeModel->getLastInsertId();
+					foreach($change_model['ChangeField'] as $field) {
+						$field['change_id']       = $new_change_id;
+						$field['change_model_id'] = $change_model_id;
+						$field['schedule_id']     = $sched_ids['a'];
+						if ($field['field_key'] == 'schedule_id') {
+							$field['field_old_val'] = $field['field_old_val'] ? $sched_ids['a'] : null;
+							$field['field_new_val'] = $field['field_new_val'] ? $sched_ids['a'] : null;
+						}
+						$change_field_data = array('ChangeField' => $field);
+						unset($change_field_data['ChangeField']['id']);
+						$this->Change->ChangeField->create();
+						$this->Change->ChangeField->save($change_field_data);
 					}
-					$change_field_data = array('ChangeField' => $field);
-					unset($change_field_data['ChangeField']['id']);
-					$this->Change->ChangeField->create();
-					$this->Change->ChangeField->save($change_field_data);
 				}
 			}
-		}
-		// apply all the new changes
-		$this->Change->schedule_id = $this->schedule_id;
-		while($this->Change->doRedo()) {
+			// apply all the new changes
+			$this->Change->schedule_id = $this->schedule_id;
+			while($this->Change->doRedo()) {
+			}
+		} else {
+			echo 'Conflicts merging b into a<br><br>';
+			debug($conflicts);
 		}
 	}
 
