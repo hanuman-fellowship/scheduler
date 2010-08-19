@@ -184,18 +184,18 @@ a:hover.remove_RC_5 {
 	text-decoration:line-through;
 }
 
-.board_temporary, .menu_temporary, a:link.temporary, a:visited.temporary, a:link.remove_temporary, a:visited.remove_temporary, #temporary {
+.board_RC_6, .menu_RC_6, a:link.RC_6, a:visited.RC_6, a:link.remove_RC_6, a:visited.remove_RC_6, #RC_6 {
 	text-decoration: none;
 	color:#ff0000;
 }
 
 
-a:hover.temporary, a:hover.remove_temporary {
+a:hover.RC_6, a:hover.remove_RC_6 {
 	color:#ff5555;
 	text-decoration: none;
 }
 
-a:hover.remove_temporary {
+a:hover.remove_RC_6 {
 	text-decoration:line-through;
 }
 
