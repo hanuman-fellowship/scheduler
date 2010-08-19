@@ -1,5 +1,4 @@
 <?
-$a = false;
-echo !$a;
+echo substr('hello',0,-1);
 ?>
 

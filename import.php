@@ -246,7 +246,8 @@ if ($_GET['a'] == '8') {
 			die('Error: ' . mysql_error()."<br>".$query);
 		}
 
-		foreach(array('boundaries','days','resident_categories','slots') as $table) {
+		// boundaries, days, slots
+		foreach(array('boundaries','days','slots') as $table) {
 			$get2 = mysql_query("SELECT * from krishna.{$table} limit 1");
 			$fields = array_keys(mysql_fetch_assoc($get2));	
 			$field_list = 'schedule_id';
@@ -264,6 +265,31 @@ if ($_GET['a'] == '8') {
 					die('Error: ' . mysql_error()."<br>".$query);
 				}
 			}
+		}
+
+		// resident categories
+		$this_date = date('Y-m-d H:i:s', $schedule['date']);
+		$RC_names = array(
+			'1' => 'YSC 1',
+			'2' => 'YSC 2'
+		);
+		$RC_names['3'] = $this_date <= date('Y-m-d H:i:s',strtotime('9/3/08')) ?
+			'YSC 3' : 'YSL';
+		$RC_names['4'] = $this_date <= date('Y-m-d H:i:s',strtotime('9/4/08')) ?
+			'New Resident' : 'Resident';
+		if ($this_date > date('Y-m-d H:i:s',strtotime('1/8/08')))
+			$RC_names['5'] = 'Intern';
+		if ($this_date > date('Y-m-d H:i:s',strtotime('5/9/09')))
+			$RC_names['6'] = 'Temporary';
+		$values = '';
+		foreach ($RC_names as $rcId => $rcName) {
+			$values .= "('{$rcId}','{$rcName}','{$schedule['id']}'),";
+		}
+		$values = substr($values,0,-1);
+		$query =  "INSERT INTO krishna.resident_categories (id,name,schedule_id)
+			VALUES {$values}";
+		if (!mysql_query($query,$database)) {
+			die('Error: ' . mysql_error()."<br>".$query);
 		}
 	}
 	echo "schedules done up to {$_GET['to']}<br>";
