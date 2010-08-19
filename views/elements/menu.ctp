@@ -176,4 +176,21 @@
 			)
 		)
 	)
-));?>
+));
+if (!($change_messages['undo'] == '' && $change_messages['redo'] == '')) {
+?>
+<div class='changes'>
+	<span id='undo_message'><?=$change_messages['undo']?></span>
+	<span id='redo_message'><?=$change_messages['redo']?></span>
+	<?=$html->link('Undo',array('controller'=>'changes','action'=>'undo'),array(
+		'onmouseover' => "showElement('undo_message')",
+		'onmouseout' => "hideElement('undo_message')"
+	));?>
+	<?=$html->link('Redo',array('controller'=>'changes','action'=>'redo'),array(
+		'onmouseover' => "showElement('redo_message')",
+		'onmouseout' => "hideElement('redo_message')"
+	));?>
+</div>
+<?
+}
+?>

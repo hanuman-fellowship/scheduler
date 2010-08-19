@@ -274,5 +274,18 @@ class Change extends AppModel {
 		$this->stopProgress();
 	}
 
+	function getMessages() {
+		return array(
+			'undo' => $this->field('description', array(
+				'Change.schedule_id' => $this->schedule_id,
+				'Change.id' => 0
+			)),
+			'redo' => $this->field('description', array(
+				'Change.schedule_id' => $this->schedule_id,
+				'Change.id' => -1
+			))
+		);
+	}
+
 } 
 ?>

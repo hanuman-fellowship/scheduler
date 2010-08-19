@@ -147,5 +147,11 @@ class AppController extends Controller {
 		}
 		return $this->Session->read('cache.bounds');
 	}
+
+	function getChangeMessages() {
+		$this->loadModel('Change');
+		return $this->Change->getMessages();
+	}
+
 }
 ?>
