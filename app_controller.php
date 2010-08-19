@@ -125,9 +125,6 @@ class AppController extends Controller {
 	function redirectIfNotValid($id) {
 		$model = $this->modelNames[0];
 		$this->{$model}->id = $id;
-		if (!$this->{$model}->field('id')) {
-			$this->redirect('/');
-		}
 		if ($model == 'Person') {
 			if (!$this->Person->PeopleSchedules->field('id',array(
 				'PeopleSchedules.person_id' => $id,
@@ -135,6 +132,11 @@ class AppController extends Controller {
 			))) {
 				$this->redirect('/');
 			}
+		} else if (!$this->{$model}->field('id',array(
+			"{$model}.id" => $id,
+			"{$model}.schedule_id" => $this->{$model}->schedule_id
+		))) {
+			$this->redirect('/');
 		}
 	}
 
