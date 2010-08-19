@@ -55,6 +55,7 @@ function openDialog(id,noHighlight,position) {
 	if (!position) {
 		position = 'right';
 	}
+
 	// find the the object that we're positioning relative to
 	loc = findPos(get(id));
 	objX = loc[0];
@@ -111,6 +112,7 @@ function openDialog(id,noHighlight,position) {
 	}
 	get('dialog').style.left = newLeft+'px';
 	get('dialog').style.top = newTop+'px';
+
 	get('dialog').style.zIndex = 1001;
 	get('drag_here').style.width = dialogWidth + 'px';
 	new Draggable('dialog',{scroll:window,handle:'drag_here'});
@@ -118,6 +120,44 @@ function openDialog(id,noHighlight,position) {
 	document.onclick = hideDialog;
 	get('dialog').onclick = clickInDialog; 
 }
+
+function keepOnScreen(id) {
+	// get the window dimensions
+	windowWidth = f_clientWidth();
+	windowHeight = f_clientHeight();
+
+	// get the object position
+	loc = findPos(get(id));
+	objX = loc[0];
+	objY = loc[1];
+
+	// get the object dimensions
+	objWidth = get(id).offsetWidth;
+	objHeight = get(id).offsetHeight;
+
+	// if it's off screen to the right, move it to the left 
+	if (objX + objWidth > windowWidth) { 
+		newLeft = objX - objWidth - 10;
+	}
+
+	// if it's off screen to the left, move it to the right
+	if (objX < 0) { 
+		newLeft = 10;
+	}
+
+	// if it's below the bottom of the window, move it up
+	if (objY + objHeight > windowHeight) {
+		newTop = windowHeight - objHeight;
+	}
+	
+	// if it's above the top of the window, move it down
+	if (objY < 0) {
+		newTop = 10;
+	}
+	get(id).style.left = newLeft+'px';
+	get(id).style.top = newTop+'px';
+}
+	
 
 function wait() {
 	get('dialog').style.zIndex = 999;
