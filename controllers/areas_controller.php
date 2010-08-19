@@ -9,7 +9,6 @@ class AreasController extends AppController {
 			$this->redirectIfNotValid($id);
 			$this->set('area',$this->Area->getArea($id));
 			$this->set('bounds', $this->getBounds());
-//			$this->set('changes', $this->Change->getChangesForMenu());
 			$this->set('change_messages',$this->getChangeMessages());
 			if ($this->params['isAjax']) $this->render('/elements/schedule_content');
 			$this->Session->write('last_area',$id);

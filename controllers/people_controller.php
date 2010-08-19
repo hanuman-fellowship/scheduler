@@ -29,7 +29,7 @@ class PeopleController extends AppController {
 			$person = $this->Person->getPerson($id);
 			$this->Person->addDisplayName($person['Person']);
 			$this->set('person',$person);		
-//			$this->set('changes', $this->Change->getChangesForMenu());
+			$this->set('change_messages',$this->getChangeMessages());
 			$this->set('bounds', $this->getBounds());
 			$this->Session->write('last_person',$id);
 		} else {

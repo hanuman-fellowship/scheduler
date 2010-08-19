@@ -210,46 +210,6 @@ class Change extends AppModel {
         );      
     } 
      
-	function getChangesForMenu() {
-		$user = Authsome::get('id');
-		$menuData = array();
-		$directions = array('undo','redo');
-		foreach($directions as $direction) {
-			$changeData = $this->sFind('all',array(
-				'recursive' => -1,
-				'conditions' => ($direction == 'undo') ? 
-					array('Change.id BETWEEN ? AND ?' => array(0,11)) :
-					array('Change.id BETWEEN ? AND ?' => array(-10,-1)) 
-				,
-				'order' => ($direction == 'undo') ?
-					'id' :
-					'id desc'
-			));
-			foreach($changeData as $change) {
-				$menuData[$direction][$change['Change']['description']] = array(
-					'url' => array('controller' => 'changes', 'action' => 'jump', $change['Change']['id']),
-					'ajax' => array(
-						'before' => "progress_start('{$user}')",
-						'complete' => "window.location.reload()"
-					)
-				);
-			}
-			if (!isset($menuData[$direction])) {
-				$menuData[$direction] = array("Nothing to {$direction}");
-			} else {
-				$menuData[$direction][] = "<hr/>";
-				$menuData[$direction]['More...'] = array(
-					'url' => array('controller' => 'changes', 'action' => 'history'),
-					'ajax' => array(
-						'update' => 'dialog_content',
-						'complete' => "openDialog('1_1','true')"
-					)
-				);
-			}
-		}
-		return $menuData;
-	}
-
 	/**
 	 * Jumps to the specified change. (Performs the undos/redos up to the one specified)
 	 *
