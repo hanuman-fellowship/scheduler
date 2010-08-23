@@ -185,10 +185,11 @@ class Schedule extends AppModel {
 		}
 
 		// get rid of changes that are identical (probably from a previous merge)
-		foreach($changes['b'] as $key => $b_change) {
-			foreach($changes['a'] as $key => $a_change) {
+		foreach($changes['b'] as $bKey => $b_change) {
+			foreach($changes['a'] as $aKey => $a_change) {
 				if ($a_change['Change']['description'] == $b_change['Change']['description']) {
-					unset($changes['b'][$key]);
+					unset($changes['a'][$aKey]);
+					unset($changes['b'][$bKey]);
 				}
 			}
 		}
@@ -258,6 +259,9 @@ class Schedule extends AppModel {
 				)
 			),
 			'Assignment' => array(
+				0 => array(
+					'Shift' => array(0,2)
+				),
 				1 => array(
 					'Shift' => array(0,2)
 				),
