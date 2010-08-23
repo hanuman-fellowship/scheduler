@@ -287,11 +287,9 @@ class Schedule extends AppModel {
 			)
 		);
 
-//	foreach(array(array('a','b'),array('b','a')) as $ab) {
-		$ab = array('a','b');
-		foreach($changes[$ab[0]] as $change0) {
+		foreach($changes['a'] as $change0) {
 			foreach($change0['ChangeModel'] as $change_model0) {
-				foreach($changes[$ab[1]] as $change1) {
+				foreach($changes['b'] as $change1) {
 					foreach($change1['ChangeModel'] as $change_model1) {
 						if($change_model0['name'] == $change_model1['name']
 						&& $change_model0['record_id'] == $change_model1['record_id']) {
@@ -312,7 +310,7 @@ class Schedule extends AppModel {
 						if (!in_array($change_model1['action'],$chart_part[$change_model1['name']])) {
 							continue 2; // this model action wouldn't conflict
 						}
-						// there is a potential for a conflict, so we check the ids
+						// there is a potential for a conflict, so we check for foreign key matches
 						foreach($change_model0['ChangeField'] as $field0) {
 							if (
 								$field0['field_key'] == Inflector::underscore($change_model1['name']).'_id'
@@ -339,7 +337,6 @@ class Schedule extends AppModel {
 				}
 			}
 		}
-//	}
 		// save changes from b as redos for a
 		if (!$this->conflicts) {
 			$new_change_id = 0;		
