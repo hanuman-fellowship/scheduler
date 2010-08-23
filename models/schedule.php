@@ -313,6 +313,17 @@ class Schedule extends AppModel {
 							continue 2; // this model action wouldn't conflict
 						}
 						// there is a potential for a conflict, so we check the ids
+						foreach($change_model0['ChangeField'] as $field0) {
+							if (
+								$field0['field_key'] == Inflector::underscore($change_model1['name']).'_id'
+							&&	(
+									$field0['field_new_val'] == $change_model1['record_id']
+								||	$field0['field_old_val'] == $change_model1['record_id']
+								)
+							) {
+								$this->addConflict($change0,$change1);
+							}
+						}
 						foreach($change_model1['ChangeField'] as $field1) {
 							if (
 								$field1['field_key'] == Inflector::underscore($change_model0['name']).'_id'
