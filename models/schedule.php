@@ -65,7 +65,7 @@ class Schedule extends AppModel {
 			$parent_id = $this->schedule_id;
 		} else { // it is a branch itself
 			// give the new one the same parent
-			$parent_id = $this->field('parent_id', array('id' => $this->schedule_id));
+			$parent_id = $old_parent_id;
 		}
 		$branch_data = array(
 			'user_id'   => $user_id,
