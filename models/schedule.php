@@ -24,6 +24,8 @@ class Schedule extends AppModel {
 		'User'
 	);
 
+	var $conflicts = array();
+
 	function valid($data) {
 		if ($data['Schedule']['name'] == '') {
 			$this->errorField = 'name';
@@ -183,6 +185,15 @@ class Schedule extends AppModel {
 			$this->Change->nudge(-1); // move the ids back
 		}
 
+		// get rid of changes that are identical (probably from a previous merge)
+		foreach($changes['b'] as $key => $b_change) {
+			foreach($changes['a'] as $key => $a_change) {
+				if ($a_change['Change']['description'] == $b_change['Change']['description']) {
+					unset($changes['b'][$key]);
+				}
+			}
+		}
+
 		// modify the change data to be merged so that there are no conflicting ids
 		$latest_ids = array();
 		foreach($changes['b'] as &$b_change) {
@@ -229,6 +240,104 @@ class Schedule extends AppModel {
 			array('a','b'),
 			array('b','a')
 		);
+		
+		/**
+		 * conflict chart should be in this format:
+		 * 	array(
+		 * 		'ModelA' => array(
+		 * 			'#' => array(   // # = 0,1,2 (delete, create, update)
+		 *				'ModelB' => array(#,#,#) // actions on ModelB that would conflict with action of ModelA
+		 *			),
+		 *			'another #' => array(
+		 *				'another ModelB' => array(#,#,#,
+		 *					'subModel' => array(#,#,#) // optional sub model
+		 *				)
+		 *			)
+		 *		)
+		 *	)
+		 *
+		 * todo: how to handle, for example, I create an OffDay, and you assign someone on that day?
+		 */
+		$conflict_chart = array(
+			'Area' => array(
+				0 => array(
+					'Shift' => array(0,1,2),
+					'FloatingShift' => array(0,1,2)
+				)
+			),
+			'Assignment' => array(
+				1 => array(
+					'Shift' => array(0,2)
+				),
+				2 => array(
+					'Shift' => array(0,2)
+				)
+			),
+			'FloatingShift' => array(
+				1 => array(
+					'Area' => array(0)
+				),
+				2 => array(
+					'Area' => array(0)
+				)
+			),
+			'Shift' => array(
+				0 => array(
+					'Assignment' => array(0,1,2)
+				),
+				2 => array(
+					'Assignment' => array(0,1,2)
+				)
+			)
+		);
+
+//	foreach(array(array('a','b'),array('b','a')) as $ab) {
+		$ab = array('a','b');
+		foreach($changes[$ab[0]] as $change0) {
+			foreach($change0['ChangeModel'] as $change_model0) {
+				foreach($changes[$ab[1]] as $change1) {
+					foreach($change1['ChangeModel'] as $change_model1) {
+						if($change_model0['name'] == $change_model1['name']
+						&& $change_model0['record_id'] == $change_model1['record_id']) {
+							$this->addConflict($change0,$change1);
+							continue;
+						}
+						if (!in_array($change_model0['name'],array_keys($conflict_chart))) {
+							continue 3; // this model is not listed as having conflicts
+						}
+						$chart_part = $conflict_chart[$change_model0['name']];
+						if (!in_array($change_model0['action'],array_keys($chart_part))) {
+							continue 3; // the action for this model is not listed as having conflicts
+						}
+						$chart_part = $chart_part[$change_model0['action']];
+						if (!in_array($change_model1['name'],array_keys($chart_part))) {
+							continue 2; // this model wouldn't conflict
+						}
+						if (!in_array($change_model1['action'],$chart_part[$change_model1['name']])) {
+							continue 2; // this model action wouldn't conflict
+						}
+						// there is a potential for a conflict, so we check the ids
+						foreach($change_model1['ChangeField'] as $field1) {
+							if (
+								$field1['field_key'] == Inflector::underscore($change_model0['name']).'_id'
+							&&	(
+									$field1['field_new_val'] == $change_model0['record_id']
+								||	$field1['field_old_val'] == $change_model0['record_id']
+								)
+							) {
+								$this->addConflict($change0,$change1);
+							}
+						}
+					}
+				}
+			}
+		}
+//	}
+
+
+
+/*
+
 //		debug($changes);
 		foreach($a_and_b as $ab) {
 			foreach($changes[$ab[0]] as $change0) {
@@ -292,8 +401,9 @@ class Schedule extends AppModel {
 			}
 		}
 		
-		
-		
+*/	
+		debug($this->conflicts);
+		die;
 		// save changes from b as redos for a
 		if (!$conflicts) {
 			$new_change_id = 0;		
@@ -335,6 +445,19 @@ class Schedule extends AppModel {
 			echo 'Conflicts merging b into a<br><br>';
 			debug($conflicts);
 		}
+	}
+
+	function addConflict($change0, $change1) {
+		$conflict_key = array(
+			'a'  => $change0['Change']['id'],
+			'b'  => $change1['Change']['id']
+		);
+		$new_conflict = array(
+			'a' => $change0['Change']['description'],
+			'b' => $change1['Change']['description'],
+		);
+		$this->conflicts[$conflict_key['a']]['a'] = $new_conflict['a'];
+		$this->conflicts[$conflict_key['a']]['conflicts'][$conflict_key['b']] = array('b' => $new_conflict['b']);
 	}
 
 	function publish() {
