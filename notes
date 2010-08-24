@@ -10,8 +10,6 @@ TODO:
 
 	- show schedules as a tree going down from pubished based on which they were copied from
 
-	- when undoing or redoing, need to check if PeopleSchedules is changed, and delete the session caches
-
 	- order working copies by date or by name in the select schedule dialog
 	
 	- schedule helper
@@ -19,6 +17,11 @@ TODO:
 
 	BUGS:
 		- Why does it save two id entries in the change_fields when doing assignments::swap?
+		- Merge:
+			- Try this: unassign someone and then reassign the same person (instead of undoing)
+			then assign that same person to that shift in another schedule.
+			if you try to merge from the first schedule, the first assign will cancel out snf the 
+			person will not be assigned, even though they are in the other schedule
 
 	- Flash messages next to menu
 		- description of actions, etc...
