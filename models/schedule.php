@@ -234,23 +234,6 @@ class Schedule extends AppModel {
 			}
 		}
 		
-		/**
-		 * conflict chart should be in this format:
-		 * 	array(
-		 * 		'ModelA' => array(
-		 * 			'#' => array(   // # = 0,1,2 (delete, create, update)
-		 *				'ModelB' => array(#,#,#) // actions on ModelB that would conflict with action of ModelA
-		 *			),
-		 *			'another #' => array(
-		 *				'another ModelB' => array(#,#,#,
-		 *					'subModel' => array(#,#,#) // optional sub model
-		 *				)
-		 *			)
-		 *		)
-		 *	)
-		 *
-		 * todo: how to handle, for example, I create an OffDay, and you assign someone on that day?
-		 */
 		$conflict_chart = array(
 			'Area' => array(
 				0 => array(
@@ -263,7 +246,13 @@ class Schedule extends AppModel {
 					'Shift' => array(0,2)
 				),
 				1 => array(
-					'Shift' => array(0,2)
+					'Shift' => array(0,2),
+					'Assignment' => array(
+						'shift_id' => array(1)
+					),
+					'PeopleSchedules' => array(
+						'person_id' => array(0)
+					)
 				),
 				2 => array(
 					'Shift' => array(0,2)
@@ -271,10 +260,16 @@ class Schedule extends AppModel {
 			),
 			'FloatingShift' => array(
 				1 => array(
-					'Area' => array(0)
+					'Area' => array(0),
+					'PeopleSchedules' => array(
+						'person_id' => array(0)
+					)
 				),
 				2 => array(
-					'Area' => array(0)
+					'Area' => array(0),
+					'PeopleSchedules' => array(
+						'person_id' => array(0)
+					)
 				)
 			),
 			'Shift' => array(
@@ -283,6 +278,16 @@ class Schedule extends AppModel {
 				),
 				2 => array(
 					'Assignment' => array(0,1,2)
+				)
+			),
+			'PeopleSchedules' => array(
+				0 => array(
+					'Assignment' => array(
+						'person_id' => array(1,2)
+					),
+					'FloatingShift' => array(
+						'person_id' => array(1,2)
+					)
 				)
 			)
 		);
@@ -305,10 +310,33 @@ class Schedule extends AppModel {
 						}
 						$chart_part = $chart_part[$change_model0['action']];
 						if (!in_array($change_model1['name'],array_keys($chart_part))) {
-							continue 2; // this model wouldn't conflict
+							continue; // this model wouldn't conflict
 						}
-						if (!in_array($change_model1['action'],$chart_part[$change_model1['name']])) {
-							continue 2; // this model action wouldn't conflict
+						$chart_part = $chart_part[$change_model1['name']];
+						foreach($chart_part as $type_key => $type) {
+							if(is_array($type)) {
+								$fkey = $type_key;
+								if(in_array($change_model1['action'],$type)) {
+									foreach($change_model0['ChangeField'] as $field0) {
+										foreach($change_model1['ChangeField'] as $field1) {
+											if ($field0['field_key'] == $fkey
+											&& $field1['field_key'] == $fkey) {
+												$val = $field0['field_new_val'] ?
+													$field0['field_new_val'] :
+													$field0['field_old_val'];
+												if ($val == $field1['field_new_val'] ||
+												$val == $field1['field_old_val']) {
+													$this->addConflict($change0,$change1);
+													continue 5;
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if (!in_array($change_model1['action'],$chart_part)) {
+							continue; // this model action wouldn't conflict
 						}
 						// there is a potential for a conflict, so we check for foreign key matches
 						foreach($change_model0['ChangeField'] as $field0) {
@@ -320,6 +348,7 @@ class Schedule extends AppModel {
 								)
 							) {
 								$this->addConflict($change0,$change1);
+								continue;
 							}
 						}
 						foreach($change_model1['ChangeField'] as $field1) {
