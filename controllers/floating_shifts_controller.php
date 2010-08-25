@@ -19,7 +19,9 @@ class FloatingShiftsController extends AppController {
 		$this->savePage();
 		$this->loadModel('Area');
 		$this->Area->order = 'name';
-		$this->set('areas',$this->Area->sFind('list'));
+		$areas = $this->Area->sFind('list');
+		$areas[0] = '';
+		$this->set('areas',$areas);
 		$this->set('area_id',$area_id);
 		$this->loadModel('Person');
 		$this->set('people',$this->Person->getList());
@@ -48,7 +50,9 @@ class FloatingShiftsController extends AppController {
 		$this->savePage();
 		$this->loadModel('Area');
 		$this->Area->order = 'name';
-		$this->set('areas',$this->Area->sFind('list'));
+		$areas = $this->Area->sFind('list');
+		$areas[0] = '';
+		$this->set('areas',$areas);
 		$this->loadModel('Person');
 		$this->set('people',$this->Person->getList());
 	}
