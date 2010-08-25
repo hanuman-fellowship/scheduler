@@ -19,4 +19,3 @@
 <?php echo $form->end('Submit');?>
 	</fieldset>
 <?=$this->element('message',array('default_field'=>'name'));?>
-

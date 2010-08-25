@@ -20,10 +20,6 @@
 				'url' => array('controller' => 'users', 'action' => 'add'),
 				'ajax'
 			),
-			'Edit User...' => array(
-				'url' => array('controller' => 'users', 'action' => 'edit'),
-				'ajax'
-			),
 			'Delete User...' => array(
 				'url' => array('controller' => 'users', 'action' => 'delete'),
 				'ajax'

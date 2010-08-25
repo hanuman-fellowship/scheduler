@@ -20,11 +20,8 @@ TODO:
 		- Merge:
 			- Try this: unassign someone and then reassign the same person (instead of undoing)
 			then assign that same person to that shift in another schedule.
-			if you try to merge from the first schedule, the first assign will cancel out snf the 
+			if you try to merge from the first schedule, the first assign will cancel out and the 
 			person will not be assigned, even though they are in the other schedule
-
-	- Flash messages next to menu
-		- description of actions, etc...
 
 	- Houses!!
 
