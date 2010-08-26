@@ -115,13 +115,13 @@
 		)
 	),
 	'Areas' => array(
-		'url' => array('controller' => 'areas', 'action' => 'schedule'),
+		'url' => array('controller' => 'areas', 'action' => 'select'),
 		'ajax',
 		'sub' => array(
 			'hidden' => $hidden,
 			'role' => array('operations'),
 			'View Schedule...' => array(
-				'url' => array('controller' => 'areas', 'action' => 'schedule'),
+				'url' => array('controller' => 'areas', 'action' => 'select'),
 				'ajax'
 			),
 			"<hr/>" => array(

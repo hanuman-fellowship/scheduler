@@ -12,7 +12,7 @@ class AreasController extends AppController {
 			$this->set('change_messages',$this->getChangeMessages());
 			$this->Session->write('last_area',$id);
 		} else {
-			$this->redirect(array('action'=>'select'));
+			$this->set('area',0);
 		}
 	}
 	

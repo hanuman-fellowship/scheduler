@@ -1,11 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>MMC Scheduler</title>
-	<meta http-equiv="Refresh" content="5;URL=
-	<?=$html->url(array('controller' => 'areas', 'action' => 'schedule', 1));?>" />
-    <style type="text/css">
-<!--
+<style>
 .style1 {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 36px;
@@ -26,25 +19,20 @@
 a {
 	text-decoration:none;
 }
--->
     </style>
-</head>
 
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><p>&nbsp;</p>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
       <table width="400" border="0" align="center" cellpadding="0" cellspacing="0">
       <tr>
-        <td><a href="<?=$html->url(array('controller' => 'areas', 'action' => 'schedule', 1));?>"><div align="center" class="style1">
+        <td><div align="center" class="style1">
           <p>KRISHNA<br/><span style="font-size:10px;position:relative;top:1.5em">Mount Madonna Center<br/>Human Rescources Project</span></p>
           <p><span class="style2">version 2.0b </span></p>
           <p class="style3">&copy; 2010 Hanuman Fellowship | All Rights Reserved<br />
           </p>
-        </div></a></td>
+        </div></td>
       </tr>
     </table></td>
   </tr>

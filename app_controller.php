@@ -13,12 +13,7 @@ class AppController extends Controller {
         
 	function beforeFilter() {
 		
-		// if this page was not reached by clicking a link, redirect to home
-		if ($this->referer() == '/' && !in_array($this->params['url']['url'], array('areas/schedule/1','/'))) {
-			$this->redirect('/');
-		}
-
-		// if the session has timed out, redirect to the login
+		// if the session has timed out, redirect 
 		if (!$this->Session->check('User')) {
 			$this->Session->write('User',array());
 			$this->redirect('/');
