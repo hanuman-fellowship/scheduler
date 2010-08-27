@@ -4,6 +4,7 @@ class ConstantShiftsController extends AppController {
 	var $name = 'ConstantShifts';
 
 	function add() {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->ConstantShift->valid($this->data)) {
 				$this->ConstantShift->create();
@@ -31,6 +32,7 @@ class ConstantShiftsController extends AppController {
 	}
 
 	function edit($id = null) {
+		$this->redirectIfNotEditable();
 		if (!$id && empty($this->data)) {
 			$this->redirect(array('action' => 'index'));
 		}
@@ -58,6 +60,7 @@ class ConstantShiftsController extends AppController {
 	}
 	
 	function delete($id) {
+		$this->redirectIfNotEditable();
 		$this->record();
 		$this->ConstantShift->sDelete($id);
 		$this->stop($this->ConstantShift->description);

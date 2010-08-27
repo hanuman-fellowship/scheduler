@@ -4,6 +4,7 @@ class SchedulesController extends AppController {
 	var $name = 'Schedules';
 	
 	function add() {
+		$this->redirectIfNotEditable();
 		$scheduleName = $this->Session->read('Schedule.name');
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
@@ -21,6 +22,7 @@ class SchedulesController extends AppController {
 	}
 	
 	function delete($id = null) {
+		$this->redirectIfNotEditable();
 		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
 			$this->setSchedule($this->Schedule->delete($id));	
  		    $this->redirect($this->referer());
@@ -58,6 +60,7 @@ class SchedulesController extends AppController {
 	}
 
 	function merge($id = null) {
+		$this->redirectIfNotEditable();
 		if ($id) {
 			$this->Schedule->merge($id);
 			$this->redirect($this->loadPage());
@@ -75,6 +78,7 @@ class SchedulesController extends AppController {
 	}
 	
 	function publish() {
+		$this->redirectIfNotEditable();
 		if (Authsome::get('id') == $this->Session->read('Schedule.user_id')) {
 			$this->setSchedule($this->Schedule->publish());
 		}

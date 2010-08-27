@@ -4,6 +4,7 @@ class OffDaysController extends AppController {
 	var $name = 'OffDays';
 
 	function toggle($person_id, $day_id) {
+		$this->redirectIfNotEditable();
 		$this->OffDay->id = null;
 		$existing = $this->OffDay->sFind('first',array(
 			'recursive' => -1,

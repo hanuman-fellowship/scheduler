@@ -4,6 +4,7 @@ class FloatingShiftsController extends AppController {
 	var $name = 'FloatingShifts';
 
 	function add($area_id = null, $person_id = null) {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->FloatingShift->valid($this->data)) {
 				$this->FloatingShift->create();
@@ -29,6 +30,7 @@ class FloatingShiftsController extends AppController {
 	}
 
 	function edit($id = null) {
+		$this->redirectIfNotEditable();
 		if (!$id && empty($this->data)) {
 			$this->redirect(array('action' => 'index'));
 		}
@@ -58,6 +60,7 @@ class FloatingShiftsController extends AppController {
 	}
 	
 	function delete($id) {
+		$this->redirectIfNotEditable();
 		$this->record();
 		$this->FloatingShift->sDelete($id);
 		$this->stop($this->FloatingShift->description);

@@ -12,7 +12,7 @@ class AppController extends Controller {
     );
         
 	function beforeFilter() {
-		
+
 		// if the session has timed out, redirect 
 		if (!$this->Session->check('User')) {
 			$this->Session->write('User',array());
@@ -146,6 +146,12 @@ class AppController extends Controller {
 	function getChangeMessages() {
 		$this->loadModel('Change');
 		return $this->Change->getMessages();
+	}
+
+	function redirectIfNotEditable() {
+		if (!$this->Session->read('Schedule.editable')) {
+			$this->redirect('/');
+		}
 	}
 
 }

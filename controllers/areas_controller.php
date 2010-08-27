@@ -17,6 +17,7 @@ class AreasController extends AppController {
 	}
 	
 	function add($area_id = null) {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Area->valid($this->data)) {
 				$this->Area->create();
@@ -32,6 +33,7 @@ class AreasController extends AppController {
 	}
 	
 	function edit($id = null) {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Area->valid($this->data)) {
 				$this->record();
@@ -50,6 +52,7 @@ class AreasController extends AppController {
 	}
 	
 	function delete($id = null) {
+		$this->redirectIfNotEditable();
 		if ($id) {
 			$this->record();
 			$this->Area->sDelete($id);

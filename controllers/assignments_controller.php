@@ -5,6 +5,7 @@ class AssignmentsController extends AppController {
 	var $helpers = array('schedule');
 
 	function assign($shift_id = null, $person_id = null) {
+		$this->redirectIfNotEditable();
 		if ($this->data) {
 			$shift_id = $this->data['Assignment']['shift'];
 			$person_id = 0;
@@ -29,6 +30,7 @@ class AssignmentsController extends AppController {
 	}		
 	
 	function unassign($id) {
+		$this->redirectIfNotEditable();
 		$this->record();
 		$this->Assignment->sDelete($id);
 		$this->stop($this->Assignment->description);
@@ -36,6 +38,7 @@ class AssignmentsController extends AppController {
 	}
 
 	function swap($assignment_id, $person_id) {
+		$this->redirectIfNotEditable();
 		$assignment =$this->Assignment->sFind('first',array(
 			'conditions' => array('Assignment.id' => $assignment_id),
 			'recursive' => -1

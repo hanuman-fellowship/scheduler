@@ -53,6 +53,7 @@ class PeopleController extends AppController {
 	}
 	
 	function uploadImage($id = null) {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			$this->Attachment->upload($this->data['Person'],$this->data['Person']['id'],'person');
 			$this->redirect($this->loadPage());
@@ -74,6 +75,7 @@ class PeopleController extends AppController {
 	}
 
 	function add() {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Person->valid($this->data)) {
 				$this->Person->create();
@@ -93,6 +95,7 @@ class PeopleController extends AppController {
 	}
 	
 	function edit($id = null) {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Person->valid($this->data)) {
 				$this->record();
@@ -116,6 +119,7 @@ class PeopleController extends AppController {
 	}
 
 	function retire($id = null) {
+		$this->redirectIfNotEditable();
 		if ($id) {
 			$this->record();
 			$this->Person->retire($id);

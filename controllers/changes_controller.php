@@ -20,9 +20,8 @@
      * is flashed.
      */
     function undo() { 
-        if(!$this->Change->doUndo()) { 
-            $this->Session->setFlash("Nothing to undo!"); 
-        } 
+		$this->redirectIfNotEditable();
+        $this->Change->doUndo(); 
         $this->redirect($this->referer()); 
     } 
      
@@ -34,19 +33,20 @@
      * is flashed.
      */
     function redo() { 
-        if(!$this->Change->doRedo()) { 
-            $this->Session->setFlash("Nothing to redo!"); 
-        } 
+		$this->redirectIfNotEditable();
+        $this->Change->doRedo();
         $this->redirect($this->referer()); 
     } 
     
     function history() {
+		$this->redirectIfNotEditable();
     	$this->Change->recursive = -1;
     	$this->Change->order = 'id';
     	$this->set('changes',$this->Change->sFind('all'));
     }
 
 	function jump($id) {
+		$this->redirectIfNotEditable();
 		$this->Change->jumpTo($id);
 		$this->redirect($this->referer());
 	}

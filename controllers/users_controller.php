@@ -29,20 +29,8 @@ class UsersController extends AppController {
 	 	$this->redirect($this->referer());
     }
 
-	function index() {
-		$this->User->recursive = 0;
-		$this->set('users', $this->paginate());
-	}
-
-	function view($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid User', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		$this->set('user', $this->User->read(null, $id));
-	}
-
 	function add() {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->User->valid($this->data)) {
 				$this->User->create();
@@ -56,6 +44,7 @@ class UsersController extends AppController {
 	}
 
 	function changePassword() {
+		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->User->changePassword($this->data)) {
 				$this->set('url',$this->referer());
@@ -67,6 +56,7 @@ class UsersController extends AppController {
 	}
 
 	function delete($id = null) {
+		$this->redirectIfNotEditable();
 		if ($id) {
 			$this->User->delete($id);
 			$this->redirect($this->referer());
