@@ -4,7 +4,6 @@ class SchedulesController extends AppController {
 	var $name = 'Schedules';
 	
 	function add() {
-		$this->redirectIfNotEditable();
 		$scheduleName = $this->Session->read('Schedule.name');
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
