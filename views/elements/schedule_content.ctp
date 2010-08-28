@@ -1,3 +1,4 @@
+<?$gaps = isset($gaps) ? true : false;?>
 <table width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
 		<td width="99" rowspan="2"> 
@@ -45,7 +46,7 @@
 		</td> 
 		<td width="107">
 			<div align="right">
-			<?= (isset($person)) ? 'Name:' : '';?>
+			<?= (isset($person) && !$gaps) ? 'Name:' : '';?>
 			</div>
 		</td> 
 		<td width="15">
@@ -53,7 +54,7 @@
 		</td> 
 		<td width="178">
 			<span style="font-size:24px;"> 
-			<? if (isset($person)) { ?>
+			<? if (isset($person) & !$gaps) { ?>
 				<span id='person_name'>
 				<?=$role->link(
 					$person['Person']['name'],
@@ -99,7 +100,7 @@
 			<div align="center"> 
 				<p>
 				<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')
-				&& isset($person)) { ?>
+				&& isset($person) && !$gaps) { ?>
 					<?=$html->link($day,array(
 						'controller'=>'off_days',
 						'action'=>'toggle',
@@ -122,7 +123,7 @@
 			</div> 
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
-		<? $off_day = (isset($person)) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
+		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
 		<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')
 		&& !$this->params['isAjax']) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
@@ -132,17 +133,17 @@
 					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start'])) 
 				:
 				array('controller'=>'shifts','action'=>'listBySlot',
-					$person['Person']['id'],
+					!$gaps ? $person['Person']['id'] : '',
 					$day,
 					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start']),
 					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['end']));
 			?>
-			<?=$ajax->link(' + ',$url,array(
+			<?= !$gaps ? $ajax->link(' + ',$url,array(
 				'id'=>"add_{$slot_num}_{$day}", 
 				'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 				'update' => 'dialog_content',
 				'complete' => "openDialog('{$slot_num}_{$day}')"
-			));?>
+			)) : '';?>
 		<? } else { ?>
 		<td <?=$off_day;?> >
 		<? } ?>
@@ -185,8 +186,8 @@
 			<? $area_id = $area['Area']['id']; ?>
 			<? $person_id = 0; ?>
 		<? } else { ?>
-			<?=$schedule->displayPersonFloating($person['FloatingShift']);?>
-			<? $person_id = $person['Person']['id']; ?>
+			<?= !$gaps ? $schedule->displayPersonFloating($person['FloatingShift']) : '';?>
+			<? $person_id = $gaps ? 0 : $person['Person']['id']; ?>
 			<? $area_id = 0; ?>
 			<?// now that the total hours are added up, sneak them in at the top
 			?>
@@ -195,7 +196,7 @@
 			</script>
 		<? } ?>
 		<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')) { ?>
-			<?=$ajax->link(
+			<?= !$gaps ? $ajax->link(
 				' + ',
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),
 				array(
@@ -204,7 +205,7 @@
 					'update' => 'dialog_content',
 					'complete' => "openDialog('0_0',null,'top')"
 				)
-			);?>
+			) : '';?>
 		<? } ?>
 			<br/>
 			<a class="extra_blank" id="hide" href="javascript:openpopup('add_extra.php','Extra','width=580,height=208')"> 

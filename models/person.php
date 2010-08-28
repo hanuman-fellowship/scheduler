@@ -150,6 +150,37 @@ class Person extends AppModel {
 		return $person;
 	}	
 
+	function getGaps() {
+		$this->Assignment->Shift->schedule_id = $this->schedule_id;
+		$this->Assignment->Shift->contain(array(
+			'Assignment' => array(
+				'conditions' => "Assignment.schedule_id = {$this->schedule_id}",
+				'fields' => array('shift_id')
+			),
+			'Area' => array(
+				'conditions' => "Area.schedule_id = {$this->schedule_id}"
+			)
+		));
+		$shifts = $this->Assignment->Shift->sFind('all');
+		$assignments = array();
+		foreach($shifts as $shift) {
+			$numAvail = $shift['Shift']['num_people'] - count($shift['Assignment']);
+			if ($numAvail > 0) {
+				$shift['Shift']['num'] = $numAvail;
+				$shift['Shift']['Area'] = $shift['Area'];
+				$assignments[]['Shift'] = $shift['Shift'];	
+			}
+		}
+		return array(
+			'PeopleSchedules' => array(
+				'ResidentCategory' => array(
+					'name' => 'GAPS'
+				)
+			),
+			'Assignment' => $assignments
+		);
+	}
+
 	function getAvailable($shift_id) {
 		$this->Assignment->Shift->id = $shift_id;
 		$this->Assignment->Shift->recursive = -1;

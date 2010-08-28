@@ -8,7 +8,8 @@ class ScheduleHelper extends AppHelper {
 		
 	function displayPersonShift($assignment,$bound,$day) {
 		if (isset($assignment['Shift'])) {
-			$assignment_id = $assignment['assignment_id'];
+			$assignment_id = isset($assignment['assignment_id']) ? $assignment['assignment_id'] : 0;
+			$gaps = ($assignment_id == 0) ? true : false;
 			$shift = $assignment['Shift'];	
 			// if the shift is within the bounds for this day and time
 			if ($shift['start'] >= $bound['start'] && 
@@ -19,10 +20,19 @@ class ScheduleHelper extends AppHelper {
 				$time_title = $this->displayTime($shift['start']) . " - " . 
 					$this->displayTime($shift['end']);
 				$time_url = array('controller'=>'assignments','action'=>'unassign',$assignment_id);
-			
+
+				if ($gaps) {
+					if ($shift['num'] > 1) {
+						$time_title .= " (x{$shift['num']})";
+					}
+					$multiplier = $shift['num'];
+				} else {
+					$multiplier = 1;
+				}
+
 				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
-				$this->total_hours[$day] += $length;
-				$this->total_hours['total'] += $length;
+				$this->total_hours[$day] += $length * $multiplier;
+				$this->total_hours['total'] += $length * $multiplier;
 				
 				/**
 				 * Make $legend an array of area ids, each of which is an array (short_name, name, manager)
@@ -39,13 +49,26 @@ class ScheduleHelper extends AppHelper {
 				}
 			}
 			if (isset($area_title)) {
+				if ($gaps) {
+					$attributes = array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('{$shift['id']}')",
+						'id' => $shift['id']
+					);
+					$time_url = array('controller' => 'assignments', 'action' => 'assign', $shift['id']);
+					$ajax = 'ajax';
+				} else {
+					$attributes = array('class' => 'remove');
+					$ajax = '';
+				}
 				$output = "<b>" . $this->html->link($area_title, $area_url) . "</b> ";
 				$output .= $this->role->link(
 					$time_title,
 					array(
 						'operations' => array(
 							'url' => $time_url,
-							'attributes' => array('class'=>'remove')
+							'attributes' => $attributes,
+							$ajax
 						)
 					),
 					!$this->session->read('Schedule.editable')

@@ -3,6 +3,7 @@
 <? $hidden = !$this->session->read('Schedule.editable');?>
 <? $scheduleName = $this->session->read('Schedule.name');?>
 <? $userName = Inflector::humanize(Authsome::get('username')); ?>
+<? $gaps = isset($person['Person']) ? false : true;?>
 <?=$role->menu(array(
 	'Login' => array(
 		'role' => array(''),
@@ -49,6 +50,9 @@
 			'View Past...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'past'),
 				'ajax'
+			),
+			'View Gaps' => array(
+				'url' => array('controller' => 'people', 'action' => 'schedule','gaps')
 			),
 			"<hr/>",
 			'New Working Copy...' => array(
@@ -162,7 +166,7 @@
 					'controller' => 'floating_shifts',
 					'action' => 'add',
 					(isset($area)) ? $area : 0, 
-					(isset($person)) ? $person : 0 
+					(isset($person) && !$gaps) ? $person : 0 
 				),
 				'ajax'
 			),

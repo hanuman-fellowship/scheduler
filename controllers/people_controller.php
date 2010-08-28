@@ -26,12 +26,17 @@ class PeopleController extends AppController {
 	function schedule($id = null) {	
 		if ($id) {
 			$this->redirectIfNotValid($id);
-			$person = $this->Person->getPerson($id);
-			$this->Person->addDisplayName($person['Person']);
+			if ($id == 'gaps') {
+				$person = $this->Person->getGaps();
+			} else {
+				$person = $this->Person->getPerson($id);
+				$this->Person->addDisplayName($person['Person']);
+				$this->Session->write('last_person',$id);
+			}
 			$this->set('person',$person);		
 			$this->set('change_messages',$this->getChangeMessages());
 			$this->set('bounds', $this->getBounds());
-			$this->Session->write('last_person',$id);
+			if ($id == 'gaps') $this->render('gaps');
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));
 		}
