@@ -31,8 +31,8 @@ class ScheduleHelper extends AppHelper {
 				}
 
 				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
-				$this->total_hours[$day] += $length * $multiplier;
-				$this->total_hours['total'] += $length * $multiplier;
+				$this->total_hours[$day] += ($length * $multiplier);
+				$this->total_hours['total'] += ($length * $multiplier);
 				
 				/**
 				 * Make $legend an array of area ids, each of which is an array (short_name, name, manager)
