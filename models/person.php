@@ -152,6 +152,7 @@ class Person extends AppModel {
 
 	function getGaps() {
 		$this->Assignment->Shift->schedule_id = $this->schedule_id;
+		$this->Assignment->Shift->order = 'Shift.start, Shift.end, Area.short_name';
 		$this->Assignment->Shift->contain(array(
 			'Assignment' => array(
 				'conditions' => "Assignment.schedule_id = {$this->schedule_id}",
