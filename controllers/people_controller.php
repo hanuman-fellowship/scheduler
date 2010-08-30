@@ -42,6 +42,11 @@ class PeopleController extends AppController {
 		}
 	}	
 
+	function board() {
+		$this->set('change_messages',$this->getChangeMessages());
+		$this->set('people',$this->Person->getBoard());
+	}
+
 	function profile($id = null) {
 		if (!$id) {
 			$this->redirect(array('action'=>'selectProfile'));

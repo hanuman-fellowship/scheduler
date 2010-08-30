@@ -30,7 +30,6 @@ class UsersController extends AppController {
     }
 
 	function add() {
-		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->User->valid($this->data)) {
 				$this->User->create();
@@ -41,6 +40,9 @@ class UsersController extends AppController {
 				$this->set('errorMessage',$this->User->errorMessage);
 			}
 		}
+		$this->loadModel('Area');
+		$this->Area->order = 'name';
+		$this->set('areas',$this->Area->sFind('list'));
 	}
 
 	function changePassword() {

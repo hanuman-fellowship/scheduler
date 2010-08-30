@@ -182,6 +182,9 @@ class Person extends AppModel {
 		);
 	}
 
+	function getBoard() {
+	}
+
 	function getAvailable($shift_id) {
 		$this->Assignment->Shift->id = $shift_id;
 		$this->Assignment->Shift->recursive = -1;

@@ -10,12 +10,19 @@
 			'between' => '&nbsp;',
 			'id' => 'password'
 		));
+		echo $form->input('email',array(
+			'between' => '&nbsp;',
+			'id' => 'email'
+		));
 		echo $form->select('role',
 			array(
-				'operations' => 'Operations'
+				'operations' => 'Operations',
+				'Manager' => $areas
 			),
 			null,
-			array('empty' => false)
+			array(
+				'empty' => false
+			)
 		);
 	?>
 <?php echo $form->end('Submit');?>

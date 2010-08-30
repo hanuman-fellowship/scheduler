@@ -253,3 +253,4 @@ function swap(a, b) {
 function toggleDisplay(id) {
 	get(id).style.display = (get(id).style.display == 'none') ? '' : 'none';
 }
+
