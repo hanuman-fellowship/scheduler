@@ -65,7 +65,8 @@
 			),
 			'Merge...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
-				'ajax'
+				'ajax',
+				'hidden' => $hidden
 			),
 			array(
 				'title' => "<hr/>",
