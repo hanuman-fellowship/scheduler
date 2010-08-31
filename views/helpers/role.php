@@ -28,7 +28,8 @@ class RoleHelper extends AppHelper {
 	}
 	
 	function menu($data) {
-		$cur_role = Authsome::get('role');
+		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
+		if($userRoles == array()) $userRoles[] = '';
 		$menuData = $this->html->css("menu");
 		$subMenus = array();
 		$menuNum = 0;
@@ -46,7 +47,7 @@ class RoleHelper extends AppHelper {
 				$title = $top['title'];
 			}
 			if (array_key_exists('role',$top)) {
-				if (!in_array($cur_role,$top['role'])) { // skip this one if it's not our role
+				if (!array_intersect($userRoles,$top['role'])) { // skip this one if it's not our role
 					continue;
 				}
 			} 
@@ -77,7 +78,7 @@ class RoleHelper extends AppHelper {
 			if (isset($top['sub'])) {
 				$showSub = true;
 				if (array_key_exists('role',$top['sub'])) {
-					if (!in_array($cur_role,$top['sub']['role'])) { // skip the submenu if it's not our role
+					if (!array_intersect($userRoles,$top['sub']['role'])) { // skip the submenu if it's not our role
 						$showSub = false;
 					}
 					unset($top['sub']['role']);
@@ -97,7 +98,7 @@ class RoleHelper extends AppHelper {
 						}
 						$sub_title = array_key_exists('title',$sub) ? $sub['title'] : $sub_title;
 						if (array_key_exists('role',$sub)) {
-							if (!in_array($cur_role,$sub['role'])) { // skip this one if it's not our role
+							if (!array_intersect($userRoles,$sub['role'])) { // skip this one if it's not our role
 								continue;
 							}
 						} 
