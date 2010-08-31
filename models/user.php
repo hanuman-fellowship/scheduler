@@ -4,11 +4,16 @@ class User extends AppModel {
 	var $name = 'User';
 	
 	var $hasMany = array(
-		'Setting'
+		'Setting',
+		'Role'
 	);
 
 	function save($data) {
 		$data['User']['password'] = Authsome::hash($data['User']['password']);
+		if (is_numeric($data['User']['role'])) {
+			$data['User']['area_id'] = $data['User']['role'];
+			$data['User']['role'] = 'manager';
+		}
 		return parent::save($data);
 	}
 
