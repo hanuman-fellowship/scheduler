@@ -1,3 +1,4 @@
+<?$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');?>
 <?$gaps = isset($gaps) ? true : false;?>
 <table width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
@@ -99,7 +100,7 @@
 		<td width="75" bordercolor="#000000"> 
 			<div align="center"> 
 				<p>
-				<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')
+				<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
 				&& isset($person) && !$gaps) { ?>
 					<?=$html->link($day,array(
 						'controller'=>'off_days',
@@ -124,7 +125,7 @@
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
-		<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')
+		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
 		&& !$this->params['isAjax']) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
 			<? $url = (isset($area)) ? 
@@ -195,7 +196,7 @@
 				document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
-		<? if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')) { ?>
+		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) { ?>
 			<?= !$gaps ? $ajax->link(
 				' + ',
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),

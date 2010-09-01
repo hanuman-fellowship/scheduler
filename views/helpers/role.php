@@ -3,21 +3,16 @@ class RoleHelper extends AppHelper {
 
 	var $helpers = array('html','ajax','javascript');
 	
-	function wrap($content, $roles) {
-		foreach ($roles as $role => $wrapper) {
-			if (Authsome::get('role') == $role) {
-				return ($wrapper[0] . $content . $wrapper[1]);
-			}
-		}
-	}
-	
 	function link($title,$roles,$override = false) {
-		$cur_role = ($override) ? '' :  Authsome::get('role');
-		if (array_key_exists($cur_role,$roles)) {
-			$attributes = array_key_exists('attributes',$roles[$cur_role]) ? 
-				$roles[$cur_role]['attributes'] : null;
-			$url =  $roles[$cur_role]['url'];
-			$type = in_array('ajax',$roles[$cur_role]) ?
+		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
+		if($userRoles == array()) $userRoles[] = '';
+		$userRoles = ($override) ? array('') : $userRoles;
+		if ($availRoles = array_intersect($userRoles,array_keys($roles))) {
+			$thisRole = reset($availRoles);
+			$attributes = array_key_exists('attributes',$roles[$thisRole]) ? 
+				$roles[$thisRole]['attributes'] : null;
+			$url =  $roles[$thisRole]['url'];
+			$type = in_array('ajax',$roles[$thisRole]) ?
 				'ajax' : 'html';
 			return $url ? 
 				$this->{$type}->link($title,$url,$attributes) : 

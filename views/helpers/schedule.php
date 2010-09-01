@@ -123,7 +123,8 @@ class ScheduleHelper extends AppHelper {
 				$this->total_hours[$day] += $length;
 				$this->total_hours['total'] += $length;
 				
-				if (Authsome::get('role') == 'operations' && $this->session->read('Schedule.editable')) {
+				$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
+				if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
 						'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
@@ -158,7 +159,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					(!$this->session->read('Schedule.editable')) 
 				) . '<br/>';
-				if (Authsome::get('role') == 'operations' && 
+				if (in_array('operations',$userRoles) && 
 				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0) {
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
