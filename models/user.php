@@ -10,6 +10,12 @@ class User extends AppModel {
 		'Schedule'
 	);
 
+	function valid($data) {
+		// this is so that the area_id can be empty and still validate
+		$data['User']['area_id'] = ($data['User']['area_id'] == '') ? ' ' : $data['User']['area_id'];
+		return parent::valid($data);
+	}
+
 	function sSave($data) {
 		$data['User']['password'] = Authsome::hash($data['User']['password']);
 		foreach(array('operations','manager') as $role) {
