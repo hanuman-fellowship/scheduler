@@ -1,7 +1,7 @@
 <?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content','before'=>'wait()'));?>
 	<fieldset>
-<div class='tall'>
  		<legend><?php __('Add User');?></legend>
+<div class='tall'>
 	<?php
 		echo $form->input('username',array(
 			'between' => '&nbsp;',

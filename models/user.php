@@ -11,9 +11,29 @@ class User extends AppModel {
 	);
 
 	function valid($data) {
-		// this is so that the area_id can be empty and still validate
-		$data['User']['area_id'] = ($data['User']['area_id'] == '') ? ' ' : $data['User']['area_id'];
-		return parent::valid($data);
+		if ($this->field('id',array('username'=>$data['User']['username']))) {
+			$this->errorField = 'username';
+			$this->errorMessage = "That username is taken";
+			return false;
+		}	
+		foreach($data['User'] as $name => $value) {
+			if ($name == 'area_id') {
+				if ($data['User']['manager']) {
+					if ($value == '') {
+						$this->errorField = $name;
+						$this->errorMessage = "Please choose an area";
+						return false;
+					}
+				}
+			} else {
+				if ($value == '') {
+					$this->errorField = $name;
+					$this->errorMessage = Inflector::humanize($name)." must not be blank.";
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	function sSave($data) {
