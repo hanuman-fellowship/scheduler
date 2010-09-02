@@ -14,16 +14,14 @@
 			'between' => '&nbsp;',
 			'id' => 'email'
 		));
-		echo $form->select('role',
-			array(
-				'operations' => 'Operations',
-				'Manager' => $areas
-			),
-			null,
-			array(
-				'empty' => false
-			)
-		);
+		echo "<fieldset class='left'>";
+		echo '<legend>Roles</legend>';
+		echo $form->checkBox('operations');
+		echo $form->label('operations');
+		echo '<br/>';
+		echo $form->checkBox('manager');
+		echo $form->label('manager');
+		echo '</fieldset>';
 	?>
 <?php echo $form->end('Submit');?>
 	</fieldset>

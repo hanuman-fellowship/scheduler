@@ -497,6 +497,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
   `username` char(50) default NULL,
   `password` char(40) default NULL,
+  `email` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
@@ -504,7 +505,7 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` VALUES(1, 'shantam', '705b958575bd82a33ac6ac798956924fb0205191');
+INSERT INTO `users` VALUES(1, 'shantam', '705b958575bd82a33ac6ac798956924fb0205191', 'shantam@mountmadonna.org');
 
 -- --------------------------------------------------------
 

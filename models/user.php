@@ -8,13 +8,16 @@ class User extends AppModel {
 		'Role'
 	);
 
-	function save($data) {
+	function sSave($data) {
 		$data['User']['password'] = Authsome::hash($data['User']['password']);
-		if (is_numeric($data['User']['role'])) {
-			$data['User']['area_id'] = $data['User']['role'];
-			$data['User']['role'] = 'manager';
+		foreach(array('operations','manager') as $role) {
+			if ($data['User'][$role]) {
+				$data['Role'][] = array(
+					'name' => $role
+				);
+			}
 		}
-		return parent::save($data);
+		return $this->saveAll($data);
 	}
 
     public function authsomeLogin($type, $credentials = array()) {

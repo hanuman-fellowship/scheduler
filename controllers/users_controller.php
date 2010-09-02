@@ -33,7 +33,7 @@ class UsersController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->User->valid($this->data)) {
 				$this->User->create();
-				$this->User->save($this->data);
+				$this->User->sSave($this->data);
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->User->errorField);
