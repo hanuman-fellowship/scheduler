@@ -162,5 +162,12 @@ class AppController extends Controller {
 		}
 	}
 
+	function redirectIfNot($role) {
+		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
+		if (!in_array($role,$userRoles)) {
+			$this->redirect('/');
+		}
+	}
+
 }
 ?>

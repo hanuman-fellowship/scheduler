@@ -30,6 +30,7 @@ class UsersController extends AppController {
     }
 
 	function add() {
+		$this->redirectIfNot('operations');
 		if (!empty($this->data)) {
 			if ($this->User->valid($this->data)) {
 				$this->User->create();
@@ -46,7 +47,6 @@ class UsersController extends AppController {
 	}
 
 	function changePassword() {
-		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->User->changePassword($this->data)) {
 				$this->set('url',$this->referer());
@@ -58,9 +58,9 @@ class UsersController extends AppController {
 	}
 
 	function delete($id = null) {
-		$this->redirectIfNotEditable();
+		$this->redirectIfNot('operations');
 		if ($id) {
-			$this->User->delete($id);
+			$this->User->sDelete($id,true);
 			$this->redirect($this->referer());
 		}
 		$this->User->recursive = -1;

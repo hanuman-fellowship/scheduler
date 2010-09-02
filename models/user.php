@@ -6,7 +6,8 @@ class User extends AppModel {
 	var $hasMany = array(
 		'Setting',
 		'Role',
-		'Manager'
+		'Manager',
+		'Schedule'
 	);
 
 	function sSave($data) {
@@ -26,6 +27,15 @@ class User extends AppModel {
 			}
 		}
 		return $this->saveAll($data);
+	}
+
+	function sDelete($id) {
+		foreach($this->hasMany as $model) {
+			$this->{$model['className']}->deleteAll(array(
+				"{$model['className']}.user_id" => $id
+			));
+		}
+		$this->delete($id);
 	}
 
     public function authsomeLogin($type, $credentials = array()) {
@@ -69,7 +79,7 @@ class User extends AppModel {
 		$this->save(array(
 			'User' => array(
 				'id' => Authsome::get('id'),
-				'password' => $data['User']['new_password']
+				'password' => Authsome::hash($data['User']['new_password'])
 			)
 		));
 		return true;
