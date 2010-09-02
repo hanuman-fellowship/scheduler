@@ -526,3 +526,17 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` VALUES(1, 1, 'operations');
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `managers`
+--
+
+CREATE TABLE `managers` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) NOT NULL,
+  `area_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
