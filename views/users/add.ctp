@@ -1,5 +1,6 @@
 <?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content','before'=>'wait()'));?>
 	<fieldset>
+<div class='tall'>
  		<legend><?php __('Add User');?></legend>
 	<?php
 		echo $form->input('username',array(
@@ -19,10 +20,16 @@
 		echo $form->checkBox('operations');
 		echo $form->label('operations');
 		echo '<br/>';
-		echo $form->checkBox('manager');
+		echo $form->checkBox('manager',array('onclick'=>"toggleDisplay('manage_areas')"));
 		echo $form->label('manager');
+		echo '<br/>';
+		$display = $this->data['User']['manager'] ? '' : 'none';
+		echo "<div id='manage_areas' style='display:{$display};padding-left:30px'>";
+		echo $form->input('area_id',array('type'=>'select','multiple'=>'checkbox','options'=>$areas));
+		echo "</div>";
 		echo '</fieldset>';
 	?>
+</div>
 <?php echo $form->end('Submit');?>
 	</fieldset>
 <?=$this->element('message',array('default_field'=>'username'));?>

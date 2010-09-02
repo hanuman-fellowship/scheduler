@@ -5,7 +5,8 @@ class User extends AppModel {
 	
 	var $hasMany = array(
 		'Setting',
-		'Role'
+		'Role',
+		'Manager'
 	);
 
 	function sSave($data) {
@@ -14,6 +15,13 @@ class User extends AppModel {
 			if ($data['User'][$role]) {
 				$data['Role'][] = array(
 					'name' => $role
+				);
+			}
+		}
+		if($data['User']['manager']) {
+			foreach($data['User']['area_id'] as $area) {
+				$data['Manager'][] = array(
+					'area_id' => $area
 				);
 			}
 		}

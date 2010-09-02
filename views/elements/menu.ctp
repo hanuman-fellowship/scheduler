@@ -13,19 +13,6 @@
 	"Hello, {$userName}" => array(
 		'role' => array('operations','manager')
 	),	
-	'Manager' => array(
-		'role' => array('manager'),
-		'url' => '',
-		'sub' => array(
-			'Edit Request Form' => array(
-				'url' => array('controller' => 'areas', 'action' => 'request'),
-			),
-			'<hr/>',
-			'Logout' => array(
-				'url' => array('controller' => 'users', 'action' => 'logout'),
-			)
-		)
-	),
 	'Operations' => array(
 		'role' => array('operations'),
 		'url' => '',
@@ -48,6 +35,19 @@
 			)
 		)
 	),	
+	'Manager' => array(
+		'role' => array('manager'),
+		'url' => '',
+		'sub' => array(
+			'Edit Request Form' => array(
+				'url' => array('controller' => 'areas', 'action' => 'request'),
+			),
+			'<hr/>',
+			'Logout' => array(
+				'url' => array('controller' => 'users', 'action' => 'logout'),
+			)
+		)
+	),
 	array(
 		'title' => ' | '
 	),
