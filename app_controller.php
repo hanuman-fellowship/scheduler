@@ -31,6 +31,34 @@ class AppController extends Controller {
 			$this->Session->write('Schedule.editable',false);
 		}	
 
+		$this->loadModel('Area');
+		$managerAreas = $this->Area->sFind('all', array(
+			'conditions' => array(
+				'Area.id' => Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id')
+			),
+			'fields' => array('name','id'),
+			'recursive' => -1,
+			'order' => 'Area.name'
+		));
+		$managerAreas = Set::combine($managerAreas,'{n}.Area.id','{n}.Area.name');
+		if (count(Authsome::get('Manager')) > 0) {
+			$managerMenu = array();
+			foreach($managerAreas as $areaId => $areaName) {
+				$managerMenu["{$areaName} Request Form"] = array(
+					'url' => array('controller' => 'areas', 'action' => 'request',$areaId)
+				);
+			}
+			$managerMenu[] = '<hr/>';
+		}
+		$managerMenu['Change Password...'] = array(
+			'url' => array('controller' => 'users', 'action' => 'changePassword'),
+			'ajax'
+		);
+		$managerMenu['Logout'] = array(
+			'url' => array('controller' => 'users', 'action' => 'logout'),
+		);
+		$this->set('managerMenu', $managerMenu);
+
 	}	
 	
     function loadModel($modelClass = null, $id = null) {

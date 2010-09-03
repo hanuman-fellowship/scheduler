@@ -38,20 +38,7 @@
 	'Manager' => array(
 		'role' => array('manager'),
 		'url' => '',
-		'sub' => array(
-			'Edit Request Form...' => array(
-				'url' => array('controller' => 'areas', 'action' => 'request'),
-				'ajax'
-			),
-			'<hr/>',
-			'Change Password...' => array(
-				'url' => array('controller' => 'users', 'action' => 'changePassword'),
-				'ajax'
-			),
-			'Logout' => array(
-				'url' => array('controller' => 'users', 'action' => 'logout'),
-			)
-		)
+		'sub' => $managerMenu
 	),
 	array(
 		'title' => ' | '
