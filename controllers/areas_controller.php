@@ -17,6 +17,12 @@ class AreasController extends AppController {
 		}
 	}
 	
+	function request($id = null) {
+		if ($id) {
+			$this->redirectIfNotManager($id);
+		}
+	}
+
 	function add($area_id = null) {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
@@ -69,6 +75,13 @@ class AreasController extends AppController {
 		$this->Area->recursive = -1;
 		$this->Area->order = 'name';
 		$this->set('areas',$this->Area->sFind('list'));
+	}
+
+	function redirectIfNotManager($id) {
+		$areas = Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id');
+		if (!in_array($id,$areas)) {
+			$this->redirect('/');
+		}
 	}
 
 }
