@@ -499,3 +499,53 @@ CREATE TABLE `managers` (
   `area_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_areas`
+--
+
+CREATE TABLE `request_areas` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL,
+  `notes` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_assignments`
+--
+
+CREATE TABLE `request_assignments` (
+  `id` int(11) NOT NULL auto_increment,
+  `person_id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `request_shift_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `person_id` (`person_id`),
+  KEY `request_shift_id` (`request_shift_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_shifts`
+--
+
+CREATE TABLE `request_shifts` (
+  `id` int(11) NOT NULL auto_increment,
+  `request_area_id` int(11) NOT NULL,
+  `day_id` int(11) NOT NULL,
+  `start` time NOT NULL,
+  `end` time NOT NULL,
+  `num_people` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `area_id` (`request_area_id`),
+  KEY `day_id` (`day_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
