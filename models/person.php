@@ -6,8 +6,7 @@ class Person extends AppModel {
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
-		'OffDay',
-		'ProfileNote'
+		'OffDay'
 	);
 	
 	var $hasOne = array(
@@ -28,7 +27,7 @@ class Person extends AppModel {
 		unset($data['Person']['resident_category_id']);
 		$changes = $this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
-			$this->addPeopleSchedules($this->id, 'Person created', $resident_category_id);
+			$this->addPeopleSchedules($this->id, $resident_category_id);
 		} else {
 			$this->PeopleSchedules->schedule_id = $this->schedule_id;
 			$peopleSchedules = $this->PeopleSchedules->sFind('first', array(
@@ -67,20 +66,14 @@ class Person extends AppModel {
 			'recursive' => -1
 		));
 		if (!$latest) { // if there is no entry, make one. Otherwise copy the latest
-			$this->addPeopleSchedules($id, 'Person restored');	
+			$this->addPeopleSchedules($id);	
 		} else {
-			$this->addPeopleSchedules($id, 'Person restored', $latest['PeopleSchedules']['resident_category_id']);	
+			$this->addPeopleSchedules($id, $latest['PeopleSchedules']['resident_category_id']);	
 		}
 		$this->description = $this->PeopleSchedules->description;
 	}
 
-	function addPeopleSchedules($person_id, $note, $rcId = 1) {
-		$noteData = array('ProfileNote' => array(
-			'person_id' => $person_id,
-			'note' =>      $note 
-		));
-		$this->ProfileNote->create();
-		$this->ProfileNote->save($noteData);
+	function addPeopleSchedules($person_id, $rcId = 1) {
 		$this->PeopleSchedules->schedule_id = $this->schedule_id;
 		$this->PeopleSchedules->sSave(array(
 			'PeopleSchedules' => array(

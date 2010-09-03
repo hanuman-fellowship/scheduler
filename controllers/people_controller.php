@@ -3,21 +3,6 @@ class PeopleController extends AppController {
 
 	var $name = 'People';
 	var $helpers = array('schedule');
-	var $paginate = array(
-		'limit' => 25,
-		'order' => 'Person.name'
-	);
-	var $components = array(
-		'Attachment' => array(
-			'rm_tmp_file' => true,
-			'allow_non_image_files' => false,
-			'images_size' => array(
-				'icon' => array(75,75,true),
-				'profile' => array(250,250,true),
-				'big' => array(500,500,true),
-			)
-		)
-	);
 
 	/**
 	 * Displays the schedule for the specified person.
@@ -45,31 +30,6 @@ class PeopleController extends AppController {
 	function board() {
 		$this->set('change_messages',$this->getChangeMessages());
 		$this->set('people',$this->Person->getBoard());
-	}
-
-	function profile($id = null) {
-		if (!$id) {
-			$this->redirect(array('action'=>'selectProfile'));
-		}
-		$this->redirectIfNotValid($id);
-		$file = glob(WWW_ROOT.'img'.DS.'photos'.DS.'profile'.DS.$id.'.*');
-		$image = (isset($file[0])) ? 
-			$id.strrchr($file[0],'.') : // get just the extension and append to filename (id))
-			'no_image.jpg';
-		$this->set('image',$image);
-		$this->set('person',$this->Person->getPerson($id, true));
-		$this->loadModel('Change');
-		$this->set('changes', $this->Change->getChangesForMenu());
-	}
-	
-	function uploadImage($id = null) {
-		$this->redirectIfNotEditable();
-		if (!empty($this->data)) {
-			$this->Attachment->upload($this->data['Person'],$this->data['Person']['id'],'person');
-			$this->redirect($this->loadPage());
-		}
-		$this->savePage();
-		$this->set('id',$id);
 	}
 
     function selectSchedule() {

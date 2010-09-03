@@ -317,26 +317,6 @@ CREATE TABLE `people_schedules` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `profile_notes`
---
-
-CREATE TABLE `profile_notes` (
-  `id` int(11) NOT NULL auto_increment,
-  `person_id` int(11) NOT NULL,
-  `note` longtext NOT NULL,
-  `updated` datetime NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `profile_id` (`person_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `profile_notes`
---
-
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `resident_categories`
 --
 
