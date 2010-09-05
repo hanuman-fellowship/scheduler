@@ -2,6 +2,8 @@
 class User extends AppModel {
 
 	var $name = 'User';
+
+	var $displayField = 'username';
 	
 	var $hasMany = array(
 		'Setting',
@@ -11,7 +13,8 @@ class User extends AppModel {
 	);
 
 	function valid($data) {
-		if ($this->field('id',array('username'=>$data['User']['username']))) {
+		if (!isset($data['User']['id']) && 
+		$this->field('id',array('username'=>$data['User']['username']))) {
 			$this->errorField = 'username';
 			$this->errorMessage = "That username is taken";
 			return false;
@@ -26,7 +29,7 @@ class User extends AppModel {
 					}
 				}
 			} else {
-				if ($value == '') {
+				if ($value == '' && !in_array($name,array('operations','manager'))) {
 					$this->errorField = $name;
 					$this->errorMessage = Inflector::humanize($name)." must not be blank.";
 					return false;
@@ -37,7 +40,9 @@ class User extends AppModel {
 	}
 
 	function sSave($data) {
-		$data['User']['password'] = Authsome::hash($data['User']['password']);
+		if (isset($data['User']['password'])) {
+			$data['User']['password'] = Authsome::hash($data['User']['password']);
+		}
 		foreach(array('operations','manager') as $role) {
 			if ($data['User'][$role]) {
 				$data['Role'][] = array(
@@ -53,6 +58,20 @@ class User extends AppModel {
 			}
 		}
 		return $this->saveAll($data);
+	}
+
+	function edit($id) {
+		$this->contain('Manager','Role');
+		$data = $this->find('first',array('conditions'=>array("User.id" => $id)));
+		$data['User']['manager'] = 0;
+		$data['User']['operations'] = 0;
+		foreach($data['Role'] as $role) {
+			$data['User'][$role['name']] = 1;
+		}
+		foreach($data['Manager'] as $manager) {
+			$data['User']['area_id'][] = $manager['area_id'];
+		}
+		return $data;
 	}
 
 	function sDelete($id) {

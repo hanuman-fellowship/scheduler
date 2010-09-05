@@ -72,5 +72,27 @@ class UsersController extends AppController {
 		)));
 	}
 	
+	function edit($id = null) {
+		$this->redirectIfNot('operations');
+		if(!$id && !$this->data) {
+			$this->User->order = 'username';
+			$this->set('users',$this->User->find('list'));
+			$this->render('select_edit');
+		} elseif (!$this->data) {
+			$this->data = $this->User->edit($id);
+			$this->loadModel('Area');
+			$this->Area->order = 'name';
+			$this->set('areas',$this->Area->sFind('list'));
+		}
+		if (!empty($this->data) && !isset($this->data['Role'])) {
+			if ($this->User->valid($this->data)) {
+				$this->User->sSave($this->data);
+				$this->set('url', $this->referer());
+			} else {
+				$this->set('errorField',$this->User->errorField);
+				$this->set('errorMessage',$this->User->errorMessage);
+			}
+		}
+	}
 }
 ?>

@@ -1,5 +1,13 @@
 TODO:
 
+	- Go to old scheduler and add a field for last name and go through and put the correct
+	  names. Jairam? Maybe write an interface for that where it prompts for each person
+	  and each date range.
+
+	- Requests
+		request_areas.id (and request_area_id in other tables) are negative versions of the area
+		they are for. Then, when published, hey are positive.
+
 	- CRUD resident categories
 
 	- edit times
@@ -23,24 +31,16 @@ TODO:
 			if you try to merge from the first schedule, the first assign will cancel out and the 
 			person will not be assigned, even though they are in the other schedule
 
-	- Houses!!
-
 	- Floating Shift
 		- Make sure description is set correctly 
 
 	- Users
-		- Create, modify, delete...
+	 	edit
 
-	- Person
-		- Restore
-			- The view should be a search box that populates the list using ajax.
-	
 	- Changes
 		- views/changes/history needs work
 		- jump is slow. could it do all of the calculations first, and then update the database all at once?
 	
-	- Merge Branch?
-
 	- Make colors (css) of resident caegories configurable.
 		- figure out how to automatically lighten links? or maybe find another way to highlight on hover.
 		- perhaps no color behind the person schedule, but just their name is colored.
