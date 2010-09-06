@@ -1,10 +1,5 @@
 TODO:
 
-	edit user -- 
-		for some reason it only saves changes if checkboxes are changed to true
-		and not if they are unchecked.
-		also, should disable the operations check box if you are editing yourself.
-
 	- Go to old scheduler and add a field for last name and go through and put the correct
 	  names. Jairam? Maybe write an interface for that where it prompts for each person
 	  and each date range.

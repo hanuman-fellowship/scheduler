@@ -18,9 +18,10 @@ class AreasController extends AppController {
 	}
 	
 	function request($id = null) {
-		if ($id) {
-			$this->redirectIfNotManager($id);
-		}
+		$this->redirectIfNotManager($id);
+		$this->loadModel('RequestArea');
+		$this->set('area',$this->RequestArea->edit($id));
+		$this->set('bounds', $this->getBounds());
 	}
 
 	function add($area_id = null) {
