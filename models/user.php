@@ -46,9 +46,14 @@ class User extends AppModel {
 		$deleteRoles = array();
 		foreach(array('operations','manager') as $role) {
 			if ($data['User'][$role]) {
-				$data['Role'][] = array(
-					'name' => $role
-				);
+				if (!$this->Role->field('id',array(
+					'Role.name' => $role,
+					'Role.user_id' => $data['User']['id']
+				))) {
+					$data['Role'][] = array(
+						'name' => $role
+					);
+				}
 			} else {
 				$deleteRoles[] = $role;
 			}
