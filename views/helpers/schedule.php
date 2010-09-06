@@ -111,13 +111,14 @@ class ScheduleHelper extends AppHelper {
 	}
 
 	function displayAreaShift($shift,$bound,$day) {
+		$request = isset($shift['RequestAssignment']) ? 'Request' : '';
 		// if the shift is within the bounds for this day and time
 		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day_id'] == $day) {
 			$time = $this->displayTime($shift['start']) . " - " . 
 				$this->displayTime($shift['end']);
 			$people = '';
 			$people_displayed = 0;
-			foreach ($shift['Assignment'] as $assignment) {
+			foreach ($shift[$request.'Assignment'] as $assignment) {
 				$people_displayed++;
 				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 				$this->total_hours[$day] += $length;
@@ -127,8 +128,8 @@ class ScheduleHelper extends AppHelper {
 				if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
-						'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
-						'onmouseout' => "hideElement('goto_{$assignment['Assignment']['id']}')"
+						'onmouseover' => "showElement('goto_{$assignment[$request.'Assignment']['id']}')",
+						'onmouseout' => "hideElement('goto_{$assignment[$request.'Assignment']['id']}')"
 					));
 				}
 				$people .= $this->role->link(
@@ -146,13 +147,13 @@ class ScheduleHelper extends AppHelper {
 							'url' => array(
 								'controller'=>'assignments',
 								'action'=>'unassign',
-								$assignment['Assignment']['id']
+								$assignment[$request.'Assignment']['id']
 							),
 							'attributes' => array(
 								'class' => 'remove_RC_'.$assignment['PeopleSchedules']['resident_category_id'],
 								'style' => 'margin:10px',
-								'onmouseover' => "showElement('goto_{$assignment['Assignment']['id']}')",
-								'onmouseout' => "hideElement('goto_{$assignment['Assignment']['id']}')",
+								'onmouseover' => "showElement('goto_{$assignment[$request.'Assignment']['id']}')",
+								'onmouseout' => "hideElement('goto_{$assignment[$request.'Assignment']['id']}')",
 								'onclick' => 'saveScroll()'
 							)
 						)
@@ -171,7 +172,7 @@ class ScheduleHelper extends AppHelper {
 								right:-3.0em;
 								background-color:#DDDDDD;
 								padding:5px',
-							'id'=>"goto_{$assignment['Assignment']['id']}"
+							'id'=>"goto_{$assignment[$request.'Assignment']['id']}"
 						)
 					)."</span>";
 				}

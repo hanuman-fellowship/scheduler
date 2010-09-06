@@ -1,6 +1,8 @@
 <?php
 /*
- * 
+ * request tables are simpler copies of areas, assignments, and shifts.
+ * negative ids represent requests in progress, and positive ids are publisjed requests
+ * the area id  number corresponds to the area id.
  **/
 
 class RequestArea extends AppModel {
@@ -21,7 +23,7 @@ class RequestArea extends AppModel {
 				'conditions' => array(
 					'Area.id' => $id
 				),
-				'fields' => array('id','name','notes')
+				'fields' => array('id','name','notes','manager')
 			));
 			$area['Area']['id'] = $area['Area']['id'] * -1;
 			$shiftValues = '';
@@ -49,19 +51,31 @@ class RequestArea extends AppModel {
 			}
 			$shiftValues = substr_replace($shiftValues,'',-1);
 			$assignmentValues = substr_replace($assignmentValues,'',-1);
-			$this->query("INSERT INTO request_areas (id,name,notes) 
-				VALUES ('{$area['Area']['id']}','{$area['Area']['name']}','{$area['Area']['notes']}')");
+			$this->query("INSERT INTO request_areas (id,name,notes,manager) 
+				VALUES (
+					'{$area['Area']['id']}',
+					'{$area['Area']['name']}',
+					'{$area['Area']['notes']}',
+					'{$area['Area']['manager']}'
+				)");
 			$this->query("INSERT INTO request_shifts (id,request_area_id,day_id,start,end,num_people)
 				VALUES {$shiftValues}");
 			$this->query("INSERT INTO request_assignments (id,person_id,name,request_shift_id)
 				VALUES {$assignmentValues}");
-		} else {
-			// there's already a request in progress so get that data
-			$this->contain('RequestShift.RequestAssignment');
-			$area = $this->find('first',array(
-				'conditions' => array('RequestArea.id' => $id * -1)
-			));
 		}
+
+		// get the data
+		$this->contain('RequestShift.RequestAssignment');
+		$area = $this->find('first',array(
+			'conditions' => array('RequestArea.id' => $id * -1)
+		));
+
+		$area['FloatingShift'] = array();
+
+		$this->Person = ClassRegistry::init('Person');;
+		$this->Person->schedule_id = $this->schedule_id;
+		$this->Person->addAssignedPeople($area,'Request');
+		return $area;
 	}
 
 }

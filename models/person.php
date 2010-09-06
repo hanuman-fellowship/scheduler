@@ -358,15 +358,15 @@ class Person extends AppModel {
 		));
 	}
 
-	function addAssignedPeople(&$data) {
-		if (!isset($data['Shift'])) {
+	function addAssignedPeople(&$data,$request = '') {
+		if (!isset($data[$request.'Shift'])) {
 			return;
 		}
 		$currentPeople = $this->getCurrent();
-		foreach($data['Shift'] as &$shift) {
+		foreach($data[$request.'Shift'] as &$shift) {
 			$people_ids = array();
 			$other_assignments = array();
-			foreach($shift['Assignment'] as &$assignment) {
+			foreach($shift[$request.'Assignment'] as &$assignment) {
 				if (in_array($assignment['person_id'], $currentPeople)) {
 					$people_ids[$assignment['id']] = $assignment['person_id'];
 				}
@@ -379,7 +379,7 @@ class Person extends AppModel {
 						'PeopleSchedules' => array(
 							'resident_category_id' => 0
 						),
-						'Assignment' => array('id' => $assignment['id'])
+						$request.'Assignment' => array('id' => $assignment['id'])
 					);
 				}
 			}
@@ -390,9 +390,9 @@ class Person extends AppModel {
 			));
 			foreach($people as &$person) {
 				$this->addDisplayName($person['Person']);
-				$person['Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
+				$person[$request.'Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
 			}
-			$shift['Assignment'] = array_merge($people, $other_assignments);
+			$shift[$request.'Assignment'] = array_merge($people, $other_assignments);
 		}
 	}
 }

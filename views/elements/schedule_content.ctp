@@ -1,3 +1,4 @@
+<? $request = isset($area['RequestArea']) ? 'Request' : '';?>
 <?$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');?>
 <?$gaps = isset($gaps) ? true : false;?>
 <table width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
@@ -16,7 +17,7 @@
 		</td> 
 		<td class="title" <?= (isset($person)) ? 'id="total_hours"' : '';?> width="144" rowspan="2">
 			<?= (isset($area)) ?
-				$area['Area']['manager'] :
+				$area[$request.'Area']['manager'] :
 				'';?>
 		</td> 
 		<td width="222" rowspan="2"> 
@@ -24,10 +25,10 @@
 			<? if (isset($area)) { ?>
 				<span id='area_name'>
 				<?=$role->link(
-					$area['Area']['name'],
+					$area[$request.'Area']['name'],
 					array(
 						'operations' => array(
-							'url' => array('action'=>'edit',$area['Area']['id']),
+							'url' => array('action'=>'edit',$area[$request.'Area']['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
 								'complete'=>"openDialog('area_name')"
@@ -42,7 +43,7 @@
 				<?= $person['PeopleSchedules']['ResidentCategory']['name'] ?>
 			<? } ?>
 				<br />
-				Schedule
+				<?= $request ? "Request Form" : "Schedule";?>
 			</div>
 		</td> 
 		<td width="107">
@@ -126,10 +127,10 @@
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
 		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
-		&& !$this->params['isAjax']) { ?>
+		&& !$this->params['isAjax'] || $request) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
 			<? $url = (isset($area)) ? 
-				array('controller'=>'shifts','action'=>'add',$area['Area']['id'],
+				array('controller'=>'shifts','action'=>'add',$area[$request.'Area']['id'],
 					$day,
 					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start'])) 
 				:
@@ -151,7 +152,7 @@
 			<div align="center" class="shift"> 
 				<p> 
 		<? if (isset($area)) { ?>
-			<? foreach ($area['Shift'] as $shift) { ?>
+			<? foreach ($area[$request.'Shift'] as $shift) { ?>
 						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day);?>
 			<? } ?>
 		<? } else { ?>
@@ -184,7 +185,7 @@
 		<td id="0_0" onmouseover='showAddShift(0,0)' onmouseout='hideAddShift("0_0")' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 		<? if (isset($area)) { ?>
 			<?=$schedule->displayAreaFloating($area['FloatingShift']);?>
-			<? $area_id = $area['Area']['id']; ?>
+			<? $area_id = $area[$request.'Area']['id']; ?>
 			<? $person_id = 0; ?>
 		<? } else { ?>
 			<?= !$gaps ? $schedule->displayPersonFloating($person['FloatingShift']) : '';?>
@@ -196,7 +197,7 @@
 				document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
-		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) { ?>
+		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable') || $request) { ?>
 			<?= !$gaps ? $ajax->link(
 				' + ',
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),
