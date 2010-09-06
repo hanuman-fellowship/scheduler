@@ -32,15 +32,12 @@ class AppController extends Controller {
 		}	
 
 		$this->loadModel('Area');
-		$managerAreas = $this->Area->sFind('all', array(
+		$managerAreas = $this->Area->sFind('list', array(
 			'conditions' => array(
 				'Area.id' => Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id')
 			),
-			'fields' => array('name','id'),
-			'recursive' => -1,
 			'order' => 'Area.name'
 		));
-		$managerAreas = Set::combine($managerAreas,'{n}.Area.id','{n}.Area.name');
 		if (count(Authsome::get('Manager')) > 0) {
 			$managerMenu = array();
 			foreach($managerAreas as $areaId => $areaName) {
