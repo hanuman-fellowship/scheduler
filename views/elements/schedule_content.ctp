@@ -23,6 +23,7 @@
 		<td width="222" rowspan="2"> 
 			<div align="center" class="title"> 
 			<? if (isset($area)) { ?>
+				<?= $request ? "<span style='color:#999'>" : '';?>
 				<span id='area_name'>
 				<?=$role->link(
 					$area[$request.'Area']['name'],
@@ -44,6 +45,7 @@
 			<? } ?>
 				<br />
 				<?= $request ? "Request Form" : "Schedule";?>
+				<?= $request ? "</span>" : '';?>
 			</div>
 		</td> 
 		<td width="107">
@@ -93,7 +95,7 @@
 		</td> 
 	</tr> 
 </table> 
-<table style="" width="774" border="2" align="center" cellpadding="0" cellspacing="0"> 
+<table style="<?= $request ? 'background-color:#ddd' : '';?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		</td> 
