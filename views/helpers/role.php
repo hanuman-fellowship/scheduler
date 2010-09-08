@@ -6,7 +6,7 @@ class RoleHelper extends AppHelper {
 	function link($title,$roles,$override = false) {
 		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 		if($userRoles == array()) $userRoles[] = '';
-		$userRoles = ($override) ? array('') : $userRoles;
+		$userRoles = ($override === true) ? array('') : (($override === false) ? $userRoles : array($override));
 		if ($availRoles = array_intersect($userRoles,array_keys($roles))) {
 			$thisRole = reset($availRoles);
 			$attributes = array_key_exists('attributes',$roles[$thisRole]) ? 

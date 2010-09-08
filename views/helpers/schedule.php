@@ -158,7 +158,7 @@ class ScheduleHelper extends AppHelper {
 							)
 						)
 					),
-					(!$this->session->read('Schedule.editable')) 
+					(!$this->session->read('Schedule.editable')) ? ($request == '') ? '' : 'operations' : '' 
 				) . '<br/>';
 				if (in_array('operations',$userRoles) && 
 				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0) {
@@ -192,7 +192,7 @@ class ScheduleHelper extends AppHelper {
 							'ajax'
 						)
 					),
-					(!$this->session->read('Schedule.editable')) 
+					(!$this->session->read('Schedule.editable')) ? ($request == '') ? '' : 'operations' : '' 
 				);
 				$people .= "{$unassigned}<br/>";
 			}
@@ -210,7 +210,7 @@ class ScheduleHelper extends AppHelper {
 						'ajax'
 					)
 				),
-				(!$this->session->read('Schedule.editable')) 
+				(!$this->session->read('Schedule.editable')) ? ($request == '') ? '' : 'operations' : '' 
 			);
 			return "<span id='{$shift['id']}'><b>" .
 				$time . "</b><br/>" . $people . "</span><br/><br/>";
