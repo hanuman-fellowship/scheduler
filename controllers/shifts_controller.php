@@ -4,6 +4,9 @@ class ShiftsController extends AppController {
 	var $name = 'Shifts';
 
 	function add($area_id = null,$day_id = null, $start = null, $end = null) {
+		if ($area_id < 0) { // if it's a request form
+			$this->redirect(array('controller'=>'RequestShifts','action'=>'add',$area_id,$day_id,$start,$end));
+		}
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Shift->valid($this->data)) {
@@ -37,6 +40,9 @@ class ShiftsController extends AppController {
 	}
 	
 	function edit($id = null) {
+		if ($id < 0) { // if it's a request form
+			$this->redirect(array('controller'=>'RequestShifts','action'=>'edit',$id));
+		}
 		$this->redirectIfNotEditable();
 		if (!$id && empty($this->data)) {
 			$this->redirect(array('action' => 'index'));
@@ -65,6 +71,9 @@ class ShiftsController extends AppController {
 	}
 	
 	function delete($id) {
+		if ($id < 0) { // if it's a request form
+			$this->redirect(array('controller'=>'RequestShifts','action'=>'delete',$id));
+		}
 		$this->redirectIfNotEditable();
 		$this->record();
 		$this->Shift->sDelete($id);
