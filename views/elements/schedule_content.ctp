@@ -1,7 +1,7 @@
 <? $request = isset($area['RequestArea']) ? 'Request' : '';?>
 <?$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');?>
 <?$gaps = isset($gaps) ? true : false;?>
-<table  style='<?= $request ? 'background-color:#eee' : '';?>' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
+<table  style='' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
 		<td width="99" rowspan="2"> 
 			<div align="right"> 
@@ -95,7 +95,7 @@
 		</td> 
 	</tr> 
 </table> 
-<table style="<?= $request ? 'background-color:#eee' : '';?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
+<table style="<?= $request ? "background-image:url({$html->url('/img/lines.jpg')})" : "";?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		</td> 
