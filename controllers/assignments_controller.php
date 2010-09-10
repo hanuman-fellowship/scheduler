@@ -5,6 +5,9 @@ class AssignmentsController extends AppController {
 	var $helpers = array('schedule');
 
 	function assign($shift_id = null, $person_id = null) {
+		if ($shift_id < 0) { // if it's a request form
+			$this->redirect(array('controller'=>'RequestAssignments','action'=>'assign',$shift_id,$person_id));
+		}
 		$this->redirectIfNotEditable();
 		if ($this->data) {
 			$shift_id = $this->data['Assignment']['shift'];
@@ -30,6 +33,9 @@ class AssignmentsController extends AppController {
 	}		
 	
 	function unassign($id) {
+		if ($id < 0) { // if it's a request form
+			$this->redirect(array('controller'=>'RequestAssignments','action'=>'unassign',$id));
+		}
 		$this->redirectIfNotEditable();
 		$this->record();
 		$this->Assignment->sDelete($id);
