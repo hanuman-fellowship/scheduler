@@ -150,11 +150,8 @@ class AppController extends Controller {
 		$this->{$model}->id = $id;
 		if ($model == 'Person') {
 			if ($id == 'gaps') {
-				if (Authsome::get('role') == 'operations') {
-					return;
-				} else {
-					$this->redirect('/');
-				}
+				$this->redirectIfNot('operations');
+				return;
 			}
 			if (!$this->Person->PeopleSchedules->field('id',array(
 				'PeopleSchedules.person_id' => $id,
