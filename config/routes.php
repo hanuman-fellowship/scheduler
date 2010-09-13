@@ -27,15 +27,11 @@
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 	Router::connect('/', array('controller' => 'areas', 'action' => 'schedule'));
-/**
- * ...and connect the rest of 'Pages' controller's urls.
- */
+
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 	
-	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
-	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
-	
-	Router::connect('/undo', array('controller' => 'undos', 'action' => 'undo'));
-	Router::connect('/redo', array('controller' => 'undos', 'action' => 'redo'));
-		
+	Router::connect('/areas/request/edit/*', array('controller' => 'RequestAreas', 'action' => 'edit'));
+	Router::connect('/areas/request/view/*', array('controller' => 'RequestAreas', 'action' => 'view'));
+	Router::connect('/assignments/request/assign/*', array('controller' => 'RequestAssignments', 'action' => 'assign'));
+	Router::connect('/shifts/request/delete/*', array('controller' => 'RequestShifts', 'action' => 'delete'));
 ?>

@@ -30,6 +30,11 @@
 				'ajax'
 			),
 			"<hr/>",
+			'View Request...' => array(
+				'url' => array('controller' => 'RequestAreas', 'action' => 'view'),
+				'ajax'
+			),
+			"<hr/>",
 			'Change Password...' => array(
 				'url' => array('controller' => 'users', 'action' => 'changePassword'),
 				'ajax'

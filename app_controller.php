@@ -31,6 +31,8 @@ class AppController extends Controller {
 			$this->Session->write('Schedule.editable',false);
 		}	
 
+
+		// request areas for manager menu
 		$this->loadModel('Area');
 		$managerAreas = $this->Area->sFind('list', array(
 			'conditions' => array(
@@ -42,7 +44,7 @@ class AppController extends Controller {
 			$managerMenu = array();
 			foreach($managerAreas as $areaId => $areaName) {
 				$managerMenu["{$areaName} Request Form"] = array(
-					'url' => array('controller' => 'areas', 'action' => 'request',$areaId)
+					'url' => array('controller' => 'RequestAreas', 'action' => 'edit',$areaId)
 				);
 			}
 			$managerMenu[] = '<hr/>';
