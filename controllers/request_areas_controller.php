@@ -10,12 +10,18 @@ class RequestAreasController extends AppController {
 		$this->set('bounds', $this->getBounds());
 	}
 
+	// the id should be negative (the request area to be published)
 	function publish($id) {
+		$this->redirectIfNotManager($id * -1);
 		$this->RequestArea->publish($id);
 		
 		// send email!!
 
 		$this->redirect($this->referer());
+	}
+
+	function view($id = null) {
+		
 	}
 
 	function redirectIfNotManager($id) {

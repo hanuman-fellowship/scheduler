@@ -5,8 +5,18 @@ TODO:
 	  and each date range.
 
 	- Requests
-		request_areas.id (and request_area_id in other tables) are negative versions of the area
-		they are for. Then, when published, hey are positive.
+		FIX: the way new shifts/assignments are saved (by subtracting 1 from the lowest id)
+		is flawed. What if there are no ids? Also, when creating a new request, what if the
+		ids, that are simply made negative, conflict with an id that is already there
+		(which would be there because someone editing an existing request created it)?
+		
+		Should request forms be an entire schedule like operations has? maybe the manager would
+		only be able to edit the areas for which they had access?? there would be a field in the
+		schedule table called request (true or false). that way, they could have undo, etc.
+
+		or... just keep it the same with the negative ids, but create every one on the fly, so
+		when importing all of the shifts and assignments it would go through each one and create
+		new ids and then make the foreign keys correctly too...
 
 	- CRUD resident categories
 

@@ -34,4 +34,5 @@
 	Router::connect('/areas/request/view/*', array('controller' => 'RequestAreas', 'action' => 'view'));
 	Router::connect('/assignments/request/assign/*', array('controller' => 'RequestAssignments', 'action' => 'assign'));
 	Router::connect('/shifts/request/delete/*', array('controller' => 'RequestShifts', 'action' => 'delete'));
+	Router::connect('/areas/request/publish/*', array('controller' => 'RequestAreas', 'action' => 'publish'));
 ?>

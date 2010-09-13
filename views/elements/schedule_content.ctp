@@ -91,7 +91,7 @@
 			&nbsp;
 		</td> 
 		<td> 
-			January 7th - April 4th
+		(Will get from Reg)
 		</td> 
 	</tr> 
 </table> 
