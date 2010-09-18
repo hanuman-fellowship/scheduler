@@ -26,31 +26,6 @@ class RequestArea extends AppModel {
 				'fields' => array('id','name','notes','manager')
 			));
 			$area['Area']['id'] = $area['Area']['id'] * -1;
-			$shiftValues = '';
-			$assignmentValues = '';
-			foreach($area['Shift'] as &$shift) {
-				$shift['id'] = $shift['id'] * -1;
-				$shift['request_area_id'] = $shift['area_id'] * -1;
-				$shiftValues .= "(
-					'{$shift['id']}',
-					'{$shift['request_area_id']}',
-					'{$shift['day_id']}',
-					'{$shift['start']}',
-					'{$shift['end']}',
-					'{$shift['num_people']}'
-				),";
-				foreach($shift['Assignment'] as $assignment) {
-					$assignment['id'] = $assignment['id'] * -1;
-					$assignmentValues .= "(
-						'{$assignment['id']}',
-						'{$assignment['person_id']}',
-						'{$assignment['name']}',
-						'{$shift['id']}'
-					),";
-				}
-			}
-			$shiftValues = substr_replace($shiftValues,'',-1);
-			$assignmentValues = substr_replace($assignmentValues,'',-1);
 			$this->query("INSERT INTO request_areas (id,name,notes,manager) 
 				VALUES (
 					'{$area['Area']['id']}',
@@ -58,13 +33,11 @@ class RequestArea extends AppModel {
 					'{$area['Area']['notes']}',
 					'{$area['Area']['manager']}'
 				)");
-			$this->query("INSERT INTO request_shifts (id,request_area_id,day_id,start,end,num_people)
-				VALUES {$shiftValues}");
-			$this->query("INSERT INTO request_assignments (id,person_id,name,request_shift_id)
-				VALUES {$assignmentValues}");
+
+			$this->importShifts($area);
 		}
 
-		// get the data
+		// get the data for display
 		$this->contain('RequestShift.RequestAssignment');
 		$area = $this->find('first',array(
 			'conditions' => array('RequestArea.id' => $id * -1)
@@ -76,6 +49,48 @@ class RequestArea extends AppModel {
 		$this->Person->schedule_id = $this->schedule_id;
 		$this->Person->addAssignedPeople($area,'Request');
 		return $area;
+	}
+
+	function importShifts($area) {		
+		$shiftValues = '';
+		$assignmentValues = '';
+
+		// get the latest (smallest) RequestShift id and AssignmentShift id
+		// so that we can make a new one that does not conflict
+		// and then incriment (decriment, but it's negative) for each new one
+		$smallestShiftId = $this->RequestShift->field('id',null,'id asc');
+		$shiftId = $smallestShiftId > 0 ? -1 : $smallestShiftId - 1;
+		$smallestAssignmentId = $this->RequestShift->RequestAssignment->field('id',null,'id asc');
+		$assignmentId = $smallestAssignmentId > 0 ? -1 : $smallestAssignmentId - 1;
+
+		foreach($area['Shift'] as &$shift) {
+			$shift['id'] = $shiftId;
+			$shift['request_area_id'] = $shift['area_id'] * -1;
+			$shiftValues .= "(
+				'{$shiftId}',
+				'{$shift['request_area_id']}',
+				'{$shift['day_id']}',
+				'{$shift['start']}',
+				'{$shift['end']}',
+				'{$shift['num_people']}'
+			),";
+			foreach($shift['Assignment'] as $assignment) {
+				$assignmentValues .= "(
+					'{$assignmentId}',
+					'{$assignment['person_id']}',
+					'{$assignment['name']}',
+					'{$shift['id']}'
+				),";
+				$assignmentId--;
+			}
+			$shiftId--;
+		}
+		$shiftValues = substr_replace($shiftValues,'',-1);
+		$assignmentValues = substr_replace($assignmentValues,'',-1);
+		$this->query("INSERT INTO request_shifts (id,request_area_id,day_id,start,end,num_people)
+			VALUES {$shiftValues}");
+		$this->query("INSERT INTO request_assignments (id,person_id,name,request_shift_id)
+			VALUES {$assignmentValues}");
 	}
 
 	function publish($id) {
