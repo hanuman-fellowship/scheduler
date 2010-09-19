@@ -115,6 +115,12 @@ class User extends AppModel {
                     'User.password' => $password,
                 );
                 break;
+			case 'update':
+				// if something has changed, re-login user without authenticating
+				$conditions = array(
+					'User.id' => Authsome::get('id')
+				);
+				break;
             default:
                 return null;
         }

@@ -88,6 +88,7 @@ class UsersController extends AppController {
 				}
 				$this->User->sSave($this->data);
 				$this->set('url', $this->referer());
+				Authsome::login('update'); // in case user is editing themself
 			} else {
 				$this->set('errorField',$this->User->errorField);
 				$this->set('errorMessage',$this->User->errorMessage);
