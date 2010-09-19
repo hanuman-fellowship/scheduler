@@ -62,37 +62,37 @@ class ConstantShift extends AppModel {
 							case 'name':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'name -> '.$newData['name'];
+									'name:'.$newData['name'];
 								break;
 							case 'resident_category_id':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'category -> '.$newData['resident_category_id'];
+									'category:'.$newData['resident_category_id'];
 								break;
 							case 'day_id':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'day -> '.$newData['day_id'];
+									'day:'.$newData['day_id'];
 								break;		
 							case 'start':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'start -> '.$newData['start'];
+									'start:'.$newData['start'];
 								break;		
 							case 'end':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'end -> '.$newData['end'];
+									'end:'.$newData['end'];
 								break;		
 							case 'specify_hours':
 								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 'specify hours -> ';
+								$this->description .= 'specify hours:';
 								$this->description .= $newData['specify_hours'] ? 'yes' : 'no';
 								break;	
 							case 'hours':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'hours -> '.$newData['hours'];
+									'hours:'.$newData['hours'];
 								break;	
 						}
 						$listed = true;

@@ -34,7 +34,7 @@ class PeopleSchedules extends AppModel {
 					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
 						$this->description .= $listed ? ', ' : ' ';
 						$this->description .= 
-							Inflector::humanize($field).' is now '.$val;
+							Inflector::humanize($field).':'.$val;
 						$listed = true;
 					}
 				}

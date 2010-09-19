@@ -338,7 +338,7 @@ class Person extends AppModel {
 			$lastNames['numLetters'] = $numLetters;
 			}
 		}
-		$lastNames['numLetters'] = (isset($lastNames['numLetters'])) ? $lastNames['numLetters'] : 0;
+		$lastNames['numLetters'] = isset($lastNames['numLetters']) ? $lastNames['numLetters'] : 0;
 		$shortLast = substr($person['last'], 0, $lastNames['numLetters']);
 		$person['name'] .= ($lastNames['numLetters'] > 0) ? " {$shortLast}" : '';
 	}

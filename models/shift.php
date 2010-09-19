@@ -76,27 +76,27 @@ class Shift extends AppModel {
 							case 'area_id':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'area -> '.$newData['area_id'];
+									'area:'.$newData['area_id'];
 								break;
 							case 'day_id':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'day -> '.$newData['day_id'];
+									'day:'.$newData['day_id'];
 								break;		
 							case 'start':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'start -> '.$newData['start'];
+									'start:'.$newData['start'];
 								break;		
 							case 'end':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'end -> '.$newData['end'];
+									'end:'.$newData['end'];
 								break;		
 							case 'num_people':
 								$this->description .= $listed ? ', ' : ' ';
 								$this->description .= 
-									'# of people -> '.$newData['num_people'];
+									'# of people:'.$newData['num_people'];
 								break;	
 						}
 						$listed = true;
