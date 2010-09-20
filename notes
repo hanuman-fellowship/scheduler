@@ -1,10 +1,10 @@
 TODO:
 
+	- Description for editing a person... (might be irrelevnt when getting people from reg)
+
 	- Go to old scheduler and add a field for last name and go through and put the correct
 	  names. Jairam? Maybe write an interface for that where it prompts for each person
 	  and each date range.
-
-	- CRUD resident categories
 
 	- edit times
 
@@ -30,13 +30,6 @@ TODO:
 	- Floating Shift
 		- Description is a little screwy
 
-	- Users
-	 	edit
-
 	- Changes
 		- views/changes/history needs work
 		- jump is slow. could it do all of the calculations first, and then update the database all at once?
-	
-	- Make colors (css) of resident caegories configurable.
-		- figure out how to automatically lighten links? or maybe find another way to highlight on hover.
-		- perhaps no color behind the person schedule, but just their name is colored.

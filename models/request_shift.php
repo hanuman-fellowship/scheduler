@@ -24,7 +24,9 @@ class RequestShift extends AppModel {
 		if (isset($data['RequestShift']['id'])) {
 			$this->contain('RequestAssignment');
 			$this->id = $data['RequestShift']['id'];
-			$shift = $this->find('first');
+			$shift = $this->find('first',array(
+				'conditions' => array('RequestShift.id' => $this->id)
+			));
 			$num_assigned = count($shift['RequestAssignment']);
 			if ($num_people < $num_assigned) {
 				$this->errorField = 'num_people';
