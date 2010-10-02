@@ -91,7 +91,7 @@
 			&nbsp;
 		</td> 
 		<td> 
-		(Will get from Reg)
+		Indefinitely
 		</td> 
 	</tr> 
 </table> 
