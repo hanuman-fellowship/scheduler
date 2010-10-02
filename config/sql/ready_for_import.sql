@@ -490,6 +490,7 @@ CREATE TABLE `managers` (
 CREATE TABLE `request_areas` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(30) NOT NULL,
+  `manager` varchar(30) NOT NULL,
   `notes` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

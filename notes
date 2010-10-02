@@ -1,9 +1,7 @@
 TODO:
 
 
-	- schedule_message is messed up.
-
-	- Description for editing a person... (might be irrelevnt when getting people from reg)
+	- Description for editing a person
 
 	- Go to old scheduler and add a field for last name and go through and put the correct
 	  names. Jairam? Maybe write an interface for that where it prompts for each person
