@@ -37,7 +37,7 @@
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$this->session->read('Schedule.editable'))
+					($this->params['isAjax'] || !$this->session->read('Schedule.editable') || isset($area['RequestArea']))
 				);?>
 				</span>
 			<? } else { ?>

@@ -3,6 +3,15 @@ class SchedulesController extends AppController {
 
 	var $name = 'Schedules';
 	
+
+	// just a test
+	function export() {
+		$file = fopen('hello.html', 'w');
+		$content = $this->requestAction('/people/schedule/12',array('return'));
+		fwrite($file, $content);
+		fclose($file);
+	}
+
 	function add() {
 		$this->redirectIfNot('operations');
 		$scheduleName = $this->Session->read('Schedule.name');
