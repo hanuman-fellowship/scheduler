@@ -81,15 +81,6 @@
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax',
 				'hidden' => $hidden
-			),
-			array(
-				'title' => "<hr/>",
-				'hidden' => $hidden,
-			),
-			'Publish...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'publish'),
-				'confirm' => "Publish the schedule: \"{$scheduleName}\"? \nThis action can't be undone.",
-				'hidden' => $hidden
 			)
 		)
 	),

@@ -1,4 +1,4 @@
 <?
-echo abs(-1);
+echo uniqid('',true);
 ?>
 

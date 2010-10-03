@@ -184,10 +184,11 @@ class Schedule extends AppModel {
 			$this->Change->nudge(-1); // move the ids back
 		}
 
-		// get rid of changes that are identical (probably from a previous merge)
+		// get rid of changes that are identical (from a previous merge)
 		foreach($changes['b'] as $bKey => $b_change) {
 			foreach($changes['a'] as $aKey => $a_change) {
-				if ($a_change['Change']['description'] == $b_change['Change']['description']) {
+				if ($a_change['Change']['description'] == $b_change['Change']['description']
+					&& $a_change['Change']['created'] == $b_change['Change']['created']) {
 					unset($changes['a'][$aKey]);
 					unset($changes['b'][$bKey]);
 				}
