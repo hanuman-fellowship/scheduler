@@ -19,7 +19,7 @@ if (isset($area['RequestArea'])) {
 	$latest = $schedule['editable'] ? "<span style='color:green'>Editing: </span>" : $latest; 
 	if($userRoles == array()) {
 		echo ' '.$this->ajax->link(
-			$latest."Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']),
+			$latest."Published on " . $time->format('F jS, Y g:ia',$schedule['updated']),
 			array('controller'=>'schedules','action'=>'past'),
 			array(
 				'escape'=>false,
