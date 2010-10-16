@@ -1,19 +1,10 @@
 TODO:
 
-	Headaches:
-
-		- Slowness with lots of old published schedules
-		- Maybe transform old published schedules into html? how?
-
 	- add publish button to schedule message
 
 	- submit request
 
 	- Description for editing a person
-
-	- Go to old scheduler and add a field for last name and go through and put the correct
-	  names. Jairam? Maybe write an interface for that where it prompts for each person
-	  and each date range.
 
 	- edit times
 

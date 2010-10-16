@@ -5,6 +5,14 @@ $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 
 if (isset($area['RequestArea'])) {
 	echo "<span style='color:green'>Editing:</span> {$area['RequestArea']['name']} Request Form";
+	echo $html->link(
+		'Submit',
+		array('controller' => 'RequestAreas', 'action' => 'submit', $schedule['id']),
+		array(
+			'class' => 'button',
+			'confirm' => "Submit {$area['RequestArea']['name']} Request Form?"
+		)
+	);
 } else {
 	$latest = $schedule['latest'] ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";
 	$latest = $schedule['username'] != '' ? "Viewing: " : $latest;
@@ -39,6 +47,16 @@ if (isset($area['RequestArea'])) {
 			);
 		}
 	}
+echo $schedule['editable'] ? 
+	$html->link(
+		'Publish',
+		array('controller' => 'schedules', 'action' => 'publish'),
+		array(
+			'class' => 'button',
+			'confirm' => "Publish a copy of \"{$schedule['name']}\"?"
+		)
+	)
+	: '';
 }
 ?>
 </div>
