@@ -432,6 +432,15 @@ class Schedule extends AppModel {
 				'parent_id' => null
 			)
 		));
+		// delete any auto-select settings for this schedule
+		$this->Setting = ClassRegistry::init('Setting');		
+		$this->Setting->deleteAll(
+			array(
+				"Setting.key" => 'auto_select',
+				'Setting.val' => $this->schedule_id
+			),false,false
+		);
+		// delete changes for this schedule
 		$models = array('Change','ChangeModel','ChangeField');
 		foreach($models as $model) {
 			$this->{$model}->deleteAll(
