@@ -247,9 +247,7 @@ a.redo {
 }
 
 a.button {
-	padding:0px 8px 0px 8px;
+	text-decoration:underline;
 	margin:8px;
-	border-left:solid 2px;
-	border-right:solid 2px;
 	color:#AAA;
 }
