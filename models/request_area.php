@@ -158,5 +158,26 @@ class RequestArea extends AppModel {
 			VALUES {$assignmentValues}");
 	}
 
+	function getList() {
+		return $this->find('list',array(
+			'conditions' => array('RequestArea.id >' => 0),
+			'order' => 'RequestArea.name'
+		));
+	}
+
+	function view($id, $submitted = true) {
+		$this->contain('RequestShift.RequestAssignment');
+		$area = $this->find('first',array(
+			'conditions' => array('RequestArea.id' => $id * ($submitted ? 1 : -1))
+		));
+
+		$area['FloatingShift'] = array();
+
+		$this->Person = ClassRegistry::init('Person');;
+		$this->Person->schedule_id = $this->schedule_id;
+		$this->Person->addAssignedPeople($area,'Request');
+		return $area;
+	}	
+
 }
 ?>

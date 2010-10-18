@@ -15,14 +15,17 @@ if (isset($area['RequestArea'])) {
 			)
 		);
 	} else {
-		echo "<span style='color:blue'>Viewing:</span> {$area['RequestArea']['name']} Request Form (Submitted)";
-		echo $html->link(
-			'Edit',
-			array('controller' => 'RequestAreas', 'action' => 'edit', $area['RequestArea']['id'],true),
-			array(
-				'class' => 'button'
-			)
-		);
+		echo "<span style='color:blue'>Viewing:</span> {$area['RequestArea']['name']} Request Form";
+		if(in_array($area['RequestArea']['id'],
+		Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id'))) {
+			echo " (Submitted)" . $html->link(
+				'Edit',
+				array('controller' => 'RequestAreas', 'action' => 'edit', $area['RequestArea']['id'],true),
+				array(
+					'class' => 'button'
+				)
+			);
+		}
 	}
 } else {
 	$latest = $schedule['latest'] ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";

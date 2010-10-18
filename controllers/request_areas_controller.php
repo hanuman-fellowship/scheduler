@@ -21,7 +21,14 @@ class RequestAreasController extends AppController {
 	}
 
 	function view($id = null) {
-		
+		$this->redirectIfNot('operations');
+		if (!$id) {
+			$this->set('areas',$this->RequestArea->getList());
+			$this->render('select');
+		} else {
+			$this->set('area',$this->RequestArea->view($id));
+			$this->set('bounds', $this->getBounds());
+		}
 	}
 
 	function redirectIfNotManager($id) {
