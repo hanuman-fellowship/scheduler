@@ -1,4 +1,12 @@
-<? $request = isset($area['RequestArea']) ? 'Request' : '';?>
+<?
+if (isset($area['RequestArea'])) {
+	$request = 'Request';
+	$editRequest = ($area['RequestArea']['id'] < 0) ? true : false;
+} else {
+	$request = '';
+	$editRequest = false;
+}
+?>
 <?$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');?>
 <?$gaps = isset($gaps) ? true : false;?>
 <table  style='' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
@@ -129,7 +137,7 @@
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
 		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
-		&& !$this->params['isAjax'] || $request) { ?>
+		&& !$this->params['isAjax'] || ($request && $editRequest)) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
 			<? $url = (isset($area)) ? 
 				array('controller'=>'shifts','action'=>'add',$area[$request.'Area']['id'],
@@ -155,7 +163,7 @@
 				<p> 
 		<? if (isset($area)) { ?>
 			<? foreach ($area[$request.'Shift'] as $shift) { ?>
-						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day);?>
+						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day,$editRequest);?>
 			<? } ?>
 		<? } else { ?>
 			<? foreach ($person['Assignment'] as $assignment) { ?>
@@ -199,7 +207,7 @@
 				document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
-		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable') || $request) { ?>
+		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable') || ($request && $editRequest)) { ?>
 			<?= !$gaps ? $ajax->link(
 				' + ',
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),

@@ -13,7 +13,7 @@ class RequestArea extends AppModel {
 		'RequestShift'
 	);
 
-	function edit($id) {
+	function edit($id,$force) {
 		if (!$area = $this->find('first',array('conditions' => array('RequestArea.id' => -1 * $id)))) {
 			// there is no request for this area, so create one
 			$this->Area = ClassRegistry::init('Area');
@@ -35,12 +35,23 @@ class RequestArea extends AppModel {
 				)");
 
 			$this->importShifts($area);
+			$submitted = false;
+		} else {
+			// the request exists. has it been submitted?
+			if ($area = $this->find('first',array('conditions' => array('RequestArea.id' => $id)))) {
+				// display the submitted request
+				$submitted = true;
+			} else {
+				$submitted = false;
+			}
 		}
+
+		if ($force) $submitted = false;
 
 		// get the data for display
 		$this->contain('RequestShift.RequestAssignment');
 		$area = $this->find('first',array(
-			'conditions' => array('RequestArea.id' => $id * -1)
+			'conditions' => array('RequestArea.id' => $id * ($submitted ? 1 : -1))
 		));
 
 		$area['FloatingShift'] = array();
@@ -93,7 +104,7 @@ class RequestArea extends AppModel {
 			VALUES {$assignmentValues}");
 	}
 
-	function publish($id) {
+	function submit($id) {
 		// delete existing published area and related model records
 		$publishId = $id * -1;
 		$this->query("DELETE FROM request_areas WHERE id = {$publishId}");

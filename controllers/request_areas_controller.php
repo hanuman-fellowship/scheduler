@@ -4,16 +4,16 @@ class RequestAreasController extends AppController {
 	var $name = 'RequestAreas';
 	var $helpers = array('schedule');
 	
-	function edit($id = null) {
+	function edit($id = null,$force = false) {
 		$this->redirectIfNotManager($id);
-		$this->set('area',$this->RequestArea->edit($id));
+		$this->set('area',$this->RequestArea->edit($id,$force));
 		$this->set('bounds', $this->getBounds());
 	}
 
-	// the id should be negative (the request area to be published)
-	function publish($id) {
+	// the id should be negative (the request area to be submited)
+	function submit($id) {
 		$this->redirectIfNotManager($id * -1);
-		$this->RequestArea->publish($id);
+		$this->RequestArea->submit($id);
 		
 		// send email!!
 

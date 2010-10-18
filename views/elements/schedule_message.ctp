@@ -4,15 +4,26 @@ $schedule = $session->read('Schedule');
 $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 
 if (isset($area['RequestArea'])) {
-	echo "<span style='color:green'>Editing:</span> {$area['RequestArea']['name']} Request Form";
-	echo $html->link(
-		'Submit',
-		array('controller' => 'RequestAreas', 'action' => 'submit', $schedule['id']),
-		array(
-			'class' => 'button',
-			'confirm' => "Submit {$area['RequestArea']['name']} Request Form?"
-		)
-	);
+	if ($area['RequestArea']['id'] < 0) {
+		echo "<span style='color:green'>Editing:</span> {$area['RequestArea']['name']} Request Form";
+		echo $html->link(
+			'Submit',
+			array('controller' => 'RequestAreas', 'action' => 'submit', $area['RequestArea']['id']),
+			array(
+				'class' => 'button',
+				'confirm' => "Submit {$area['RequestArea']['name']} Request Form?"
+			)
+		);
+	} else {
+		echo "<span style='color:blue'>Viewing:</span> {$area['RequestArea']['name']} Request Form (Submitted)";
+		echo $html->link(
+			'Edit',
+			array('controller' => 'RequestAreas', 'action' => 'edit', $area['RequestArea']['id'],true),
+			array(
+				'class' => 'button'
+			)
+		);
+	}
 } else {
 	$latest = $schedule['latest'] ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";
 	$latest = $schedule['username'] != '' ? "Viewing: " : $latest;
