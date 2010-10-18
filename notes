@@ -1,17 +1,28 @@
 TODO:
 
-	- add publish button to schedule message
+	- big board
 
-	- submit request
+	- notes on person and area
+
+	- floating shift on area request
+
+	- personnel
+
+	- templates
+
+	- delete all shifts, delete all areas, delete all people, etc...
+
+	- new schedule (instead of working copy)
 
 	- Description for editing a person
 
 	- edit times
 
-	- publish multiple schedules (for retreats, etc.)
-		- auto publish times?
-
-
+	- when pubishing a schedule, ask for start and end dates. start date defaults to "now"
+	  if it falls during another published schedule, user is asked for a name and it is offered
+	  as an alternate schedule (like for retreats). If start date is later, the schedule will 
+	  automatically be available starting at that time... etc...
+	
 	- show schedules as a tree going down from pubished based on which they were copied from
 
 	- order working copies by date or by name in the select schedule dialog
