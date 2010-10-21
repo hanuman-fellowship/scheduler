@@ -108,6 +108,35 @@ if (isset($area['RequestArea'])) {
 <table style="<?= $request ? "background-image:url({$html->url('/img/lines.jpg')})" : "";?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
+		<div align='center'>
+		<? if (isset($area)) { ?>
+			<? if (isset($area['RequestArea'])) { ?>
+				<?=$html->link('View<br/>Schedule',
+					array(
+						'controller'=>'areas',
+						'action'=>'schedule',
+						abs($area['RequestArea']['id'])
+					),
+					array(
+						'escape'=>false,
+						'style'=>'color:green'
+					)
+				); ?>
+			<? } elseif ($area['hasRequest']) { ?>
+				<?=$html->link('View<br/>Request',
+					array(
+						'controller'=>'RequestAreas',
+						'action'=>'view',
+						$area['Area']['id']
+					),
+					array(
+						'escape'=>false,
+						'style'=>'color:green'
+					)
+				); ?>
+			<? } ?>
+		<? } ?>
+		</div>
 		</td> 
 <? foreach ($bounds['days'] as $day_id => $day) { ?>
 		<td width="75" bordercolor="#000000"> 

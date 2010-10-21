@@ -68,7 +68,7 @@ echo $schedule['editable'] ?
 		array('controller' => 'schedules', 'action' => 'publish'),
 		array(
 			'class' => 'button',
-			'confirm' => "Publish a copy of \"{$schedule['name']}\"?"
+			'confirm' => "Publish the schedule \"{$schedule['name']}\"?"
 		)
 	)
 	: '';
