@@ -17,7 +17,7 @@ class RequestAreasController extends AppController {
 		
 		// send email!!
 
-		$this->redirect($this->referer());
+		$this->redirect(array('controller'=>'requestAreas','action'=>'edit',$id*-1));
 	}
 
 	function view($id = null) {

@@ -183,8 +183,7 @@
 		)
 	)
 ));
-$area = isset($area) ? $area : 0;
-if ($session->read('Schedule.editable') && $area >= 0) {
+if ($session->read('Schedule.editable') && !isset($this->viewVars['area']['RequestArea'])) {
 ?>
 <div class='changes'>
 	<span class='change_message' id='undo_message'><?=$change_messages['undo']?></span>

@@ -137,7 +137,7 @@ if (isset($area['RequestArea'])) {
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
 		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
-		&& !$this->params['isAjax'] || ($request && $editRequest)) { ?>
+		&& !$this->params['isAjax'] && !$request || ($request && $editRequest)) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
 			<? $url = (isset($area)) ? 
 				array('controller'=>'shifts','action'=>'add',$area[$request.'Area']['id'],
@@ -207,7 +207,8 @@ if (isset($area['RequestArea'])) {
 				document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
-		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable') || ($request && $editRequest)) { ?>
+		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable') && !$request
+		|| ($request && $editRequest)) { ?>
 			<?= !$gaps ? $ajax->link(
 				' + ',
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),
