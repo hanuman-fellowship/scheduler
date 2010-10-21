@@ -146,7 +146,8 @@ class ScheduleHelper extends AppHelper {
 								'controller'=>'people','action'=>'schedule',$assignment['Person']['id']
 							),
 							'attributes' => array(
-								'class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id']
+								'class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id'],
+								'title' => "View {$assignment['Person']['name']}'s Schedule"
 							)
 						),
 						'operations' => array(
@@ -168,8 +169,9 @@ class ScheduleHelper extends AppHelper {
 					$this->session->read('Schedule.editable') && !$request
 					|| ($request && $editRequest) ? 'operations' : '' 
 				) . '<br/>';
-				if (in_array('operations',$userRoles) && 
-				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0) {
+				if (in_array('operations',$userRoles) && !$request && 
+				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0
+				|| ($request && $editRequest)) {
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
@@ -332,7 +334,8 @@ class ScheduleHelper extends AppHelper {
 			$output[] = "<span id='floating_".$floating_shift['id']."'>"
 			. $hours . " w/ " . $this->html->link(
 				$link_title, $link_url, array(
-					'class' => 'RC_' . $floating_shift['Person']['PeopleSchedules']['resident_category_id']
+					'class' => 'RC_' . $floating_shift['Person']['PeopleSchedules']['resident_category_id'],
+					'title' => "View {$floating_shift['Person']['name']}'s Schedule"
 				)
 			) . $note . '</span>';
 		}	
