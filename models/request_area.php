@@ -10,7 +10,9 @@ class RequestArea extends AppModel {
 	var $name = 'RequestArea';
 
 	var $hasMany = array(
-		'RequestShift'
+		'RequestShift' => array(
+			'order' => 'start, end'
+		)
 	);
 
 	function edit($id,$force) {
