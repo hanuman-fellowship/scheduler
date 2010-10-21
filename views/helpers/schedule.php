@@ -298,7 +298,12 @@ class ScheduleHelper extends AppHelper {
 			}
 			$output[] = "<span id='floating_".$floating_shift['id']."'>"
 			. $hours . $this->html->link($link_title, $link_url,
-			array('title' => "View {$floating_shift['Area']['name']} Schedule")) . $note . '</span>';
+				array(
+					'title' => $floating_shift['area_id'] != 0 ?
+						"View {$floating_shift['Area']['name']} Schedule"
+						: ''
+				)
+			) . $note . '</span>';
 			
 		}
 		return (!$output ? '' : 'Plus ' . $this->text->toList($output));	
