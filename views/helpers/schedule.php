@@ -53,15 +53,20 @@ class ScheduleHelper extends AppHelper {
 					$attributes = array(
 						'update' => 'dialog_content',
 						'complete' => "openDialog('{$shift['id']}')",
-						'id' => $shift['id']
+						'id' => $shift['id'],
+						'title' => 'Assign Shift'
 					);
 					$time_url = array('controller' => 'assignments', 'action' => 'assign', $shift['id']);
 					$ajax = 'ajax';
 				} else {
-					$attributes = array('class' => 'remove');
+					$attributes = array(
+						'class' => 'remove',
+						'title' => 'Unassign'
+					);
 					$ajax = '';
 				}
-				$output = "<b>" . $this->html->link($area_title, $area_url) . "</b> ";
+				$output = "<b>" . $this->html->link($area_title, $area_url,
+					array('title'=>"View {$shift['Area']['name']} Schedule")) . "</b> ";
 				$output .= $this->role->link(
 					$time_title,
 					array(
@@ -98,7 +103,8 @@ class ScheduleHelper extends AppHelper {
 							'attributes' => array(
 								'escape' => false,
 								'update'=>'dialog_content',
-								'complete'=>"openDialog('constant_{$shift['id']}')"
+								'complete'=>"openDialog('constant_{$shift['id']}')",
+								'title' => 'Edit Constant Shift...'
 							),
 							'ajax'
 						)
@@ -154,7 +160,8 @@ class ScheduleHelper extends AppHelper {
 								'style' => 'margin:10px',
 								'onmouseover' => "showElement('goto_{$assignment[$request.'Assignment']['id']}')",
 								'onmouseout' => "hideElement('goto_{$assignment[$request.'Assignment']['id']}')",
-								'onclick' => 'saveScroll()'
+								'onclick' => 'saveScroll()',
+								'title' => 'Unassign'
 							)
 						)
 					),
@@ -188,7 +195,8 @@ class ScheduleHelper extends AppHelper {
 							'url' => array('controller'=>'assignments','action'=>'assign',$shift['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
-								'complete'=>"openDialog({$shift['id']})"
+								'complete'=>"openDialog({$shift['id']})",
+								'title' => 'Assign...'
 							),
 							'ajax'
 						)
@@ -207,7 +215,8 @@ class ScheduleHelper extends AppHelper {
 						'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
 						'attributes'=>array(
 							'update'=>'dialog_content',
-							'complete'=>"openDialog({$shift['id']})"
+							'complete'=>"openDialog({$shift['id']})",
+							'title' => 'Edit Shift...'
 						),
 						'ajax'
 					)
@@ -259,6 +268,7 @@ class ScheduleHelper extends AppHelper {
 						'attributes' => array(
 							'update' => 'dialog_content',
 							'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
+							'title' => 'Edit Floating Shift...'
 						),
 						'ajax'
 					)
@@ -285,7 +295,8 @@ class ScheduleHelper extends AppHelper {
 				}
 			}
 			$output[] = "<span id='floating_".$floating_shift['id']."'>"
-			. $hours . $this->html->link($link_title, $link_url) . $note . '</span>';
+			. $hours . $this->html->link($link_title, $link_url,
+			array('title' => "View {$floating_shift['Area']['name']} Schedule")) . $note . '</span>';
 			
 		}
 		return (!$output ? '' : 'Plus ' . $this->text->toList($output));	
@@ -307,6 +318,7 @@ class ScheduleHelper extends AppHelper {
 						'attributes' => array(
 							'update' => 'dialog_content',
 							'complete' => "openDialog('floating_{$floating_shift['id']}',false,'top')",
+							'title' => 'Edit Floating Shift...'
 						),
 						'ajax'
 					)

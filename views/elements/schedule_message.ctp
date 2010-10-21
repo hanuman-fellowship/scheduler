@@ -11,7 +11,8 @@ if (isset($area['RequestArea'])) {
 			array('controller' => 'RequestAreas', 'action' => 'submit', $area['RequestArea']['id']),
 			array(
 				'class' => 'button',
-				'confirm' => "Submit {$area['RequestArea']['name']} Request Form?"
+				'confirm' => "Submit {$area['RequestArea']['name']} Request Form?",
+				'title' => 'Submit Request Form'
 			)
 		);
 	} else {

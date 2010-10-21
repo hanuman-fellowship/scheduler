@@ -40,7 +40,8 @@ if (isset($area['RequestArea'])) {
 							'url' => array('action'=>'edit',$area[$request.'Area']['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
-								'complete'=>"openDialog('area_name')"
+								'complete'=>"openDialog('area_name')",
+								'title' => 'Edit Area...'
 							),
 							'ajax'
 						)
@@ -75,7 +76,8 @@ if (isset($area['RequestArea'])) {
 							'url' => array('action'=>'edit',$person['Person']['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
-								'complete'=>"openDialog('person_name')"
+								'complete'=>"openDialog('person_name')",
+								'title' => 'Edit Person...'
 							),
 							'ajax'
 						)
@@ -118,7 +120,7 @@ if (isset($area['RequestArea'])) {
 						'action'=>'toggle',
 						$person['Person']['id'],
 						$day_id
-					)); ?>
+					),array('title' => 'Toggle Day Off')); ?>
 				<? } else { ?>
 					<?=$day;?>
 				<? } ?>
@@ -154,7 +156,8 @@ if (isset($area['RequestArea'])) {
 				'id'=>"add_{$slot_num}_{$day}", 
 				'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 				'update' => 'dialog_content',
-				'complete' => "openDialog('{$slot_num}_{$day}')"
+				'complete' => "openDialog('{$slot_num}_{$day}')",
+				'title' => isset($area) ? 'New Shift...' : 'Assign Shift...'
 			)) : '';?>
 		<? } else { ?>
 		<td <?=$off_day;?> >
@@ -216,7 +219,8 @@ if (isset($area['RequestArea'])) {
 					'id'=>"add_0_0", 
 					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
 					'update' => 'dialog_content',
-					'complete' => "openDialog('0_0',null,'top')"
+					'complete' => "openDialog('0_0',null,'top')",
+					'title' => 'New Floating Shift'
 				)
 			) : '';?>
 		<? } ?>
