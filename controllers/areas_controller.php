@@ -10,6 +10,7 @@ class AreasController extends AppController {
 			$this->set('area',$this->Area->getArea($id));
 			$this->set('bounds', $this->getBounds());
 			$this->set('change_messages',$this->getChangeMessages());
+			$this->set('effective',$this->effective());
 			$this->Session->write('last_area',$id);
 		} else {
 			$this->set('change_messages',$this->getChangeMessages());

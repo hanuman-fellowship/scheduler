@@ -193,5 +193,23 @@ class AppController extends Controller {
 		}
 	}
 
+	function effective() {
+		$schedule = $this->Session->read('Schedule');
+		if ($schedule['end']) {
+			$start = strtotime($schedule['start']);
+			$end = strtotime($schedule['end']);
+			$startYear = date('Y',$start);
+			$endYear = date('Y',$end);
+
+			$output = date('M j',$start);
+			$output .= ($startYear == $endYear) ?  '' : date(', Y',$start);
+			$output .= ' &ndash; ';
+			$output .= date('M j, Y',$end);
+		} else {
+			$output = 'Indefinitely';
+		}
+		return $output;
+	}
+
 }
 ?>

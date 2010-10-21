@@ -349,6 +349,8 @@ CREATE TABLE `schedules` (
   `name` varchar(30) default NULL,
   `user_id` int(11) default NULL,
   `updated` datetime default NULL,
+  `start` datetime default NULL,
+  `end` datetime default NULL,
   `parent_id` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
@@ -358,7 +360,7 @@ CREATE TABLE `schedules` (
 -- Dumping data for table `schedules`
 --
 
-INSERT INTO `schedules` VALUES(-1, 'Published', NULL, '2010-08-04 15:36:29', NULL);
+INSERT INTO `schedules` VALUES(-1, 'Published', NULL, '2010-08-04 15:36:29', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 

@@ -21,6 +21,7 @@ class PeopleController extends AppController {
 			$this->set('person',$person);		
 			$this->set('change_messages',$this->getChangeMessages());
 			$this->set('bounds', $this->getBounds());
+			$this->set('effective',$this->effective());
 			if ($id == 'gaps') $this->render('gaps');
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));

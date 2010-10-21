@@ -90,18 +90,18 @@ if (isset($area['RequestArea'])) {
 		</td> 
 	</tr> 
 	<tr> 
-    	<td> 
+    	<td width='0px'> 
 			<div align="right">
 				<span class="style2">
-					Effective:
+					<?= isset($effective) ? 'Effective:' : ''?>
 				</span>
 			</div>
 		</td> 
 		<td>
 			&nbsp;
 		</td> 
-		<td> 
-		Indefinitely
+		<td width='200px'> 
+		<?= isset($effective) ? $effective : ''?>
 		</td> 
 	</tr> 
 </table> 
