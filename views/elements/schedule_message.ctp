@@ -32,7 +32,7 @@ if (isset($area['RequestArea'])) {
 	$latest = $schedule['latest'] ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";
 	$latest = $schedule['username'] != '' ? "Viewing: " : $latest;
 	$latest = $schedule['editable'] ? "<span style='color:green'>Editing: </span>" : $latest; 
-	if($userRoles == array()) {
+	if (in_array('operations',$userRoles)) {
 		echo ' '.$this->ajax->link(
 			$latest."Published on " . $time->format('F jS, Y g:ia',$schedule['updated']),
 			array('controller'=>'schedules','action'=>'past'),
@@ -43,24 +43,21 @@ if (isset($area['RequestArea'])) {
 				'id' =>'past'
 			)
 		);
-
 	} else {
-		if (in_array('operations',$userRoles)) {
-			$title = ($schedule['username'] != '') ?
-				$schedule['editable'] ? $schedule['name'] : 
-					$schedule['name']." (".$schedule['username'].")" : 
-				"Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']);
-			echo $latest.' '.$this->ajax->link(
-				$title,
-				array('controller'=>'schedules','action'=>'past'),
-				array(
-					'escape'=>false,
-					'update' => 'dialog_content',
-					'complete' => "openDialog('past',true,'bottom')",
-					'id' =>'past'
-				)
-			);
-		}
+		$title = ($schedule['username'] != '') ?
+			$schedule['editable'] ? $schedule['name'] : 
+				$schedule['name']." (".$schedule['username'].")" : 
+			"Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']);
+		echo $latest.' '.$this->ajax->link(
+			$title,
+			array('controller'=>'schedules','action'=>'past'),
+			array(
+				'escape'=>false,
+				'update' => 'dialog_content',
+				'complete' => "openDialog('past',true,'bottom')",
+				'id' =>'past'
+			)
+		);
 	}
 echo $schedule['editable'] ? 
 	$html->link(

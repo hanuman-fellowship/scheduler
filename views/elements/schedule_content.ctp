@@ -122,7 +122,7 @@ if (isset($area['RequestArea'])) {
 						'style'=>'color:green'
 					)
 				); ?>
-			<? } elseif ($area['hasRequest']) { ?>
+			<? } elseif ($area['hasRequest'] && in_array('operations',$userRoles)) { ?>
 				<?=$html->link('View<br/>Request',
 					array(
 						'controller'=>'RequestAreas',
