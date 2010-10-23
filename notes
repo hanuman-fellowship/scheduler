@@ -1,6 +1,13 @@
 TODO:
 
+	- add groups (for schedules) and give schedules a group_id. This group will have the
+	  name of the schedule and the start and end times. all schedules published under this group
+	  are just versions of each other, so when looking back to old schedules, only the groups
+	  are shown.
+
 	- big board
+
+	- hours by area etc...
 
 	- notes on person and area
 

@@ -231,11 +231,29 @@ if ($_GET['a'] == '8') {
 	while($schedule = mysql_fetch_array($get)) {
 		$done = false;
 		$updated = date('Y-m-d H:i:s', $schedule['date']);
-		$query = "INSERT INTO krishna.schedules (id,name,updated)
+		$getGroup = mysql_query("SELECT name,id from krishna.schedule_groups where name = '{$schedule['name']}'");
+		if ($group = mysql_fetch_assoc($getGroup)) {
+			$group_id = $group['id'];
+		} else {
+			$makeGroup = "INSERT INTO krishna.schedule_groups (name,start,end)
+				VALUES (
+					'{$schedule['name']}',
+					'{$updated}',
+					'{$updated}'
+				)";
+			if (!mysql_query($makeGroup,$database)) {
+				die('Error: ' . mysql_error()."<br>".$query);
+			}
+			$getGroup = mysql_query("SELECT id from krishna.schedule_groups where name = '{$schedule['name']}'");
+			$group = mysql_fetch_assoc($getGroup);
+			$group_id = $group['id'];
+		}
+		$query = "INSERT INTO krishna.schedules (id,name,updated,schedule_group_id)
 			VALUES (
 				'{$schedule['id']}',
 				'Published',
-				'{$updated}'
+				'{$updated}',
+				'{$group_id}'
 			)";
 		if (!mysql_query($query,$database)) {
 			die('Error: ' . mysql_error()."<br>".$query);

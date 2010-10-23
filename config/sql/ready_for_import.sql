@@ -346,12 +346,11 @@ INSERT INTO `resident_categories` VALUES(6, 'Intern', -1);
 
 CREATE TABLE `schedules` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(30) default NULL,
+  `name` varchar(30) NOT NULL,
   `user_id` int(11) default NULL,
-  `updated` datetime default NULL,
-  `start` datetime default NULL,
-  `end` datetime default NULL,
+  `updated` datetime NOT NULL,
   `parent_id` int(11) default NULL,
+  `schedule_group_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=531 ;
@@ -360,9 +359,18 @@ CREATE TABLE `schedules` (
 -- Dumping data for table `schedules`
 --
 
-INSERT INTO `schedules` VALUES(-1, 'Published', NULL, '2010-08-04 15:36:29', NULL, NULL, NULL);
+INSERT INTO `schedules` VALUES(-1, 'Published', NULL, '2010-08-04 15:36:29', NULL, 1);
 
 -- --------------------------------------------------------
+
+CREATE TABLE `schedule_groups` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 30 ) NOT NULL ,
+`start` DATETIME NOT NULL ,
+`end` DATETIME NOT NULL
+) ENGINE = MYISAM;
+
+
 
 --
 -- Table structure for table `settings`
