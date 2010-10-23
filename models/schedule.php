@@ -83,6 +83,8 @@ class Schedule extends AppModel {
 					continue;
 				case 'User':
 					continue;
+				case 'ScheduleGroup':
+					continue;
 				case 'ChangeField':
 					foreach($record as &$field_data) {
 						if ($field_data['field_key'] == 'schedule_id') {

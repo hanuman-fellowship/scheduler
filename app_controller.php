@@ -97,7 +97,7 @@ class AppController extends Controller {
 
 	function setSchedule($id) {
 		$this->loadModel('Schedule');
-		$this->Schedule->contain('User');
+		$this->Schedule->contain('User','ScheduleGroup');
 		$params = ($id == 'latest') ? 
 			array(
 				'conditions' => array('Schedule.user_id' => null),
@@ -109,6 +109,7 @@ class AppController extends Controller {
 		$schedule = $this->Schedule->find('first',$params);
 		$this->Session->write('Schedule', $schedule['Schedule']);	
 		$this->Session->write('Schedule.username', $schedule['User']['username']);
+		$this->Session->write('Schedule.Group',$schedule['ScheduleGroup']);
 		$latestSchedule = $this->Schedule->field(
 			'id',
 			array('Schedule.name' => 'Published'),
@@ -191,24 +192,6 @@ class AppController extends Controller {
 		if (!in_array($role,$userRoles)) {
 			$this->redirect('/');
 		}
-	}
-
-	function effective() {
-		$schedule = $this->Session->read('Schedule');
-		if ($schedule['end']) {
-			$start = strtotime($schedule['start']);
-			$end = strtotime($schedule['end']);
-			$startYear = date('Y',$start);
-			$endYear = date('Y',$end);
-
-			$output = date('M j',$start);
-			$output .= ($startYear == $endYear) ?  '' : date(', Y',$start);
-			$output .= ' &ndash; ';
-			$output .= date('M j, Y',$end);
-		} else {
-			$output = 'Indefinitely';
-		}
-		return $output;
 	}
 
 }

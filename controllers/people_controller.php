@@ -2,7 +2,7 @@
 class PeopleController extends AppController {
 
 	var $name = 'People';
-	var $helpers = array('schedule');
+	var $helpers = array('Schedule');
 
 	/**
 	 * Displays the schedule for the specified person.
@@ -21,7 +21,6 @@ class PeopleController extends AppController {
 			$this->set('person',$person);		
 			$this->set('change_messages',$this->getChangeMessages());
 			$this->set('bounds', $this->getBounds());
-			$this->set('effective',$this->effective());
 			if ($id == 'gaps') $this->render('gaps');
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));

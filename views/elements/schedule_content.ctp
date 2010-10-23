@@ -5,6 +5,7 @@ if (isset($area['RequestArea'])) {
 } else {
 	$request = '';
 	$editRequest = false;
+	$effective = $this->Schedule->displayEffective($this->session->read('Schedule.Group'));
 }
 ?>
 <?$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');?>
