@@ -21,7 +21,8 @@ class Schedule extends AppModel {
 	);
 
 	var $belongsTo = array(
-		'User'
+		'User',
+		'ScheduleGroup'
 	);
 
 	var $conflicts = array();
@@ -451,5 +452,6 @@ class Schedule extends AppModel {
 		}
 		return $this->schedule_id;
 	}
+
 }
 ?>

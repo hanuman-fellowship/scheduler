@@ -1,3 +1,4 @@
+<?debug($schedules)?>
 <fieldset>
 	<legend><?php __('Past Schedules');?></legend>
 <div class='tall left' style='width:15em'>
@@ -22,3 +23,4 @@ foreach($schedules as $schedule) {
 </div>
 </fieldset>
 <?=$this->element('message');?>
+<?=$this->element('sql_dump');
