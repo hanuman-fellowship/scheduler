@@ -356,5 +356,18 @@ class ScheduleHelper extends AppHelper {
 		}
 		return $output;
 	}
+
+	function displayEffective($schedule) {
+		$start = strtotime($schedule['start']);
+		$end = strtotime($schedule['end']);
+		$startYear = date('Y',$start);
+		$endYear = date('Y',$end);
+
+		$output = date('M j',$start);
+		$output .= ($startYear == $endYear) ?  '' : date(', Y',$start);
+		$output .= ' &ndash; ';
+		$output .= date('M j, Y',$end);
+		return $output;
+	}
 }
 ?>

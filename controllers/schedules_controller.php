@@ -2,7 +2,8 @@
 class SchedulesController extends AppController {
 
 	var $name = 'Schedules';
-	
+
+	var $helpers = array('schedule');
 
 	// just a test
 	function export() {
