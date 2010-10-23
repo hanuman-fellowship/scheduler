@@ -5,7 +5,7 @@
 <table width='100%'>
 	<tr>
 		<td><b>Name</b><hr/></td>
-		<td><b>Effective</b><hr/></td>
+		<td style='text-align:right'><b>Effective</b><hr/></td>
 	</tr>
 <?  foreach($schedules as $sched) { ?>
 	<tr>
