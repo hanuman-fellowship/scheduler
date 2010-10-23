@@ -36,7 +36,7 @@ if ($_GET['a'] == '1') {
 
 	$query = "INSERT INTO krishna.areas (name,short_name,manager,id,notes,schedule_id)
 		(SELECT name,short_name,incharge,id,notes,sch_id  FROM scheduler_public.areas
-		WHERE area.name != '')";
+		WHERE areas.name != '')";
 	mysql_query($query,$database);
 	echo 'importing assignments...<br>';
 	$location = "import.php?a=2";
@@ -47,9 +47,9 @@ if ($_GET['a'] == '2') {
 
 	$query = "INSERT INTO krishna.assignments (person_id,name,shift_id,schedule_id)
 		(SELECT person,name,shift,sch_id FROM scheduler_public.assign 
-		WHERE shift.area NOT IN (
+		WHERE shift NOT IN (
 			SELECT distinct areas.id from scheduler_public.areas 
-			WHERE area.name != ''
+			WHERE areas.name != ''
 		)
 	)";
 	mysql_query($query,$database);
