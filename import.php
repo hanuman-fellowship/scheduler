@@ -229,11 +229,13 @@ if ($_GET['a'] == '8') {
 		if ($group = mysql_fetch_assoc($getGroup)) {
 			$group_id = $group['id'];
 		} else {
+			// just for some normal looking dates
+			$end = date('Y-m-d H:i:s', strtotime($updated.' + 2 months'));
 			$makeGroup = "INSERT INTO krishna.schedule_groups (name,start,end)
 				VALUES (
 					'{$schedule['name']}',
 					'{$updated}',
-					'{$updated}'
+					'{$end}'
 				)";
 			if (!mysql_query($makeGroup,$database)) {
 				die('Error: ' . mysql_error()."<br>".$query);
