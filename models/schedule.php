@@ -28,6 +28,11 @@ class Schedule extends AppModel {
 	var $conflicts = array();
 
 	function valid($data) {
+		if (isset($data['Schedule']['group'])) {
+			if ($data['Schedule']['group'] == 'update') {
+				return true;
+			}
+		}
 		if ($data['Schedule']['name'] == '') {
 			$this->errorField = 'name';
 			$this->errorMessage = "Name must not be blank";
@@ -37,6 +42,28 @@ class Schedule extends AppModel {
 			$this->errorField = 'name';
 			$this->errorMessage = "That name already exists";
 			return false;
+		}
+		if (isset($data['Schedule']['group'])) {
+			if (!strtotime($data['Schedule']['start'])) {
+				$this->errorField = 'start';
+				$this->errorMessage = "Invalid start date";
+				return false;
+			}	
+			if (!strtotime($data['Schedule']['end'])) {
+				$this->errorField = 'end';
+				$this->errorMessage = "Invalid end date";
+				return false;
+			}	
+			if (time() >= strtotime($data['Schedule']['end'])) {
+				$this->errorField = 'end';
+				$this->errorMessage = "Must not end in the past";
+				return false;
+			}
+			if (strtotime($data['Schedule']['end']) <= strtotime($data['Schedule']['start'])) {
+				$this->errorField = 'end';
+				$this->errorMessage = "Start before end, please";
+				return false;
+			}	
 		}
 		return true;
 	}

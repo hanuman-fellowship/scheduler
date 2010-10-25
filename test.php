@@ -1,4 +1,4 @@
 <?
-echo date('Y-m-d',strtotime(' + 2 months'));
+echo date('Y-m-d',strtotime('i'));
 ?>
 
