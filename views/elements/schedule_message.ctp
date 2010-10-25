@@ -60,12 +60,14 @@ if (isset($area['RequestArea'])) {
 		);
 	}
 echo $schedule['editable'] ? 
-	$html->link(
+	$ajax->link(
 		'Publish',
 		array('controller' => 'schedules', 'action' => 'publish'),
 		array(
 			'class' => 'button',
-			'confirm' => "Publish the schedule \"{$schedule['name']}\"?"
+			'update' => 'dialog_content',
+			'complete' => "openDialog('publish',true,'bottom')",
+			'id' => 'publish'
 		)
 	)
 	: '';
