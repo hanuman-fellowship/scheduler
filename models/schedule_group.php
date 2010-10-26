@@ -11,7 +11,7 @@ class ScheduleGroup extends AppModel {
 
 	function getPublished() {
 		$published = $this->find('all',array(
-			'order' => 'ScheduleGroup.id desc',
+			'order' => 'ScheduleGroup.start desc',
 			'conditions' => array(
 				'Schedule.name' => 'Published'
 			),
