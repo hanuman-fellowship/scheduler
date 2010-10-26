@@ -457,15 +457,34 @@ class Schedule extends AppModel {
 		$this->conflicts[$conflict_key['a']]['conflicts'][$conflict_key['b']] = array('b' => $new_conflict['b']);
 	}
 
-	function publish() {
-		$this->save(array(
-			'Schedule' => array(
-				'id' => $this->schedule_id,
-				'name' => 'Published',
-				'user_id' => null,
-				'parent_id' => null
-			)
-		));
+	function publish($data) {
+		if ($data['Schedule']['group'] == 'new') {
+			$this->ScheduleGroup->save(array(
+				'ScheduleGroup' => array(
+					'name' => $data['Schedule']['name'],
+					'start' => date('Y-m-d H:i:s',strtotime($data['Schedule']['start'])),
+					'end' => date('Y-m-d H:i:s',strtotime($data['Schedule']['end']))
+				)
+			));
+			$this->save(array(
+				'Schedule' => array(
+					'id' => $this->schedule_id,
+					'name' => 'Published',
+					'user_id' => null,
+					'parent_id' => null,
+					'schedule_group_id' => $this->ScheduleGroup->id
+				)
+			));
+		} else {
+			$this->save(array(
+				'Schedule' => array(
+					'id' => $this->schedule_id,
+					'name' => 'Published',
+					'user_id' => null,
+					'parent_id' => null
+				)
+			));
+		}
 		// delete any auto-select settings for this schedule
 		$this->Setting = ClassRegistry::init('Setting');		
 		$this->Setting->deleteAll(

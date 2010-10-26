@@ -87,7 +87,7 @@ class SchedulesController extends AppController {
 		$scheduleName = $this->Session->read('Schedule.name');
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
-			//	$this->setSchedule($this->Schedule->publish());
+				$this->setSchedule($this->Schedule->publish($this->data));
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Schedule->errorField);
