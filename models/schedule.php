@@ -28,22 +28,26 @@ class Schedule extends AppModel {
 	var $conflicts = array();
 
 	function valid($data) {
-		if (isset($data['Schedule']['group'])) {
+		$publish = isset($data['Schedule']['group']); // true = publish; false = copy;
+		if ($publish) {
 			if ($data['Schedule']['group'] == 'update') {
 				return true;
 			}
+			$nameExists = $this->ScheduleGroup->field('id',array('name' => $data['Schedule']['name']));
+		} else {
+			$nameExists = $this->field('id',array('name' => $data['Schedule']['name']));
 		}
 		if ($data['Schedule']['name'] == '') {
 			$this->errorField = 'name';
 			$this->errorMessage = "Name must not be blank";
 			return false;
 		}	
-		if ($this->field('id',array('name' => $data['Schedule']['name']))) {
+		if ($nameExists) {
 			$this->errorField = 'name';
 			$this->errorMessage = "That name already exists";
 			return false;
 		}
-		if (isset($data['Schedule']['group'])) {
+		if ($publish) {
 			if (!strtotime($data['Schedule']['start'])) {
 				$this->errorField = 'start';
 				$this->errorMessage = "Invalid start date";

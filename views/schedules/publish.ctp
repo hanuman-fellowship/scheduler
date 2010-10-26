@@ -16,7 +16,7 @@
 			array(
 				'separator' => '<br/>',
 				'value' => $group,
-				'onchange' => "toggleDisplay('nameDiv')",
+				'onchange' => "toggleDisplay('nameDiv');get('name').select()",
 				'legend' => false
 			)
 		);?>
@@ -26,6 +26,7 @@
 			'id' => 'name',
 			'between' => '&nbsp;'
 		)); ?>
+		<p>Effective:</p>
 		<?=$form->input('start',array(
 			'id' => 'start',
 			'between' => '&nbsp;'
