@@ -1,4 +1,5 @@
 <?
-echo date('Y-m-d',strtotime('i'));
+$string = trim('hello my darling ');
+echo "**{$string}**";
 ?>
 

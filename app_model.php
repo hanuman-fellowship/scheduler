@@ -128,7 +128,7 @@ class AppModel extends Model {
 	
 	function valid($data) {
 		foreach($data[$this->name] as $name => $value) {
-			if ($value == '') {
+			if (trim($value) == '') {
 				$this->errorField = $name;
 				$this->errorMessage = Inflector::humanize($name)." must not be blank.";
 				return false;

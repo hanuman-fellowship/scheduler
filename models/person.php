@@ -14,7 +14,7 @@ class Person extends AppModel {
 	);
 
 	function valid($data) {
-		if ($data['Person']['first'] == '') {
+		if (trim($data['Person']['first']) == '') {
 			$this->errorField = 'first';
 			$this->errorMessage = "First name must not be blank";
 			return false;
