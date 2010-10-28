@@ -179,6 +179,17 @@
 			'New Constant Shift...' => array(
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
 				'ajax'
+			),
+			"<hr/>" => array(
+				'role' => array('operations')
+			),
+			'Delete All Shifts...' => array(
+				'url' => array(
+					'controller' => 'shifts',
+					'action' => 'clear',
+					(isset($area)) ? $area : null 
+				),
+				'ajax'
 			)
 		)
 	)
