@@ -104,14 +104,13 @@
 				'url' => array('controller' => 'people', 'action' => 'profile'),
 				'ajax'
 			),
-			"<hr/>" => array(
-				'role' => array('operations')
-			),
+			"<hr/>",
 			'New Person...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'add'),
 				'ajax'
 			),
+			"<hr/>",
 			'Restore Person...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'restore'),
@@ -134,12 +133,20 @@
 				'url' => array('controller' => 'areas', 'action' => 'select'),
 				'ajax'
 			),
-			"<hr/>" => array(
-				'role' => array('operations')
-			),
+			"<hr/>",
 			'New Area...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'areas', 'action' => 'add'),
+				'ajax'
+			),
+			"<hr/>",
+			'Clear Area...' => array(
+				'role' => array('operations'),
+				'url' => array(
+					'controller' => 'areas',
+					'action' => 'clear',
+					(isset($area)) ? $area : null 
+				),
 				'ajax'
 			),
 			'Delete Area...' => array(

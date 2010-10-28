@@ -58,13 +58,28 @@ class AreasController extends AppController {
 			$this->record();
 			$this->Area->sDelete($id);
 			$this->stop($this->Area->description);
-			$this->redirect('/');
+			$this->redirect($this->referer());
 		}
 		$this->Area->recursive = -1;
 		$this->Area->order = 'name';
 		$this->set('areas',$this->Area->sFind('list'));
 	}
 	
+	function clear($area_id = null) {
+		$this->redirectIfNotEditable();
+		$this->Area->order = 'name';
+		$this->set('areas',$this->Area->sFind('list'));
+		if (!empty($this->data)) {
+			$this->set('area_id',$this->data['Area']['area_id']);
+			$this->set('url', $this->referer());
+			$this->record();
+			$this->Area->clear($this->data['Area']['area_id'],$this->data['Area']['keep_shifts']);
+			$this->stop($this->Area->description);
+		} else {
+			$this->data['Area']['area_id'] = array($area_id);
+		}
+	}
+
 	function select() {
 		$this->Area->recursive = -1;
 		$this->Area->order = 'name';

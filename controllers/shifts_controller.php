@@ -94,20 +94,6 @@ class ShiftsController extends AppController {
 		$this->set('day', $day['Day']['name']);
 	}
 
-	function clear($area_id = null) {
-		$this->redirectIfNotEditable();
-		$this->set('area_id',$area_id);
-		$this->loadModel('Area');
-		$this->Area->order = 'name';
-		$this->set('areas',$this->Area->sFind('list'));
-		if (!empty($this->data)) {
-			$this->set('area_id',$this->data['Shift']['area_id']);
-			$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
-			$this->record();
-			$this->Shift->clear($this->data['Shift']['area_id']);
-			$this->stop($this->Shift->description);
-		}
-	}
 
 }
 ?>

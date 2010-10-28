@@ -50,6 +50,12 @@ class Shift extends AppModel {
 	}
 	
 	function sDelete($id) {
+		$this->clear($id);
+		$changes = parent::sDelete($id);
+		$this->setDescription($changes);
+	}
+
+	function clear($id) {
 		$this->id = $id;
 		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment');
@@ -57,8 +63,6 @@ class Shift extends AppModel {
 		foreach($shift['Assignment'] as $assignment) {
 			$this->Assignment->sDelete($assignment['id']);
 		}
-		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
 	}
 	
 	function setDescription($changes) {
@@ -220,20 +224,5 @@ class Shift extends AppModel {
 		$data['Assignment'] = $shifts;
 	}
 
-	function clear($area_id) {
-		$this->FloatingShift = ClassRegistry::init('FloatingShift');
-		$this->FloatingShift->schedule_id = $this->schedule_id;
-		$this->Area->schedule_id = $this->schedule_id;
-		$this->Area->id = $area_id;
-		$this->Area->sContain('Shift','FloatingShift');
-		$area = $this->Area->sFind('first');
-		foreach($area['Shift'] as $shift) {
-			$this->sDelete($shift['id']);
-		}
-		foreach($area['FloatingShift'] as $floatingShift) {
-			$this->FloatingShift->sDelete($floatingShift['id']);
-		}
-		$this->description = "All {$area['Area']['name']} shifts deleted";
-	}
 }
 ?>

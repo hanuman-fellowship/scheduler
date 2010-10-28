@@ -35,7 +35,7 @@ class Area extends AppModel {
 	function sDelete($id) {
 		$this->id = $id;
 		$this->Shift->schedule_id = $this->schedule_id;
-		$this->Shift->clear($id);
+		$this->clear($id);
 		$changes = parent::sDelete($id);
 		$this->setDescription($changes);
 	}
@@ -62,5 +62,30 @@ class Area extends AppModel {
 		}
 	}
 
+	function clear($area_ids, $keep_shifts = false) {
+		$areas = (!is_array($area_ids)) ?  array($area_ids) : $area_ids;
+		$this->Shift->schedule_id = $this->schedule_id;
+		$this->FloatingShift->schedule_id = $this->schedule_id;
+		$list = '';
+		foreach($areas as $area_id) {
+			$this->id = $area_id;
+			$this->sContain('Shift','FloatingShift');
+			$area = $this->sFind('first');
+			foreach($area['Shift'] as $shift) {
+				if ($keep_shifts) {
+					$this->Shift->clear($shift['id']);
+				} else {
+					$this->Shift->sDelete($shift['id']);
+				}
+			}
+			foreach($area['FloatingShift'] as $floatingShift) {
+				$this->FloatingShift->sDelete($floatingShift['id']);
+			}
+			$list .= $area['Area']['short_name'] . ', ';	
+		}
+		$list = substr($list,0,-2);	
+		$keep_shifts = $keep_shifts ? ' (shifts kept)' : '';
+		$this->description = "Areas cleared{$keep_shifts}: {$list}";
+	}
 }
 ?>
