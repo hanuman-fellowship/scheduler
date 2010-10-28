@@ -93,9 +93,22 @@ class User extends AppModel {
 
 	function sDelete($id) {
 		foreach($this->hasMany as $model) {
-			$this->{$model['className']}->deleteAll(array(
-				"{$model['className']}.user_id" => $id
-			));
+			if ($model['className'] == 'Schedule') {
+				$schedules = $this->Schedule->find('all', array(
+					'conditions' => array(
+						'Schedule.user_id' => $id
+					),
+					'recursive' => -1,
+					'fields' => array('id')
+				));
+				foreach($schedules as $schedule) {
+					$this->Schedule->delete($schedule['Schedule']['id']);
+				}
+			} else {
+				$this->{$model['className']}->deleteAll(array(
+					"{$model['className']}.user_id" => $id
+				));
+			}
 		}
 		$this->delete($id);
 	}
