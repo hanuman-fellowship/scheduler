@@ -350,12 +350,8 @@ class ScheduleHelper extends AppHelper {
 	// this to be called after all shifts have been displayed so that $this->legend is accurate
 	function displayLegend() {
 		$output = '';
-		$sort = array();
 		// Set::sort() needs the ids to be consecutive, so we have to make a new array
-		foreach($this->legend as $legend) {
-			$sort[] = $legend;
-		}
-		$this->legend = Set::sort($sort,'{n}.short_name','asc');
+		$this->legend = Set::sort(array_values($this->legend),'{n}.short_name','asc');
 		foreach($this->legend as $legend) {
 			$output .= 
 			"<strong>{$legend['short_name']}</strong>&nbsp;=&nbsp;{$legend['name']}&nbsp;({$legend['manager']}) ";
