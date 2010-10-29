@@ -43,12 +43,13 @@ class User extends AppModel {
 		if (isset($data['User']['password'])) {
 			$data['User']['password'] = Authsome::hash($data['User']['password']);
 		}
+		$id = isset($data['User']['id']) ? $data['User']['id'] : '';
 		$deleteRoles = array();
 		foreach(array('operations','manager') as $role) {
 			if ($data['User'][$role]) {
 				if (!$this->Role->field('id',array(
 					'Role.name' => $role,
-					'Role.user_id' => $data['User']['id']
+					'Role.user_id' => $id 
 				))) {
 					$data['Role'][] = array(
 						'name' => $role
@@ -60,7 +61,7 @@ class User extends AppModel {
 		}
 		$this->Role->deleteAll(array(
 			'name' => $deleteRoles,
-			'user_id' => $data['User']['id']
+			'user_id' => $id 
 		));
 		if($data['User']['manager']) {
 			foreach($data['User']['area_id'] as $area) {
