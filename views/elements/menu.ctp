@@ -151,7 +151,11 @@
 			),
 			'Delete Area...' => array(
 				'role' => array('operations'),
-				'url' => array('controller' => 'areas', 'action' => 'delete'),
+				'url' => array(
+					'controller' => 'areas',
+					'action' => 'delete',
+					(isset($area)) ? $area : null 
+				),
 				'ajax'
 			),
 		)
@@ -185,17 +189,6 @@
 			),
 			'New Constant Shift...' => array(
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
-				'ajax'
-			),
-			"<hr/>" => array(
-				'role' => array('operations')
-			),
-			'Delete All Shifts...' => array(
-				'url' => array(
-					'controller' => 'shifts',
-					'action' => 'clear',
-					(isset($area)) ? $area : null 
-				),
 				'ajax'
 			)
 		)
