@@ -59,9 +59,11 @@ class AreasController extends AppController {
 		if (!empty($this->data)) {
 			$this->set('area_id',$this->data['Area']['area_id']);
 			$this->set('url', $this->referer());
-			$this->record();
-			$this->Area->sDelete($this->data['Area']['area_id']);
-			$this->stop($this->Area->description);
+			if ($this->data['Area']['area_id']) {
+				$this->record();
+				$this->Area->sDelete($this->data['Area']['area_id']);
+				$this->stop($this->Area->description);
+			}
 		} else {
 			$this->data['Area']['area_id'] = array($id);
 		}
@@ -71,12 +73,14 @@ class AreasController extends AppController {
 		$this->redirectIfNotEditable();
 		$this->Area->order = 'name';
 		$this->set('areas',$this->Area->sFind('list'));
-		if (!empty($this->data)) {
+		if (!empty($this->data) ) {
 			$this->set('area_id',$this->data['Area']['area_id']);
 			$this->set('url', $this->referer());
-			$this->record();
-			$this->Area->clear($this->data['Area']['area_id'],$this->data['Area']['keep_shifts']);
-			$this->stop($this->Area->description);
+			if ($this->data['Area']['area_id']) {
+				$this->record();
+				$this->Area->clear($this->data['Area']['area_id'],$this->data['Area']['keep_shifts']);
+				$this->stop($this->Area->description);
+			}
 		} else {
 			$this->data['Area']['area_id'] = array($id);
 		}
