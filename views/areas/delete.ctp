@@ -1,20 +1,17 @@
-<? $last = $session->check('last_area') ?
-	$session->read('last_area') : '';
-?>
-<fieldset>
-	<legend><?php __('Delete Area');?></legend>
-<div class='tall left'>
-<?
-foreach($areas as $id => $name) {
-	$last_style = ($last == $id) ? array('<i>','</i>') : array('','');
-	echo $last_style[0].
-		$html->link($name,array($id),array(
-			'class' => 'remove',
-			'onClick' => 'wait()'
-		)).'<br/>'.
-		$last_style[1];
-}
-?>
-</div>
-</fieldset>
-<?=$this->element('message');?>
+<?= $ajax->form($this->action,'post',array('model'=>'Area','update'=>'dialog_content','before'=>'wait();saveScroll()','id'=>'areas'));?>
+	<fieldset>
+ 		<legend><?php __('Delete Area');?></legend>
+	<div class='tall left' style='width:300px'>
+	<?=$form->input('area_id',array('label'=>false,'type'=>'select','multiple'=>'checkbox','options'=>$areas));?>
+	</div>
+	<hr/>
+	<div class='left'>
+	<?=$form->checkbox('check_all',array(
+		'onclick' => "checkAll('areas','AreaCheckAll',['AreaKeepShifts'])"
+	));?>
+	<?=$form->label('check_all');?>
+	</div>
+	</fieldset>
+<?= $form->submit('Submit');?>
+<?php echo $form->end();?>
+<?=$this->element('message',array('default_field'=>''));?>
