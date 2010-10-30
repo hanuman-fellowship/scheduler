@@ -1,22 +1,38 @@
-<div class="people form">
+<?= $ajax->form($this->action,'post',array('model'=>'Person','update'=>'dialog_content','before'=>'wait();saveScroll()','id'=>'areas'));?>
 	<fieldset>
  		<legend><?php __('Retire Person');?></legend>
+	<div class='tall'>
 <?
-$rcId = 0;
-echo "<div class='tall'>";
-	foreach($people as $person) {
-		if ($rcId != $person['PeopleSchedules']['resident_category_id']) {
-			if ($rcId != 0) { echo "</div>";};
-			echo "<div class='left' style='float:left;padding:10px'><strong>{$person['PeopleSchedules']['ResidentCategory']['name']}</strong><br/>";	
-			$rcId = $person['PeopleSchedules']['resident_category_id'];
-		}
-		echo $html->link($person['Person']['name'],array($person['Person']['id']),array(
-			'onClick' => 'wait()',
-			'class' => 'remove_RC_' . $person['PeopleSchedules']['resident_category_id']
-		)) . '<br>';
+	foreach($people as $category) {
+		$categoryData = current($category);
+		$categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
+		$categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
+?>	
+		<div class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
+			<span style='position:relative;left:10px;'>
+			<strong><?=$categoryName?></strong></span><br/>
+<?	
+		echo $form->input($categoryId,array(
+			'label'    =>  false,
+			'type'     => 'select',
+			'multiple' => 'checkbox',
+			'div' => 'board_RC_' . $categoryId,
+			'options'  => Set::combine(array_values($category),'{n}.Person.id','{n}.Person.name'),
+		));
+?>	
+	<hr/>
+	<div class='left'>
+	<?=$form->checkbox("all{$categoryId}",array(
+		'onclick' => "checkAll('people{$categoryId}',this)"
+	));?>
+	<label for='PersonAll<?=$categoryId;?>'>All</label>
+	</div>
+<?
+	?></div><?
 	}
 ?>
 	</div>
 	</fieldset>
-</div>
+<?= $form->submit('Submit');?>
+<?php echo $form->end();?>
 <?=$this->element('message');?>

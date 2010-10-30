@@ -39,6 +39,18 @@ class Person extends AppModel {
 		}
 	}
 	
+	function retireMany($data) {
+		$peopleIds = array();
+		foreach($data['Person'] as $category) {
+			if (is_array($category)) {
+				$peopleIds = array_merge($peopleIds,array_values($category));
+			}
+		}
+		foreach($peopleIds as $personId) {
+			$this->retire($personId);
+		}
+	}
+
 	function retire($id) {
 		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->FloatingShift->schedule_id = $this->schedule_id;
@@ -287,6 +299,7 @@ class Person extends AppModel {
 			)
 		));
 		$this->addDisplayNamesAll($people);
+		$people = Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
 		return $people;
 	}
 

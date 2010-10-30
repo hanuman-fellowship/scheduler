@@ -1,13 +1,13 @@
-<?= $ajax->form($this->action,'post',array('model'=>'Area','update'=>'dialog_content','before'=>'wait();saveScroll()','id'=>'areas'));?>
+<?= $ajax->form($this->action,'post',array('model'=>'Area','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
 	<fieldset>
  		<legend><?php __('Delete Area');?></legend>
-	<div class='tall left' style='width:300px'>
+	<div class='tall left' id='areas' style='width:300px'>
 	<?=$form->input('area_id',array('label'=>false,'type'=>'select','multiple'=>'checkbox','options'=>$areas));?>
 	</div>
 	<hr/>
 	<div class='left'>
 	<?=$form->checkbox('check_all',array(
-		'onclick' => "checkAll('areas','AreaCheckAll',['AreaKeepShifts'])"
+		'onclick' => "checkAll('areas',this)"
 	));?>
 	<?=$form->label('check_all');?>
 	</div>

@@ -90,14 +90,13 @@ class PeopleController extends AppController {
 
 	function retire($id = null) {
 		$this->redirectIfNotEditable();
-		if ($id) {
+		if (!empty($this->data)) {
+			$this->set('url', $this->referer());
 			$this->record();
-			$this->Person->retire($id);
+			$this->Person->retireMany($this->data);
 			$this->stop($this->Person->description);
 			$this->Session->delete('cache.people');
-			$this->redirect($this->loadPage());
 		}
-		$this->savePage();
 		$this->set('people',$this->Person->listByResidentCategory());
 	}
 

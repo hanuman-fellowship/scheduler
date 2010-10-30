@@ -254,13 +254,10 @@ function toggleDisplay(id) {
 	get(id).style.display = (get(id).style.display == 'none') ? '' : 'none';
 }
 
-function checkAll(formId, checkAllId, exempt) {
-	var formObj = get(formId);
-	var checkAllObj = get(checkAllId);
-	for (var i =0; i < formObj.elements.length; i++) {
-		if (exempt.indexOf(formObj.elements[i].id) == -1) { 
-			formObj.elements[i].checked = checkAllObj.checked;
-		}
+function checkAll(divId, all) {
+	var elements = $(divId).select('input');
+	for (var i =0; i < elements.length; i++) {
+		elements[i].checked = all.checked;
 	}
 }
 
