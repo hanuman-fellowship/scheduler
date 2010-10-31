@@ -97,22 +97,26 @@ class AppModel extends Model {
 		);
 	}
 	
-	function sDelete($id) {
+	function sDelete($ids) {
+		// an array of ids can be sent to delete them all
+		if (!is_array($ids)) $ids = array($ids);
 		// save the change
 		$this->Change =& ClassRegistry::init('Change');  
 		$this->Change->schedule_id = $this->schedule_id;
-		$this->Change->getOldData($this->name,$id);
-		$this->Change->newData = array(
-			"{$this->name}" => $this->array_fill_keys(array_keys($this->Change->oldData[$this->name]),null)
-		);
-		$this->Change->saveChange(0); // 0 for delete
+		foreach($ids as $id) {
+			$this->Change->getOldData($this->name,$id);
+			$this->Change->newData = array(
+				"{$this->name}" => $this->array_fill_keys(array_keys($this->Change->oldData[$this->name]),null)
+			);
+			$this->Change->saveChange(0); // 0 for delete
+		}
 
 		// delete the record
 		$this->deleteAll(array(
-			"{$this->name}.id"          => $id,
+			"{$this->name}.id"          => $ids,
 			"{$this->name}.schedule_id" => $this->schedule_id
 		),false,false);
-		return $this->Change->oldData[$this->name];
+		if (isset($this->Change->oldData[$this->name])) return $this->Change->oldData[$this->name];
 	}
 	
 	function forceSave($data) {

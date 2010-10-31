@@ -25,7 +25,9 @@ class FloatingShift extends AppModel {
 	
 	function sDelete($id) {
 		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
+		if (isset($changes)) { // if $id is array (this is a dependant of a higher delete like 'retire')
+			$this->setDescription($changes);
+		}
 	}
 	
 	function setDescription($changes) {

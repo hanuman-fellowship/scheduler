@@ -61,12 +61,10 @@ class Person extends AppModel {
 		$person = $this->find('first',array(
 			'conditions' => array('Person.id' => $id)
 		));
-		foreach($person['Assignment'] as $assignment) {
-			$this->Assignment->sDelete($assignment['id']);
-		}
-		foreach($person['FloatingShift'] as $floatingShift) {
-			$this->FloatingShift->sDelete($floatingShift['id']);
-		}
+		$assignmentIds = Set::combine($person['Assignment'],'{n}.id','{n}.id');
+		$this->Assignment->sDelete($assignmentIds);
+		$floatingIds = Set::combine($person['FloatingShift'],'{n}.id','{n}.id');
+		$this->FloatingShift->sDelete($floatingIds);
 		$this->PeopleSchedules->schedule_id = $this->schedule_id;
 		$this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
 		$this->description = $this->PeopleSchedules->description;
