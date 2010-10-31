@@ -46,9 +46,12 @@ class Person extends AppModel {
 				$peopleIds = array_merge($peopleIds,array_values($category));
 			}
 		}
+		$list = '';
 		foreach($peopleIds as $personId) {
-			$this->retire($personId);
+			$list .= $this->retire($personId) . ', ';
 		}
+		$list = substr($list,0,-2);	
+		$this->description = "People retired: {$list}";
 	}
 
 	function retire($id) {
@@ -67,6 +70,8 @@ class Person extends AppModel {
 		$this->PeopleSchedules->schedule_id = $this->schedule_id;
 		$this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
 		$this->description = $this->PeopleSchedules->description;
+		$this->addDisplayName($person['Person']);
+		return $person['Person']['name']; // for retireMany description
 	}
 	
 	function restore($id) {
