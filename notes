@@ -1,4 +1,9 @@
 TODO:
+	
+	- blast! some things (clear areas, retire people) are slooooow! recording all of those
+	  changes is one problem... maybe there's a way to keep a running tally of all
+	  intended saves/deletes for each model and then do them all at once?
+	  The whole thing with nudge might be a big problem... redesign it?
 
 	- kinda wierd to define the effective only when publishing... would be good
 	  to be able to make a working copy and then change the effective... somehow...
