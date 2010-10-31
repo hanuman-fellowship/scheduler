@@ -7,8 +7,8 @@ function myDebug($var) {
 }
 
 function timer($name = 0, $action) {
-    static $a;
-	static $total;
+    global $a;
+	global $total;
 	switch ($action) {
 		case 'start' :
 			$a[$name] = microtime(true);
