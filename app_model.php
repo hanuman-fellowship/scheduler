@@ -3,7 +3,8 @@ class AppModel extends Model {
 	var $actsAs = array('Containable');
 	var $schedule_id;
 	var $description;
-	
+	var $buffer = array();
+
 	function sContain() {
 		$args = func_get_args();
 		$new_args = array();
@@ -114,7 +115,39 @@ class AppModel extends Model {
 		),false,false);
 		return $this->Change->oldData[$this->name];
 	}
-	
+
+	function insertBuffer($data) {
+		if (!$existing = getId($this->name)) {
+			$id = $this->field('id',null,'id desc') + 1;
+		} else {
+			$id = $existing + 1;
+		}
+		return(updateBuffer($this->name,$data,$id));
+	}
+
+	function insertFromBuffer() {
+		if (!$buffer = getBuffer()) return;
+		foreach($buffer as $model => $data) {
+			$table = Inflector::tableize($model);
+			$fields = '';
+			foreach(array_keys($data[0]) as $field) {
+				$fields .= $field.','; 
+			}
+			$fields = substr_replace($fields,'',-1);
+			$values = '';
+			foreach($data as $row) {
+				$values .= '(';
+				foreach($row as $value) {
+					$values .= "'{$value}',";
+				}
+				$values = substr_replace($values,'',-1);
+				$values .= '),';
+			}
+			$values = substr_replace($values,'',-1);
+			$this->query("INSERT into {$table} ({$fields}) VALUES {$values}");
+		}
+	}
+
 	function forceSave($data) {
 		$keys = "schedule_id";
 		$values = "'{$data['schedule_id']}'";

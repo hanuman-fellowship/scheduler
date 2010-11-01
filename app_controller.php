@@ -194,5 +194,9 @@ class AppController extends Controller {
 		}
 	}
 
+	function beforeRender() {
+		$this->{$this->modelClass}->insertFromBuffer();
+	}
+
 }
 ?>

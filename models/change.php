@@ -143,34 +143,23 @@ class Change extends AppModel {
 			$this->newData[$model_name]['id'] = $id;
 			$fields[] = 'id';
 		}
-		$change_model_data = array(
-			'ChangeModel' => array(
-				'change_id'   => 0, 
-				'name'        => $model_name, 
-				'action'      => $action, 
-				'record_id'   => $id,
-				'schedule_id' => $this->schedule_id
-			)
-		); 
-		$this->ChangeModel->create(); 
-		$this->ChangeModel->save($change_model_data); 
-		$last_id = $this->ChangeModel->getLastInsertId();
-		$values = '';
+		$last_id = $this->ChangeModel->insertBuffer(array(
+			'change_id'   => 0, 
+			'name'        => $model_name, 
+			'action'      => $action, 
+			'record_id'   => $id,
+			'schedule_id' => $this->schedule_id
+		));
 		foreach ($fields as $field_key) { 
-			$values .= "(
-				'0',
-				'{$last_id}',
-				'{$field_key}',
-				'{$this->oldData[$model_name][$field_key]}',
-				'{$this->newData[$model_name][$field_key]}',
-				'{$this->schedule_id}'
-			),";
+			$this->ChangeField->insertBuffer(array(
+				'change_id' => 0,
+				'change_model_id' => $last_id,
+				'field_key' => $field_key,
+				'field_old_val' => $this->oldData[$model_name][$field_key],
+				'field_new_val' => $this->newData[$model_name][$field_key],
+				'schedule_id' => $this->schedule_id
+			));
 		}
-		$values = substr_replace($values,'',-1);
-		$this->ChangeField->query("INSERT INTO change_fields
-			(change_id,change_model_id,field_key,field_old_val,field_new_val,schedule_id)
-			VALUES {$values}
-		");
         $this->clearHanging();
     }     
      
