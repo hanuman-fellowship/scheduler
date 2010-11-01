@@ -3,7 +3,6 @@ class AppModel extends Model {
 	var $actsAs = array('Containable');
 	var $schedule_id;
 	var $description;
-	var $buffer = array();
 
 	function sContain() {
 		$args = func_get_args();
@@ -109,25 +108,27 @@ class AppModel extends Model {
 		$this->Change->saveChange(0); // 0 for delete
 
 		// delete the record
-		$this->deleteAll(array(
-			"{$this->name}.id"          => $id,
-			"{$this->name}.schedule_id" => $this->schedule_id
-		),false,false);
+		$this->qDelete($id);
 		return $this->Change->oldData[$this->name];
 	}
 
-	function insertBuffer($data) {
-		if (!$existing = getId($this->name)) {
+	function qInsert($data) {
+		if (!$existing = getInsertId($this->name)) {
 			$id = $this->field('id',null,'id desc') + 1;
 		} else {
 			$id = $existing + 1;
 		}
-		return(updateBuffer($this->name,$data,$id));
+		return(qInsertAdd($this->name,$data,$id));
 	}
 
-	function insertFromBuffer() {
-		if (!$buffer = getBuffer()) return;
-		foreach($buffer as $model => $data) {
+	function qDelete($id) {
+		qDeleteAdd($this->name,$id);
+	}
+
+	function doQueue() {
+		$queue = getQueue();
+		if (!is_array($queue['insert'])) return;
+		foreach($queue['insert'] as $model => $data) {
 			$table = Inflector::tableize($model);
 			$fields = '';
 			foreach(array_keys($data[0]) as $field) {
@@ -145,6 +146,17 @@ class AppModel extends Model {
 			}
 			$values = substr_replace($values,'',-1);
 			$this->query("INSERT into {$table} ({$fields}) VALUES {$values}");
+		}
+		if (!is_array($queue['delete'])) return;
+		foreach($queue['delete'] as $model => $ids) {
+			$table = Inflector::tableize($model);
+			$values = '';
+			foreach($ids as $id) {
+				$values .= "'{$id}',";
+			}
+			$values = substr_replace($values,'',-1);
+			$this->query("DELETE FROM {$table} WHERE 
+				{$table}.schedule_id = '{$this->schedule_id}' and {$table}.id IN ({$values})");
 		}
 	}
 

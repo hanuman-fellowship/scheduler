@@ -24,31 +24,40 @@ function timer($name = 0, $action) {
 	}
 }
 
-function getId($model) {
-	global $ids;
-	return isset($ids[$model]) ? $ids[$model] : false;
+function getInsertId($model) {
+	global $insertIds;
+
+	return isset($insertIds[$model]) ? $insertIds[$model] : false;
 }
 
-function updateBuffer($model, $data, $id) {
-	global $buffer;
-	global $ids; // keep an array of latest ids for each model
+function qDeleteAdd($model,$id) {
+	global $qD;
 
-	$ids[$model] = isset($ids[$model]) ? $ids[$model] + 1 : $id;
+	$qD[$model][] = $id;
+}
+
+function qInsertAdd($model, $data, $id) {
+	global $qI;
+	global $insertIds; // keep an array of latest ids for each model
+
+	$insertIds[$model] = isset($insertIds[$model]) ? $insertIds[$model] + 1 : $id;
 	if (isset($data[$model])) {
 		$data = $data[$model];
 	}
 	if (in_array('id',$data)) {
 	}
-	$buffer[$model] = isset($buffer[$model]) ? 
-		$buffer[$model] : array();
-	$data['id'] = $ids[$model];
+	$qI[$model] = isset($qI[$model]) ? 
+		$qI[$model] : array();
+	$data['id'] = $insertIds[$model];
 	ksort($data);
-	$buffer[$model][] = $data;
-	return $ids[$model];
+	$qI[$model][] = $data;
+	return $insertIds[$model];
 }
 
-function getBuffer() {
-	global $buffer;
-	return $buffer;
+function getQueue() {
+	global $qI;
+	global $qD;
+
+	return array('insert'=>$qI,'delete'=>$qD);
 }
 ?>

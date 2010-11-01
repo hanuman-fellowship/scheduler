@@ -194,8 +194,13 @@ class AppController extends Controller {
 		}
 	}
 
+	function redirect($url) {
+		$this->{$this->modelClass}->doQueue();
+		parent::redirect($url);
+	}
+		
 	function beforeRender() {
-		$this->{$this->modelClass}->insertFromBuffer();
+		$this->{$this->modelClass}->doQueue();
 	}
 
 }

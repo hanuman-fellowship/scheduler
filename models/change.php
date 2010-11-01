@@ -143,7 +143,7 @@ class Change extends AppModel {
 			$this->newData[$model_name]['id'] = $id;
 			$fields[] = 'id';
 		}
-		$last_id = $this->ChangeModel->insertBuffer(array(
+		$last_id = $this->ChangeModel->qInsert(array(
 			'change_id'   => 0, 
 			'name'        => $model_name, 
 			'action'      => $action, 
@@ -151,7 +151,7 @@ class Change extends AppModel {
 			'schedule_id' => $this->schedule_id
 		));
 		foreach ($fields as $field_key) { 
-			$this->ChangeField->insertBuffer(array(
+			$this->ChangeField->qInsert(array(
 				'change_id' => 0,
 				'change_model_id' => $last_id,
 				'field_key' => $field_key,
