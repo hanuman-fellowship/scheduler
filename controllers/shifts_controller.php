@@ -12,8 +12,8 @@ class ShiftsController extends AppController {
 			if ($this->Shift->valid($this->data)) {
 				$this->Shift->create();
 				$this->record();
-				$this->Shift->sSave($this->data);
-				$this->stop($this->Shift->description);
+				$changes = $this->Shift->sSave($this->data);
+				$this->stop($this->Shift->description($changes));
 				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
 			} else {
 				$this->set('errorField',$this->Shift->errorField);
@@ -50,8 +50,8 @@ class ShiftsController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Shift->valid($this->data)) {
 				$this->record();
-				$this->Shift->sSave($this->data);
-				$this->stop($this->Shift->description);
+				$changes = $this->Shift->sSave($this->data);
+				$this->stop($this->Shift->description($changes));
 				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->data['Shift']['area_id']));
 			} else {
 				$this->set('errorField',$this->Shift->errorField);
@@ -76,8 +76,8 @@ class ShiftsController extends AppController {
 		}
 		$this->redirectIfNotEditable();
 		$this->record();
-		$this->Shift->sDelete($id);
-		$this->stop($this->Shift->description);
+		$changes = $this->Shift->sDelete($id);
+		$this->stop($this->Shift->description($changes));
 		$this->redirect($this->referer());
 	}
 		

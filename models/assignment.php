@@ -8,17 +8,7 @@ class Assignment extends AppModel {
 		'Shift'
 	);
 	
-	function sSave($data) {
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
-	}
-	
-	function sDelete($id) {
-		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
-	}	
-
-	function setDescription($changes) {
+	function description($changes) {
 		$this->Shift->schedule_id = $this->schedule_id;
 		$this->Person->schedule_id = $this->schedule_id;
 		if (isset($changes['newData'])) {
@@ -59,7 +49,7 @@ class Assignment extends AppModel {
 			$person['name'] = $data['name'];
 		}
 		$person['name'] = $person['name'] ? $person['name'] : $data['name'];
-		$this->description = "{$person['name']} {$assignedOrRemoved} {$formatted['name']}";
+		return "{$person['name']} {$assignedOrRemoved} {$formatted['name']}";
 	}
 	
 }

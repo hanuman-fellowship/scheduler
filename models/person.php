@@ -22,10 +22,14 @@ class Person extends AppModel {
 		return true;
 	}
 
+	function description($changes) {
+		if (!is_array($changes)) return $changes;
+	}
+
 	function sSave($data) {
 		$resident_category_id = $data['Person']['resident_category_id'];
 		unset($data['Person']['resident_category_id']);
-		$changes = $this->save($data);
+		$this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
 			$this->addPeopleSchedules($this->id, $resident_category_id);
 		} else {
@@ -48,13 +52,13 @@ class Person extends AppModel {
 		}
 		$list = '';
 		foreach($peopleIds as $personId) {
-			$list .= $this->retire($personId) . ', ';
+			$list .= $this->retire($personId,true) . ', ';
 		}
 		$list = substr($list,0,-2);	
-		$this->description = "People retired: {$list}";
+		return "People retired: {$list}";
 	}
 
-	function retire($id) {
+	function retire($id, $internal = false) {
 		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->FloatingShift->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment','FloatingShift');
@@ -68,10 +72,9 @@ class Person extends AppModel {
 			$this->FloatingShift->sDelete($floatingShift['id']);
 		}
 		$this->PeopleSchedules->schedule_id = $this->schedule_id;
-		$this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
-		$this->description = $this->PeopleSchedules->description;
+		$changes = $this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
 		$this->addDisplayName($person['Person']);
-		return $person['Person']['name']; // for retireMany description
+		return $internal ? $person['Person']['name'] : $changes;
 	}
 	
 	function restore($id) {
@@ -87,7 +90,6 @@ class Person extends AppModel {
 		} else {
 			$this->addPeopleSchedules($id, $latest['PeopleSchedules']['resident_category_id']);	
 		}
-		$this->description = $this->PeopleSchedules->description;
 	}
 
 	function addPeopleSchedules($person_id, $rcId = 1) {

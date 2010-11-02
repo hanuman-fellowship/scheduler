@@ -45,14 +45,12 @@ class Shift extends AppModel {
 		foreach($times as $time) {
 			$data['Shift'][$time] = $this->dbTime($data['Shift'][$time]);
 		}
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
+		return parent::sSave($data);
 	}
 	
 	function sDelete($id) {
 		$this->clear($id);
-		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
+		return parent::sDelete($id);
 	}
 
 	function clear($id) {
@@ -65,41 +63,41 @@ class Shift extends AppModel {
 		}
 	}
 	
-	function setDescription($changes) {
+	function description($changes) {
 		if (isset($changes['newData'])) {
 			$newData = $this->format($changes['newData']);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New Shift: {$newData['name']}";
+				$desc = "New Shift: {$newData['name']}";
 			} else {
 				$oldData = $this->format($changes['oldData']);				
-				$this->description = "Shift changed: ({$oldData['name']})";
+				$desc = "Shift changed: ({$oldData['name']})";
 				$listed = false;
 				foreach($changes['newData'] as $field => $val) {
 					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
 						switch ($field) {
 							case 'area_id':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'area:'.$newData['area_id'];
 								break;
 							case 'day_id':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'day:'.$newData['day_id'];
 								break;		
 							case 'start':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'start:'.$newData['start'];
 								break;		
 							case 'end':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'end:'.$newData['end'];
 								break;		
 							case 'num_people':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'# of people:'.$newData['num_people'];
 								break;	
 						}
@@ -109,8 +107,9 @@ class Shift extends AppModel {
 			}
 		} else {
 			$oldData = $this->format($changes);
-			$this->description = "Shift deleted: {$oldData['name']}";
+			$desc = "Shift deleted: {$oldData['name']}";
 		}
+		return $desc;
 	}
 	
 	function format($data, $rich = false, $show_day = true) {

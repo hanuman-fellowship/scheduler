@@ -18,30 +18,20 @@ class FloatingShift extends AppModel {
 		return true;
 	}
 
-	function sSave($data) {
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
-	}
-	
-	function sDelete($id) {
-		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
-	}
-	
-	function setDescription($changes) {
+	function description($changes) {
 		if (isset($changes['newData'])) {	
 			$newData = $this->format($changes['newData']);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New floating shift: {$newData['name']}";
+				$desc = "New floating shift: {$newData['name']}";
 			} else {
 				$oldData = $this->format($changes['oldData']);				
-				$this->description = 'Floating shift changed: '.
+				$desc = 'Floating shift changed: '.
 				"{$oldData['name']}";
 				$listed = false;
 				foreach($changes['newData'] as $field => $val) {
 					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
-						$this->description .= $listed ? ', ' : ' ';
-						$this->description .= 
+						$desc .= $listed ? ', ' : ' ';
+						$desc .= 
 							Inflector::humanize($field).':'.$val;
 						$listed = true;
 					}
@@ -49,8 +39,9 @@ class FloatingShift extends AppModel {
 			}
 		} else {
 			$oldData = $this->format($changes);
-			$this->description = "Floating shift deleted: {$oldData['name']}";
+			$desc = "Floating shift deleted: {$oldData['name']}";
 		}
+		return $desc;
 	}
 
 	function format($data) {

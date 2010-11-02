@@ -37,61 +37,59 @@ class ConstantShift extends AppModel {
 		foreach($times as $time) {
 			$data['ConstantShift'][$time] = $this->dbTime($data['ConstantShift'][$time]);
 		}
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
+		return parent::sSave($data);
 	}
 	
 	function sDelete($id) {
 		$this->id = $id;
-		$changes = parent::sDelete($id);
-		$this->setDescription($changes);
+		return parent::sDelete($id);
 	}
 	
-	function setDescription($changes) {
+	function description($changes) {
 		if (isset($changes['newData'])) {
 			$newData = $this->format($changes['newData']);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New Constant Shift: {$newData['details']}";
+				$desc = "New Constant Shift: {$newData['details']}";
 			} else {
 				$oldData = $this->format($changes['oldData']);				
-				$this->description = "Constant Shift changed: ({$oldData['name']})";
+				$desc = "Constant Shift changed: ({$oldData['name']})";
 				$listed = false;
 				foreach($changes['newData'] as $field => $val) {
 					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
 						switch ($field) {
 							case 'name':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'name:'.$newData['name'];
 								break;
 							case 'resident_category_id':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'category:'.$newData['resident_category_id'];
 								break;
 							case 'day_id':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'day:'.$newData['day_id'];
 								break;		
 							case 'start':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'start:'.$newData['start'];
 								break;		
 							case 'end':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'end:'.$newData['end'];
 								break;		
 							case 'specify_hours':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 'specify hours:';
-								$this->description .= $newData['specify_hours'] ? 'yes' : 'no';
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 'specify hours:';
+								$desc .= $newData['specify_hours'] ? 'yes' : 'no';
 								break;	
 							case 'hours':
-								$this->description .= $listed ? ', ' : ' ';
-								$this->description .= 
+								$desc .= $listed ? ', ' : ' ';
+								$desc .= 
 									'hours:'.$newData['hours'];
 								break;	
 						}
@@ -101,8 +99,9 @@ class ConstantShift extends AppModel {
 			}
 		} else {
 			$oldData = $this->format($changes);
-			$this->description = "Constant Shift deleted: {$oldData['details']}";
+			$desc = "Constant Shift deleted: {$oldData['details']}";
 		}
+		return $desc;
 	}
 	
 	function format($data) {

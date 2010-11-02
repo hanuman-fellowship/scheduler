@@ -50,8 +50,8 @@ class PeopleController extends AppController {
 			if ($this->Person->valid($this->data)) {
 				$this->Person->create();
 				$this->record();
-				$this->Person->sSave($this->data);
-				$this->stop($this->Person->PeopleSchedules->description);
+				$changes = $this->Person->sSave($this->data);
+				$this->stop($this->Person->PeopleSchedules->description($changes));
 				$this->Session->delete('cache.people');
 				$this->set('url', $this->referer());
 			} else {
@@ -69,8 +69,8 @@ class PeopleController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Person->valid($this->data)) {
 				$this->record();
-				$this->Person->sSave($this->data);
-				$this->stop($this->Person->description);
+				$changes = $this->Person->sSave($this->data);
+				$this->stop($this->Person->description($changes));
 				$this->set('url', 
 					array('controller' => 'people', 'action' => 'schedule', $this->data['Person']['id']));
 			 } else {
@@ -93,8 +93,8 @@ class PeopleController extends AppController {
 		if (!empty($this->data)) {
 			$this->set('url', $this->referer());
 			$this->record();
-			$this->Person->retireMany($this->data);
-			$this->stop($this->Person->description);
+			$changes = $this->Person->retireMany($this->data);
+			$this->stop($this->Person->description($changes));
 			$this->Session->delete('cache.people');
 		}
 		$this->set('people',$this->Person->listByResidentCategory());
@@ -103,8 +103,8 @@ class PeopleController extends AppController {
 	function restore($id = null) {
 		if ($id) {
 			$this->record();
-			$this->Person->restore($id);
-			$this->stop($this->Person->description);
+			$changes = $this->Person->restore($id);
+			$this->stop($this->Person->description($changes));
 			$this->Session->delete('cache.people');
 			$this->redirect($this->loadPage());
 		}

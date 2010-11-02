@@ -31,7 +31,6 @@ class AppController extends Controller {
 			$this->Session->write('Schedule.editable',false);
 		}	
 
-
 		// request areas for manager menu
 		$this->loadModel('Area');
 		$managerAreas = $this->Area->sFind('list', array(

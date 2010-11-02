@@ -2,7 +2,6 @@
 class AppModel extends Model {
 	var $actsAs = array('Containable');
 	var $schedule_id;
-	var $description;
 
 	function sContain() {
 		$args = func_get_args();

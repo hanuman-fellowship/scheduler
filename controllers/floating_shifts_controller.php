@@ -9,8 +9,8 @@ class FloatingShiftsController extends AppController {
 			if ($this->FloatingShift->valid($this->data)) {
 				$this->FloatingShift->create();
 				$this->record();
-				$this->FloatingShift->sSave($this->data);
-				$this->stop($this->FloatingShift->description);
+				$changes = $this->FloatingShift->sSave($this->data);
+				$this->stop($this->FloatingShift->description($changes));
 				$this->set('url',$this->loadPage() );
 			} else {
 				$this->set('errorField',$this->FloatingShift->errorField);
@@ -37,8 +37,8 @@ class FloatingShiftsController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->FloatingShift->valid($this->data)) {
 				$this->record();
-				$this->FloatingShift->sSave($this->data);
-				$this->stop($this->FloatingShift->description);
+				$changes = $this->FloatingShift->sSave($this->data);
+				$this->stop($this->FloatingShift->description($changes));
 				$this->set('url',$this->loadPage() );
 			} else {
 				$this->set('errorField',$this->FloatingShift->errorField);
@@ -62,8 +62,8 @@ class FloatingShiftsController extends AppController {
 	function delete($id) {
 		$this->redirectIfNotEditable();
 		$this->record();
-		$this->FloatingShift->sDelete($id);
-		$this->stop($this->FloatingShift->description);
+		$changes = $this->FloatingShift->sDelete($id);
+		$this->stop($this->FloatingShift->description($changes));
 		$this->redirect($this->referer());
 	}
 		

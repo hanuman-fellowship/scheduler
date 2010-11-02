@@ -27,12 +27,7 @@ class Area extends AppModel {
 		return $area;
 	}
 	
-	function sSave($data) {
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
-	}
-	
-	function clear($ids, $keep_shifts = false) {
+	function clear($ids, $keep_shifts = false, $internal = false) {
 		$areas = (!is_array($ids)) ?  array($ids) : $ids;
 		$this->Shift->schedule_id = $this->schedule_id;
 		$this->FloatingShift->schedule_id = $this->schedule_id;
@@ -55,8 +50,8 @@ class Area extends AppModel {
 		}
 		$list = substr($list,0,-2);	
 		$keep_shifts = $keep_shifts ? ' (shifts kept)' : '';
-		$this->description = "Areas cleared{$keep_shifts}: {$list}";
-		return $area['Area']['short_name']; // for sDelete
+		return $internal ? $area['Area']['short_name'] :
+			"Areas cleared{$keep_shifts}: {$list}";
 	}
 
 	function sDelete($ids) {
@@ -64,33 +59,35 @@ class Area extends AppModel {
 		$list = '';
 		foreach($areas as $id) {
 			$this->id = $id;
-			$list .= $this->clear($id) . ', ';
+			$list .= $this->clear($id,false,true) . ', ';
 			parent::sDelete($id);
 		}
 		$list = substr($list,0,-2);	
-		$this->description = "Areas deleted:{$list}";
+		return "Areas deleted:{$list}";
 	}
 	
-	function setDescription($changes) {
+	function description($changes) {
+		if (!is_array($changes)) return $changes;
 		if (isset($changes['newData'])) {
 			if ($changes['oldData']['id'] == '') {
-				$this->description = "New area created: {$changes['newData']['name']}";
+				$desc = "New area created: {$changes['newData']['name']}";
 			} else {
-				$this->description = 'Area changed: '.
+				$desc = 'Area changed: '.
 				"{$changes['oldData']['name']}";
 				$listed = false;
 				foreach($changes['newData'] as $field => $val) {
 					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
-						$this->description .= $listed ? ', ' : ' ';
-						$this->description .= 
+						$desc .= $listed ? ', ' : ' ';
+						$desc .= 
 							Inflector::humanize($field).':'.$val;
 						$listed = true;
 					}
 				}
 			}
 		} else {
-			$this->description = "Area deleted: {$changes['name']}";
+			$desc = "Area deleted: {$changes['name']}";
 		}
+		return $desc;
 	}
 
 }

@@ -23,8 +23,8 @@ class AreasController extends AppController {
 			if ($this->Area->valid($this->data)) {
 				$this->Area->create();
 				$this->record();
-				$this->Area->sSave($this->data);
-				$this->stop($this->Area->description);
+				$changes = $this->Area->sSave($this->data);
+				$this->stop($this->Area->description($changes));
 				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->Area->id));
 			} else {
 				$this->set('errorField',$this->Area->errorField);
@@ -38,8 +38,8 @@ class AreasController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Area->valid($this->data)) {
 				$this->record();
-				$this->Area->sSave($this->data);
-				$this->stop($this->Area->description);
+				$changes = $this->Area->sSave($this->data);
+				$this->stop($this->Area->description($changes));
 				$this->set('url', array('controller' => 'areas', 'action' => 'schedule', $this->data['Area']['id']));
 			 } else {
 				$this->set('errorField',$this->Area->errorField);
@@ -61,8 +61,8 @@ class AreasController extends AppController {
 			$this->set('url', $this->referer());
 			if ($this->data['Area']['area_id']) {
 				$this->record();
-				$this->Area->sDelete($this->data['Area']['area_id']);
-				$this->stop($this->Area->description);
+				$changes = $this->Area->sDelete($this->data['Area']['area_id']);
+				$this->stop($this->Area->description($changes));
 			}
 		} else {
 			$this->data['Area']['area_id'] = array($id);
@@ -78,8 +78,9 @@ class AreasController extends AppController {
 			$this->set('url', $this->referer());
 			if ($this->data['Area']['area_id']) {
 				$this->record();
-				$this->Area->clear($this->data['Area']['area_id'],$this->data['Area']['keep_shifts']);
-				$this->stop($this->Area->description);
+				$changes = $this->Area->clear(
+					$this->data['Area']['area_id'],$this->data['Area']['keep_shifts']);
+				$this->stop($this->Area->description($changes));
 			}
 		} else {
 			$this->data['Area']['area_id'] = array($id);

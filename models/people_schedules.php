@@ -9,31 +9,21 @@ class PeopleSchedules extends AppModel {
 		'Person'
 	);
 
-	function sSave($data) {
-		$changes = parent::sSave($data);
-		$this->setDescription($changes);
-	}
-
-	function sDelete($data) {
-		$changes = parent::sDelete($data);
-		$this->setDescription($changes);
-	}
-
-	function setDescription($changes) {
+	function description($changes) {
 		if (isset($changes['newData'])) {
 			$person = $this->Person->getPerson($changes['newData']['person_id'],true);
 			if ($changes['oldData']['id'] == '') {
-				$this->description = $this->restore ? 
+				$desc = $this->restore ? 
 					"Person restored: {$person['Person']['first']}" :
 					"New person created: {$person['Person']['first']}";
 			} else {
-				$this->description = 'Person changed: '.
+				$desc = 'Person changed: '.
 				"{$person['Person']['first']}";
 				$listed = false;
 				foreach($changes['newData'] as $field => $val) {
 					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
-						$this->description .= $listed ? ', ' : ' ';
-						$this->description .= 
+						$desc .= $listed ? ', ' : ' ';
+						$desc .= 
 							Inflector::humanize($field).':'.$val;
 						$listed = true;
 					}
@@ -41,8 +31,9 @@ class PeopleSchedules extends AppModel {
 			}
 		} else {
 			$person = $this->Person->getPerson($changes['person_id'],true);
-			$this->description = "Person retired: {$person['Person']['first']}";
+			$desc = "Person retired: {$person['Person']['first']}";
 		}
+		return $desc;
 	}
 	
 	

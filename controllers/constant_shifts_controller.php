@@ -9,8 +9,8 @@ class ConstantShiftsController extends AppController {
 			if ($this->ConstantShift->valid($this->data)) {
 				$this->ConstantShift->create();
 				$this->record();
-				$this->ConstantShift->sSave($this->data);
-				$this->stop($this->ConstantShift->description);
+				$changes = $this->ConstantShift->sSave($this->data);
+				$this->stop($this->ConstantShift->description($changes));
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->ConstantShift->errorField);
@@ -39,8 +39,8 @@ class ConstantShiftsController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->ConstantShift->valid($this->data)) {
 				$this->record();
-				$this->ConstantShift->sSave($this->data);
-				$this->stop($this->ConstantShift->description);
+				$changes = $this->ConstantShift->sSave($this->data);
+				$this->stop($this->ConstantShift->description($changes));
 				$this->set('url',$this->referer());
 			} else {
 				$this->set('errorField',$this->ConstantShift->errorField);
@@ -62,8 +62,8 @@ class ConstantShiftsController extends AppController {
 	function delete($id) {
 		$this->redirectIfNotEditable();
 		$this->record();
-		$this->ConstantShift->sDelete($id);
-		$this->stop($this->ConstantShift->description);
+		$changes = $this->ConstantShift->sDelete($id);
+		$this->stop($this->ConstantShift->description($changes));
 		$this->redirect($this->referer());
 	}
 		

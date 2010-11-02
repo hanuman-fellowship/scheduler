@@ -22,8 +22,8 @@ class AssignmentsController extends AppController {
 				'name' => isset($name) ? $name : ''
 			));
 			$this->record();
-			$this->Assignment->sSave($this->data);
-			$this->stop($this->Assignment->description);
+			$changes = $this->Assignment->sSave($this->data);
+			$this->stop($this->Assignment->description($changes));
 			$this->redirect($this->referer());
 		}
 		$this->loadModel('Person');
@@ -38,8 +38,8 @@ class AssignmentsController extends AppController {
 		}
 		$this->redirectIfNotEditable();
 		$this->record();
-		$this->Assignment->sDelete($id);
-		$this->stop($this->Assignment->description);
+		$changes = $this->Assignment->sDelete($id);
+		$this->stop($this->Assignment->description($changes));
 		$this->redirect($this->referer());
 	}
 
@@ -52,8 +52,8 @@ class AssignmentsController extends AppController {
 		$assignment['Assignment']['person_id'] = $person_id;
 		$assignment['Assignment']['name'] = '';
 		$this->record();
-		$this->Assignment->sSave($assignment);
-		$this->stop($this->Assignment->description);
+		$changes = $this->Assignment->sSave($assignment);
+		$this->stop($this->Assignment->description($changes));
 		$this->redirect($this->referer());
 	}
 }
