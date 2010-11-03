@@ -62,34 +62,44 @@ function getQueue() {
 }
 
 function writeCache($path, $data) {
-	$parts = explode('.',$path);
-	$old = Cache::read(Authsome::get('id').$parts[0]);
-	if (!is_array($old)) $old = '';
-	$container = array($parts[0]=>$old);
-	$updated = Set::insert($container,$path,$data);
-	Cache::write(Authsome::get('id').$parts[0],$updated[$parts[0]]);
+	$old = Cache::read('user_'.Authsome::get('id'));
+	$updated = Set::insert($old,$path,$data);
+	Cache::write('user_'.Authsome::get('id'),$updated);
 }
 
-function readCache($path) {
-	$parts = explode('.',$path);
-	$temp = Cache::read(Authsome::get('id').$parts[0]);
-	array_shift($parts);
-	$data = $temp;
-	foreach($parts as $part) {
-		$data = $temp[$part];
-	}
-	return $data;
-}
-
-function deleteCache($path) {
-	$parts = explode('.',$path);
-	if (count($parts) > 1) {
-		$old = Cache::read(Authsome::get('id').$parts[0]);
-		$container = array($parts[0]=>$old);
-		$updated = Set::remove($container,$path);
-		Cache::write(Authsome::get('id').$parts[0],$updated[$parts[0]]);
+function readCache($path = null) {
+	$all = Cache::read('user_'.Authsome::get('id'));
+	if ($path) {
+		$parts = explode('.',$path);
+		$data = $all;
+		foreach($parts as $part) {
+			$data = $data[$part];
+		}
+		return $data;
 	} else {
-		Cache::delete(Authsome::get('id').$path);
+		return $all;
+	}
+}
+
+
+function checkCache($path) {
+	$all = Cache::read('user_'.Authsome::get('id'));
+	$parts = explode('.',$path);
+	$data = $all;
+	foreach($parts as $part) {
+		if (!isset($all[$part])) return false;
+		$data = $all[$part];
+	}
+	return true;
+}
+
+function deleteCache($path = null) {
+	if ($path) {
+		$original = Cache::read('user_'.Authsome::get('id'));
+		$updated = Set::remove($original,$path);
+		Cache::write('user_'.Authsome::get('id'),$updated);
+	} else {
+		Cache::delete('user_'.Authsome::get('id'));
 	}
 }
 
