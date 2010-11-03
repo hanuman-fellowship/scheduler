@@ -113,7 +113,7 @@ class Change extends AppModel {
                 	break;
             } 
 			if ($change_model['name'] == 'PeopleSchedules') {
-				unset($_SESSION['cache']['people']);
+				deleteCache('people');
 			}
         } 
     } 

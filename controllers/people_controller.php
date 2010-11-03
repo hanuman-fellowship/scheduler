@@ -52,7 +52,7 @@ class PeopleController extends AppController {
 				$this->record();
 				$changes = $this->Person->sSave($this->data);
 				$this->stop($this->Person->PeopleSchedules->description($changes));
-				$this->Session->delete('cache.people');
+				deleteCache('people');
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Person->errorField);
@@ -95,7 +95,7 @@ class PeopleController extends AppController {
 			$this->record();
 			$changes = $this->Person->retireMany($this->data);
 			$this->stop($this->Person->description($changes));
-			$this->Session->delete('cache.people');
+			deleteCache('people');
 		}
 		$this->set('people',$this->Person->listByResidentCategory());
 	}
@@ -105,7 +105,7 @@ class PeopleController extends AppController {
 			$this->record();
 			$changes = $this->Person->restore($id);
 			$this->stop($this->Person->description($changes));
-			$this->Session->delete('cache.people');
+			deleteCache('people');
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();

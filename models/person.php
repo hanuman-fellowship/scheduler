@@ -311,19 +311,19 @@ class Person extends AppModel {
 	}
 
 	function getCurrent() {
-		if (isset($_SESSION['cache']['people']['current'])) {
-			return $_SESSION['cache']['people']['current'];
+		if (checkCache('people.current')) {
+			return readCache('people.current');
 		}
 		$currentPeople = $this->PeopleSchedules->find('all',array(
 			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
 			'fields' => array('distinct PeopleSchedules.person_id')
 		));
-		$_SESSION['cache']['people']['current'] = Set::combine(
+		writeCache('people.current', Set::combine(
 			$currentPeople,
 			'{n}.PeopleSchedules.person_id',
 			'{n}.PeopleSchedules.person_id'
-		);
-		return $_SESSION['cache']['people']['current'];
+		));
+		return readCache('people.current');
 	}
 
 	function getPeopleSchedulesId($id) {
@@ -336,12 +336,12 @@ class Person extends AppModel {
 	function addDisplayName(&$person) {
 		// first time this function is called, set up a list of people's last names grouped by first name
 		$person['name'] = ($person['name']) ? $person['name'] : $person['first'];
-		$_SESSION['cache']['people']['names'] = !isset($_SESSION['cache']['people']['names']) ?
+		writeCache('people.names', !checkCache('people.names') ?
 			Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first') 
-			: $_SESSION['cache']['people']['names'];
+			: readCache('people.names'));
 
 		// now find out how many letters of the last name we need for each first name
-		$lastNames = &$_SESSION['cache']['people']['names'][$person['first']];
+		$lastNames = readCache("people.names.{$person['first']}");
 		if (!isset($lastNames['numLetters']) && $lastNames) {
 			$others = $lastNames;
 			unset($others[$person['id']]); // don't compare with itself
@@ -361,6 +361,7 @@ class Person extends AppModel {
 		$lastNames['numLetters'] = isset($lastNames['numLetters']) ? $lastNames['numLetters'] : 0;
 		$shortLast = substr($person['last'], 0, $lastNames['numLetters']);
 		$person['name'] .= ($lastNames['numLetters'] > 0) ? " {$shortLast}" : '';
+		writeCache("people.names.{$person['first']}",$lastNames);
 	}
 
 	function addDisplayNamesAll(&$people) {

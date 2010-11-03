@@ -116,7 +116,7 @@ class AppController extends Controller {
 		);
 		$latest = ($id == 'latest' || $id == $latestSchedule) ? true : false;
 		$this->Session->write('Schedule.latest', $latest);
-		$this->Session->delete('cache');
+		deleteCache();
 	}
 	
 	function record() {
@@ -168,11 +168,11 @@ class AppController extends Controller {
 	}
 
 	function getBounds() {
-		if (!$this->Session->check('cache.bounds')) {
+		if (!checkCache('bounds')) {
 			$this->loadModel('Boundary');
-			$this->Session->write('cache.bounds',$this->Boundary->getBounds());
+			writeCache('bounds',$this->Boundary->getBounds());
 		}
-		return $this->Session->read('cache.bounds');
+		return readCache('bounds');
 	}
 
 	function getChangeMessages() {
