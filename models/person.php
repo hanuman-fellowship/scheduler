@@ -19,6 +19,11 @@ class Person extends AppModel {
 			$this->errorMessage = "First name must not be blank";
 			return false;
 		}	
+		if (!ctype_alpha(str_replace(' ','',$data['Person']['first']))) {
+			$this->errorField = 'first';
+			$this->errorMessage = "First name must be letters only";
+			return false;
+		}	
 		return true;
 	}
 

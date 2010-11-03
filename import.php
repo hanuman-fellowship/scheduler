@@ -137,6 +137,7 @@ if ($_GET['a'] == '6') {
 		if (!mysql_query($query,$database)) {
 			die('Error: ' . mysql_error()."<br>".$query);
 		}
+		$people['name'] = str_replace('.','',$people['name']);
 		if (!in_array($people['id'],$people_ids)) {
 			$people_ids[] = $people['id'];
 			$query = "INSERT INTO krishna.people (id,first)
