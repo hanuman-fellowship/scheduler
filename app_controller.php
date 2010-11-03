@@ -18,7 +18,7 @@ class AppController extends Controller {
 			$this->Session->write('User',array());
 			$this->redirect('/');
 		}
-	
+
 		// put the latest published schedule into the session
 		if (!$this->Session->check('Schedule')) {
 			$this->setSchedule('latest');

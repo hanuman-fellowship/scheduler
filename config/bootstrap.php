@@ -60,4 +60,37 @@ function getQueue() {
 
 	return array('insert'=>$qI,'delete'=>$qD);
 }
+
+function writeCache($path, $data) {
+	$parts = explode('.',$path);
+	$old = Cache::read(Authsome::get('id').$parts[0]);
+	if (!is_array($old)) $old = '';
+	$container = array($parts[0]=>$old);
+	$updated = Set::insert($container,$path,$data);
+	Cache::write(Authsome::get('id').$parts[0],$updated[$parts[0]]);
+}
+
+function readCache($path) {
+	$parts = explode('.',$path);
+	$temp = Cache::read(Authsome::get('id').$parts[0]);
+	array_shift($parts);
+	$data = $temp;
+	foreach($parts as $part) {
+		$data = $temp[$part];
+	}
+	return $data;
+}
+
+function deleteCache($path) {
+	$parts = explode('.',$path);
+	if (count($parts) > 1) {
+		$old = Cache::read(Authsome::get('id').$parts[0]);
+		$container = array($parts[0]=>$old);
+		$updated = Set::remove($container,$path);
+		Cache::write(Authsome::get('id').$parts[0],$updated[$parts[0]]);
+	} else {
+		Cache::delete(Authsome::get('id').$path);
+	}
+}
+
 ?>
