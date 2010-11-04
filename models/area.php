@@ -39,6 +39,7 @@ class Area extends AppModel {
 			foreach($area['Shift'] as $shift) {
 				if ($keep_shifts) {
 					$this->Shift->clear($shift['id']);
+					
 				} else {
 					$this->Shift->sDelete($shift['id']);
 				}

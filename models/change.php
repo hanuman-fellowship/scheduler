@@ -94,13 +94,10 @@ class Change extends AppModel {
             }
             switch ($change_model['action']) {
             	case 0: // delete
-					$model->deleteAll(array(
-						"{$model->name}.id"          => $change_model['record_id'],
-						"{$model->name}.schedule_id" => $this->schedule_id
-					),false,false);
+					$model->qDelete($change_model['record_id']);
                 	break;
                 case 1: // create
-                	$model->forceSave($model_data);
+                	$model->qInsert($model_data);
                 	break;
                 case 2: // update
                 	foreach($model_data as $field => $value) {

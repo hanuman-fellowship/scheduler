@@ -40,15 +40,12 @@ function qInsertAdd($model, $data, $id) {
 	global $qI;
 	global $insertIds; // keep an array of latest ids for each model
 
-	$insertIds[$model] = isset($insertIds[$model]) ? $insertIds[$model] + 1 : $id;
-	if (isset($data[$model])) {
-		$data = $data[$model];
+	if ($id) {
+		$insertIds[$model] = isset($insertIds[$model]) ? $insertIds[$model] + 1 : $id;
+		$qI[$model] = isset($qI[$model]) ? 
+			$qI[$model] : array();
+		$data['id'] = $insertIds[$model];
 	}
-	if (in_array('id',$data)) {
-	}
-	$qI[$model] = isset($qI[$model]) ? 
-		$qI[$model] : array();
-	$data['id'] = $insertIds[$model];
 	ksort($data);
 	$qI[$model][] = $data;
 	return $insertIds[$model];

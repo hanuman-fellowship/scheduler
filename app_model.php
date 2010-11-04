@@ -112,10 +112,17 @@ class AppModel extends Model {
 	}
 
 	function qInsert($data) {
-		if (!$existing = getInsertId($this->name)) {
-			$id = $this->field('id',null,'id desc') + 1;
+		if (isset($data[$this->name])) {
+			$data = $data[$this->name];
+		}
+		if (array_key_exists('id',$data)) {
+			$id = null;
 		} else {
-			$id = $existing + 1;
+			if (!$existing = getInsertId($this->name)) {
+				$id = $this->field('id',null,'id desc') + 1;
+			} else {
+				$id = $existing + 1;
+			}
 		}
 		return(qInsertAdd($this->name,$data,$id));
 	}
