@@ -58,7 +58,9 @@ function getQueue() {
 	global $qI;
 	global $qD;
 
-	return array('insert'=>$qI,'delete'=>$qD);
+	$queue = array('insert'=>$qI,'delete'=>$qD);
+	unset($GLOBALS['qI'], $GLOBALS['qD']);
+	return $queue;
 }
 
 function writeCache($path, $data) {
