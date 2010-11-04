@@ -323,12 +323,13 @@ class Person extends AppModel {
 			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
 			'fields' => array('distinct PeopleSchedules.person_id')
 		));
-		writeCache('people.current', Set::combine(
+		$currentPeople = Set::combine(
 			$currentPeople,
 			'{n}.PeopleSchedules.person_id',
 			'{n}.PeopleSchedules.person_id'
-		));
-		return readCache('people.current');
+		);
+		writeCache('people.current',$currentPeople);
+		return $currentPeople;
 	}
 
 	function getPeopleSchedulesId($id) {
@@ -341,9 +342,10 @@ class Person extends AppModel {
 	function addDisplayName(&$person) {
 		// first time this function is called, set up a list of people's last names grouped by first name
 		$person['name'] = ($person['name']) ? $person['name'] : $person['first'];
-		writeCache('people.names', !checkCache('people.names') ?
-			Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first') 
-			: readCache('people.names'));
+		if (!checkCache('people.names')) {
+			writeCache('people.names',
+				Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first'));
+		}
 
 		// now find out how many letters of the last name we need for each first name
 		$lastNames = readCache("people.names.{$person['first']}");

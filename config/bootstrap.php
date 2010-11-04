@@ -79,6 +79,7 @@ function readCache($path = null) {
 	} else {
 		return $all;
 	}
+
 }
 
 
@@ -87,8 +88,8 @@ function checkCache($path) {
 	$parts = explode('.',$path);
 	$data = $all;
 	foreach($parts as $part) {
-		if (!isset($all[$part])) return false;
-		$data = $all[$part];
+		if (!isset($data[$part])) return false;
+		$data = $data[$part];
 	}
 	return true;
 }
