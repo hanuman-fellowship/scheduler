@@ -126,36 +126,38 @@ class AppModel extends Model {
 
 	function doQueue() {
 		$queue = getQueue();
-		if (!is_array($queue['insert'])) return;
-		foreach($queue['insert'] as $model => $data) {
-			$table = Inflector::tableize($model);
-			$fields = '';
-			foreach(array_keys($data[0]) as $field) {
-				$fields .= $field.','; 
-			}
-			$fields = substr_replace($fields,'',-1);
-			$values = '';
-			foreach($data as $row) {
-				$values .= '(';
-				foreach($row as $value) {
-					$values .= "'{$value}',";
+		if (is_array($queue['insert'])) {
+			foreach($queue['insert'] as $model => $data) {
+				$table = Inflector::tableize($model);
+				$fields = '';
+				foreach(array_keys($data[0]) as $field) {
+					$fields .= $field.','; 
+				}
+				$fields = substr_replace($fields,'',-1);
+				$values = '';
+				foreach($data as $row) {
+					$values .= '(';
+					foreach($row as $value) {
+						$values .= "'{$value}',";
+					}
+					$values = substr_replace($values,'',-1);
+					$values .= '),';
 				}
 				$values = substr_replace($values,'',-1);
-				$values .= '),';
+				$this->query("INSERT into {$table} ({$fields}) VALUES {$values}");
 			}
-			$values = substr_replace($values,'',-1);
-			$this->query("INSERT into {$table} ({$fields}) VALUES {$values}");
 		}
-		if (!is_array($queue['delete'])) return;
-		foreach($queue['delete'] as $model => $ids) {
-			$table = Inflector::tableize($model);
-			$values = '';
-			foreach($ids as $id) {
-				$values .= "'{$id}',";
+		if (is_array($queue['delete'])) {
+			foreach($queue['delete'] as $model => $ids) {
+				$table = Inflector::tableize($model);
+				$values = '';
+				foreach($ids as $id) {
+					$values .= "'{$id}',";
+				}
+				$values = substr_replace($values,'',-1);
+				$this->query("DELETE FROM {$table} WHERE 
+					{$table}.schedule_id = '{$this->schedule_id}' and {$table}.id IN ({$values})");
 			}
-			$values = substr_replace($values,'',-1);
-			$this->query("DELETE FROM {$table} WHERE 
-				{$table}.schedule_id = '{$this->schedule_id}' and {$table}.id IN ({$values})");
 		}
 	}
 
