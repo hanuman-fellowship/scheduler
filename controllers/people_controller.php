@@ -96,6 +96,7 @@ class PeopleController extends AppController {
 			$changes = $this->Person->retireMany($this->data);
 			$this->stop($this->Person->description($changes));
 			deleteCache('people');
+			$this->Person->doQueue(); // perform the deletes so that the new cache is made correctly	
 		}
 		$this->set('people',$this->Person->listByResidentCategory());
 	}
