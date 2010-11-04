@@ -157,7 +157,6 @@ class Change extends AppModel {
 				'schedule_id' => $this->schedule_id
 			));
 		}
-        $this->clearHanging();
     }     
      
     /**
