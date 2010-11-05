@@ -24,7 +24,7 @@
 		echo $form->input('specify_hours', array(
 			'between' => '&nbsp;',
 			'size' => 1,
-			'onClick' => "toggleDisplay('hours');document.getElementById('hours').focus()",
+			'onClick' => "$('hours').toggle().focus()",
 			'div' => array(
 				'style' => 'float:left'
 			),

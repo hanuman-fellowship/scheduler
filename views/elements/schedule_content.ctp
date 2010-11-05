@@ -170,7 +170,7 @@ if (isset($area['RequestArea'])) {
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
 		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
 		&& !$this->params['isAjax'] && !$request || ($request && $editRequest)) { ?>
-		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='hideAddShift("<?=$slot_num.'_'.$day?>")' > 
+		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='$("add_<?=$slot_num.'_'.$day?>").hide()' > 
 			<? $url = (isset($area)) ? 
 				array('controller'=>'shifts','action'=>'add',$area[$request.'Area']['id'],
 					$day,
@@ -225,7 +225,7 @@ if (isset($area['RequestArea'])) {
  	</tr> 
 	<tr> 
 	<? } ?>	
-		<td id="0_0" onmouseover='showAddShift(0,0)' onmouseout='hideAddShift("0_0")' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
+		<td id="0_0" onmouseover='showAddShift(0,0)' onmouseout='$("add_0_0").hide()' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 		<? if (isset($area)) { ?>
 			<?=$schedule->displayAreaFloating($area['FloatingShift']);?>
 			<? $area_id = $area[$request.'Area']['id']; ?>

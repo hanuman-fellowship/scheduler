@@ -16,7 +16,7 @@
 			array(
 				'separator' => '<br/>',
 				'value' => $group,
-				'onchange' => "toggleDisplay('nameDiv');get('name').select()",
+				'onchange' => "$('nameDiv').toggle();$('name').select()",
 				'legend' => false
 			)
 		);?>

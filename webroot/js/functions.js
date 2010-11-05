@@ -1,54 +1,37 @@
 var highlighted = '';
 var stopClick = false;
 
-function get(id) {
-	return document.getElementById(id);
-}
-
 function showAddShift(slot,day) {
-	var addElement = get('add_'+slot+'_'+day);
-	loc = findPos(get(slot+'_'+day));
+	var addElement = $('add_'+slot+'_'+day);
+	loc = findPos($(slot+'_'+day));
 	addElement.style.left = loc[0];
 	addElement.style.top = loc[1]+3+'px';
 	addElement.style.display = 'block';
 }
 
-function hideAddShift(id) {
-	var addElement = document.getElementById('add_'+id);
-	addElement.style.display = 'none';
-}
-
-function showElement(id) {
-	get(id).style.display = 'block';
-}
-
-function hideElement(id) {
-	get(id).style.display = 'none';
-}
-
 function hideDialog() {
-	if (!stopClick && get('dialog').style.zIndex != 999) {
+	if (!stopClick && $('dialog').style.zIndex != 999) {
 		if(highlighted != '') {
-			get(highlighted).style.backgroundColor = '';
+			$(highlighted).style.backgroundColor = '';
 		}
-		get('dialog').style.display = 'none';
-		get('behind_dialog').style.display = 'none';
+		$('dialog').style.display = 'none';
+		$('behind_dialog').style.display = 'none';
 	}
 	stopClick = false;
 }
 
 function openDialog(id,noHighlight,position) {
-	if (get(id+'_sub')) {
-		get(id+'_sub').style.display = 'none';
+	if ($(id+'_sub')) {
+		$(id+'_sub').style.display = 'none';
 	}
-	behind = get('behind_dialog');
+	behind = $('behind_dialog');
 	behind.style.height = document.body.offsetHeight + 5 + 'px';
 	behind.style.width = document.body.offsetWidth + 'px';
 	behind.style.display = 'table';
 	behind.style.zIndex = 1000;
-	get('dialog').style.display = 'table';
+	$('dialog').show();
 	if (!noHighlight) {
-		get(id).style.backgroundColor = '#FFF8BA';
+		$(id).style.backgroundColor = '#FFF8BA';
 		highlighted = id;
 	}
 
@@ -57,19 +40,19 @@ function openDialog(id,noHighlight,position) {
 	}
 
 	// find the the object that we're positioning relative to
-	loc = findPos(get(id));
+	loc = findPos($(id));
 	objX = loc[0];
 	objY = loc[1];
-	objWidth = get(id).offsetWidth;
-	objHeight = get(id).offsetHeight;
+	objWidth = $(id).offsetWidth;
+	objHeight = $(id).offsetHeight;
 	
 	// get the window dimensions
 	windowWidth = f_clientWidth();
 	windowHeight = f_clientHeight();
 
 	// get the dialog dimensions
-	dialogWidth = get('dialog').offsetWidth;
-	dialogHeight = get('dialog').offsetHeight;
+	dialogWidth = $('dialog').offsetWidth;
+	dialogHeight = $('dialog').offsetHeight;
 
 	if (position == 'left') {
 		newLeft = objX - f_scrollLeft() - dialogWidth - 20;
@@ -110,15 +93,15 @@ function openDialog(id,noHighlight,position) {
 	if (newTop < 0) {
 		newTop = 10;
 	}
-	get('dialog').style.left = newLeft+'px';
-	get('dialog').style.top = newTop+'px';
+	$('dialog').style.left = newLeft+'px';
+	$('dialog').style.top = newTop+'px';
 
-	get('dialog').style.zIndex = 1001;
-	get('drag_here').style.width = dialogWidth + 'px';
+	$('dialog').style.zIndex = 1001;
+	$('drag_here').style.width = dialogWidth + 'px';
 	new Draggable('dialog',{scroll:window,handle:'drag_here'});
 //	new Resizeable('dialog_content', {top: 0, left:0, right:10, bottom:10});
 	document.onclick = hideDialog;
-	get('dialog').onclick = clickInDialog; 
+	$('dialog').onclick = clickInDialog; 
 }
 
 function keepOnScreen(id) {
@@ -127,13 +110,13 @@ function keepOnScreen(id) {
 	windowHeight = f_clientHeight();
 
 	// get the object position
-	loc = findPos(get(id));
+	loc = findPos($(id));
 	objX = loc[0];
 	objY = loc[1];
 
 	// get the object dimensions
-	objWidth = get(id).offsetWidth;
-	objHeight = get(id).offsetHeight;
+	objWidth = $(id).offsetWidth;
+	objHeight = $(id).offsetHeight;
 
 	// if it's off screen to the right, move it to the left 
 	if (objX + objWidth > windowWidth) { 
@@ -154,24 +137,24 @@ function keepOnScreen(id) {
 	if (objY < 0) {
 		newTop = 10;
 	}
-	get(id).style.left = newLeft+'px';
-	get(id).style.top = newTop+'px';
+	$(id).style.left = newLeft+'px';
+	$(id).style.top = newTop+'px';
 }
 	
 
 function wait() {
-	get('dialog').style.zIndex = 999;
-	hideElement('error');
-	showElement('wait');
+	$('dialog').style.zIndex = 999;
+	$('error').hide();
+	$('wait').show();
 }
 
 function toggleConflicts() {
-	if (get('conflictsBox').checked) {
-		get('available').style.display = 'none';
-		get('all').style.display = '';
+	if ($('conflictsBox').checked) {
+		$('available').hide();
+		$('all').show();
 	} else {
-		get('available').style.display = '';
-		get('all').style.display = 'none';
+		$('available').show();
+		$('all').hide();
 	}	
 }
 
@@ -246,12 +229,8 @@ function getCookie ( cookie_name ) {
 }
 
 function swap(a, b) {
-	toggleDisplay(a);
-	toggleDisplay(b);
-}
-
-function toggleDisplay(id) {
-	get(id).style.display = (get(id).style.display == 'none') ? '' : 'none';
+	$(a).toggle();
+	$(b).toggle();
 }
 
 function checkAll(divId, all) {

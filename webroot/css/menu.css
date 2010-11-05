@@ -102,7 +102,6 @@ background-color: #CCC;
 }
 
 .changes span.change_message {
-	display:none;
 	position:absolute;
 	right:10px;
 	top:25px;

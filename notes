@@ -17,19 +17,19 @@ TODO:
 
 	- templates
 
-	- delete all shifts, delete all areas, delete all people, etc...
-
-	- new schedule (instead of working copy)
-
 	- Description for editing a person
 
 	- edit times
 
-	- when pubishing a schedule, ask for start and end dates. start date defaults to "now"
-	  if it falls during another published schedule, user is asked for a name and it is offered
-	  as an alternate schedule (like for retreats). If start date is later, the schedule will 
-	  automatically be available starting at that time... etc...
-	
+	- why the error in ie? should i use more prototype for the dialog?
+
+	- merge... display conflicts nicely and find a way to deal with them. put conflicts into
+	  session and then let the user play with the schedule? maybe the conflicts on the schedule
+	  could show up red, and mousing over them would show the conflict...
+
+	- check to see if more than one published schedule is happening now
+		- default to the one that is ending soonest, and offer the others as options
+
 	- show schedules as a tree going down from pubished based on which they were copied from
 
 	- order working copies by date or by name in the select schedule dialog

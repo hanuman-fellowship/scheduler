@@ -13,10 +13,10 @@ foreach($changes as $change) {
 }
 ?>
 <?=$this->javascript->codeBlock("
-	get('current').scrollIntoView(true);
-	get('current').style.color = 'black';
-	get('current').style.fontWeight = 'bold';
-	get('current').innerHTML = '&nbsp;&nbsp;<---- last change';
+	$('current').scrollIntoView(true);
+	$('current').style.color = 'black';
+	$('current').style.fontWeight = 'bold';
+	$('current').innerHTML = '&nbsp;&nbsp;<---- last change';
 	setScroll();
 ");?>
 </div>

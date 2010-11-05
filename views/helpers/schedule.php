@@ -134,8 +134,8 @@ class ScheduleHelper extends AppHelper {
 				if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
-						'onmouseover' => "showElement('goto_{$assignment[$request.'Assignment']['id']}')",
-						'onmouseout' => "hideElement('goto_{$assignment[$request.'Assignment']['id']}')"
+						'onmouseover' => "$('goto_{$assignment[$request.'Assignment']['id']}').show()",
+						'onmouseout' => "$('goto_{$assignment[$request.'Assignment']['id']}').hide()"
 					));
 				}
 				$people .= $this->role->link(
@@ -159,8 +159,8 @@ class ScheduleHelper extends AppHelper {
 							'attributes' => array(
 								'class' => 'remove_RC_'.$assignment['PeopleSchedules']['resident_category_id'],
 								'style' => 'margin:10px',
-								'onmouseover' => "showElement('goto_{$assignment[$request.'Assignment']['id']}')",
-								'onmouseout' => "hideElement('goto_{$assignment[$request.'Assignment']['id']}')",
+								'onmouseover' => "$('goto_{$assignment[$request.'Assignment']['id']}').show()",
+								'onmouseout' => "$('goto_{$assignment[$request.'Assignment']['id']}').hide()",
 								'onclick' => 'saveScroll()',
 								'title' => 'Unassign'
 							)

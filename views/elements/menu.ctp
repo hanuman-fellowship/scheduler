@@ -197,15 +197,15 @@
 if ($session->read('Schedule.editable') && !isset($this->viewVars['area']['RequestArea'])) {
 ?>
 <div class='changes'>
-	<span class='change_message' id='undo_message'><?=$change_messages['undo']?></span>
-	<span class='change_message' id='redo_message'><?=$change_messages['redo']?></span>
+	<span class='change_message' id='undo_message' style='display:none'><?=$change_messages['undo']?></span>
+	<span class='change_message' id='redo_message' style='display:none'><?=$change_messages['redo']?></span>
 	<?= $change_messages['redo'] ? $html->link('Redo',array('controller'=>'changes','action'=>'redo'),array(
-		'onmouseover' => "showElement('redo_message')",
-		'onmouseout' => "hideElement('redo_message')"
+		'onmouseover' => "$('redo_message').show()",
+		'onmouseout' => "$('redo_message').hide()"
 	)) : "<span class='no_link'>Redo</span>";?>
 	<?= $change_messages['undo'] ? $html->link('Undo',array('controller'=>'changes','action'=>'undo'),array(
-		'onmouseover' => "showElement('undo_message')",
-		'onmouseout' => "hideElement('undo_message')"
+		'onmouseover' => "$('undo_message').show()",
+		'onmouseout' => "$('undo_message').hide()"
 	)) : "<span class='no_link'>Undo</span>";?>
 	<?=$ajax->link('View History',
 		array('controller'=>'changes','action'=>'history'),

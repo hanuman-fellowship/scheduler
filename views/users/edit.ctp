@@ -21,7 +21,7 @@
 		));
 		echo $form->label('operations');
 		echo '<br/>';
-		echo $form->checkBox('manager',array('onclick'=>"toggleDisplay('manage_areas')"));
+		echo $form->checkBox('manager',array('onclick'=>"$('manage_areas').toggle()"));
 		echo $form->label('manager');
 		echo '<br/>';
 		$display = $this->data['User']['manager'] ? '' : 'none';
