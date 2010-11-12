@@ -29,12 +29,16 @@ if (isset($area['RequestArea'])) {
 		}
 	}
 } else {
-	$latest = $schedule['latest'] ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";
-	$latest = $schedule['username'] != '' ? "Viewing: " : $latest;
-	$latest = $schedule['editable'] ? "<span style='color:green'>Editing: </span>" : $latest; 
+	$message = $schedule['latest'] ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";
+	$message = $schedule['username'] != '' ? "Viewing: " : $message;
+	$message = $schedule['editable'] ? "<span style='color:green'>Editing: </span>" : $message; 
 	if (in_array('operations',$userRoles)) {
-		echo ' '.$this->ajax->link(
-			$latest."Published on " . $time->format('F jS, Y g:ia',$schedule['updated']),
+		$title = ($schedule['username'] != '') ?
+			$schedule['editable'] ? $schedule['name'] : 
+				$schedule['name']." (".$schedule['username'].")" : 
+			"Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']);
+		echo $message.' '.$this->ajax->link(
+			$title,
 			array('controller'=>'schedules','action'=>'past'),
 			array(
 				'escape'=>false,
@@ -44,12 +48,8 @@ if (isset($area['RequestArea'])) {
 			)
 		);
 	} else {
-		$title = ($schedule['username'] != '') ?
-			$schedule['editable'] ? $schedule['name'] : 
-				$schedule['name']." (".$schedule['username'].")" : 
-			"Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']);
-		echo $latest.' '.$this->ajax->link(
-			$title,
+		echo ' '.$this->ajax->link(
+			$message."Published on " . $time->format('F jS, Y g:ia',$schedule['updated']),
 			array('controller'=>'schedules','action'=>'past'),
 			array(
 				'escape'=>false,
