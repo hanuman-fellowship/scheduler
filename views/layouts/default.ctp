@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>
-		Krishna: <?=$title_for_layout?>
+		<?=$title_for_layout?>
 	</title>	
 	<?=$html->css("screen") ?>
 	<?=$javascript->link('prototype');?>

@@ -197,7 +197,7 @@ class ScheduleHelper extends AppHelper {
 							'url' => array('controller'=>'assignments','action'=>'assign',$shift['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
-								'complete'=>"openDialog({$shift['id']})",
+								'complete'=>"openDialog('{$shift['id']}')",
 								'title' => 'Assign...'
 							),
 							'ajax'
@@ -217,7 +217,7 @@ class ScheduleHelper extends AppHelper {
 						'url' => array('controller'=>'shifts','action'=>'edit',$shift['id']),
 						'attributes'=>array(
 							'update'=>'dialog_content',
-							'complete'=>"openDialog({$shift['id']})",
+							'complete'=>"openDialog('{$shift['id']}')",
 							'title' => 'Edit Shift...'
 						),
 						'ajax'
@@ -277,7 +277,7 @@ class ScheduleHelper extends AppHelper {
 				),
 				!$this->session->read('Schedule.editable')
 			);
-			$link_title = $floating_shift['Area'] ? $floating_shift['Area']['name'] : '';
+			$link_title = $floating_shift['Area'] ? $floating_shift['Area']['short_name'] : '';
 			$link_url = $floating_shift['Area'] ? 
 				array('controller'=>'areas','action'=>'schedule',$floating_shift['Area']['id']) :
 				array();
