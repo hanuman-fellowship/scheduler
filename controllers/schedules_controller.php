@@ -82,6 +82,22 @@ class SchedulesController extends AppController {
 		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => $this->Schedule->schedule_id)));		
 	}
 	
+	function effective() {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			if ($this->Schedule->valid($this->data)) {
+				$this->Schedule->updateEffective($this->data);
+				$this->setSchedule($this->Schedule->schedule_id);
+				$this->set('url', $this->referer());
+			} else {
+				$this->set('errorField',$this->Schedule->errorField);
+				$this->set('errorMessage',$this->Schedule->errorMessage);
+				$start = $this->data['Schedule']['start'];
+				$end = $this->data['Schedule']['end'];
+			}
+		}
+	}
+
 	function publish() {
 		$this->redirectIfNotEditable();
 		$scheduleName = $this->Session->read('Schedule.name');

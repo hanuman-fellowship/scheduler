@@ -199,7 +199,9 @@ class AppController extends Controller {
 	}
 		
 	function beforeRender() {
-		$this->{$this->modelClass}->doQueue();
+		if ($this->modelClass != 'CakeError') {
+			$this->{$this->modelClass}->doQueue();
+		}
 	}
 
 }

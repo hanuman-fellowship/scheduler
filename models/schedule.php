@@ -28,26 +28,29 @@ class Schedule extends AppModel {
 	var $conflicts = array();
 
 	function valid($data) {
+		$effective = isset($data['Schedule']['effective']);
 		$publish = isset($data['Schedule']['group']); // true = publish; false = copy;
-		if ($publish) {
-			if ($data['Schedule']['group'] == 'update') {
-				return true;
+		if (isset($data['Schedule']['name'])) {
+			if ($publish) {
+				if ($data['Schedule']['group'] == 'update') {
+					return true;
+				}
+				$nameExists = $this->ScheduleGroup->field('id',array('name' => $data['Schedule']['name']));
+			} else {
+				$nameExists = $this->field('id',array('name' => $data['Schedule']['name']));
 			}
-			$nameExists = $this->ScheduleGroup->field('id',array('name' => $data['Schedule']['name']));
-		} else {
-			$nameExists = $this->field('id',array('name' => $data['Schedule']['name']));
+			if ($data['Schedule']['name'] == '') {
+				$this->errorField = 'name';
+				$this->errorMessage = "Name must not be blank";
+				return false;
+			}	
+			if ($nameExists) {
+				$this->errorField = 'name';
+				$this->errorMessage = "That name already exists";
+				return false;
+			}
 		}
-		if ($data['Schedule']['name'] == '') {
-			$this->errorField = 'name';
-			$this->errorMessage = "Name must not be blank";
-			return false;
-		}	
-		if ($nameExists) {
-			$this->errorField = 'name';
-			$this->errorMessage = "That name already exists";
-			return false;
-		}
-		if ($publish) {
+		if ($publish || $effective) {
 			if (!strtotime($data['Schedule']['start'])) {
 				$this->errorField = 'start';
 				$this->errorMessage = "Invalid start date";
@@ -455,6 +458,19 @@ class Schedule extends AppModel {
 		);
 		$this->conflicts[$conflict_key['a']]['a'] = $new_conflict['a'];
 		$this->conflicts[$conflict_key['a']]['conflicts'][$conflict_key['b']] = array('b' => $new_conflict['b']);
+	}
+
+	function updateEffective($data) {
+		$this->ScheduleGroup->save(array(
+			'ScheduleGroup' => array(
+				'start' => date('Y-m-d H:i:s',strtotime($data['Schedule']['start'])),
+				'end' => date('Y-m-d H:i:s',strtotime($data['Schedule']['end']))
+			)
+		));
+		$this->updateAll(
+			array('schedule_group_id' => $this->ScheduleGroup->id),
+			array('Schedule.id' => $this->schedule_id)
+		);
 	}
 
 	function publish($data) {

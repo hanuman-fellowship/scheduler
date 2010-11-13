@@ -102,7 +102,25 @@ if (isset($area['RequestArea'])) {
 			&nbsp;
 		</td> 
 		<td width='200px'> 
-		<?= isset($effective) ? $effective : ''?>
+		<?= isset($effective) ? 
+			$role->link(
+				$effective,
+				array(
+					'operations' => array(
+						'url' => array('controller'=>'schedules','action'=>'effective'),
+						'attributes'=>array(
+							'update'=>'dialog_content',
+							'complete'=>"openDialog('effective',false,'bottom')",
+							'title' => 'Change date range...',
+							'id' => 'effective',
+							'escape' => false
+						),
+						'ajax'
+					)
+				),
+				($this->params['isAjax'] || !$this->session->read('Schedule.editable') || isset($area['RequestArea']))
+			)
+		: ''?>
 		</td> 
 	</tr> 
 </table> 
