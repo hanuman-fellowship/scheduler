@@ -14,17 +14,17 @@ class OffDaysController extends AppController {
 			)
 		));
 		$this->record();
-		if ($existing) {
-			$this->OffDay->sDelete($existing['OffDay']['id']);
-		} else {
+		$changes = $existing ?
+			$this->OffDay->sDelete($existing['OffDay']['id'])
+		:
 			$this->OffDay->sSave(array(
 				'OffDay' => array(
 					'person_id' => $person_id,
 					'day_id' => $day_id
 				)
-			));
-		}
-		$this->stop($this->OffDay->description);
+			))
+		;
+		$this->stop($this->OffDay->description($changes));
 		$this->redirect($this->referer());
 	}
 
