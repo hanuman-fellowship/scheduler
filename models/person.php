@@ -38,7 +38,6 @@ class Person extends AppModel {
 		if(!isset($data['Person']['id'])) { // if this is a new person
 			$this->addPeopleSchedules($this->id, $resident_category_id);
 		} else {
-			$this->PeopleSchedules->schedule_id = $this->schedule_id;
 			$peopleSchedules = $this->PeopleSchedules->sFind('first', array(
 				'recursive' => -1,
 				'conditions' => array('PeopleSchedules.person_id' => $data['Person']['id'])
@@ -64,8 +63,6 @@ class Person extends AppModel {
 	}
 
 	function retire($id, $internal = false) {
-		$this->Assignment->schedule_id = $this->schedule_id;
-		$this->FloatingShift->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment','FloatingShift');
 		$person = $this->find('first',array(
 			'conditions' => array('Person.id' => $id)
@@ -76,7 +73,6 @@ class Person extends AppModel {
 		foreach($person['FloatingShift'] as $floatingShift) {
 			$this->FloatingShift->sDelete($floatingShift['id']);
 		}
-		$this->PeopleSchedules->schedule_id = $this->schedule_id;
 		$changes = $this->PeopleSchedules->sDelete($this->getPeopleSchedulesId($id));
 		$this->addDisplayName($person['Person']);
 		return $internal ? $person['Person']['name'] : $changes;
@@ -98,7 +94,6 @@ class Person extends AppModel {
 	}
 
 	function addPeopleSchedules($person_id, $rcId = 1) {
-		$this->PeopleSchedules->schedule_id = $this->schedule_id;
 		$this->PeopleSchedules->sSave(array(
 			'PeopleSchedules' => array(
 				'person_id' =>            $person_id,
@@ -134,7 +129,6 @@ class Person extends AppModel {
 		$person = $this->find('first',array(
 			'conditions' => array('Person.id' => $id)
 		));
-		$this->Assignment->Shift->schedule_id = $this->schedule_id;
 		$this->Assignment->Shift->addAssignedShifts($person);
 
 		// move the constant shifts into place with the other shifts
@@ -167,15 +161,14 @@ class Person extends AppModel {
 	}	
 
 	function getGaps() {
-		$this->Assignment->Shift->schedule_id = $this->schedule_id;
 		$this->Assignment->Shift->order = 'Shift.start, Shift.end, Area.short_name';
 		$this->Assignment->Shift->contain(array(
 			'Assignment' => array(
-				'conditions' => "Assignment.schedule_id = {$this->schedule_id}",
+				'conditions' => "Assignment.schedule_id = ". scheduleId(),
 				'fields' => array('shift_id')
 			),
 			'Area' => array(
-				'conditions' => "Area.schedule_id = {$this->schedule_id}"
+				'conditions' => "Area.schedule_id = ". scheduleId()
 			)
 		));
 		$shifts = $this->Assignment->Shift->sFind('all');
@@ -234,7 +227,6 @@ class Person extends AppModel {
 	 */
 	function available($person, $shift) {
 		$this->ConstantShift = &$this->PeopleSchedules->ResidentCategory->ConstantShift;
-		$this->ConstantShift->schedule_id = $this->schedule_id;
 		$constantShifts = $this->ConstantShift->sFind('all', array(
 			'recursive' => -1,
 			'conditions' => array(
@@ -320,7 +312,7 @@ class Person extends AppModel {
 			return readCache('people.current');
 		}
 		$currentPeople = $this->PeopleSchedules->find('all',array(
-			'conditions' => array('PeopleSchedules.schedule_id' => $this->schedule_id),
+			'conditions' => array('PeopleSchedules.schedule_id' => scheduleId()),
 			'fields' => array('distinct PeopleSchedules.person_id')
 		));
 		$currentPeople = Set::combine(
@@ -335,7 +327,7 @@ class Person extends AppModel {
 	function getPeopleSchedulesId($id) {
 		return $this->PeopleSchedules->field('id',array(
 			'PeopleSchedules.person_id' => $id,
-			'PeopleSchedules.schedule_id' => $this->schedule_id
+			'PeopleSchedules.schedule_id' => scheduleId()
 		));
 	}
 

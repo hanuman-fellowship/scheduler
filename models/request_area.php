@@ -19,7 +19,6 @@ class RequestArea extends AppModel {
 		if (!$area = $this->find('first',array('conditions' => array('RequestArea.id' => -1 * $id)))) {
 			// there is no request for this area, so create one
 			$this->Area = ClassRegistry::init('Area');
-			$this->Area->schedule_id = $this->schedule_id;
 			$this->Area->sContain('Shift.Assignment');
 			$area = $this->Area->sFind('first',array(
 				'conditions' => array(
@@ -59,7 +58,6 @@ class RequestArea extends AppModel {
 		$area['FloatingShift'] = array();
 
 		$this->Person = ClassRegistry::init('Person');;
-		$this->Person->schedule_id = $this->schedule_id;
 		$this->Person->addAssignedPeople($area,'Request');
 		return $area;
 	}
@@ -176,7 +174,6 @@ class RequestArea extends AppModel {
 		$area['FloatingShift'] = array();
 
 		$this->Person = ClassRegistry::init('Person');;
-		$this->Person->schedule_id = $this->schedule_id;
 		$this->Person->addAssignedPeople($area,'Request');
 		return $area;
 	}	

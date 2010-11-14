@@ -94,10 +94,10 @@ class Schedule extends AppModel {
 	}
 
 	function copy($user_id, $name) {
-		$original = $this->findById($this->schedule_id);
+		$original = $this->findById(scheduleId());
 		if (is_null($original['Schedule']['parent_id'])) { // it has been published
 			// make the old one the parent of the new one
-			$parent_id = $this->schedule_id;
+			$parent_id = scheduleId();
 		} else { // it is a branch itself
 			// give the new one the same parent
 			$parent_id = $original['Schedule']['parent_id'];
@@ -161,7 +161,7 @@ class Schedule extends AppModel {
 	 */
 	function merge($id) {
 
-		$this->id = $this->schedule_id;
+		$this->id = scheduleId();
 		$my_parent = $this->field('parent_id');
 		$this->id = $id;
 		$merge_parent = $this->field('parent_id');
@@ -170,13 +170,13 @@ class Schedule extends AppModel {
 			return false;
 		}
 
-		$sched_ids = array('a' => $this->schedule_id, 'b' => $id);
+		$sched_ids = array('a' => scheduleId(), 'b' => $id);
 
 		// get all of the model data for both schedules and
 		// separate them by schedule_id
 		foreach($this->hasMany as $model => $assoc) {
 			$data[$model] = $this->{$model}->find('all', array(
-				'conditions' => array("{$model}.schedule_id" => array($this->schedule_id, $id)),
+				'conditions' => array("{$model}.schedule_id" => array(scheduleId(), $id)),
 				'recursive' => -1
 			));
 			$data[$model] = Set::combine($data[$model],
@@ -186,7 +186,7 @@ class Schedule extends AppModel {
 			);
 			if ($data[$model] == array()){
 				$data[$model] = array(
-					$this->schedule_id => array(),
+					scheduleId() => array(),
 					$id => array()
 				);
 			}		
@@ -211,15 +211,17 @@ class Schedule extends AppModel {
 		
 		// get the change data for each branch
 		$this->Change = ClassRegistry::init('Change');		
+		$scheduleID = scheduleId();
 		foreach($sched_ids as $key => $sched_id) {
 			$this->Change->id = '';
-			$this->Change->schedule_id = $sched_id;	
+			setScheduleId($sched_id);
 			$this->Change->clearHanging(); // get rid of redos
 			$this->Change->nudge(1); // move the ids up so that the first record is not 0
 			$this->Change->sContain('ChangeModel.ChangeField');
 			$changes[$key] = $this->Change->sFind('all');
 			$this->Change->nudge(-1); // move the ids back
 		}
+		setScheduleId($scheduleID);
 
 		// get rid of changes that are identical (from a previous merge)
 		foreach($changes['b'] as $bKey => $b_change) {
@@ -438,7 +440,6 @@ class Schedule extends AppModel {
 				}
 			}
 			// apply all the new changes
-			$this->Change->schedule_id = $this->schedule_id;
 			while($this->Change->doRedo()) {
 			}
 		} else {
@@ -469,7 +470,7 @@ class Schedule extends AppModel {
 		));
 		$this->updateAll(
 			array('schedule_group_id' => $this->ScheduleGroup->id),
-			array('Schedule.id' => $this->schedule_id)
+			array('Schedule.id' => scheduleId())
 		);
 	}
 
@@ -484,7 +485,7 @@ class Schedule extends AppModel {
 			));
 			$this->save(array(
 				'Schedule' => array(
-					'id' => $this->schedule_id,
+					'id' => scheduleId(),
 					'name' => 'Published',
 					'user_id' => null,
 					'parent_id' => null,
@@ -494,7 +495,7 @@ class Schedule extends AppModel {
 		} else {
 			$this->save(array(
 				'Schedule' => array(
-					'id' => $this->schedule_id,
+					'id' => scheduleId(),
 					'name' => 'Published',
 					'user_id' => null,
 					'parent_id' => null
@@ -506,7 +507,7 @@ class Schedule extends AppModel {
 		$this->Setting->deleteAll(
 			array(
 				"Setting.key" => 'auto_select',
-				'Setting.val' => $this->schedule_id
+				'Setting.val' => scheduleId()
 			),false,false
 		);
 		// delete changes for this schedule
@@ -514,11 +515,11 @@ class Schedule extends AppModel {
 		foreach($models as $model) {
 			$this->{$model}->deleteAll(
 				array(
-					"{$model}.schedule_id" => $this->schedule_id
+					"{$model}.schedule_id" => scheduleId()
 				),false,false
 			); 
 		}
-		return $this->schedule_id;
+		return scheduleId();
 	}
 
 }

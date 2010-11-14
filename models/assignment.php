@@ -9,8 +9,6 @@ class Assignment extends AppModel {
 	);
 	
 	function description($changes) {
-		$this->Shift->schedule_id = $this->schedule_id;
-		$this->Person->schedule_id = $this->schedule_id;
 		if (isset($changes['newData'])) {
 			$data = $changes['newData'];
 			$assignedOrRemoved = 'assigned to';

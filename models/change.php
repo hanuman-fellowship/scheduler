@@ -122,7 +122,7 @@ class Change extends AppModel {
 			array ( 
 				'conditions' => array (
 					"{$model_name}.id"          => $id,
-					"{$model_name}.schedule_id" => $model->schedule_id
+					"{$model_name}.schedule_id" => scheduleId()
 				), 
 				'recursive' => -1 
 			) 
@@ -145,7 +145,7 @@ class Change extends AppModel {
 			'name'        => $model_name, 
 			'action'      => $action, 
 			'record_id'   => $id,
-			'schedule_id' => $this->schedule_id
+			'schedule_id' => scheduleId()
 		));
 		foreach ($fields as $field_key) { 
 			$this->ChangeField->qInsert(array(
@@ -154,7 +154,7 @@ class Change extends AppModel {
 				'field_key' => $field_key,
 				'field_old_val' => $this->oldData[$model_name][$field_key],
 				'field_new_val' => $this->newData[$model_name][$field_key],
-				'schedule_id' => $this->schedule_id
+				'schedule_id' => scheduleId()
 			));
 		}
     }     
@@ -167,12 +167,13 @@ class Change extends AppModel {
      * change is made) this function is called.
      */
     function clearHanging() { 
+    	$scheduleID = scheduleId();
 		$this->query("DELETE FROM changes 
-			WHERE changes.id < 0 AND changes.schedule_id = {$this->schedule_id}");
+			WHERE changes.id < 0 AND changes.schedule_id = {$scheduleID}");
 		$this->query("DELETE FROM change_models 
-			WHERE change_models.change_id < 0 AND change_models.schedule_id = {$this->schedule_id}");
+			WHERE change_models.change_id < 0 AND change_models.schedule_id = {$scheduleID}");
 		$this->query("DELETE FROM change_fields 
-			WHERE change_fields.change_id < 0 AND change_fields.schedule_id = {$this->schedule_id}");
+			WHERE change_fields.change_id < 0 AND change_fields.schedule_id = {$scheduleID}");
     }     
 
     /**
@@ -186,15 +187,15 @@ class Change extends AppModel {
     function nudge($i) { 
         $this->updateAll(
         	array('Change.id' => "Change.id + {$i}"),
-        	array('Change.schedule_id' => $this->schedule_id)
+        	array('Change.schedule_id' => scheduleId())
         );      
         $this->ChangeModel->updateAll(
         	array('ChangeModel.change_id' => "ChangeModel.change_id + {$i}"),
-        	array('ChangeModel.schedule_id' => $this->schedule_id)
+        	array('ChangeModel.schedule_id' => scheduleId())
         );      
         $this->ChangeField->updateAll(
         	array('ChangeField.change_id' => "ChangeField.change_id + {$i}"),
-        	array('ChangeField.schedule_id' => $this->schedule_id)
+        	array('ChangeField.schedule_id' => scheduleId())
         );      
     } 
      
@@ -225,11 +226,11 @@ class Change extends AppModel {
 	function getMessages() {
 		return array(
 			'undo' => $this->field('description', array(
-				'Change.schedule_id' => $this->schedule_id,
+				'Change.schedule_id' => scheduleId(),
 				'Change.id' => 0
 			)),
 			'redo' => $this->field('description', array(
-				'Change.schedule_id' => $this->schedule_id,
+				'Change.schedule_id' => scheduleId(),
 				'Change.id' => -1
 			))
 		);

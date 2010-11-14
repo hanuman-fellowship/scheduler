@@ -107,12 +107,10 @@ class ConstantShift extends AppModel {
 	function format($data) {
 		$this->ResidentCategory->id = $data['resident_category_id'];
 		$this->ResidentCategory->recursive = -1;
-		$this->ResidentCategory->schedule_id = $this->schedule_id;
 		$resodent_category = $this->ResidentCategory->sFind('first');
 		$data['resident_category_id'] = $resodent_category['ResidentCategory']['name'];
 		$this->Day->id = $data['day_id'];
 		$this->Day->recursive = -1;
-		$this->Day->schedule_id = $this->schedule_id;
 		$day = $this->Day->sFind('first');
 		$data['day_id'] = substr($day['Day']['name'],0,3);
 		$start = strtotime($data['start']);
