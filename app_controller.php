@@ -23,6 +23,7 @@ class AppController extends Controller {
 		if (!$this->Session->check('Schedule')) {
 			$this->setSchedule('latest');
 		}
+		setScheduleId($this->Session->read('Schedule.id'));
 		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 		if ($this->Session->read('Schedule.user_id') == Authsome::get('id') && 
 		in_array('operations',$userRoles)) {

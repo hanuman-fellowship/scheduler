@@ -60,14 +60,28 @@ function getQueue() {
 	return $queue;
 }
 
+function setScheduleId($id) {
+	global $schedule_id;
+	$schedule_id = $id;
+}
+
+function scheduleId() {
+	global $schedule_id;
+	return $schedule_id;
+}
+
 function writeCache($path, $data) {
-	$old = Cache::read('user_'.Authsome::get('id'));
+	global $schedule_id;
+
+	$old = Cache::read(Authsome::get('id').'_'.$schedule_id);
 	$updated = Set::insert($old,$path,$data);
-	Cache::write('user_'.Authsome::get('id'),$updated);
+	Cache::write(Authsome::get('id').'_'.$schedule_id,$updated);
 }
 
 function readCache($path = null) {
-	$all = Cache::read('user_'.Authsome::get('id'));
+	global $schedule_id;
+
+	$all = Cache::read(Authsome::get('id').'_'.$schedule_id);
 	if ($path) {
 		$parts = explode('.',$path);
 		$data = $all;
@@ -83,7 +97,9 @@ function readCache($path = null) {
 
 
 function checkCache($path) {
-	$all = Cache::read('user_'.Authsome::get('id'));
+	global $schedule_id;
+
+	$all = Cache::read(Authsome::get('id').'_'.$schedule_id);
 	$parts = explode('.',$path);
 	$data = $all;
 	foreach($parts as $part) {
@@ -94,12 +110,14 @@ function checkCache($path) {
 }
 
 function deleteCache($path = null) {
+	global $schedule_id;
+
 	if ($path) {
-		$original = Cache::read('user_'.Authsome::get('id'));
+		$original = Cache::read(Authsome::get('id').'_'.$schedule_id);
 		$updated = Set::remove($original,$path);
-		Cache::write('user_'.Authsome::get('id'),$updated);
+		Cache::write(Authsome::get('id').'_'.$schedule_id,$updated);
 	} else {
-		Cache::delete('user_'.Authsome::get('id'));
+		Cache::delete(Authsome::get('id').'_'.$schedule_id);
 	}
 }
 
