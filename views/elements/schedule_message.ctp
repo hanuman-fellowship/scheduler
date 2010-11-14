@@ -44,7 +44,8 @@ if (isset($area['RequestArea'])) {
 				'escape'=>false,
 				'update' => 'dialog_content',
 				'complete' => "openDialog('past',true,'bottom')",
-				'id' =>'past'
+				'id' =>'past',
+				'title' => 'View past schedules...'
 			)
 		);
 	} else {
@@ -55,7 +56,8 @@ if (isset($area['RequestArea'])) {
 				'escape'=>false,
 				'update' => 'dialog_content',
 				'complete' => "openDialog('past',true,'bottom')",
-				'id' =>'past'
+				'id' =>'past',
+				'title' => 'View past schedules...'
 			)
 		);
 	}
