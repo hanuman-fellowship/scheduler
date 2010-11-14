@@ -13,7 +13,6 @@ class Area extends AppModel {
 	function getArea($id) {
 		$this->id = $id;
 		$this->Person = &$this->Shift->Assignment->Person;
-		$this->Person->schedule_id = $this->schedule_id;
 		$this->sContain('Shift.Assignment','FloatingShift.Person.PeopleSchedules.ResidentCategory');
 		$area = $this->sFind('first');
 		if (isset($area['FloatingShift'])) {
@@ -29,8 +28,6 @@ class Area extends AppModel {
 	
 	function clear($ids, $keep_shifts = false, $internal = false) {
 		$areas = (!is_array($ids)) ?  array($ids) : $ids;
-		$this->Shift->schedule_id = $this->schedule_id;
-		$this->FloatingShift->schedule_id = $this->schedule_id;
 		$list = '';
 		foreach($areas as $area_id) {
 			$this->id = $area_id;

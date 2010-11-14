@@ -47,7 +47,6 @@ class FloatingShift extends AppModel {
 	function format($data) {
 		$this->Area->id = $data['area_id'];
 		$this->Area->recursive = -1;
-		$this->Area->schedule_id = $this->schedule_id;
 		$area = $this->Area->sFind('first');
 		$data['area_id'] = $area['Area']['short_name'];
 		$this->Person->id = $data['person_id'];

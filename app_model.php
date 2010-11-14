@@ -1,7 +1,6 @@
 <?php
 class AppModel extends Model {
 	var $actsAs = array('Containable');
-	var $schedule_id;
 
 	function sContain() {
 		$args = func_get_args();
@@ -13,7 +12,7 @@ class AppModel extends Model {
 			foreach($models as $model) {
 				$next_arg[$model] = array(
 					'conditions' => array(
-						"{$model}.schedule_id =" => $this->schedule_id
+						"{$model}.schedule_id =" => scheduleId()
 					)
 				);
 				if ($model == 'Person') {
@@ -30,14 +29,14 @@ class AppModel extends Model {
 		if ($this->name != 'Schedule') {
 			if (array_key_exists('contain', $params)) {
 				foreach($params['contain'] as &$contain) {
-					$contain .= '.schedule_id = ' . $this->schedule_id;
+					$contain .= '.schedule_id = ' . scheduleId();
 				}
 			}
 			$params = array_merge_recursive(
 				$params,
 				array(
 					'conditions' => array(
-						"{$this->name}.schedule_id" => $this->schedule_id
+						"{$this->name}.schedule_id" => scheduleId()
 					)
 				)
 			);
@@ -52,11 +51,10 @@ class AppModel extends Model {
 		$fields =& $data[$this->name];
 		$create = !array_key_exists('id', $fields);
 		// now add the schedule_id
-		$fields['schedule_id'] = $this->schedule_id;
+		$fields['schedule_id'] = scheduleId();
 
 		// prepare data for saving the Change
 		$this->Change =& ClassRegistry::init('Change');  
-		$this->Change->schedule_id = $this->schedule_id;		
 		// if it's an update, get the old data
 		if (!$create) { 
 			$this->Change->getOldData($this->name, $fields['id']); 
@@ -80,7 +78,7 @@ class AppModel extends Model {
 			// add a condition for the schedule_id and do the update
 			$this->updateAll($update, array(
 				"{$this->name}.id"          => $fields['id'],
-				"{$this->name}.schedule_id" => $this->schedule_id
+				"{$this->name}.schedule_id" => scheduleId()
 			));
 		}
 		
@@ -99,7 +97,6 @@ class AppModel extends Model {
 	function sDelete($id) {
 		// save the change
 		$this->Change =& ClassRegistry::init('Change');  
-		$this->Change->schedule_id = $this->schedule_id;
 		$this->Change->getOldData($this->name,$id);
 		$this->Change->newData = array(
 			"{$this->name}" => $this->array_fill_keys(array_keys($this->Change->oldData[$this->name]),null)
@@ -162,8 +159,9 @@ class AppModel extends Model {
 					$values .= "'{$id}',";
 				}
 				$values = substr_replace($values,'',-1);
+				$scheduleID = scheduleId();
 				$this->query("DELETE FROM {$table} WHERE 
-					{$table}.schedule_id = '{$this->schedule_id}' and {$table}.id IN ({$values})");
+					{$table}.schedule_id = '{$scheduleID}' and {$table}.id IN ({$values})");
 			}
 		}
 	}

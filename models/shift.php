@@ -55,7 +55,6 @@ class Shift extends AppModel {
 
 	function clear($id) {
 		$this->id = $id;
-		$this->Assignment->schedule_id = $this->schedule_id;
 		$this->sContain('Assignment');
 		$shift = $this->sFind('first');
 		foreach($shift['Assignment'] as $assignment) {
@@ -123,13 +122,11 @@ class Shift extends AppModel {
 			);
 		$this->Area->id = $data['area_id'];
 		$this->Area->recursive = -1;
-		$this->Area->schedule_id = $this->schedule_id;
 		$area = $this->Area->sFind('first');
 		$data['area_id'] = $tags['short_name'][0].$area['Area']['short_name'].$tags['short_name'][1];
 		if ($show_day) {
 			$this->Day->id = $data['day_id'];
 			$this->Day->recursive = -1;
-			$this->Day->schedule_id = $this->schedule_id;
 			$day = $this->Day->sFind('first');
 			$data['day_id'] = substr($day['Day']['name'],0,3);
 		} else {
@@ -151,7 +148,6 @@ class Shift extends AppModel {
 
 	function listBySlot($person_id,$day,$start,$end) {
 		$this->Person = &$this->Assignment->Person;
-		$this->Person->schedule_id = $this->schedule_id;
 		$this->Person->sContain('OffDay','Assignment.Shift','PeopleSchedules.ResidentCategory');
 		$person = $this->Person->find('first',array(
 			'conditions' => array(

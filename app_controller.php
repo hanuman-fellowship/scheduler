@@ -59,13 +59,7 @@ class AppController extends Controller {
 		$this->set('managerMenu', $managerMenu);
 
 	}	
-	
-    function loadModel($modelClass = null, $id = null) {
-    	$modelObject = parent::loadModel($modelClass, $id);
-		$this->$modelClass->schedule_id = $this->Session->read('Schedule.id');
-		return $modelObject;
-	}	
-	
+		
 	function saveSetting($key, $val) {
 		$this->loadModel('Setting');
 		$user_id = Authsome::get('id');
@@ -117,6 +111,7 @@ class AppController extends Controller {
 		);
 		$latest = ($id == 'latest' || $id == $latestSchedule) ? true : false;
 		$this->Session->write('Schedule.latest', $latest);
+		setScheduleId($schedule['Schedule']['id']);
 		deleteCache();
 	}
 	
@@ -133,7 +128,7 @@ class AppController extends Controller {
             'Change' => array( 
                 'id' => 0, 
                 'description' => $description,
-                'schedule_id' => $this->Session->read('Schedule.id')
+                'schedule_id' => scheduleId()
             ) 
         )); 	
 	}	
@@ -156,13 +151,13 @@ class AppController extends Controller {
 			}
 			if (!$this->Person->PeopleSchedules->field('id',array(
 				'PeopleSchedules.person_id' => $id,
-				'PeopleSchedules.schedule_id' => $this->Person->schedule_id
+				'PeopleSchedules.schedule_id' => scheduleId()
 			))) {
 				$this->redirect('/');
 			}
 		} else if (!$this->{$model}->field('id',array(
 			"{$model}.id" => $id,
-			"{$model}.schedule_id" => $this->{$model}->schedule_id
+			"{$model}.schedule_id" => scheduleId()
 		))) {
 			$this->redirect('/');
 		}

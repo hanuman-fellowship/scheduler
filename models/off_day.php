@@ -9,7 +9,6 @@ class OffDay extends AppModel {
 
 	function sSave($data) {
 		$changes = parent::sSave($data);
-		$this->Person->Assignment->schedule_id = $this->schedule_id;
 		$this->sContain('Person.Assignment.Shift');
 		$offDay = $this->sFind('first');
 		foreach($offDay['Person']['Assignment'] as $assignment) {
@@ -21,8 +20,6 @@ class OffDay extends AppModel {
 	}
 
 	function description($changes) {
-		$this->Person->Assignment->Shift->Day->schedule_id = $this->schedule_id;
-		$this->Person->schedule_id = $this->schedule_id;
 		if (isset($changes['newData'])) {
 			$personName = $this->Person->getName($changes['newData']['person_id']);
 			$day = $this->Person->Assignment->Shift->Day->getShortName($changes['newData']['day_id']);

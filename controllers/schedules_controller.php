@@ -43,7 +43,7 @@ class SchedulesController extends AppController {
 				'Schedule.user_id' => Authsome::get('id')
 			)
 		)));
-		$this->set('schedule_id',$this->Schedule->schedule_id);			
+		$this->set('schedule_id',scheduleId());			
 	}
 	
 	function select($id = null, $autoSelect = 0) {
@@ -57,7 +57,7 @@ class SchedulesController extends AppController {
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
 		$this->set('schedules',$this->Schedule->viewList());
-		$this->set('schedule_id',$this->Schedule->schedule_id);		
+		$this->set('schedule_id',scheduleId());		
 	}
 	
 	function past() {
@@ -78,8 +78,8 @@ class SchedulesController extends AppController {
 				'Schedule.name <>' => 'Published'
 			)
 		)));
-		$this->set('schedule_id',$this->Schedule->schedule_id);		
-		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => $this->Schedule->schedule_id)));		
+		$this->set('schedule_id',scheduleId());		
+		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => scheduleId())));		
 	}
 	
 	function effective() {
@@ -87,7 +87,7 @@ class SchedulesController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
 				$this->Schedule->updateEffective($this->data);
-				$this->setSchedule($this->Schedule->schedule_id);
+				$this->setSchedule(scheduleId());
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Schedule->errorField);
