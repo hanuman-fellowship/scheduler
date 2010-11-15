@@ -5,7 +5,7 @@ if (isset($area['RequestArea'])) {
 } else {
 	$request = '';
 	$editRequest = false;
-	$effective = $this->Schedule->displayEffective($this->session->read('Schedule.Group'));
+	$groupName = $this->session->read('Schedule.Group.name');
 }
 ?>
 <?$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');?>
@@ -91,23 +91,14 @@ if (isset($area['RequestArea'])) {
 		</td> 
 	</tr> 
 	<tr> 
-    	<td width='0px'> 
-			<div align="right">
-				<span class="style2">
-					<?= isset($effective) ? 'Effective:' : ''?>
-				</span>
-			</div>
-		</td> 
-		<td>
-			&nbsp;
-		</td> 
-		<td width='200px'> 
-		<?= isset($effective) ? 
+		<td width='200px' colspan='3'> 
+			<div align="center">
+		<?= isset($groupName) ? 
 			$role->link(
-				$effective,
+				$groupName,
 				array(
 					'operations' => array(
-						'url' => array('controller'=>'schedules','action'=>'effective'),
+						'url' => array('controller'=>'schedules','action'=>'change'),
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog('effective',false,'bottom')",
@@ -121,6 +112,7 @@ if (isset($area['RequestArea'])) {
 				($this->params['isAjax'] || !$this->session->read('Schedule.editable') || isset($area['RequestArea']))
 			)
 		: ''?>
+			</div>
 		</td> 
 	</tr> 
 </table> 

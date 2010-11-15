@@ -69,8 +69,12 @@
 				'url' => array('controller' => 'people', 'action' => 'schedule','gaps')
 			),
 			"<hr/>",
-			'New Working Copy...' => array(
+			'New...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
+				'ajax'
+			),
+			'Edit A Copy...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'copy'),
 				'ajax'
 			),
 			'Delete...' => array(

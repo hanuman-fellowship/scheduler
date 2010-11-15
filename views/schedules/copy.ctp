@@ -1,6 +1,6 @@
 <? $user = Authsome::get('id'); ?>
 <fieldset>
-	<legend><?php __("New Working Copy of <i>{$scheduleName}</i>");?></legend>
+	<legend><?php __("Edit a Copy of <i>{$groupName}</i>");?></legend>
 <?= $ajax->form($this->action,'post',array(
 	'model'=>'Schedule',
 	'update'=>'dialog_content',

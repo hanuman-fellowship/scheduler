@@ -13,9 +13,10 @@ class SchedulesController extends AppController {
 		fclose($file);
 	}
 
-	function add() {
+
+	function copy() {
 		$this->redirectIfNot('operations');
-		$scheduleName = $this->Session->read('Schedule.name');
+		$groupName = $this->Session->read('Schedule.Group.name');
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
 				$this->setSchedule($this->Schedule->copy(
@@ -28,7 +29,7 @@ class SchedulesController extends AppController {
 				$this->set('errorMessage',$this->Schedule->errorMessage);
 			}
 		} 
-		$this->set('scheduleName',$scheduleName);
+		$this->set('groupName',$groupName);
 	}
 	
 	function delete($id = null) {
@@ -82,11 +83,11 @@ class SchedulesController extends AppController {
 		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => scheduleId())));		
 	}
 	
-	function effective() {
+	function change() {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
-				$this->Schedule->updateEffective($this->data);
+				$this->Schedule->change($this->data);
 				$this->setSchedule(scheduleId());
 				$this->set('url', $this->referer());
 			} else {
