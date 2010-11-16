@@ -39,6 +39,10 @@ TODO:
 
 	BUGS:
 		- Why does it save two id entries in the change_fields when doing assignments::swap?
+		- Retire everone and then assign a shift by typing in the "other"
+			Undefined index:   [APP/config/bootstrap.php, line 89]
+		- Add Person
+			Undefined index:  Person [APP/models/people_schedules.php, line 34]
 
 	- Floating Shift
 		- Description is a little screwy
