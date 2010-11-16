@@ -152,10 +152,14 @@ class RequestArea extends AppModel {
 				'{$area['RequestArea']['notes']}',
 				'{$area['RequestArea']['manager']}'
 			)");
-		$this->query("INSERT INTO request_shifts (id,request_area_id,day_id,start,end,num_people)
-			VALUES {$shiftValues}");
-		$this->query("INSERT INTO request_assignments (id,person_id,name,request_shift_id)
-			VALUES {$assignmentValues}");
+		if ($shiftValues) {
+			$this->query("INSERT INTO request_shifts (id,request_area_id,day_id,start,end,num_people)
+				VALUES {$shiftValues}");
+		}
+		if ($assignmentValues) {
+			$this->query("INSERT INTO request_assignments (id,person_id,name,request_shift_id)
+				VALUES {$assignmentValues}");
+		}
 	}
 
 	function getList() {
