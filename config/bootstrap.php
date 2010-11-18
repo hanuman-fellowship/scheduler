@@ -6,9 +6,29 @@ function myDebug($var) {
 	echo "</div>";	
 }
 
-function timer($name = 0, $action) {
+
+/**
+ * start the timer
+ */
+function start($name = 0) {
+	timer($name,'start');
+}
+
+/**
+ * stop the timer
+ */
+function stop($name = 0) {
+	timer($name,'stop');
+}
+
+function total() {
+	global $totals;
+	myDebug($totals);
+}
+
+function timer($name,$action) {
     global $a;
-	global $total;
+	global $totals;
 	switch ($action) {
 		case 'start' :
 			$a[$name] = microtime(true);
@@ -17,10 +37,10 @@ function timer($name = 0, $action) {
 			$b = microtime(true); 
 			$time = $b - $a[$name];
 			$a[$name] = $b;
-			$total[$name] = isset($total[$name]) ? $total[$name] + $time : $time;
+			$totals[$name] = isset($totals[$name]) ? $totals[$name] + $time : $time;
 			return (string)$time;
 		case 'total' :
-			return (string)$total[$name];
+			return (string)$totals[$name];
 	}
 }
 
