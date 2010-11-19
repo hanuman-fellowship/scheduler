@@ -214,6 +214,7 @@ class Schedule extends AppModel {
 		foreach($sched_ids as $key => $sched_id) {
 			$this->Change->id = '';
 			$this->Change->schedule_id = $sched_id;	
+
 			$this->Change->clearHanging(); // get rid of redos
 			$this->Change->nudge(1); // move the ids up so that the first record is not 0
 			$this->Change->sContain('ChangeModel.ChangeField');
