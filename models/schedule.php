@@ -211,16 +211,17 @@ class Schedule extends AppModel {
 		
 		// get the change data for each branch
 		$this->Change = ClassRegistry::init('Change');		
+		$scheduleID = scheduleId();
 		foreach($sched_ids as $key => $sched_id) {
 			$this->Change->id = '';
-			$this->Change->schedule_id = $sched_id;	
-
+			setScheduleId($sched_id);
 			$this->Change->clearHanging(); // get rid of redos
 			$this->Change->nudge(1); // move the ids up so that the first record is not 0
 			$this->Change->sContain('ChangeModel.ChangeField');
 			$changes[$key] = $this->Change->sFind('all');
 			$this->Change->nudge(-1); // move the ids back
 		}
+		setScheduleId($scheduleID);
 
 		// get rid of changes that are identical (from a previous merge)
 		foreach($changes['b'] as $bKey => $b_change) {
