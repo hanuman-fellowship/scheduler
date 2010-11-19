@@ -413,7 +413,6 @@ class Schedule extends AppModel {
 				$new_change_id --;
 				$change['Change']['id']          = $new_change_id;
 				$change['Change']['schedule_id'] = $sched_ids['a'];
-				$this->Change->create();
 				$this->Change->save(array('Change' => $change['Change']));
 				foreach($change['ChangeModel'] as $change_model) {
 					$change_model_data = array('ChangeModel' => $change_model);
@@ -421,9 +420,7 @@ class Schedule extends AppModel {
 					$change_model_data['ChangeModel']['schedule_id'] = $sched_ids['a'];
 					unset($change_model_data['ChangeModel']['ChangeField']);
 					unset($change_model_data['ChangeModel']['id']);
-					$this->Change->ChangeModel->create();
-					$this->Change->ChangeModel->save($change_model_data);
-					$change_model_id = $this->Change->ChangeModel->getLastInsertId();
+					$change_model_id = $this->Change->ChangeModel->qInsert($change_model_data);
 					foreach($change_model['ChangeField'] as $field) {
 						$field['change_id']       = $new_change_id;
 						$field['change_model_id'] = $change_model_id;
@@ -434,11 +431,11 @@ class Schedule extends AppModel {
 						}
 						$change_field_data = array('ChangeField' => $field);
 						unset($change_field_data['ChangeField']['id']);
-						$this->Change->ChangeField->create();
-						$this->Change->ChangeField->save($change_field_data);
+						$this->Change->ChangeField->qInsert($change_field_data);
 					}
 				}
 			}
+			$this->Change->doQueue();
 			// apply all the new changes
 			while($this->Change->doRedo()) {
 			}
