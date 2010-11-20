@@ -51,7 +51,5 @@
 		$this->redirect($this->referer());
 	}
 				
-	function progress() {
-	}
 } 
 ?>

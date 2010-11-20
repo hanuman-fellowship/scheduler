@@ -6,7 +6,7 @@ $user = Authsome::get('id');
 echo '<div style="color:#CCCCCC">';
 foreach($changes as $change) {
 	echo $ajax->link($change['Change']['description'],array('action'=>'jump',$change['Change']['id']),array(
-		'before' => "progress_start('{$user}')",
+		'before' => "wait()",
 		'complete' => "window.location.reload()"
 	));
 	echo $change['Change']['id'] == 0 ? "<span id='current'></span><br>" : "<br>";
@@ -21,3 +21,4 @@ foreach($changes as $change) {
 ");?>
 </div>
 </fieldset>
+<?=$this->element('message');?>
