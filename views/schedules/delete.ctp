@@ -3,7 +3,7 @@
 <?
 foreach($schedules as $schedule) {
 	$style = ($schedule['Schedule']['id'] == $schedule_id) ? 
-		array('<b>','</b') :
+		array('<b>','</b>') :
 		array(null,null);
 	echo $style[0];
 	echo $html->link($schedule['Schedule']['name'],
@@ -15,4 +15,4 @@ foreach($schedules as $schedule) {
 }
 ?>
 </fieldset>
-<?=$this->element('message',array('default_field'=>'name'));?>
+<?=$this->element('message');?>
