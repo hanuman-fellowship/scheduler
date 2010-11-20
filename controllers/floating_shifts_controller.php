@@ -4,6 +4,9 @@ class FloatingShiftsController extends AppController {
 	var $name = 'FloatingShifts';
 
 	function add($area_id = null, $person_id = null) {
+		if ($area_id < 0) { // if it's a request form
+			$this->redirect(array('controller'=>'RequestFloatingShifts','action'=>'add',$area_id,$person_id));
+		}
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->FloatingShift->valid($this->data)) {
@@ -30,6 +33,9 @@ class FloatingShiftsController extends AppController {
 	}
 
 	function edit($id = null) {
+		if ($id < 0) { // if it's a request form
+			$this->redirect(array('controller'=>'RequestFloatingShifts','action'=>'edit',$id));
+		}
 		$this->redirectIfNotEditable();
 		if (!$id && empty($this->data)) {
 			$this->redirect(array('action' => 'index'));

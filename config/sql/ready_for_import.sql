@@ -540,3 +540,24 @@ CREATE TABLE `request_shifts` (
   KEY `area_id` (`request_area_id`),
   KEY `day_id` (`day_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_floating_shifts`
+--
+
+
+CREATE TABLE `request_floating_shifts` (
+  `id` int(11) NOT NULL auto_increment,
+  `person_id` int(11) NOT NULL,
+  `request_area_id` int(11) NOT NULL,
+  `hours` float NOT NULL,
+  `note` tinytext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `person_id` (`person_id`),
+  KEY `request_area_id` (`request_area_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+
+

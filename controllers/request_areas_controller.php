@@ -31,11 +31,4 @@ class RequestAreasController extends AppController {
 		}
 	}
 
-	function redirectIfNotManager($id) {
-		$areas = Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id');
-		if (!in_array($id,$areas)) {
-			$this->redirect('/');
-		}
-	}
-
 }

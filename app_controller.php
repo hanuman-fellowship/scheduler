@@ -189,6 +189,13 @@ class AppController extends Controller {
 		}
 	}
 
+	function redirectIfNotManager($id) {
+		$areas = Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id');
+		if (!in_array($id,$areas)) {
+			$this->redirect('/');
+		}
+	}
+
 	function redirect($url) {
 		$this->{$this->modelClass}->doQueue();
 		parent::redirect($url);

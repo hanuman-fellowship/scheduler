@@ -10,6 +10,7 @@ class RequestArea extends AppModel {
 	var $name = 'RequestArea';
 
 	var $hasMany = array(
+		'RequestFloatingShift',
 		'RequestShift' => array(
 			'order' => 'start, end'
 		)
@@ -50,14 +51,30 @@ class RequestArea extends AppModel {
 		if ($force) $submitted = false;
 
 		// get the data for display
-		$this->contain('RequestShift.RequestAssignment');
+		$this->contain(array(
+			'RequestShift.RequestAssignment',
+			'RequestFloatingShift' => array(
+				'Person' => array(
+					'PeopleSchedules' => array(
+						'conditions' => array('PeopleSchedules.schedule_id' => scheduleId())
+					)
+				)
+			)
+		));
 		$area = $this->find('first',array(
 			'conditions' => array('RequestArea.id' => $id * ($submitted ? 1 : -1))
 		));
 
-		$area['FloatingShift'] = array();
-
 		$this->Person = ClassRegistry::init('Person');;
+		if (isset($area['RequestFloatingShift'])) {
+			foreach($area['RequestFloatingShift'] as &$floating_shift) {
+				$this->Person->addDisplayName($floating_shift['Person']);
+			}
+		}
+
+		$area['FloatingShift'] = $area['RequestFloatingShift'];
+		unset($area['RequestFloatingShift']);
+
 		$this->Person->addAssignedPeople($area,'Request');
 		return $area;
 	}
@@ -111,17 +128,19 @@ class RequestArea extends AppModel {
 		$this->query("DELETE FROM request_assignments WHERE request_shift_id IN
 			(SELECT id from request_shifts where request_area_id = {$publishId})");
 		$this->query("DELETE FROM request_shifts WHERE request_area_id = {$publishId}");
+		$this->query("DELETE FROM request_floating_shifts WHERE request_area_id = {$publishId}");
 		
 		// copy edited request (negative request_area_id) to publish (positive ids)
 		$area = $this->find('first',array(
 			'conditions' => array(
 				'RequestArea.id' => $id
 			),
-			'contain' => array('RequestShift.RequestAssignment')
+			'contain' => array('RequestShift.RequestAssignment','RequestFloatingShift')
 		));
 		$area['RequestArea']['id'] = $area['RequestArea']['id'] * -1;
 		$shiftValues = '';
 		$assignmentValues = '';
+		$floatingShiftValues = '';
 		foreach($area['RequestShift'] as &$shift) {
 			$shift['id'] = $shift['id'] * -1;
 			$shift['request_area_id'] = $shift['request_area_id'] * -1;
@@ -143,8 +162,20 @@ class RequestArea extends AppModel {
 				),";
 			}
 		}
+		foreach($area['RequestFloatingShift'] as &$floating_shift) {
+			$floating_shift['id'] = $floating_shift['id'] * -1;
+			$floating_shift['request_area_id'] = $floating_shift['request_area_id'] * -1;
+			$floatingShiftValues .= "(
+				'{$floating_shift['id']}',
+				'{$floating_shift['person_id']}',
+				'{$floating_shift['request_area_id']}',
+				'{$floating_shift['hours']}',
+				'{$floating_shift['note']}'
+			),";
+		}
 		$shiftValues = substr_replace($shiftValues,'',-1);
 		$assignmentValues = substr_replace($assignmentValues,'',-1);
+		$floatingShiftValues = substr_replace($floatingShiftValues,'',-1);
 		$this->query("INSERT INTO request_areas (id,name,notes,manager) 
 			VALUES (
 				'{$area['RequestArea']['id']}',
@@ -160,6 +191,10 @@ class RequestArea extends AppModel {
 			$this->query("INSERT INTO request_assignments (id,person_id,name,request_shift_id)
 				VALUES {$assignmentValues}");
 		}
+		if ($floatingShiftValues) {
+			$this->query("INSERT INTO request_floating_shifts (id,person_id,request_area_id,hours,note)
+				VALUES {$floatingShiftValues}");
+		}
 	}
 
 	function getList() {
@@ -170,14 +205,29 @@ class RequestArea extends AppModel {
 	}
 
 	function view($id, $submitted = true) {
-		$this->contain('RequestShift.RequestAssignment');
+		$this->Person = ClassRegistry::init('Person');;
+		$this->contain(array(
+			'RequestShift.RequestAssignment',
+			'RequestFloatingShift' => array(
+				'Person' => array(
+					'PeopleSchedules' => array(
+						'conditions' => array('PeopleSchedules.schedule_id' => scheduleId())
+					)
+				)
+			)
+		));
 		$area = $this->find('first',array(
 			'conditions' => array('RequestArea.id' => $id * ($submitted ? 1 : -1))
 		));
 
-		$area['FloatingShift'] = array();
+		if (isset($area['RequestFloatingShift'])) {
+			foreach($area['RequestFloatingShift'] as &$floating_shift) {
+				$this->Person->addDisplayName($floating_shift['Person']);
+			}
+		}
 
-		$this->Person = ClassRegistry::init('Person');;
+		$area['FloatingShift'] = $area['RequestFloatingShift'];
+		unset($area['RequestFloatingShift']);
 		$this->Person->addAssignedPeople($area,'Request');
 		return $area;
 	}	

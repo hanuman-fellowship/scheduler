@@ -245,7 +245,7 @@ if (isset($area['RequestArea'])) {
 	<? } ?>	
 		<td id="0_0" onmouseover='showAddShift(0,0)' onmouseout='$("add_0_0").hide()' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 		<? if (isset($area)) { ?>
-			<?=$schedule->displayAreaFloating($area['FloatingShift']);?>
+			<?=$schedule->displayAreaFloating($area['FloatingShift'],$editRequest);?>
 			<? $area_id = $area[$request.'Area']['id']; ?>
 			<? $person_id = 0; ?>
 		<? } else { ?>
