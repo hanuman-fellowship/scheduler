@@ -1,4 +1,4 @@
-<?=$javascript->link(array('functions','progress','dropdowntabs'));?>
+<?=$javascript->link(array('functions','dropdowntabs'));?>
 <?=$html->css("dialog") ?>
 <? $hidden = !$this->session->read('Schedule.editable');?>
 <? $scheduleName = $this->session->read('Schedule.name');?>

@@ -204,8 +204,6 @@ class Change extends AppModel {
 	 *
 	 */
 	function jumpTo($id) {
-		$this->message = 'Applying Changes...';
-		$this->updateProgress(0);
 		$direction = 'redo';
 		$distance = abs($id);
 		if ($id >= 0) {
@@ -218,9 +216,7 @@ class Change extends AppModel {
 			} else {
 				$this->doRedo();
 			}
-			$this->updateProgress(100*($i/$distance));
 		}
-		$this->stopProgress();
 	}
 
 	function getMessages() {
