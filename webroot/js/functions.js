@@ -143,6 +143,7 @@ function keepOnScreen(id) {
 	
 
 function wait() {
+	document.body.style.cursor = 'wait';
 	$('dialog').style.zIndex = 999;
 	$('error').hide();
 	$('wait').show();

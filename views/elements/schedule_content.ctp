@@ -1,4 +1,9 @@
 <?
+$isOperations = in_array(
+	'operations',
+	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
+);
+$editable = $this->Session->read('Schedule.editable');
 if (isset($area['RequestArea'])) {
 	$request = 'Request';
 	$editRequest = ($area['RequestArea']['id'] < 0) ? true : false;
@@ -8,7 +13,6 @@ if (isset($area['RequestArea'])) {
 	$groupName = $this->session->read('Schedule.Group.name');
 }
 ?>
-<?$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');?>
 <?$gaps = isset($gaps) ? true : false;?>
 <table  style='' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
@@ -47,7 +51,7 @@ if (isset($area['RequestArea'])) {
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$this->session->read('Schedule.editable') || isset($area['RequestArea']))
+					($this->params['isAjax'] || !$editable || isset($area['RequestArea']))
 				);?>
 				</span>
 			<? } else { ?>
@@ -83,7 +87,7 @@ if (isset($area['RequestArea'])) {
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$this->session->read('Schedule.editable'))
+					($this->params['isAjax'] || !$editable)
 				);?>
 				</span>
 			<? } ?>
@@ -109,7 +113,7 @@ if (isset($area['RequestArea'])) {
 						'ajax'
 					)
 				),
-				($this->params['isAjax'] || !$this->session->read('Schedule.editable') || isset($area['RequestArea']))
+				($this->params['isAjax'] || !$editable || isset($area['RequestArea']))
 			)
 		: ''?>
 			</div>
@@ -133,7 +137,7 @@ if (isset($area['RequestArea'])) {
 						'style'=>'color:green'
 					)
 				); ?>
-			<? } elseif ($area['hasRequest'] && in_array('operations',$userRoles)) { ?>
+			<? } elseif ($area['hasRequest'] && $isOperations) { ?>
 				<?=$html->link('View<br/>Request',
 					array(
 						'controller'=>'RequestAreas',
@@ -153,8 +157,7 @@ if (isset($area['RequestArea'])) {
 		<td width="75" bordercolor="#000000"> 
 			<div align="center"> 
 				<p>
-				<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
-				&& isset($person) && !$gaps) { ?>
+				<? if ($isOperations && $editable && isset($person) && !$gaps) { ?>
 					<?=$html->link($day,array(
 						'controller'=>'off_days',
 						'action'=>'toggle',
@@ -178,8 +181,8 @@ if (isset($area['RequestArea'])) {
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
-		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')
-		&& !$this->params['isAjax'] && !$request || ($request && $editRequest)) { ?>
+		<? if ($isOperations && $editable && !$this->params['isAjax'] && !$request
+		|| ($request && $editRequest)) { ?>
 		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='$("add_<?=$slot_num.'_'.$day?>").hide()' > 
 			<? $url = (isset($area)) ? 
 				array('controller'=>'shifts','action'=>'add',$area[$request.'Area']['id'],
@@ -247,10 +250,10 @@ if (isset($area['RequestArea'])) {
 			<?// now that the total hours are added up, sneak them in at the top
 			?>
 			<script type="text/javascript">
-				document.getElementById('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
+				$('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
-		<? if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable') && !$request
+		<? if ($isOperations && $editable && !$request
 		|| ($request && $editRequest)) { ?>
 			<?= !$gaps ? $ajax->link(
 				' + ',
@@ -265,13 +268,15 @@ if (isset($area['RequestArea'])) {
 			) : '';?>
 		<? } ?>
 			<br/>
-			<a class="extra_blank" id="hide" href="javascript:openpopup('add_extra.php','Extra','width=580,height=208')"> 
-				<span id="no_print">
-					Click here to assign extra hours
-				</span> 
-			</a> 
 		</td> 
 	</tr> 
+	<? if ($editable) { ?>
+	<tr> 
+		<td align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
+			<i>*** notes ***</i>
+		</td> 
+	</tr> 
+	<? } ?>	
 	<? if (isset($person)) { ?>
 	<tr> 
 		<td align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
