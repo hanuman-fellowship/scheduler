@@ -10,7 +10,7 @@ class FloatingShift extends AppModel {
 
 	function valid($data) {
 		$hours = $data['FloatingShift']['hours'];
-		if (!is_numeric($hours) || $hours < 1) {
+		if (!is_numeric($hours) || $hours <= 0) {
 			$this->errorField = 'hours';
 			$this->errorMessage = "Invalid # of hours";
 			return false;

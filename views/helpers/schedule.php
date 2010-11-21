@@ -309,7 +309,8 @@ class ScheduleHelper extends AppHelper {
 		return (!$output ? '' : 'Plus ' . $this->text->toList($output));	
 	}
 	
-	function displayAreaFloating($floating_shifts) {
+	function displayAreaFloating($floating_shifts,$editRequest) {
+		$request = isset($floating_shifts[0]['request_area_id']);
 		$output = array();
 		foreach($floating_shifts as $floating_shift) {
 			$hours = $floating_shift['hours'];
@@ -330,7 +331,8 @@ class ScheduleHelper extends AppHelper {
 						'ajax'
 					)
 				),
-				!$this->session->read('Schedule.editable')
+				$this->session->read('Schedule.editable') && !$request
+				|| ($request && $editRequest) ? 'operations' : '' 
 			);
 			$link_title = $floating_shift['Person']['name'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);

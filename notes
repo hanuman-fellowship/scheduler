@@ -21,8 +21,6 @@ TODO:
 
 	- edit times
 
-	- why the error in ie? should i use more prototype for the dialog?
-
 	- merge... display conflicts nicely and find a way to deal with them. put conflicts into
 	  session and then let the user play with the schedule? maybe the conflicts on the schedule
 	  could show up red, and mousing over them would show the conflict...
