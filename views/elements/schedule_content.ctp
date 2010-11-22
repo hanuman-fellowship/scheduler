@@ -279,7 +279,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			<br/>
 		</td> 
 	</tr> 
-	<? if (($isOperations && $editable) || $notes || $editRequest) { ?>
+	<? if (($isOperations && $editable && !$request) || $notes || $editRequest) { ?>
 	<tr> 
 		<td id="notes" align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
 			<?=$role->link(

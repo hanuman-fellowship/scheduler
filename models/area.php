@@ -52,6 +52,13 @@ class Area extends AppModel {
 			"Areas cleared{$keep_shifts}: {$list}";
 	}
 
+	function sSave($data) {
+		if (isset($data['Area']['notes'])) {
+			$data['Area']['notes'] = trim($data['Area']['notes']);
+		}
+		return parent::sSave($data);
+	}
+
 	function sDelete($ids) {
 		$areas = (!is_array($ids)) ?  array($ids) : $ids;
 		$list = '';
