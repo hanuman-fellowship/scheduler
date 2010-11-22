@@ -1,7 +1,7 @@
 <?= $ajax->form($this->action,'post',array(
 	'model'=>'FloatingShift',
 	'update'=>'dialog_content',
-	'before'=>'wait();saveScroll()'
+	'before'=>'wait();saveScroll()',
 	'inputDefaults' => array('between' => '&nbsp;')
 ));?>
 	<fieldset>
