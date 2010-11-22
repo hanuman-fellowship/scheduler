@@ -45,13 +45,25 @@ class AreasController extends AppController {
 				$this->set('errorField',$this->Area->errorField);
 				$this->set('errorMessage',$this->Area->errorMessage);
 			}
-		}
-		if (empty($this->data)) {
+		} else {
 			$this->id = $id;
 			$this->data = $this->Area->sFind('first');
 		}
 	}
 	
+	function editNotes($id = null) {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			$this->record();
+			$changes = $this->Area->sSave($this->data);
+			$this->stop($this->Area->description($changes));
+			$this->set('url',$this->referer());
+		} else {
+			$this->id = $id;
+			$this->data = $this->Area->sFind('first');
+		}
+	}
+
 	function delete($id = null) {
 		$this->redirectIfNotEditable();
 		$this->Area->order = 'name';

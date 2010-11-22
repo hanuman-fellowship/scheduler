@@ -8,10 +8,10 @@
 	<?php
 		echo $form->hidden('id');
 		echo $form->input('notes',array(
-			'id' => 'notes',
+			'id' => 'edit_notes',
 			'label' => false
 		));
 	?>
 <?php echo $form->end('Submit');?>
 	</fieldset>
-<?=$this->element('message',array('default_field'=>'notes'));?>
+<?=$this->element('message',array('default_field'=>'edit_notes'));?>
