@@ -1,20 +1,16 @@
-<?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content','before'=>'wait()'));?>
+<?= $ajax->form($this->action,'post',array(
+	'model'=>'User',
+	'update'=>'dialog_content',
+	'before'=>'wait()',
+	'inputDefaults' => array('between' => '&nbsp;')
+));?>
 	<fieldset>
  		<legend><?php __('Add User');?></legend>
 <div class='tall'>
 	<?php
-		echo $form->input('username',array(
-			'between' => '&nbsp;',
-			'id' => 'username'
-		));
-		echo $form->input('password',array(
-			'between' => '&nbsp;',
-			'id' => 'password'
-		));
-		echo $form->input('email',array(
-			'between' => '&nbsp;',
-			'id' => 'email'
-		));
+		echo $form->input('username',array('id' => 'username'));
+		echo $form->input('password',array('id' => 'password'));
+		echo $form->input('email',array('id' => 'email'));
 		echo "<fieldset class='left'>";
 		echo '<legend>Roles</legend>';
 		echo $form->checkBox('operations');
