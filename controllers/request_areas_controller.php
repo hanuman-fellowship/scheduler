@@ -16,8 +16,12 @@ class RequestAreasController extends AppController {
 			$this->RequestArea->save($this->data);
 			$this->set('url',$this->referer());
 		} else {
-			$this->id = $id;
-			$this->data = $this->RequestArea->find('first');
+			$this->RequestArea->recursive = -1;
+			$this->data = $this->RequestArea->find('first',array(
+				'conditions' => array(
+					'RequestArea.id' => $id
+				)
+			));
 		}
 	}
 
