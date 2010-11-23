@@ -88,6 +88,19 @@ class PeopleController extends AppController {
 		$this->set(compact('residentCategory'));
 	}
 
+	function editNotes($id = null) {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			$this->record();
+			$changes = $this->Person->PeopleSchedules->sSave($this->data);
+			$this->stop($this->Person->PeopleSchedules->description($changes));
+			$this->set('url',$this->referer());
+		} else {
+			$this->data = $this->Person->PeopleSchedules->sFind('first',array(
+				'conditions' => array('PeopleSchedules.person_id' => $id)));
+		}
+	}
+
 	function retire($id = null) {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {

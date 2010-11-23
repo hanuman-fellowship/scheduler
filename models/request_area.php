@@ -16,6 +16,13 @@ class RequestArea extends AppModel {
 		)
 	);
 
+	function save($data) {
+		if (isset($data['RequestArea']['notes'])) {
+			$data['RequestArea']['notes'] = trim($data['RequestArea']['notes']);
+		}
+		return parent::save($data);
+	}
+
 	function edit($id,$force) {
 		if (!$area = $this->find('first',array('conditions' => array('RequestArea.id' => -1 * $id)))) {
 			// there is no request for this area, so create one

@@ -12,8 +12,9 @@ if (isset($area['RequestArea'])) {
 	$editRequest = false;
 	$groupName = $this->session->read('Schedule.Group.name');
 }
+$gaps = isset($gaps);
+$notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $person['PeopleSchedules']['notes']);
 ?>
-<?$gaps = isset($gaps) ? true : false;?>
 <table  style='' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
 		<td width="99" rowspan="2"> 
@@ -51,7 +52,7 @@ if (isset($area['RequestArea'])) {
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$editable || isset($area['RequestArea']))
+					($this->params['isAjax'] || !$editable || $request)
 				);?>
 				</span>
 			<? } else { ?>
@@ -113,7 +114,7 @@ if (isset($area['RequestArea'])) {
 						'ajax'
 					)
 				),
-				($this->params['isAjax'] || !$editable || isset($area['RequestArea']))
+				($this->params['isAjax'] || !$editable || $request)
 			)
 		: ''?>
 			</div>
@@ -125,7 +126,7 @@ if (isset($area['RequestArea'])) {
 		<td width="75" bordercolor="#000000"> 
 		<div align='center'>
 		<? if (isset($area)) { ?>
-			<? if (isset($area['RequestArea'])) { ?>
+			<? if ($request) { ?>
 				<?=$html->link('View<br/>Schedule',
 					array(
 						'controller'=>'areas',
@@ -270,10 +271,27 @@ if (isset($area['RequestArea'])) {
 			<br/>
 		</td> 
 	</tr> 
-	<? if ($editable) { ?>
+	<? if (($isOperations && $editable && !$request) || $notes || $editRequest) { ?>
 	<tr> 
-		<td align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
-			<i>*** notes ***</i>
+		<td id="notes" align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
+			<?=$role->link(
+				$notes ? $notes : '*** notes ***',
+				array(
+					'operations' => array(
+						'url' => array(
+							'action'=>'editNotes',
+							isset($area)? $area[$request.'Area']['id'] : $person['Person']['id']
+						),
+						'attributes'=>array(
+							'update'=>'dialog_content',
+							'complete'=>"openDialog('notes',false,'top')",
+							'title' => 'Edit Notes...'
+						),
+						'ajax'
+					)
+				),
+				$editable && !$request || ($request && $editRequest) ? 'operations' : '' 
+			);?>
 		</td> 
 	</tr> 
 	<? } ?>	

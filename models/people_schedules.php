@@ -9,6 +9,13 @@ class PeopleSchedules extends AppModel {
 		'Person'
 	);
 
+	function sSave($data) {
+		if (isset($data['PeopleSchedules']['notes'])) {
+			$data['PeopleSchedules']['notes'] = trim($data['PeopleSchedules']['notes']);
+		}
+		return parent::sSave($data);
+	}
+
 	function description($changes) {
 		if (isset($changes['newData'])) {
 			$person = $this->Person->getPerson($changes['newData']['person_id'],true);

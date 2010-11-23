@@ -10,6 +10,17 @@ class RequestAreasController extends AppController {
 		$this->set('bounds', $this->getBounds());
 	}
 
+	function editNotes($id = null) {
+		if (!empty($this->data)) {
+			$this->record();
+			$this->RequestArea->save($this->data);
+			$this->set('url',$this->referer());
+		} else {
+			$this->id = $id;
+			$this->data = $this->RequestArea->find('first');
+		}
+	}
+
 	// the id should be negative (the request area to be submited)
 	function submit($id) {
 		$this->redirectIfNotManager($id * -1);

@@ -68,7 +68,7 @@ function qInsertAdd($model, $data, $id) {
 	}
 	ksort($data);
 	$qI[$model][] = $data;
-	return $insertIds[$model];
+	return isset($insertIds[$model]) ? $insertIds[$model] : $data['id'];
 }
 
 function getQueue() {

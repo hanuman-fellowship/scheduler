@@ -4,17 +4,11 @@
 echo $ajax->form($this->action,'post',array(
 	'model'=>'User',
 	'update'=>'dialog_content',
-	'before'=>'wait()'
+	'before'=>'wait()',
+	'inputDefaults' => array('between' => '&nbsp;')
 ));
-echo $form->input('username', array(
-	'label' => 'Username',
-	'id'=>'username',
-	'between'=>'&nbsp;'
-));
-echo $form->input('password', array(
-	'label' => "Password",
-	'between' => '&nbsp;'
-));
+echo $form->input('username', array('id'=>'username'));
+echo $form->input('password');
 echo $form->submit('Login');
 echo $form->end();
 ?>
