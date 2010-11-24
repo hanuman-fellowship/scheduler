@@ -282,6 +282,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	<? if (($isOperations && $editable && !$request) || $notes || $editRequest) { ?>
 	<tr> 
 		<td id="notes" align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
+			<i>
 			<?=$role->link(
 				$notes ? $notes : '*** notes ***',
 				array(
@@ -300,6 +301,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				),
 				$editable && !$request || ($request && $editRequest) ? 'operations' : '' 
 			);?>
+			</i>
 		</td> 
 	</tr> 
 	<? } ?>	
