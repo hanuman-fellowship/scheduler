@@ -1,3 +1,7 @@
+<?= $this->element('shortcut',array(
+	'shortcut' => 'return',
+	'codeBlock' =>'$("submit_button").click()'
+));?>
 <?= $ajax->form($this->action,'post',array(
 	'model'=>'PeopleSchedules',
 	'update'=>'dialog_content',
@@ -13,6 +17,7 @@
 			'label' => false
 		));
 	?>
-<?php echo $form->end('Submit');?>
+<?php echo $form->submit('Submit',array('id'=>'submit_button'));?>
+<?=$form->end();?>
 	</fieldset>
 <?=$this->element('message',array('default_field'=>'edit_notes'));?>
