@@ -27,7 +27,7 @@
 				'ajax'
 			),
 			'Logout' => array(
-				'url' => array('controller' => 'users', 'action' => 'logout'),
+				'url' => array('controller' => 'users', 'action' => 'logout')
 			)
 		)
 	),	
@@ -88,7 +88,7 @@
 				'ajax'
 			),
 			'View Gaps' => array(
-				'url' => array('controller' => 'people', 'action' => 'schedule','gaps')
+				'url' => array('controller' => 'people', 'action' => 'schedule','gaps'),
 			),
 			"<hr/>",
 			'New Working Copy...' => array(
@@ -120,7 +120,7 @@
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
 				'ajax',
-				'shortcut' => 'p'
+				'shortcut' => 'ctrl+p'
 			),
 			'View Profile...' => array(
 				'role' => array('operations'),
@@ -154,7 +154,8 @@
 			'role' => array('operations'),
 			'View Schedule...' => array(
 				'url' => array('controller' => 'areas', 'action' => 'select'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+a'
 			),
 			"<hr/>",
 			'New Area...' => array(
@@ -199,7 +200,8 @@
 					'action' => 'add',
 					(isset($area)) ? $area : null 
 				),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+s'
 			),
 			'New Floating Shift...' => array(
 				'url' => array(
@@ -208,11 +210,13 @@
 					(isset($area)) ? $area : 0, 
 					(isset($person) && !$gaps) ? $person : 0 
 				),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+f'
 			),
 			'New Constant Shift...' => array(
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+c'
 			)
 		)
 	)

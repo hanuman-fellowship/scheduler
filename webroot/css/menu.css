@@ -109,3 +109,10 @@ background-color: #CCC;
 	white-space:nowrap;
 	color: #CCC;
 }
+
+span.key {
+	position:relative;
+	top:-22px;
+	float:right;
+	padding-right:3px;
+}

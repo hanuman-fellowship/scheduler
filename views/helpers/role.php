@@ -129,6 +129,7 @@ class RoleHelper extends AppHelper {
 								'shortcut' => $sub['shortcut'],
 								'codeBlock' => "clickLink($('sub{$menuNum}').down('a',{$i}))"
 							));
+							$subMenus[$menuNum] .= "<span class='key'>{$sub['shortcut']}</span>";
 						}
 						$i++;
 					}
