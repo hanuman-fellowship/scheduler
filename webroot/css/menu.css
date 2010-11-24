@@ -110,9 +110,8 @@ background-color: #CCC;
 	color: #CCC;
 }
 
-span.key {
+span.shortcut {
 	position:relative;
-	top:-22px;
 	float:right;
 	padding-right:3px;
 }
