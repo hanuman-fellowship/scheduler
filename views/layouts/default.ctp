@@ -5,6 +5,7 @@
 		<?=$title_for_layout?>
 	</title>	
 	<?=$html->css("screen") ?>
+	<?=$javascript->link('shortcut');?>
 	<?=$javascript->link('prototype');?>
 	<?=$javascript->link('scriptaculous');?>
 </head>
