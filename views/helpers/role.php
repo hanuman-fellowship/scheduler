@@ -23,6 +23,7 @@ class RoleHelper extends AppHelper {
 	}
 	
 	function menu($data) {
+		$View =& ClassRegistry::getObject('view'); 
 		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 		if($userRoles == array()) $userRoles[] = '';
 		$menuData = $this->html->css("menu");
@@ -86,6 +87,7 @@ class RoleHelper extends AppHelper {
 				}
 				if ($showSub) {
 					$subMenus[$menuNum] = "<div id='sub{$menuNum}' class='sub'>";
+					$i = 0;
 					foreach($top['sub'] as $sub_title => $sub) {
 						if (!is_array($sub)) { // no link or role, so draw and move on
 							$subMenus[$menuNum] .= "<span>{$sub}</span>";
@@ -115,7 +117,6 @@ class RoleHelper extends AppHelper {
 									);
 								} else {				
 									$type = 'html';
-									$attributes = array();
 								}
 							}				
 							$confirm = array_key_exists('confirm',$sub) ? $sub['confirm'] : null;
@@ -123,6 +124,13 @@ class RoleHelper extends AppHelper {
 						} else {
 							$subMenus[$menuNum] .= "<span>{$sub_title}</span>";
 						}
+						if (array_key_exists('shortcut',$sub)) {
+							echo $View->element('shortcut',array(
+								'shortcut' => $sub['shortcut'],
+								'codeBlock' => "clickLink($('sub{$menuNum}').down('a',{$i}))"
+							));
+						}
+						$i++;
 					}
 					$subMenus[$menuNum] .= '</div>';
 				}

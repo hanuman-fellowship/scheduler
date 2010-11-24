@@ -13,6 +13,28 @@
 	"Hello, {$userName}" => array(
 		'role' => array('operations','manager')
 	),	
+	'Personnel' => array(
+		'role' => array('personnel'),
+		'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
+		'sub' => array(
+			'Notes for Operations...' => array(
+				'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
+				'ajax'
+			),
+			"<hr/>",
+			'Change Password...' => array(
+				'url' => array('controller' => 'users', 'action' => 'changePassword'),
+				'ajax'
+			),
+			'Logout' => array(
+				'url' => array('controller' => 'users', 'action' => 'logout'),
+			)
+		)
+	),	
+	array(
+		'title' => ' | ',
+		'role' => array('personnel'),
+	),
 	'Operations' => array(
 		'role' => array('operations'),
 		'url' => '',
@@ -101,7 +123,8 @@
 			'View Schedule...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'p'
 			),
 			'View Profile...' => array(
 				'role' => array('operations'),
