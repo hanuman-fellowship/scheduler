@@ -109,3 +109,9 @@ background-color: #CCC;
 	white-space:nowrap;
 	color: #CCC;
 }
+
+span.shortcut {
+	position:relative;
+	float:right;
+	padding-right:3px;
+}

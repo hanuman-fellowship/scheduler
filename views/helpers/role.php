@@ -104,6 +104,14 @@ class RoleHelper extends AppHelper {
 								continue;
 							}
 						}
+						if (array_key_exists('shortcut',$sub)) {
+							echo $View->element('shortcut',array(
+								'shortcut' => $sub['shortcut'],
+								'codeBlock' => "clickLink($('sub{$menuNum}').down('a',{$i}))"
+							));
+							$subMenus[$menuNum] .= "<span class='shortcut'>{$sub['shortcut']}</span>";
+						}
+						$i++;
 						if (array_key_exists('url',$sub)) {
 							if (array_key_exists('ajax',$sub)) {
 								$type = 'ajax';
@@ -124,13 +132,6 @@ class RoleHelper extends AppHelper {
 						} else {
 							$subMenus[$menuNum] .= "<span>{$sub_title}</span>";
 						}
-						if (array_key_exists('shortcut',$sub)) {
-							echo $View->element('shortcut',array(
-								'shortcut' => $sub['shortcut'],
-								'codeBlock' => "clickLink($('sub{$menuNum}').down('a',{$i}))"
-							));
-						}
-						$i++;
 					}
 					$subMenus[$menuNum] .= '</div>';
 				}
