@@ -1,12 +1,26 @@
 var highlighted = '';
 var stopClick = false;
 
-function showAddShift(slot,day) {
-	var addElement = $('add_'+slot+'_'+day);
-	loc = findPos($(slot+'_'+day));
-	addElement.style.left = loc[0];
-	addElement.style.top = loc[1]+3+'px';
-	addElement.style.display = 'block';
+function showAddShift(elem) {
+	var all = $$('a.add');
+	for (var i = 0; i < all.length; i++) {
+		all[i].hide().rel = '';
+	}
+	loc = findPos(elem.up('td'));
+	elem.style.left = loc[0];
+	elem.style.top = loc[1]+3+'px';
+	elem.style.display = 'block';
+	elem.rel = 'active';
+}
+
+function hideAddShift(elem) {
+	elem.hide();
+	elem.rel = '';
+}
+
+function getActive() {
+	var active = $$('a.add[rel=active]').first();
+	return active ? active : $('add_1_1');
 }
 
 function clickLink(link) {

@@ -1,3 +1,4 @@
+<?= $this->element('keyboard_navigation')?>
 <?
 $isOperations = in_array(
 	'operations',
@@ -192,7 +193,10 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
 		<? if ($isOperations && $editable && !$this->params['isAjax'] && !$request
 		|| ($request && $editRequest)) { ?>
-		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>" onmouseover='showAddShift("<?=$slot_num ?>","<?=$day ?>")' onmouseout='$("add_<?=$slot_num.'_'.$day?>").hide()' > 
+		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>"
+			onmouseover='showAddShift($("add_<?=$slot_num?>_<?=$day?>"))'
+			onmouseout='hideAddShift($("add_<?=$slot_num?>_<?=$day?>"))'
+		> 
 			<? $url = (isset($area)) ? 
 				array('controller'=>'shifts','action'=>'add',$area[$request.'Area']['id'],
 					$day,
@@ -206,7 +210,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			?>
 			<?= !$gaps ? $ajax->link(' + ',$url,array(
 				'id'=>"add_{$slot_num}_{$day}", 
-				'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
+				'class' => 'add',
 				'update' => 'dialog_content',
 				'complete' => "openDialog('{$slot_num}_{$day}')",
 				'title' => isset($area) ? 'New Shift...' : 'Assign Shift...'
@@ -247,7 +251,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
  	</tr> 
 	<tr> 
 	<? } ?>	
-		<td id="0_0" onmouseover='showAddShift(0,0)' onmouseout='$("add_0_0").hide()' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
+		<td id="0_0" onmouseover='showAddShift($("add_0_0"))'
+			onmouseout='hideAddShift($("add_0_0"))' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 		<? if (isset($area)) { ?>
 			<?=$schedule->displayAreaFloating($area['FloatingShift'],$editRequest);?>
 			<? $area_id = $area[$request.'Area']['id']; ?>
@@ -269,7 +274,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),
 				array(
 					'id'=>"add_0_0", 
-					'style'=>"display:none;font-size:10pt;position:absolute;padding:3px;background-color:#DDDDDD",
+					'class' => 'add',
 					'update' => 'dialog_content',
 					'complete' => "openDialog('0_0',null,'top')",
 					'title' => 'New Floating Shift'
