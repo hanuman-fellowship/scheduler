@@ -1,3 +1,8 @@
+<? if ($this->params['isAjax'] && $area['Area']['id'] == 0) {
+	echo $javascript->codeBlock("window.location = '{$html->url('/')}'");
+	echo "Redirecting...";
+	die;
+} ?>
 <?=$this->element('menu',array('area'=>$area['Area']['id']));?>
 <?=$this->element('schedule_message');?>
 <? 
