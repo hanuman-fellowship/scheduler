@@ -8,6 +8,7 @@
 	'Login' => array(
 		'role' => array(''),
 		'url' => array('controller' => 'users', 'action' => 'login'),
+		'shortcut' => 'ctrl+l',
 		'ajax'
 	),
 	"Hello, {$userName}" => array(
@@ -112,6 +113,7 @@
 	),
 	'People' => array(
 		'url' => array('controller' => 'people', 'action' => 'schedule'),
+		'shortcut' => 'ctrl+p',
 		'ajax',
 		'sub' => array(
 			'hidden' => $hidden,
@@ -148,6 +150,7 @@
 	),
 	'Areas' => array(
 		'url' => array('controller' => 'areas', 'action' => 'select'),
+		'shortcut' => 'ctrl+a',
 		'ajax',
 		'sub' => array(
 			'hidden' => $hidden,
