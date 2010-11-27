@@ -4,16 +4,30 @@
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'return',
-	'codeBlock' =>"clickLink($$('a.add[rel=active]').first())"
+	'codeBlock' =>"
+		if ($('dialog').visible()) {
+			clickLink($('dialog').down('a[rel=active]'));
+		} else {
+			clickLink($$('a.add[rel=active]').first())
+		}
+	"
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'right',
-	'disable_in_dialog' => true,
 	'codeBlock' => "
-		var active = getActive();
-		var newActive = active.up('td').next('td').down('a.add');
-		newActive = newActive ? newActive : active;
-		showAddShift(newActive);
+		if ($('dialog').visible()) {
+			var active = $('dialog').down('a[rel=active]');
+			newActive = active ? active.up('div').next('div').down('a') : $('dialog').down('a');
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+			active.style.backgroundColor = '';
+			active.rel = '';
+		} else {
+			var active = getActive();
+			var newActive = active.up('td').next('td').down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
+		}
 	"
 ));?>
 <?= $this->element('shortcut',array(
@@ -28,12 +42,20 @@
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'left',
-	'disable_in_dialog' => true,
 	'codeBlock' => "
-		var active = getActive();
-		var newActive = active.up('td').previous('td').down('a.add');
-		newActive = newActive ? newActive : active;
-		showAddShift(newActive);
+		if ($('dialog').visible()) {
+			var active = $('dialog').down('a[rel=active]');
+			newActive = active ? active.up('div').previous('div').down('a') : $('dialog').down('a');
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+			active.style.backgroundColor = '';
+			active.rel = '';
+		} else {
+			var active = getActive();
+			var newActive = active.up('td').previous('td').down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
+		}
 	"
 ));?>
 <?= $this->element('shortcut',array(
@@ -48,57 +70,91 @@
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'up',
-	'disable_in_dialog' => true,
 	'codeBlock' => "
-		var active = getActive();
-		td = active.up('td');
-		for (tdNum = -1; td; tdNum++) {
-			td = td.previous('td');
+		if ($('dialog').visible()) {
+			var active = $('dialog').down('a[rel=active]');
+			newActive = active ? active.previous('a') : $('dialog').down('a');
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+			active.style.backgroundColor = '';
+			active.rel = '';
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			newActive = active.up('tr').previous('tr').down('td',tdNum).down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
 		}
-		newActive = active.up('tr').previous('tr').down('td',tdNum).down('a.add');
-		newActive = newActive ? newActive : active;
-		showAddShift(newActive);
 	"
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'alt+up',
-	'disable_in_dialog' => true,
 	'codeBlock' => "
-		var active = getActive();
-		td = active.up('td');
-		for (tdNum = -1; td; tdNum++) {
-			td = td.previous('td');
+		if ($('dialog').visible()) {
+			var active = $('dialog').down('a[rel=active]');
+			newActive = $('dialog').down('a');
+			if (!active) active = newActive;
+			active.style.backgroundColor = '';
+			active.rel = '';
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			var newActive = active.up('table').down('tr',1).down('td',tdNum).down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
 		}
-		var newActive = active.up('table').down('tr',1).down('td',tdNum).down('a.add');
-		newActive = newActive ? newActive : active;
-		showAddShift(newActive);
 	"
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'down',
-	'disable_in_dialog' => true,
 	'codeBlock' => "
-		var active = getActive();
-		td = active.up('td');
-		for (tdNum = -1; td; tdNum++) {
-			td = td.previous('td');
+		if ($('dialog').visible()) {
+			var active = $('dialog').down('a[rel=active]');
+			newActive = active ? active.next('a') : $('dialog').down('a');
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+			active.style.backgroundColor = '';
+			active.rel = '';
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			var newActive = active.up('tr').next('tr').down('td',tdNum).down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
 		}
-		var newActive = active.up('tr').next('tr').down('td',tdNum).down('a.add');
-		newActive = newActive ? newActive : active;
-		showAddShift(newActive);
 	"
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'alt+down',
-	'disable_in_dialog' => true,
 	'codeBlock' => "
-		var active = getActive();
-		td = active.up('td');
-		for (tdNum = -1; td; tdNum++) {
-			td = td.previous('td');
+		if ($('dialog').visible()) {
+			var active = $('dialog').down('a[rel=active]');
+			newActive = active ? active.next('a', 1) : $('dialog').down('a');
+			newActive = newActive ? newActive : active.next('a');
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+			active.style.backgroundColor = '';
+			active.rel = '';
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			var newActive = active.up('table').down('tr',4).down('td',tdNum).down('a.add'); 
+			showAddShift(newActive);
 		}
-		var newActive = active.up('table').down('tr',4).down('td',tdNum).down('a.add'); 
-		showAddShift(newActive);
 	"
 ));?>
 

@@ -8,6 +8,7 @@
 	<?=$javascript->link('shortcut');?>
 	<?=$javascript->link('prototype');?>
 	<?=$javascript->link('scriptaculous');?>
+	<?= $this->element('keyboard_navigation')?>
 </head>
 <body  onload="setScroll()">  
 	<div id="container">

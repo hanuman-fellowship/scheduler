@@ -10,6 +10,7 @@ class DialogHelper extends AppHelper {
 			return $this->javascript->codeBlock("
 				$('dialog').style.zIndex=1001;
 				$('{$first_field}').select();
+				$('{$first_field}').focus();
 			");
 		}
 	}

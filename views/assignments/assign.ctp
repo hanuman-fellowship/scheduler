@@ -20,7 +20,8 @@ $rcId = 0;
 			}
 			echo $html->link($person['name'],array($shift,$person['id']),array(
 				'class' => 'RC_' . $person['ResidentCategory']['id'],
-				'onclick'=>'wait();saveScroll()'
+				'onclick'=>'wait();saveScroll()',
+				'style' => 'background-color:#';
 			)) . '<br>';
 		}
 	}
