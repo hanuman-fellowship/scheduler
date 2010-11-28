@@ -1,6 +1,11 @@
 <?= $this->element('shortcut',array(
 	'shortcut' => 'esc',
-	'codeBlock' =>"hideDialog()"
+	'codeBlock' =>"
+		if ($('dialog').visible()) {
+			hideDialog();
+		} else {
+		}
+	"
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'return',
@@ -22,6 +27,7 @@
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
 			active.rel = '';
+			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
 			var newActive = active.up('td').next('td').down('a.add');
@@ -50,6 +56,7 @@
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
 			active.rel = '';
+			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
 			var newActive = active.up('td').previous('td').down('a.add');
@@ -78,6 +85,7 @@
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
 			active.rel = '';
+			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
 			td = active.up('td');
@@ -101,6 +109,7 @@
 			active.rel = '';
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
+			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
 			td = active.up('td');
@@ -123,6 +132,7 @@
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
 			active.rel = '';
+			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
 			td = active.up('td');
@@ -146,6 +156,7 @@
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
 			active.rel = '';
+			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
 			td = active.up('td');
