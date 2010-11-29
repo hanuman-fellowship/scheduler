@@ -6,16 +6,26 @@ function showAddShift(elem) {
 	for (var i = 0; i < all.length; i++) {
 		all[i].hide().rel = '';
 	}
-	var all = $$('a.time', 'span.assignment a');
-	for (var i = 0; i < all.length; i++) {
-		all[i].rel = '';
-		all[i].style.backgroundColor = '';
-	}
+	resetActive();
 	loc = findPos(elem.up('td'));
 	elem.style.left = loc[0];
 	elem.style.top = loc[1]+3+'px';
 	elem.style.display = 'block';
 	elem.rel = 'active';
+}
+
+function activate(elem) {
+	resetActive();
+	elem.style.backgroundColor = '#FFF8BA';
+	elem.rel = 'active';
+}
+
+function resetActive() {
+	var all = $$('a.time', 'span.assignment a');
+	for (var i = 0; i < all.length; i++) {
+		all[i].rel = '';
+		all[i].style.backgroundColor = '';
+	}
 }
 
 function hideAddShift(elem) {

@@ -45,8 +45,7 @@
 			newActive = active ? active.up('div').next('div').down('a') : dialog.down('a');
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			resetActive();
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -77,10 +76,9 @@
 			}
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.up('div').previous('div').down('a') : dialog.down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
+			activate(newActive);
 			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			resetActive();
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -111,10 +109,7 @@
 			}
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.previous('a') : dialog.down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -140,10 +135,7 @@
 			var active = dialog.down('a[rel=active]');
 			newActive = $('dialog').down('a');
 			if (!active) active = newActive;
-			active.style.backgroundColor = '';
-			active.rel = '';
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -168,10 +160,7 @@
 			}
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.next('a') : dialog.down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -197,10 +186,7 @@
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.next('a', 1) : dialog.down('a');
 			newActive = newActive ? newActive : active.next('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -245,9 +231,7 @@
 	'codeBlock' => "
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
-			var old = $('dialog').down('a[rel=active]');
-			old.style.backgroundColor = '';
-			old.rel = '';
+			resetActive();
 		}
 	"
 ));?>
@@ -256,9 +240,7 @@
 	'codeBlock' => "
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
-			var old = $('dialog').down('a[rel=active]');
-			old.style.backgroundColor = '';
-			old.rel = '';
+			resetActive();
 		}
 	"
 ));?>
@@ -267,18 +249,13 @@
 	'codeBlock' => "
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
-			var old = $('dialog').down('a[rel=active]');
-			old.style.backgroundColor = '';
-			old.rel = '';
+			resetActive();
 		} else {
 			var active = $$('a.time[rel=active]').first();
 			newActive = active ? active.up('span').next('span').down('a') :
 				$$('a.add[rel=active]').first().up('td').down('span').down('a');
 			newActive.up('td').down('a.add').hide();
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			activate(newActive);
 		}
 	"
 ));?>
@@ -287,18 +264,13 @@
 	'codeBlock' => "
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
-			var old = $('dialog').down('a[rel=active]');
-			old.style.backgroundColor = '';
-			old.rel = '';
+			resetActive();
 		} else {
 			var active = $$('a.time[rel=active]').first();
 			newActive = active ? active.up('span').previous('span').down('a') :
 				$$('a.add[rel=active]').first().up('td').down('span').down('a');
 			newActive.up('td').down('a.add').hide();
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			activate(newActive);
 		}
 	"
 ));?>
@@ -311,10 +283,7 @@
 			newActive = active ? active.up('span').next('span').down('a') :
 				$$('a.time[rel=active]').first().up('span').down('span').down('a');
 			newActive.up('td').down('a.time').style.backgroundColor = '';
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			activate(newActive);
 		}
 	"
 ));?>
@@ -327,10 +296,7 @@
 			newActive = active ? active.up('span').previous('span').down('a') :
 				$$('a.time[rel=active]').first().up('span').down('span').down('a');
 			newActive.up('td').down('a.time').style.backgroundColor = '';
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			activate(newActive);
 		}
 	"
 ));?>
