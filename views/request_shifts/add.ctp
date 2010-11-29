@@ -12,6 +12,7 @@
 		));
 		echo $form->input('day_id', array(
 			'default' => $day_id,
+			'id' => 'day_id'
 		));
 		echo $form->input('start', array(
 			'interval' => 15,
@@ -30,4 +31,4 @@
 	</fieldset>
 <?= $form->submit('Submit');?>
 <?php echo $form->end();?>
-<?=$this->element('message',array('default_field'=>'name'));?>
+<?=$this->element('message',array('default_field'=>'day_id'));?>

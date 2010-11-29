@@ -218,7 +218,8 @@ class ScheduleHelper extends AppHelper {
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog('{$shift['id']}')",
-							'title' => 'Edit Shift...'
+							'title' => 'Edit Shift...',
+							'class' => 'time'
 						),
 						'ajax'
 					)

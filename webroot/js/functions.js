@@ -19,6 +19,11 @@ function hideAddShift(elem) {
 }
 
 function getActive() {
+	var oldTime = $$('a.time[rel=active]').first();
+	if (oldTime) {
+		oldTime.rel = '';
+		oldTime.style.backgroundColor = '';
+	}
 	var active = $$('a.add[rel=active]').first();
 	return active ? active : $('add_1_1');
 }
