@@ -13,18 +13,17 @@ foreach($people as $category) {
 	<div class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
 		<strong><?=$categoryName?></strong><br/>
 <?	
-	$attributes = array(
-		'onClick' => 'wait()',
-		'class' => 'RC_' . $categoryId
-	);
 	foreach($category as $person) {
-		$last_style = ($last == $person['Person']['id']) ? array('<b><i>','</i></b>') : array('','');
-		echo $last_style[0].
-		$html->link(
+		$last_style = ($last == $person['Person']['id']) ? 'font-weight:bold;font-style:italic' : '';
+		echo $html->link(
 			$person['Person']['name'],
 			array('action'=>'schedule',$person['Person']['id']),
-			$attributes
-		) . $last_style[1].'<br>';
+			array(
+				'onClick' => 'wait()',
+				'class' => 'RC_' . $categoryId,
+				'style' => $last_style
+			)
+		) . '<br>';
 	}
 ?>
 	</div>

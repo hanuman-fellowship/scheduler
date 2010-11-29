@@ -6,10 +6,12 @@
 <?
 echo "<div class='tall left'>";
 foreach($areas as $id => $name) {
-	$last_style = ($last == $id) ? array('<b><i>','</i></b>') : array('','');
-	echo $last_style[0].
-	$html->link($name,array('action'=>'schedule',$id),array('onclick'=>'wait()')).
-	$last_style[1].'<br/>';
+	$last_style = ($last == $id) ? 'font-weight:bold;font-style:italic' : '';
+	echo $html->link($name,array('action'=>'schedule',$id),array(
+		'onclick'=>'wait()',
+		'style' => $last_style
+	)).
+	'<br/>';
 }
 echo "</div>";
 ?>
