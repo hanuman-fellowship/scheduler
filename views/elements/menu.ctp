@@ -8,6 +8,7 @@
 	'Login' => array(
 		'role' => array(''),
 		'url' => array('controller' => 'users', 'action' => 'login'),
+		'shortcut' => 'ctrl+l',
 		'ajax'
 	),
 	"Hello, {$userName}" => array(
@@ -27,7 +28,8 @@
 				'ajax'
 			),
 			'Logout' => array(
-				'url' => array('controller' => 'users', 'action' => 'logout')
+				'url' => array('controller' => 'users', 'action' => 'logout'),
+				'shortcut' => 'ctrl+l'
 			)
 		)
 	),	
@@ -63,6 +65,7 @@
 			),
 			'Logout' => array(
 				'url' => array('controller' => 'users', 'action' => 'logout'),
+				'shortcut' => 'ctrl+l'
 			)
 		)
 	),	
@@ -116,6 +119,7 @@
 	),
 	'People' => array(
 		'url' => array('controller' => 'people', 'action' => 'schedule'),
+		'shortcut' => 'ctrl+p',
 		'ajax',
 		'sub' => array(
 			'hidden' => $hidden,
@@ -152,6 +156,7 @@
 	),
 	'Areas' => array(
 		'url' => array('controller' => 'areas', 'action' => 'select'),
+		'shortcut' => 'ctrl+a',
 		'ajax',
 		'sub' => array(
 			'hidden' => $hidden,
@@ -227,16 +232,28 @@
 ));
 if ($session->read('Schedule.editable') && !isset($this->viewVars['area']['RequestArea'])) {
 ?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+u',
+	'codeBlock' => "clickLink($('undoLink'))"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+r',
+	'codeBlock' => "clickLink($('redoLink'))"
+));?>
 <div class='changes'>
 	<span class='change_message' id='undo_message' style='display:none'><?=$change_messages['undo']?></span>
 	<span class='change_message' id='redo_message' style='display:none'><?=$change_messages['redo']?></span>
 	<?= $change_messages['redo'] ? $html->link('Redo',array('controller'=>'changes','action'=>'redo'),array(
 		'onmouseover' => "$('redo_message').show()",
-		'onmouseout' => "$('redo_message').hide()"
+		'onmouseout' => "$('redo_message').hide()",
+		'id' => 'redoLink',
+		'title' => 'ctrl+r'
 	)) : "<span class='no_link'>Redo</span>";?>
 	<?= $change_messages['undo'] ? $html->link('Undo',array('controller'=>'changes','action'=>'undo'),array(
 		'onmouseover' => "$('undo_message').show()",
-		'onmouseout' => "$('undo_message').hide()"
+		'onmouseout' => "$('undo_message').hide()",
+		'id' => 'undoLink',
+		'title' => 'ctrl+u'
 	)) : "<span class='no_link'>Undo</span>";?>
 	<?=$ajax->link('View History',
 		array('controller'=>'changes','action'=>'history'),

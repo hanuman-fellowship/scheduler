@@ -9,6 +9,7 @@
 	<?php
 		echo $form->input('area_id', array(
 			'default' => $area_id,
+			'id' => 'area_id'
 		));
 		echo $form->input('day_id', array(
 			'default' => $day_id,
@@ -30,4 +31,4 @@
 	</fieldset>
 <?= $form->submit('Submit');?>
 <?php echo $form->end();?>
-<?=$this->element('message',array('default_field'=>'name'));?>
+<?=$this->element('message',array('default_field'=>'area_id'));?>

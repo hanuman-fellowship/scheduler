@@ -12,6 +12,7 @@ shortcut = {
 			'type':'keydown',
 			'propagate':false,
 			'disable_in_input':false,
+			'disable_in_dialog':false,
 			'target':document,
 			'keycode':false
 		}
@@ -39,6 +40,8 @@ shortcut = {
 
 				if(element.tagName == 'INPUT' || element.tagName == 'TEXTAREA') return;
 			}
+
+			if (opt['disable_in_dialog'] && $('dialog').visible()) return;
 	
 			//Find Which key is pressed
 			if (e.keyCode) code = e.keyCode;
@@ -207,7 +210,7 @@ shortcut = {
 	},
 
 	//Remove the shortcut - just specify the shortcut and I will remove the binding
-	'remove':function(shortcut_combination) {
+	'remove':function(shortcut_combination, keep) {
 		shortcut_combination = shortcut_combination.toLowerCase();
 		var binding = this.all_shortcuts[shortcut_combination];
 		delete(this.all_shortcuts[shortcut_combination])
@@ -216,8 +219,22 @@ shortcut = {
 		var ele = binding['target'];
 		var callback = binding['callback'];
 
-		if(ele.detachEvent) ele.detachEvent('on'+type, callback);
-		else if(ele.removeEventListener) ele.removeEventListener(type, callback, false);
-		else ele['on'+type] = false;
+		if (!keep) {
+			if(ele.detachEvent) ele.detachEvent('on'+type, callback);
+			else if(ele.removeEventListener) ele.removeEventListener(type, callback, false);
+			else ele['on'+type] = false;
+		}
+	},
+
+	'removeAll': function() {
+		for(x in this.all_shortcuts) {
+			this.remove(x);
+		}
+	},
+
+	'addKept': function() {
+		for(x in this.all_shortcuts) {
+			this.add(x);
+		}
 	}
 }

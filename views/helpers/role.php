@@ -58,6 +58,15 @@ class RoleHelper extends AppHelper {
 					'id'=>"menu_{$title}",
 					'rel'=>"sub{$menuNum}"
 				);
+				if (array_key_exists('shortcut',$top)) {
+					echo $View->element('shortcut',array(
+						'shortcut' => $top['shortcut'],
+						'codeBlock' => "clickLink($('menu_{$title}'))"
+					));
+					$attributes = array_merge($attributes,array(
+						'title' => "({$top['shortcut']})"
+					));
+				}
 				if (in_array('ajax',$top)) {
 					$type = 'ajax';
 					$attributes = array_merge($attributes,array(
@@ -87,7 +96,7 @@ class RoleHelper extends AppHelper {
 				}
 				if ($showSub) {
 					$subMenus[$menuNum] = "<div id='sub{$menuNum}' class='sub'>";
-					$i = 0;
+					$subNum = 0;
 					foreach($top['sub'] as $sub_title => $sub) {
 						if (!is_array($sub)) { // no link or role, so draw and move on
 							$subMenus[$menuNum] .= "<span>{$sub}</span>";
@@ -107,11 +116,11 @@ class RoleHelper extends AppHelper {
 						if (array_key_exists('shortcut',$sub)) {
 							echo $View->element('shortcut',array(
 								'shortcut' => $sub['shortcut'],
-								'codeBlock' => "clickLink($('sub{$menuNum}').down('a',{$i}))"
+								'codeBlock' => "clickLink($('sub{$menuNum}').down('a',{$subNum}))"
 							));
 							$subMenus[$menuNum] .= "<span class='shortcut'>{$sub['shortcut']}</span>";
 						}
-						$i++;
+						$subNum++;
 						if (array_key_exists('url',$sub)) {
 							if (array_key_exists('ajax',$sub)) {
 								$type = 'ajax';

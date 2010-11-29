@@ -1,4 +1,3 @@
-<?= $this->element('keyboard_navigation')?>
 <?
 $isOperations = in_array(
 	'operations',
