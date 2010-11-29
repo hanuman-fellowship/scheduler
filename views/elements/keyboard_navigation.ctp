@@ -36,8 +36,13 @@
 	'shortcut' => 'right',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.up('div').next('div').down('a') : $('dialog').down('a');
+			if ($('conflictsBox')) {
+				var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.up('div').next('div').down('a') : dialog.down('a');
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
@@ -65,8 +70,13 @@
 	'shortcut' => 'left',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.up('div').previous('div').down('a') : $('dialog').down('a');
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.up('div').previous('div').down('a') : dialog.down('a');
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
@@ -94,8 +104,13 @@
 	'shortcut' => 'up',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.previous('a') : $('dialog').down('a');
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.previous('a') : dialog.down('a');
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
@@ -117,7 +132,12 @@
 	'shortcut' => 'alt+up',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
 			newActive = $('dialog').down('a');
 			if (!active) active = newActive;
 			active.style.backgroundColor = '';
@@ -141,8 +161,13 @@
 	'shortcut' => 'down',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.next('a') : $('dialog').down('a');
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.next('a') : dialog.down('a');
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
@@ -164,8 +189,13 @@
 	'shortcut' => 'alt+down',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.next('a', 1) : $('dialog').down('a');
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.next('a', 1) : dialog.down('a');
 			newActive = newActive ? newActive : active.next('a');
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
@@ -211,9 +241,35 @@
 	"
 ));?>
 <?= $this->element('shortcut',array(
+	'shortcut' => 'shift+left',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			var old = $('dialog').down('a[rel=active]');
+			old.style.backgroundColor = '';
+			old.rel = '';
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'shift+right',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			var old = $('dialog').down('a[rel=active]');
+			old.style.backgroundColor = '';
+			old.rel = '';
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
 	'shortcut' => 'shift+down',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			var old = $('dialog').down('a[rel=active]');
+			old.style.backgroundColor = '';
+			old.rel = '';
 		} else {
 			var active = $$('a.time[rel=active]').first();
 			newActive = active ? active.up('span').next('span').down('a') :
@@ -230,6 +286,10 @@
 	'shortcut' => 'shift+up',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			var old = $('dialog').down('a[rel=active]');
+			old.style.backgroundColor = '';
+			old.rel = '';
 		} else {
 			var active = $$('a.time[rel=active]').first();
 			newActive = active ? active.up('span').previous('span').down('a') :
