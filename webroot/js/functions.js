@@ -21,7 +21,7 @@ function activate(elem) {
 }
 
 function resetActive() {
-	var all = $$('a.time', 'span.assignment a', '#dialog a');
+	var all = $$('a.time', 'span.assignment a[rel]', '#dialog a');
 	for (var i = 0; i < all.length; i++) {
 		all[i].rel = '';
 		all[i].style.backgroundColor = '';
