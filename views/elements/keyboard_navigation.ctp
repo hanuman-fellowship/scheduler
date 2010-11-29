@@ -43,9 +43,7 @@
 			}
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.up('div').next('div').down('a') : dialog.down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			resetActive();
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -77,8 +75,6 @@
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.up('div').previous('div').down('a') : dialog.down('a');
 			activate(newActive);
-			newActive.rel = 'active';
-			resetActive();
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();

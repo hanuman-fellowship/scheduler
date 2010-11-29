@@ -229,17 +229,13 @@ class ScheduleHelper extends AppHelper {
 				$this->session->read('Schedule.editable') && !$request
 				|| ($request && $editRequest) ? 'operations' : '' 
 			);
-			if (($request && $editRequest) || $this->session->read('Schedule.editable') && !$request) $this->html->link(
-				'delete',
-				array(
-					'operations' => array(
-						'url' => array('controller'=>'shifts','action'=>'delete',$shift['id']),
-						'attributes'=>array(
-							'style' => 'display:none'
-						)
-					)
-				)
-			);
+			if (($request && $editRequest) || $this->session->read('Schedule.editable') && !$request) {
+				$time .= $this->html->link(
+					'delete',
+					array('controller'=>'shifts','action'=>'delete',$shift['id']),
+					array('style' => 'display:none')
+				);
+			}
 			return "<span id='{$shift['id']}'><b>" .
 				$time . "</b><br/>" . $people . "</span><br/><br/>";
 		}
