@@ -13,10 +13,21 @@
 		if ($('dialog').visible()) {
 			clickLink($('dialog').down('a[rel=active]'));
 		} else {
-			if (shift = $$('a.time[rel=active]').first()) {
-				clickLink(shift);
+			var active = $$('span.assignment a.assign[rel=active]').first();
+			if (active) {
+				clickLink(active);
 			} else {
-				clickLink($$('a.add[rel=active]').first())
+				active = $$('span.assignment a[rel=active]').first();
+				if (active) {
+					clickLink(active.next('a'));
+				} else {
+					active = $$('a.time[rel=active]').first();
+					if (active) {
+						clickLink(active);
+					} else {
+						clickLink($$('a.add[rel=active]').first())
+					}
+				}
 			}
 		}
 	"
@@ -175,7 +186,7 @@
 
 <?// Click Day Off ?>
 <?= $this->element('shortcut',array(
-	'shortcut' => 'ctrl+d',
+	'shortcut' => 'ctrl+o',
 	'disable_in_dialog' => true,
 	'codeBlock' => "
 		var active = getActive();
@@ -207,6 +218,7 @@
 			var active = $$('a.time[rel=active]').first();
 			newActive = active ? active.up('span').next('span').down('a') :
 				$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			newActive.up('td').down('a.add').hide();
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
@@ -222,10 +234,57 @@
 			var active = $$('a.time[rel=active]').first();
 			newActive = active ? active.up('span').previous('span').down('a') :
 				$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			newActive.up('td').down('a.add').hide();
 			newActive.style.backgroundColor = '#FFF8BA';
 			newActive.rel = 'active';
 			active.style.backgroundColor = '';
 			active.rel = '';
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+down',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+		} else {
+			var active = $$('span.assignment a[rel=active]').first();
+			newActive = active ? active.up('span').next('span').down('a') :
+				$$('a.time[rel=active]').first().up('span').down('span').down('a');
+			newActive.up('td').down('a.time').style.backgroundColor = '';
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+			active.style.backgroundColor = '';
+			active.rel = '';
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+up',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+		} else {
+			var active = $$('span.assignment a[rel=active]').first();
+			newActive = active ? active.up('span').previous('span').down('a') :
+				$$('a.time[rel=active]').first().up('span').down('span').down('a');
+			newActive.up('td').down('a.time').style.backgroundColor = '';
+			newActive.style.backgroundColor = '#FFF8BA';
+			newActive.rel = 'active';
+			active.style.backgroundColor = '';
+			active.rel = '';
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+d',
+	'codeBlock' => "
+		var active = $$('span.assignment a[rel=active]').first();
+		if (active) {
+			clickLink(active);
+		} else {
+			active = $$('a.time[rel=active]').first();
+			if (active) {
+				clickLink(active.next('a')); 
+			}
 		}
 	"
 ));?>
