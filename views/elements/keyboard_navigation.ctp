@@ -8,6 +8,16 @@
 	"
 ));?>
 <?= $this->element('shortcut',array(
+	'shortcut' => 'tab',
+	'propagate' => true,
+	'codeBlock' =>"
+		if ($('dialog').visible()) {
+			resetActive();
+		} else {
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
 	'shortcut' => 'return',
 	'codeBlock' =>"
 		if ($('dialog').visible()) {
