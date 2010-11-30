@@ -56,7 +56,8 @@
 			"<hr/>",
 			'View Request...' => array(
 				'url' => array('controller' => 'RequestAreas', 'action' => 'view'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+r'
 			),
 			"<hr/>",
 			'Change Password...' => array(
@@ -84,14 +85,17 @@
 		'sub' => array(
 			'Select...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+h'
 			),
 			'View Past...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'past'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+o'
 			),
 			'View Gaps' => array(
 				'url' => array('controller' => 'people', 'action' => 'schedule','gaps'),
+				'shortcut' => 'ctrl+g'
 			),
 			"<hr/>",
 			'New...' => array(

@@ -8,12 +8,37 @@
 	"
 ));?>
 <?= $this->element('shortcut',array(
+	'shortcut' => 'tab',
+	'propagate' => true,
+	'codeBlock' =>"
+		if ($('dialog').visible()) {
+			resetActive();
+		} else {
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
 	'shortcut' => 'return',
 	'codeBlock' =>"
 		if ($('dialog').visible()) {
 			clickLink($('dialog').down('a[rel=active]'));
 		} else {
-			clickLink($$('a.add[rel=active]').first())
+			var active = $$('span.assignment a.assign[rel=active]').first();
+			if (active) {
+				clickLink(active);
+			} else {
+				active = $$('span.assignment a[rel=active]').first();
+				if (active) {
+					clickLink(active.next('a'));
+				} else {
+					active = $$('a.time[rel=active]').first();
+					if (active) {
+						clickLink(active);
+					} else {
+						clickLink($$('a.add[rel=active]').first())
+					}
+				}
+			}
 		}
 	"
 ));?>
@@ -21,12 +46,14 @@
 	'shortcut' => 'right',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.up('div').next('div').down('a') : $('dialog').down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			if ($('conflictsBox')) {
+				var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.up('div').next('div').down('a') : dialog.down('a');
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -50,12 +77,14 @@
 	'shortcut' => 'left',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.up('div').previous('div').down('a') : $('dialog').down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.up('div').previous('div').down('a') : dialog.down('a');
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -79,12 +108,14 @@
 	'shortcut' => 'up',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.previous('a') : $('dialog').down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.previous('a') : dialog.down('a');
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -102,13 +133,15 @@
 	'shortcut' => 'alt+up',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
 			newActive = $('dialog').down('a');
 			if (!active) active = newActive;
-			active.style.backgroundColor = '';
-			active.rel = '';
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
+			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -126,12 +159,14 @@
 	'shortcut' => 'down',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.next('a') : $('dialog').down('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.next('a') : dialog.down('a');
+			if (newActive) activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -149,13 +184,15 @@
 	'shortcut' => 'alt+down',
 	'codeBlock' => "
 		if ($('dialog').visible()) {
-			var active = $('dialog').down('a[rel=active]');
-			newActive = active ? active.next('a', 1) : $('dialog').down('a');
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.next('a', 1) : dialog.down('a');
 			newActive = newActive ? newActive : active.next('a');
-			newActive.style.backgroundColor = '#FFF8BA';
-			newActive.rel = 'active';
-			active.style.backgroundColor = '';
-			active.rel = '';
+			if (newActive) activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -171,7 +208,7 @@
 
 <?// Click Day Off ?>
 <?= $this->element('shortcut',array(
-	'shortcut' => 'ctrl+d',
+	'shortcut' => 'ctrl+o',
 	'disable_in_dialog' => true,
 	'codeBlock' => "
 		var active = getActive();
@@ -193,5 +230,93 @@
 			td = td.previous('td');
 		}
 		clickLink($('notes').down('a'));
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'shift+left',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'shift+right',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'shift+down',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		} else {
+			var active = $$('a.time[rel=active]').first();
+			newActive = active ? active.up('span').next('span').down('a') :
+				$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			newActive.up('td').down('a.add').hide();
+			activate(newActive);
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'shift+up',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		} else {
+			var active = $$('a.time[rel=active]').first();
+			newActive = active ? active.up('span').previous('span').down('a') :
+				$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			newActive.up('td').down('a.add').hide();
+			activate(newActive);
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+down',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+		} else {
+			var active = $$('span.assignment a[rel=active]').first();
+			newActive = active ? active.up('span').next('span').down('a') :
+				$$('a.time[rel=active]').first().up('span').down('span').down('a');
+			newActive.up('td').down('a.time').style.backgroundColor = '';
+			activate(newActive);
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+up',
+	'codeBlock' => "
+		if ($('dialog').visible()) {
+		} else {
+			var active = $$('span.assignment a[rel=active]').first();
+			newActive = active ? active.up('span').previous('span').down('a') :
+				$$('a.time[rel=active]').first().up('span').down('span').down('a');
+			newActive.up('td').down('a.time').style.backgroundColor = '';
+			activate(newActive);
+		}
+	"
+));?>
+<?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+d',
+	'codeBlock' => "
+		var active = $$('span.assignment a[rel=active]').first();
+		if (active) {
+			clickLink(active);
+		} else {
+			active = $$('a.time[rel=active]').first();
+			if (active) {
+				clickLink(active.next('a')); 
+			}
+		}
 	"
 ));?>

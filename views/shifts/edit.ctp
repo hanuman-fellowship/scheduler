@@ -8,7 +8,7 @@
  		<legend><?php __('Edit Shift');?></legend>
 	<?php
 		echo $form->hidden('id');
-		echo $form->input('area_id');
+		echo $form->input('area_id',array('id'=>'area_id'));
 		echo $form->input('day_id');
 		echo $form->input('start', array(
 			'interval' => 15,
@@ -30,4 +30,4 @@
 		'onclick'=>'wait();saveScroll()'
 	)
 );?>
-<?=$this->element('message',array('default_field'=>'name'));?>
+<?=$this->element('message',array('default_field'=>'area_id'));?>

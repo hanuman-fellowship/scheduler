@@ -135,7 +135,8 @@ class ScheduleHelper extends AppHelper {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
 						'onmouseover' => "$('goto_{$assignment[$request.'Assignment']['id']}').show()",
-						'onmouseout' => "$('goto_{$assignment[$request.'Assignment']['id']}').hide()"
+						'onmouseout' => "$('goto_{$assignment[$request.'Assignment']['id']}').hide()",
+						'class' => 'assignment'
 					));
 				}
 				$people .= $this->role->link(
@@ -190,7 +191,7 @@ class ScheduleHelper extends AppHelper {
 				
 			}
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {
-				$unassigned = $this->role->link(
+				$unassigned = "<span class='assignment'>".$this->role->link(
 					'________',
 					array(
 						'operations' => array(
@@ -198,14 +199,15 @@ class ScheduleHelper extends AppHelper {
 							'attributes'=>array(
 								'update'=>'dialog_content',
 								'complete'=>"openDialog('{$shift['id']}')",
-								'title' => 'Assign...'
+								'title' => 'Assign...',
+								'class' => 'assign'
 							),
 							'ajax'
 						)
 					),
 					$this->session->read('Schedule.editable') && !$request
 					|| ($request && $editRequest) ? 'operations' : '' 
-				);
+				)."</span>";
 				$people .= "{$unassigned}<br/>";
 			}
 		}
@@ -218,7 +220,8 @@ class ScheduleHelper extends AppHelper {
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog('{$shift['id']}')",
-							'title' => 'Edit Shift...'
+							'title' => 'Edit Shift...',
+							'class' => 'time'
 						),
 						'ajax'
 					)
@@ -226,6 +229,13 @@ class ScheduleHelper extends AppHelper {
 				$this->session->read('Schedule.editable') && !$request
 				|| ($request && $editRequest) ? 'operations' : '' 
 			);
+			if (($request && $editRequest) || $this->session->read('Schedule.editable') && !$request) {
+				$time .= $this->html->link(
+					'delete',
+					array('controller'=>'shifts','action'=>'delete',$shift['id']),
+					array('style' => 'display:none')
+				);
+			}
 			return "<span id='{$shift['id']}'><b>" .
 				$time . "</b><br/>" . $people . "</span><br/><br/>";
 		}

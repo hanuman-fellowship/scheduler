@@ -21,7 +21,6 @@ $rcId = 0;
 			echo $html->link($person['name'],array($shift,$person['id']),array(
 				'class' => 'RC_' . $person['ResidentCategory']['id'],
 				'onclick'=>'wait();saveScroll()',
-				'style' => 'background-color:#';
 			)) . '<br>';
 		}
 	}
@@ -32,9 +31,9 @@ $rcId = 0;
 	</div>
 	<div style="clear:both">
 		<?=$form->create('Assignment',array('type'=>'post','onSubmit'=>'wait()'));?>
-		Other: <?=$form->text('other',array('id' => 'other'));?>
+		Other: <?=$form->text('other',array('id' => 'other','tabindex'=>1));?>
 		<?=$form->hidden('shift',array('value'=>$shift));?>
 		<?=$form->end();?>
 	</div>
 </fieldset>
-<?=$this->element('message',array('default_field'=>'other'));?>
+<?=$this->element('message');?>
