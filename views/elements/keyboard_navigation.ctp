@@ -166,7 +166,7 @@
 			}
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.next('a') : dialog.down('a');
-			activate(newActive);
+			if (newActive) activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
@@ -192,7 +192,7 @@
 			var active = dialog.down('a[rel=active]');
 			newActive = active ? active.next('a', 1) : dialog.down('a');
 			newActive = newActive ? newActive : active.next('a');
-			activate(newActive);
+			if (newActive) activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
 			var active = getActive();
