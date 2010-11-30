@@ -10,7 +10,7 @@
 	<?=$javascript->link('scriptaculous');?>
 	<?= $this->element('keyboard_navigation')?>
 </head>
-<body  onload="setScroll()">  
+<body  onload="setScroll()" onkeypress="typeActivate(event)">  
 	<div id="container">
 		<div id="content">
 			<? if ($session->check('Message.flash')) { ?>

@@ -1,5 +1,36 @@
 var highlighted = '';
 var stopClick = false;
+var stringWindow = '';
+var lastTime;
+
+function typeActivate(e) {
+	if (!$('dialog').visible()) return;
+	var code;
+	var thisTime;
+	if (!e) var e = window.event;
+	if (e.keyCode) code = e.keyCode;
+	else if (e.which) code = e.which;
+	thisTime = new Date().getTime();
+	stringWindow = (thisTime - lastTime < 900) ? 
+		stringWindow + String.fromCharCode(code) :
+		String.fromCharCode(code);
+	lastTime = thisTime;
+	if ($('conflictsBox')) {
+		dialog = ($('conflictsBox').checked) ?
+			$$('#all a') :
+			$$('#available a');
+	} else {
+		dialog = $$('#dialog a');
+	}	
+	var done = false;
+	dialog.each(function(element) {
+		if (element.innerHTML.stripTags().toLowerCase().strip().startsWith(stringWindow) && !done) {
+			activate(element);
+			element.scrollIntoView();
+			done = true;
+		}
+	});
+}
 
 function showAddShift(elem) {
 	var all = $$('a.add');
