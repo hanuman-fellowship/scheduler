@@ -35,7 +35,12 @@
 					if (active) {
 						clickLink(active);
 					} else {
-						clickLink($$('a.add[rel=active]').first())
+						active = $$('span.shift a[rel=active]').first();
+						if (active) {
+							clickLink(active);
+						} else {
+							clickLink($$('a.add[rel=active]').first())
+						}
 					}
 				}
 			}
@@ -257,9 +262,15 @@
 			$('conflictsBox').click();
 			resetActive();
 		} else {
-			var active = $$('a.time[rel=active]').first();
-			newActive = active ? active.up('span').next('span').down('a') :
-				$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			if ($$('a.time').first()) { // area
+				var active = $$('a.time[rel=active]').first();
+				newActive = active ? active.up('span').next('span').down('a') :
+					$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			} else { // person
+				var active = $$('span.shift a[rel=active]').first();
+				newActive = active ? active.up('span.shift').next('span.shift').down('a') :
+					$$('a.add[rel=active]').first().up('td').down('span.shift').down('a');
+			}
 			newActive.up('td').down('a.add').hide();
 			activate(newActive);
 		}
@@ -316,6 +327,11 @@
 			active = $$('a.time[rel=active]').first();
 			if (active) {
 				clickLink(active.next('a')); 
+			} else {
+				active = $$('span.shift a[rel=active]').first();
+				if (active) {
+					clickLink(active.up().next('a'));
+				}
 			}
 		}
 	"
