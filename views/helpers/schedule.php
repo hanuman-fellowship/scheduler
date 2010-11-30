@@ -185,8 +185,9 @@ class ScheduleHelper extends AppHelper {
 								padding:5px',
 							'id'=>"goto_{$assignment[$request.'Assignment']['id']}"
 						)
-					)."</span>";
+					);
 				}
+				$people .= "</span>";
 
 				
 			}
