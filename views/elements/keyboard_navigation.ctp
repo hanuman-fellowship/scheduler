@@ -304,6 +304,7 @@
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'backspace',
+	'disable_in_input' => true,
 	'codeBlock' => "
 		var active = $$('span.assignment a[rel=active]').first();
 		if (active) {
