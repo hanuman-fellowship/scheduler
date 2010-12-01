@@ -78,7 +78,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					!$this->session->read('Schedule.editable')
 				) . "<br/>";
-				return $output;
+				return "<span class='shift'>{$output}</span>";
 			}
 		}
 		if (isset($assignment['ConstantShift'])) {
@@ -111,7 +111,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					!$this->session->read('Schedule.editable')
 				) . "</span><br/>";
-				return "<span id='constant_{$shift['id']}'>{$output}</span>";
+				return "<span class='shift' id='constant_{$shift['id']}'>{$output}</span>";
 			}
 		}
 	}
@@ -185,8 +185,9 @@ class ScheduleHelper extends AppHelper {
 								padding:5px',
 							'id'=>"goto_{$assignment[$request.'Assignment']['id']}"
 						)
-					)."</span>";
+					);
 				}
+				$people .= "</span>";
 
 				
 			}

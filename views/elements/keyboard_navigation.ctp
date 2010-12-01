@@ -35,7 +35,12 @@
 					if (active) {
 						clickLink(active);
 					} else {
-						clickLink($$('a.add[rel=active]').first())
+						active = $$('span.shift a[rel=active]').first();
+						if (active) {
+							clickLink(active);
+						} else {
+							clickLink($$('a.add[rel=active]').first())
+						}
 					}
 				}
 			}
@@ -205,21 +210,6 @@
 		}
 	"
 ));?>
-
-<?// Click Day Off ?>
-<?= $this->element('shortcut',array(
-	'shortcut' => 'ctrl+o',
-	'disable_in_dialog' => true,
-	'codeBlock' => "
-		var active = getActive();
-		td = active.up('td');
-		for (tdNum = -1; td; tdNum++) {
-			td = td.previous('td');
-		}
-		clickLink(active.up('tr').siblings().first().down('td',tdNum).down('a'));
-	"
-));?>
-
 <?= $this->element('shortcut',array(
 	'shortcut' => 'n',
 	'disable_in_dialog' => true,
@@ -257,9 +247,15 @@
 			$('conflictsBox').click();
 			resetActive();
 		} else {
-			var active = $$('a.time[rel=active]').first();
-			newActive = active ? active.up('span').next('span').down('a') :
-				$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			if ($$('a.time').first()) { // area
+				var active = $$('a.time[rel=active]').first();
+				newActive = active ? active.up('span').next('span').down('a') :
+					$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			} else { // person
+				var active = $$('span.shift a[rel=active]').first();
+				newActive = active ? active.up('span.shift').next('span.shift').down('a') :
+					$$('a.add[rel=active]').first().up('td').down('span.shift').down('a');
+			}
 			newActive.up('td').down('a.add').hide();
 			activate(newActive);
 		}
@@ -307,7 +303,7 @@
 	"
 ));?>
 <?= $this->element('shortcut',array(
-	'shortcut' => 'ctrl+d',
+	'shortcut' => 'backspace',
 	'codeBlock' => "
 		var active = $$('span.assignment a[rel=active]').first();
 		if (active) {
@@ -316,6 +312,11 @@
 			active = $$('a.time[rel=active]').first();
 			if (active) {
 				clickLink(active.next('a')); 
+			} else {
+				active = $$('span.shift a[rel=active]').first();
+				if (active) {
+					clickLink(active.up().next('a'));
+				}
 			}
 		}
 	"
