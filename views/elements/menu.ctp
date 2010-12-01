@@ -100,16 +100,19 @@
 			"<hr/>",
 			'New Working Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+n'
 			),
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'shift+ctrl+d'
 			),
 			'Merge...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax',
-				'hidden' => $hidden
+				'hidden' => $hidden,
+				'shortcut' => 'ctrl+m'
 			)
 		)
 	),
@@ -139,7 +142,8 @@
 			'New Person...' => array(
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'add'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'shift+ctrl+p'
 			),
 			"<hr/>",
 			'Restore Person...' => array(
@@ -180,7 +184,8 @@
 					'action' => 'clear',
 					(isset($area)) ? $area : null 
 				),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+c'
 			),
 			'Delete Area...' => array(
 				'role' => array('operations'),
@@ -224,8 +229,7 @@
 			),
 			'New Constant Shift...' => array(
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
-				'ajax',
-				'shortcut' => 'ctrl+c'
+				'ajax'
 			)
 		)
 	)

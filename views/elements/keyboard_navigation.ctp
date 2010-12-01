@@ -210,21 +210,6 @@
 		}
 	"
 ));?>
-
-<?// Click Day Off ?>
-<?= $this->element('shortcut',array(
-	'shortcut' => 'ctrl+o',
-	'disable_in_dialog' => true,
-	'codeBlock' => "
-		var active = getActive();
-		td = active.up('td');
-		for (tdNum = -1; td; tdNum++) {
-			td = td.previous('td');
-		}
-		clickLink(active.up('tr').siblings().first().down('td',tdNum).down('a'));
-	"
-));?>
-
 <?= $this->element('shortcut',array(
 	'shortcut' => 'n',
 	'disable_in_dialog' => true,
@@ -318,7 +303,7 @@
 	"
 ));?>
 <?= $this->element('shortcut',array(
-	'shortcut' => 'ctrl+d',
+	'shortcut' => 'backspace',
 	'codeBlock' => "
 		var active = $$('span.assignment a[rel=active]').first();
 		if (active) {
