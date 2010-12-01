@@ -558,6 +558,11 @@ CREATE TABLE `request_floating_shifts` (
   PRIMARY KEY (`id`),
   KEY `person_id` (`person_id`),
   KEY `request_area_id` (`request_area_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-
+CREATE TABLE  `personnel_notes` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`person_id` INT NOT NULL ,
+	`notes` TEXT NOT NULL ,
+	`schedule_id` INT NOT NULL
+) ENGINE = MYISAM;

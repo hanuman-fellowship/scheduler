@@ -12,7 +12,7 @@
 		'ajax'
 	),
 	"Hello, {$userName}" => array(
-		'role' => array('operations','manager')
+		'role' => array('operations','manager','personnel')
 	),	
 	'Personnel' => array(
 		'role' => array('personnel'),
@@ -33,10 +33,6 @@
 			)
 		)
 	),	
-	array(
-		'title' => ' | ',
-		'role' => array('personnel'),
-	),
 	'Operations' => array(
 		'role' => array('operations'),
 		'url' => '',
