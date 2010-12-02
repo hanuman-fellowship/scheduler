@@ -17,10 +17,12 @@
 	'Personnel' => array(
 		'role' => array('personnel'),
 		'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
+		'ajax',
 		'sub' => array(
 			'Notes for Operations...' => array(
 				'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+n'
 			),
 			"<hr/>",
 			'Change Password...' => array(
@@ -97,7 +99,7 @@
 			'New Working Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
 				'ajax',
-				'shortcut' => 'ctrl+n'
+				'shortcut' => 'shift+ctrl+n'
 			),
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
