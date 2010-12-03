@@ -1,4 +1,8 @@
 <?
+$isPersonnel = in_array(
+	'personnel',
+	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
+);
 $isOperations = in_array(
 	'operations',
 	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
@@ -317,3 +321,25 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr> 
 	<? } ?>	
 </table> 
+<? if (($isOperations || $isPersonnel) && isset($personnelNotes)) { ?>
+<div align="center">
+<div style="font-size:14pt;padding-top:5px;text-align:left;width:500px;padding-right:250px">
+	<?=$role->link("<b><u>Personnel Notes:</b></u><i> {$personnelNotes['PersonnelNote']['notes']}</i>", array(
+		'personnel' => array(
+			'url' => array(
+				'controller' => 'PersonnelNotes',
+				'action' => 'edit',
+				$personnelNotes['PersonnelNote']['person_id']
+			),
+			'attributes' => array(
+				'escape'=>false,
+				'update' => 'dialog_content',
+				'complete' => "openDialog('pnotes',false,'top')",
+				'id' => 'pnotes'
+			),
+			'ajax'
+		)
+	));?>
+</div>
+</div>
+<? } ?>
