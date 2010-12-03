@@ -128,6 +128,29 @@ class PeopleController extends AppController {
 		$this->savePage();
 		$this->set('people',$this->Person->getRestorable());
 	}
+
+	function previous($id) {
+		$people = $this->Person->listByResidentCategory(true);
+		while(list($key, $val) = each($people)) {
+			if ($key == $id) {
+				prev($people);
+				prev($people);
+				$goto = each($people);
+				$this->redirect(array('action'=>'schedule',$goto['key']));
+			}
+		}
+	}
+
+	function next($id) {
+		$people = $this->Person->listByResidentCategory(true);
+		while(list($key, $val) = each($people)) {
+			if ($key == $id) {
+				$goto = each($people);
+				$this->redirect(array('action'=>'schedule',$goto['key']));
+			}
+		}
+	}
+
 }
 	
 ?>

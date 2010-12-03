@@ -228,6 +228,8 @@
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
 			resetActive();
+		} else {
+			clickLink($('previousSchedule'));
 		}
 	"
 ));?>
@@ -237,6 +239,8 @@
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
 			resetActive();
+		} else {
+			clickLink($('nextSchedule'));
 		}
 	"
 ));?>

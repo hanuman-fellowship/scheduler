@@ -321,6 +321,40 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr> 
 	<? } ?>	
 </table> 
+<? if (!$request && !$gaps) { ?>
+	<table align='center' width='774' style='font-size:18pt;text-align:center'>
+		<tr>
+			<td align='left'>
+<?
+	echo $html->link('&larr;',
+		array(
+			'action' => 'previous',
+			isset($area) ? $area['Area']['id'] : $person['Person']['id']
+		),
+		array(
+			'escape' => false,
+			'id' => 'previousSchedule'
+		)
+	);
+?>
+		</td>
+		<td align='right'>
+<?
+	echo $html->link('&rarr;',
+		array(
+			'action' => 'next',
+			isset($area) ? $area['Area']['id'] : $person['Person']['id']
+		),
+		array(
+			'escape' => false,
+			'id' => 'nextSchedule'
+		)
+	);
+?>
+		</td>
+	</tr>
+</table>
+<? } ?>
 <? if (($isOperations || $isPersonnel) && isset($personnelNotes)) { ?>
 <div align="center">
 <div style="font-size:14pt;padding-top:5px;text-align:left;width:500px;padding-right:250px">
