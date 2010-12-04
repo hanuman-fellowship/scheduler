@@ -333,7 +333,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		),
 		array(
 			'escape' => false,
-			'id' => 'previousSchedule'
+			'id' => 'previousSchedule',
+			'title' => 'Previous Schedule (shift+left)'
 		)
 	);
 ?>
@@ -347,7 +348,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		),
 		array(
 			'escape' => false,
-			'id' => 'nextSchedule'
+			'id' => 'nextSchedule',
+			'title' => 'Next Schedule (shift+right)'
 		)
 	);
 ?>
