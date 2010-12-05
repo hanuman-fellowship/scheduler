@@ -322,7 +322,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	<? } ?>	
 </table> 
 <? if (!$request && !$gaps) { ?>
-	<table align='center' width='774' style='font-size:18pt;text-align:center'>
+	<table align='center' width='850px' style='position:relative;top:-30px;font-size:18pt;text-align:center'>
 		<tr>
 			<td align='left'>
 <?
@@ -357,25 +357,36 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr>
 </table>
 <? } ?>
-<? if (($isOperations || $isPersonnel) && isset($personnelNotes)) { ?>
-<div align="center">
-<div style="font-size:14pt;padding-top:5px;text-align:left;width:500px;padding-right:250px">
-	<?=$role->link("<b><u>Personnel Notes:</b></u><i> {$personnelNotes['PersonnelNote']['notes']}</i>", array(
-		'personnel' => array(
-			'url' => array(
-				'controller' => 'PersonnelNotes',
-				'action' => 'edit',
-				$personnelNotes['PersonnelNote']['person_id']
-			),
-			'attributes' => array(
-				'escape'=>false,
-				'update' => 'dialog_content',
-				'complete' => "openDialog('pnotes',false,'top')",
-				'id' => 'pnotes'
-			),
-			'ajax'
-		)
-	));?>
-</div>
-</div>
+<? if (($isOperations || $isPersonnel) && isset($personnelNotes) && !$gaps) { ?>
+<table align="center" width="774px" style="position:relative;top:-30px">
+	<tr>
+		<td valign="top" style="font-size:14pt;text-align:left">
+		<?=$role->link("<b><u>Personnel Notes:</b></u><i> {$personnelNotes['PersonnelNote']['notes']}</i>", array(
+			'personnel' => array(
+				'url' => array(
+					'controller' => 'PersonnelNotes',
+					'action' => 'edit',
+					$personnelNotes['PersonnelNote']['person_id']
+				),
+				'attributes' => array(
+					'escape'=>false,
+					'update' => 'dialog_content',
+					'complete' => "openDialog('pnotes',false,'top')",
+					'id' => 'pnotes'
+				),
+				'ajax'
+			)
+		));?>
+		</td>
+		<td width="20px"></td>
+		<td valign="top" style="font-size:14pt;text-align:left">
+			<b><u>Notes For Operations:</b></u><i>
+				<ul>
+					<li>Well, for one thing, there's nothing left to do</li>
+					<li>The other thing is that I have nothing to say about it...</li>
+				</ul>
+			</i>
+		</td>
+	</tr>
+</table>
 <? } ?>

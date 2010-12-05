@@ -229,6 +229,7 @@
 			$('conflictsBox').click();
 			resetActive();
 		} else {
+			$('previousSchedule').style.backgroundColor = '#FFF8BA';
 			clickLink($('previousSchedule'));
 		}
 	"
@@ -240,6 +241,7 @@
 			$('conflictsBox').click();
 			resetActive();
 		} else {
+			$('nextSchedule').style.backgroundColor = '#FFF8BA';
 			clickLink($('nextSchedule'));
 		}
 	"
