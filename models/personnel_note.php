@@ -13,16 +13,20 @@ class PersonnelNote extends AppModel {
 		return Set::combine($notes,'{n}.PersonnelNote.id','{n}.Person.name');
 	}
 
-	function makeOrGet($id) {
-		if (!$this->findByPersonId($id)) {
-			$this->create();
-			$this->save(array(
-				'PersonnelNote' => array(
-					'person_id' => $id
-				)
-			));
+	function save($data) {
+		if (isset($data['PersonnelNote']['note'])) {
+			if (trim($data['PersonnelNote']['note']) == '') {
+				if (isset($data['PersonnelNote']['id']))
+					$this->delete($data['PersonnelNote']['id']);
+				return;
+			}
 		}
-		return $this->findByPersonId($id);
+		if (!isset($data['PersonnelNote']['order'])) {
+			$data['PersonnelNote']['order'] = $this->field('order',array(
+				'person_id' => $data['PersonnelNote']['person_id']
+			),'order desc') + 1;
+		}
+		parent::save($data);
 	}
 
 }

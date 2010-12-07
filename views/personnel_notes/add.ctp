@@ -8,16 +8,15 @@
 	'before'=>'wait();saveScroll()'
 ));?>
 	<fieldset>
+ 		<legend><?php __("New Personnel Note");?></legend>
 	<?php
-		echo $form->hidden('id');
 		echo $form->hidden('person_id');
-		echo $form->hidden('order');
 		echo $form->input('note',array(
-			'id' => 'edit_note',
+			'id' => 'edit_notes',
 			'label' => false
 		));
 	?>
 <?php echo $form->submit('Submit',array('id'=>'submit_button'));?>
 <?=$form->end();?>
 	</fieldset>
-<?=$this->element('message',array('default_field'=>'edit_note'));?>
+<?=$this->element('message',array('default_field'=>'edit_notes'));?>

@@ -3,6 +3,20 @@ var stopClick = false;
 var stringWindow = '';
 var lastTime;
 
+function saveOrder(id) {
+	oldOrder = $(id+'_order').value;
+	order = Sortable.serialize(id);
+	items = order.split('&');
+	send = '';
+	for(i=0; i < items.length; i++) {
+		send = send + items[i].split('=')[1] + ',';
+	}
+	send = send.slice(0,send.length-1);
+	$(id+'_order').value = send;
+	$(id+'_submit').click();
+	return (oldOrder == $(id+'_order').value);
+}
+
 function typeActivate(e) {
 	if (!$('dialog').visible()) return;
 	var code;
