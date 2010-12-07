@@ -357,10 +357,11 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr>
 </table>
 <? } ?>
-<? if ($isPersonnel && isset($person) && !$gaps) { ?>
+<? if (($isPersonnel || $isOperations) && isset($person) && !$gaps) { ?>
 <table align="center" width="774px" style="position:relative;top:-30px">
 	<tr>
 		<td valign="top" style="font-size:14pt;text-align:left">
+		<? if ($isPersonnel) { ?>
 		<b><u>
 		<?=$role->link("Personnel Notes:", array(
 			'personnel' => array(
@@ -383,7 +384,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				<? foreach($personnelNotes as $id => $note) { ?>
 					<? $note_ids .= $id.','?>
 					<li id='lpnote_<?=$id?>'>
-					<?=$ajax->link('X',array(
+					<?=$ajax->link('edit',array(
 						'controller' => 'PersonnelNotes',
 						'action' => 'edit',
 						$id
@@ -405,15 +406,54 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				<? } ?>	
 				<? $note_ids = substr_replace($note_ids,'',-1) ?>
 			</ul>
+		<? } ?>
 		</td>
 		<td width="20px"></td>
 		<td valign="top" style="font-size:14pt;text-align:left">
-			<b><u>Notes For Operations:</b></u><i>
-				<ul>
-					<li>Well, for one thing, there's nothing left to do</li>
-					<li>The other thing is that I have nothing to say about it...</li>
-				</ul>
-			</i>
+			<b><u>
+		<?=$role->link((!$isPersonnel)? "Notes from Personnel:" : "Notes for Operations:", array(
+			'personnel' => array(
+				'url' => array(
+					'controller' => 'OperationsNotes',
+					'action' => 'add',
+					$person['Person']['id']
+				),
+				'attributes' => array(
+					'update' => 'dialog_content',
+					'complete' => "openDialog('onotes',false,'top')",
+					'id' => 'onotes'
+				),
+				'ajax'
+			)
+		));?>
+		</u></b>
+			<ul id='lonotes'>
+				<? $note_ids = ''?>
+				<? foreach($operationsNotes as $id => $note) { ?>
+					<? $note_ids .= $id.','?>
+					<li id='lonote_<?=$id?>'>
+					<?=$ajax->link('edit',array(
+						'controller' => 'OperationsNotes',
+						'action' => 'edit',
+						$id
+					),array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('lonote_".$id."')",
+						'style' => 'display:none',
+						'class' => 'edit',
+					));?>
+					<i>
+						<?=$html->tag('span',$note,array(
+							'onclick' => $isPersonnel ? "
+								if (saveOrder('lonotes')) 
+									clickLink(this.up('li').down('a.edit'));
+							" : '',
+							'onmouseover' => $isPersonnel ? "this.style.cursor='pointer'" : '',
+						))?>
+					</i></li>
+				<? } ?>	
+				<? $note_ids = substr_replace($note_ids,'',-1) ?>
+			</ul>
 		</td>
 	</tr>
 </table>
@@ -431,6 +471,21 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		));?>
 		<?=$form->hidden('lpnotes_order',array('id'=>'lpnotes_order','value'=>$note_ids));?>
 		<?=$form->submit('submit',array('id'=>'lpnotes_submit','style'=>'display:none'));?>
+		<?=$form->end()?>
+
+		<?=$ajax->sortable('lonotes')?>
+		<?=$ajax->form(array('type' => 'post',
+				'options' => array(
+						'id' => 'lonotes_form',
+						'model'=>'OperationsNote',
+						'url' => array(
+								'controller' => 'OperationsNotes',
+								'action' => 'reorder'
+						)
+				)
+		));?>
+		<?=$form->hidden('lonotes_order',array('id'=>'lonotes_order','value'=>$note_ids));?>
+		<?=$form->submit('submit',array('id'=>'lonotes_submit','style'=>'display:none'));?>
 		<?=$form->end()?>
 	<? } ?>
 <? } ?>

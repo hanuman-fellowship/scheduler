@@ -26,6 +26,10 @@ class PeopleController extends AppController {
 			$personnelNotes = $this->Person->PersonnelNote->findAllByPersonId($id);
 			$this->set('personnelNotes', Set::combine(
 				$personnelNotes,'{n}.PersonnelNote.id','{n}.PersonnelNote.note'));
+			$this->Person->OperationsNote->order = 'OperationsNote.order asc';
+			$personnelNotes = $this->Person->OperationsNote->findAllByPersonId($id);
+			$this->set('operationsNotes', Set::combine(
+				$personnelNotes,'{n}.OperationsNote.id','{n}.OperationsNote.note'));
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));
 		}

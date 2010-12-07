@@ -6,12 +6,13 @@ class Person extends AppModel {
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
-		'OffDay'
+		'OffDay',
+		'PersonnelNote',
+		'OperationsNote'
 	);
 	
 	var $hasOne = array(
-		'PeopleSchedules',
-		'PersonnelNote'
+		'PeopleSchedules'
 	);
 
 	function valid($data) {

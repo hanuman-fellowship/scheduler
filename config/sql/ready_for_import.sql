@@ -567,3 +567,11 @@ CREATE TABLE `personnel_notes` (
   `order` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+CREATE TABLE `operations_notes` (
+  `id` int(11) NOT NULL auto_increment,
+  `person_id` int(11) NOT NULL,
+  `note` text NOT NULL,
+  `order` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
