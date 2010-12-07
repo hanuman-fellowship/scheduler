@@ -8,6 +8,11 @@ class Assignment extends AppModel {
 		'Shift'
 	);
 	
+	function valid($data) {
+		if (trim($data['Assignment']['other']) == '') return false;
+		return true;
+	}
+
 	function description($changes) {
 		if (isset($changes['newData'])) {
 			$data = $changes['newData'];

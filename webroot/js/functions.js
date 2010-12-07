@@ -18,7 +18,14 @@ function saveOrder(id) {
 }
 
 function typeActivate(e) {
+	var element;
+	if(e.target) element=e.target;
+	else if(e.srcElement) element=e.srcElement;
+	if(element.nodeType==3) element=element.parentNode;
+	if(element.tagName == 'INPUT' || element.tagName == 'TEXTAREA') return;
+
 	if (!$('dialog').visible()) return;
+
 	var code;
 	var thisTime;
 	if (!e) var e = window.event;

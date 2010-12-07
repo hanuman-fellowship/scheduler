@@ -3,14 +3,15 @@
 ?>
 <fieldset>
 	<legend><?php __('View Person Schedule');?></legend>
-<div class='tall'>
+<table>
+<tr>
 <?
 foreach($people as $category) {
 	$categoryData = current($category);
 	$categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
 	$categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
 ?>	
-	<div class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
+	<td class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
 		<strong><?=$categoryName?></strong><br/>
 <?	
 	foreach($category as $person) {
@@ -26,10 +27,11 @@ foreach($people as $category) {
 		) . '<br>';
 	}
 ?>
-	</div>
+	</td>
 <?
 }
 ?>
-</div>
+</tr>
+</table>
 </fieldset>
 <?=$this->element('message');?>
