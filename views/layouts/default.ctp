@@ -8,6 +8,7 @@
 	<?=$javascript->link('shortcut');?>
 	<?=$javascript->link('prototype');?>
 	<?=$javascript->link('scriptaculous');?>
+	<?=$javascript->link('dragdrop');?>
 	<?= $this->element('keyboard_navigation')?>
 </head>
 <body  onload="setScroll()" onkeypress="typeActivate(event)">  

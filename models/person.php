@@ -6,7 +6,9 @@ class Person extends AppModel {
 	var $hasMany = array(
 		'Assignment',
 		'FloatingShift',
-		'OffDay'
+		'OffDay',
+		'PersonnelNote',
+		'OperationsNote'
 	);
 	
 	var $hasOne = array(
@@ -275,10 +277,10 @@ class Person extends AppModel {
 		return $people;
 	}
 
-	function getList() {
+	function getList($order = 'Person.first, Person.last') {
 		$currentPeople = $this->getCurrent();
 
-		$this->order = 'Person.first, Person.last';
+		$this->order = $order;
 		$this->recursive = -1;
 		$people = $this->find('all',array(
 			'conditions' => array(
@@ -290,10 +292,10 @@ class Person extends AppModel {
 		return $people;
 	}
 
-	function listByResidentCategory() {	
+	function listByResidentCategory($simple = false) {	
 		$currentPeople = $this->getCurrent();
 
-		$this->order = array('PeopleSchedules.resident_category_id','Person.first');
+		$this->order = array('PeopleSchedules.resident_category_id','Person.first','Person.last');
 		$this->sContain(
 			'PeopleSchedules.ResidentCategory'
 		);
@@ -303,7 +305,9 @@ class Person extends AppModel {
 			)
 		));
 		$this->addDisplayNamesAll($people);
-		$people = Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
+		$people = $simple ?
+			Set::combine($people,'{n}.Person.id','{n}.Person.name') :
+			Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
 		return $people;
 	}
 

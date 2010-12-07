@@ -1,4 +1,8 @@
 <?
+$isPersonnel = in_array(
+	'personnel',
+	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
+);
 $isOperations = in_array(
 	'operations',
 	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
@@ -309,3 +313,171 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr> 
 	<? } ?>	
 </table> 
+<? if (!$request && !$gaps) { ?>
+	<table align='center' width='850px' style='position:relative;top:-30px;font-size:18pt;text-align:center'>
+		<tr>
+			<td align='left'>
+<?
+	echo $html->link('&larr;',
+		array(
+			'action' => 'previous',
+			isset($area) ? $area['Area']['id'] : $person['Person']['id']
+		),
+		array(
+			'escape' => false,
+			'id' => 'previousSchedule',
+			'title' => 'Previous Schedule (shift+left)'
+		)
+	);
+?>
+		</td>
+		<td align='right'>
+<?
+	echo $html->link('&rarr;',
+		array(
+			'action' => 'next',
+			isset($area) ? $area['Area']['id'] : $person['Person']['id']
+		),
+		array(
+			'escape' => false,
+			'id' => 'nextSchedule',
+			'title' => 'Next Schedule (shift+right)'
+		)
+	);
+?>
+		</td>
+	</tr>
+</table>
+<? } ?>
+<? if (($isPersonnel || $isOperations) && isset($person) && !$gaps) { ?>
+<table align="center" width="774px" style="position:relative;top:-30px">
+	<tr>
+		<td valign="top" style="font-size:14pt;text-align:left">
+		<? if ($isPersonnel) { ?>
+		<b><u>
+		<?=$role->link("Personnel Notes:", array(
+			'personnel' => array(
+				'url' => array(
+					'controller' => 'PersonnelNotes',
+					'action' => 'add',
+					$person['Person']['id']
+				),
+				'attributes' => array(
+					'update' => 'dialog_content',
+					'complete' => "openDialog('pnotes',false,'top')",
+					'id' => 'pnotes'
+				),
+				'ajax'
+			)
+		));?>
+		</b></u>
+			<ul id='lpnotes'>
+				<? $note_ids = ''?>
+				<? foreach($personnelNotes as $id => $note) { ?>
+					<? $note_ids .= $id.','?>
+					<li id='lpnote_<?=$id?>'>
+					<?=$ajax->link('edit',array(
+						'controller' => 'PersonnelNotes',
+						'action' => 'edit',
+						$id
+					),array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('lpnote_".$id."')",
+						'style' => 'display:none',
+						'class' => 'edit',
+					));?>
+					<i>
+						<?=$html->tag('span',$note,array(
+							'onclick' => $isPersonnel ? "
+								if (saveOrder('lpnotes')) 
+									clickLink(this.up('li').down('a.edit'));
+							" : '',
+							'onmouseover' => "this.style.cursor='pointer'",
+						))?>
+					</i></li>
+				<? } ?>	
+				<? $note_ids = substr_replace($note_ids,'',-1) ?>
+			</ul>
+		<? } ?>
+		</td>
+		<td width="20px"></td>
+		<td valign="top" style="font-size:14pt;text-align:left">
+			<b><u>
+		<?=$role->link((!$isPersonnel)? "Notes from Personnel:" : "Notes for Operations:", array(
+			'personnel' => array(
+				'url' => array(
+					'controller' => 'OperationsNotes',
+					'action' => 'add',
+					$person['Person']['id']
+				),
+				'attributes' => array(
+					'update' => 'dialog_content',
+					'complete' => "openDialog('onotes',false,'top')",
+					'id' => 'onotes'
+				),
+				'ajax'
+			)
+		));?>
+		</u></b>
+			<ul id='lonotes'>
+				<? $note_ids = ''?>
+				<? foreach($operationsNotes as $id => $note) { ?>
+					<? $note_ids .= $id.','?>
+					<li id='lonote_<?=$id?>'>
+					<?=$ajax->link('edit',array(
+						'controller' => 'OperationsNotes',
+						'action' => 'edit',
+						$id
+					),array(
+						'update' => 'dialog_content',
+						'complete' => "openDialog('lonote_".$id."')",
+						'style' => 'display:none',
+						'class' => 'edit',
+					));?>
+					<i>
+						<?=$html->tag('span',$note,array(
+							'onclick' => $isPersonnel ? "
+								if (saveOrder('lonotes')) 
+									clickLink(this.up('li').down('a.edit'));
+							" : '',
+							'onmouseover' => $isPersonnel ? "this.style.cursor='pointer'" : '',
+						))?>
+					</i></li>
+				<? } ?>	
+				<? $note_ids = substr_replace($note_ids,'',-1) ?>
+			</ul>
+		</td>
+	</tr>
+</table>
+	<? if ($isPersonnel) { ?>
+		<?=$ajax->sortable('lpnotes')?>
+		<?=$ajax->form(array('type' => 'post',
+				'options' => array(
+						'id' => 'lpnotes_form',
+						'model'=>'PersonnelNote',
+						'url' => array(
+								'controller' => 'personnelNotes',
+								'action' => 'reorder'
+						)
+				)
+		));?>
+		<?=$form->hidden('lpnotes_order',array('id'=>'lpnotes_order','value'=>$note_ids));?>
+		<?=$form->submit('submit',array('id'=>'lpnotes_submit','style'=>'display:none'));?>
+		<?=$form->end()?>
+
+		<?=$ajax->sortable('lonotes')?>
+		<?=$ajax->form(array('type' => 'post',
+				'options' => array(
+						'id' => 'lonotes_form',
+						'model'=>'OperationsNote',
+						'url' => array(
+								'controller' => 'OperationsNotes',
+								'action' => 'reorder'
+						)
+				)
+		));?>
+		<?=$form->hidden('lonotes_order',array('id'=>'lonotes_order','value'=>$note_ids));?>
+		<?=$form->submit('submit',array('id'=>'lonotes_submit','style'=>'display:none'));?>
+		<?=$form->end()?>
+	<? } ?>
+<? } ?>

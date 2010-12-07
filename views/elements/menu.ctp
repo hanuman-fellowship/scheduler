@@ -12,15 +12,17 @@
 		'ajax'
 	),
 	"Hello, {$userName}" => array(
-		'role' => array('operations','manager')
+		'role' => array('operations','manager','personnel')
 	),	
 	'Personnel' => array(
 		'role' => array('personnel'),
 		'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
+		'ajax',
 		'sub' => array(
 			'Notes for Operations...' => array(
 				'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+n'
 			),
 			"<hr/>",
 			'Change Password...' => array(
@@ -33,10 +35,6 @@
 			)
 		)
 	),	
-	array(
-		'title' => ' | ',
-		'role' => array('personnel'),
-	),
 	'Operations' => array(
 		'role' => array('operations'),
 		'url' => '',
@@ -101,7 +99,7 @@
 			'New...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
 				'ajax',
-				'shortcut' => 'ctrl+n'
+				'shortcut' => 'shift+ctrl+n'
 			),
 			'Edit A Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'copy'),

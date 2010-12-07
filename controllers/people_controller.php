@@ -22,6 +22,14 @@ class PeopleController extends AppController {
 			$this->set('change_messages',$this->getChangeMessages());
 			$this->set('bounds', $this->getBounds());
 			if ($id == 'gaps') $this->render('gaps');
+			$this->Person->PersonnelNote->order = 'PersonnelNote.order asc';
+			$personnelNotes = $this->Person->PersonnelNote->findAllByPersonId($id);
+			$this->set('personnelNotes', Set::combine(
+				$personnelNotes,'{n}.PersonnelNote.id','{n}.PersonnelNote.note'));
+			$this->Person->OperationsNote->order = 'OperationsNote.order asc';
+			$personnelNotes = $this->Person->OperationsNote->findAllByPersonId($id);
+			$this->set('operationsNotes', Set::combine(
+				$personnelNotes,'{n}.OperationsNote.id','{n}.OperationsNote.note'));
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));
 		}
@@ -125,6 +133,29 @@ class PeopleController extends AppController {
 		$this->savePage();
 		$this->set('people',$this->Person->getRestorable());
 	}
+
+	function previous($id) {
+		$people = $this->Person->listByResidentCategory(true);
+		while(list($key, $val) = each($people)) {
+			if ($key == $id) {
+				prev($people);
+				prev($people);
+				$goto = each($people);
+				$this->redirect(array('action'=>'schedule',$goto['key']));
+			}
+		}
+	}
+
+	function next($id) {
+		$people = $this->Person->listByResidentCategory(true);
+		while(list($key, $val) = each($people)) {
+			if ($key == $id) {
+				$goto = each($people);
+				$this->redirect(array('action'=>'schedule',$goto['key']));
+			}
+		}
+	}
+
 }
 	
 ?>

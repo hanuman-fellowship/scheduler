@@ -105,5 +105,31 @@ class AreasController extends AppController {
 		$this->set('areas',$this->Area->sFind('list'));
 	}
 
+	function previous($id) {
+		$this->Area->recursive = -1;
+		$this->Area->order = 'name';
+		$areas = $this->Area->sFind('list');
+		while(list($key, $val) = each($areas)) {
+			if ($key == $id) {
+				prev($areas);
+				prev($areas);
+				$goto = each($areas); 
+				$this->redirect(array('action'=>'schedule',$goto['key']));
+			}
+		}
+	}
+
+	function next($id) {
+		$this->Area->recursive = -1;
+		$this->Area->order = 'name';
+		$areas = $this->Area->sFind('list');
+		while(list($key, $val) = each($areas)) {
+			if ($key == $id) {
+				$goto = each($areas);
+				$this->redirect(array('action'=>'schedule',$goto['key']));
+			}
+		}
+	}
+
 }
 ?>

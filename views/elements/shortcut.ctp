@@ -4,6 +4,7 @@ shortcut.add("<?=$shortcut?>",function() {
 	},{
 		'type':'keydown',
 		'propagate':<?= isset($propagate)? $propagate : 'false'?>,
+		'disable_in_input':<?= isset($disable_in_input)? $disable_in_input : 'false'?>,
 		'disable_in_dialog':<?= isset($disable_in_dialog)? $disable_in_dialog : 'false'?>,
 		'target':<?= isset($target)? "$('{$target}')" : "document"?>
 	});

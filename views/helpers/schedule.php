@@ -111,7 +111,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					!$this->session->read('Schedule.editable')
 				) . "</span><br/>";
-				return "<span class='shift' id='constant_{$shift['id']}'>{$output}</span>";
+				return "<span id='constant_{$shift['id']}'>{$output}</span>";
 			}
 		}
 	}

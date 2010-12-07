@@ -228,6 +228,9 @@
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
 			resetActive();
+		} else {
+			$('previousSchedule').style.backgroundColor = '#FFF8BA';
+			clickLink($('previousSchedule'));
 		}
 	"
 ));?>
@@ -237,6 +240,9 @@
 		if ($('dialog').visible()) {
 			$('conflictsBox').click();
 			resetActive();
+		} else {
+			$('nextSchedule').style.backgroundColor = '#FFF8BA';
+			clickLink($('nextSchedule'));
 		}
 	"
 ));?>
@@ -304,18 +310,21 @@
 ));?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'backspace',
+	'disable_in_input' => true,
 	'codeBlock' => "
+		// this one uses window.location instead of clickLink()
+		// because clickLink() was doing nasty things in some browsers
 		var active = $$('span.assignment a[rel=active]').first();
 		if (active) {
-			clickLink(active);
+			window.location = active.href;
 		} else {
 			active = $$('a.time[rel=active]').first();
 			if (active) {
-				clickLink(active.next('a')); 
+				window.location = active.next('a').href; 
 			} else {
 				active = $$('span.shift a[rel=active]').first();
 				if (active) {
-					clickLink(active.up().next('a'));
+					window.location = active.up().next('a').href;
 				}
 			}
 		}
