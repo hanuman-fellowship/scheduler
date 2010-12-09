@@ -36,10 +36,19 @@ class RequestAreasController extends AppController {
 		$areaName = $this->RequestArea->field('name',array('RequestArea.id' => $id));
 		$userEmail = Authsome::get('User.email');
 		$username = Inflector::humanize(Authsome::get('User.username'));
-		
+
 		// email the manager that the request was received
+		$this->Email->smtpOptions = array(
+			'port' => '465',
+			'timeout' => '30',
+			'auth' => true,
+			'host' => 'ssl://smtp.gmail.com',
+			'username' => 'jason.galuten@gmail.com',
+			'password' => 'jas3141'
+		);
+		$this->Email->delivery = 'smtp';
 		$this->Email->from    = 'Scheduler at MMC <do-not-reply@mountmadonna.org>';
-		$this->Email->to      = $userEmail;
+		$this->Email->to      = '<'.$userEmail.'>';
 		$this->Email->subject = 'Area Request Form Recieved!';
 		$this->Email->template = 'request_submit_mgr';
 		$this->set('username',$username);
@@ -49,8 +58,17 @@ class RequestAreasController extends AppController {
 
 		// email operations about the submitted request
 		$this->Email->reset();
+		$this->Email->smtpOptions = array(
+			'port' => '465',
+			'timeout' => '30',
+			'auth' => true,
+			'host' => 'ssl://smtp.gmail.com',
+			'username' => 'jason.galuten@gmail.com',
+			'password' => 'jas3141'
+		);
+		$this->Email->delivery = 'smtp';
 		$this->Email->from    = 'Scheduler at MMC <do-not-reply@mountmadonna.org>';
-		$this->Email->to      = $operationsEmail;
+		$this->Email->to      = '<'.$operationsEmail.'>';
 		$this->Email->subject = "{$areaName} Request Form Submitted";
 		$this->Email->template = 'request_submit_prsnl';
 		$this->set('username',$username);
