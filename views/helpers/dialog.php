@@ -15,4 +15,4 @@ class DialogHelper extends AppHelper {
 		}
 	}
 }
-?>	
+?>
