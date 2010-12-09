@@ -57,7 +57,7 @@
 				var dialog = $('dialog');
 			}
 			var active = dialog.down('a[rel=active]');
-			newActive = active ? active.up('div').next('div').down('a') : dialog.down('a');
+			newActive = active ? active.up('td').next('td').down('a') : dialog.down('a');
 			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {
@@ -88,7 +88,7 @@
 				var dialog = $('dialog');
 			}
 			var active = dialog.down('a[rel=active]');
-			newActive = active ? active.up('div').previous('div').down('a') : dialog.down('a');
+			newActive = active ? active.up('td').previous('td').down('a') : dialog.down('a');
 			activate(newActive);
 			newActive.scrollIntoView(false);
 		} else {

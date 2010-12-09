@@ -5,13 +5,14 @@ $lists = array('available','all');
 foreach($lists as $list) {
 $rcId = 0;
 ?><div style='clear:both'><?
-?><div class='tall' id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
+?><table id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
+?><tr><?
 	foreach($people as $person) {
 		if ($person['available'] === -1) {continue;} // already on this shift so don't ever show.
 		if ($person['available'] || $list == 'all') {
 			if ($rcId != $person['ResidentCategory']['id']) {
-				if ($rcId != 0) { echo "</div>";};
-				echo "<div class='left' style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
+				if ($rcId != 0) { echo "</td>";};
+				echo "<td class='left' style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
 				$rcId = $person['ResidentCategory']['id'];
 			}
 			echo $html->link($person['name'],array($shift,$person['id']),array(
@@ -20,11 +21,11 @@ $rcId = 0;
 			)) . '<br>';
 		}
 	}
-	echo '</div>';
-?></div><?
+	echo '</td>';
+?></tr><?
 }
 ?>
-	</div>
+	</table>
 	<div style="clear:both">
 		<?=$form->create('RequestAssignment',array('type'=>'post','onSubmit'=>'wait()'));?>
 		Other: <?=$form->text('other',array('id' => 'other'));?>

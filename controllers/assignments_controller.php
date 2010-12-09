@@ -10,6 +10,7 @@ class AssignmentsController extends AppController {
 		}
 		$this->redirectIfNotEditable();
 		if ($this->data) {
+			if (!$this->Assignment->valid($this->data)) $this->redirect($this->referer());
 			$shift_id = $this->data['Assignment']['shift'];
 			$person_id = 0;
 			$name = $this->data['Assignment']['other'];
