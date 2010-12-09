@@ -96,14 +96,14 @@
 				'shortcut' => 'ctrl+g'
 			),
 			"<hr/>",
-			'New...' => array(
+			'New Copy...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'copy'),
+				'ajax'
+			),
+			'New Blank...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
 				'ajax',
 				'shortcut' => 'shift+ctrl+n'
-			),
-			'Edit A Copy...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'copy'),
-				'ajax'
 			),
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
