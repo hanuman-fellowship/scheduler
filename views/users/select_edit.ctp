@@ -4,13 +4,12 @@
 <?
 echo "<div class='tall left'>";
 foreach($users as $id => $name) {
-	$cur_style = ($cur == $id) ? array('<b><i>','</i></b>') : array('','');
-	echo $cur_style[0].
-	$ajax->link($name,array($id),array(
+	$cur_style = ($cur == $id) ? "font-weight:bold;font-style:italic" : '';
+	echo $ajax->link($name,array($id),array(
 		'before'=>'wait()',
-		'update' => 'dialog_content'
-	)).
-	$cur_style[1].'<br/>';
+		'update' => 'dialog_content',
+		'style' => $cur_style
+	))."<br>";
 }
 echo "</div>";
 ?>

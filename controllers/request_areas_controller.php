@@ -31,38 +31,50 @@ class RequestAreasController extends AppController {
 		$this->redirectIfNotManager($id * -1);
 		$this->RequestArea->submit($id);
 
+		$operationsEmail = "shantam@mountmadonna.org";
+	
 		$areaName = $this->RequestArea->field('name',array('RequestArea.id' => $id));
 		$userEmail = Authsome::get('User.email');
 		$username = Inflector::humanize(Authsome::get('User.username'));
-		$message =  "Hello, {$username},\n";
-		$message .= "\n";
-		$message .= "Thank you for submiting the {$areaName} Request Form.";
-		$message .= " Operations has been notified, and will contact you if there are any questions.";
-		$message .= " Feel free to update your request and re-submit it at any time, but please";
-		$message .= " don't be too late! :)\n";
-		$message .= "\n";
-		$message .= "You are welcome to contact operations at operations@mountmadonna.org with any questions.\n";
-		$message .= "\n";
-		$message .= "Thanks,\n";
-		$message .= "Operations Team";
-		
-		$this->Email->from    = 'Scheduler at MMC <do-not-reply@mountmadonna.org>';
-		$this->Email->to      = $userEmail;
-		$this->Email->subject = 'Area Request Form Recieved!';
-		$this->Email->send($message);
 
-		$this->Email->reset();
+		// email the manager that the request was received
+		$this->Email->smtpOptions = array(
+			'port' => '465',
+			'timeout' => '30',
+			'auth' => true,
+			'host' => 'ssl://smtp.gmail.com',
+			'username' => 'jason.galuten@gmail.com',
+			'password' => 'jas3141'
+		);
+		$this->Email->delivery = 'smtp';
 		$this->Email->from    = 'Scheduler at MMC <do-not-reply@mountmadonna.org>';
-		$this->Email->to      = 'shantam@mountmadonna.org';
+		$this->Email->to      = '<'.$userEmail.'>';
+		$this->Email->subject = 'Area Request Form Recieved!';
+		$this->Email->template = 'request_submit_mgr';
+		$this->set('username',$username);
+		$this->set('areaName',$areaName);
+		$this->set('operationsEmail',$operationsEmail);
+		$this->Email->send();
+
+		// email operations about the submitted request
+		$this->Email->reset();
+		$this->Email->smtpOptions = array(
+			'port' => '465',
+			'timeout' => '30',
+			'auth' => true,
+			'host' => 'ssl://smtp.gmail.com',
+			'username' => 'jason.galuten@gmail.com',
+			'password' => 'jas3141'
+		);
+		$this->Email->delivery = 'smtp';
+		$this->Email->from    = 'Scheduler at MMC <do-not-reply@mountmadonna.org>';
+		$this->Email->to      = '<'.$operationsEmail.'>';
 		$this->Email->subject = "{$areaName} Request Form Submitted";
-		$message =  "Hello Operations Team,\n";
-		$message .= "\n";
-		$message .= "{$username} has submitted the {$areaName} Request form, and it is avaialable";
-		$message .= " for viewing in the Scheduler. {$username} can be contacted at {$userEmail}.\n";
-		$message .= "\n";
-		$message .= "Automatically Yours,\n";
-		$message .= "The Scheduler";
-		$this->Email->send($message);
+		$this->Email->template = 'request_submit_prsnl';
+		$this->set('username',$username);
+		$this->set('areaName',$areaName);
+		$this->set('userEmail',$userEmail);
+		$this->Email->send();
 
 		$this->redirect(array('controller'=>'requestAreas','action'=>'edit',$id*-1));
 	}
