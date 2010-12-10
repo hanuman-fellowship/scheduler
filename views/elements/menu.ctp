@@ -98,13 +98,15 @@
 			"<hr/>",
 			'New Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'copy'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'shift+ctrl+n'
 			),
 			'New Blank...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'add'),
 				'ajax',
-				'shortcut' => 'shift+ctrl+n'
+				'shortcut' => 'shift+ctrl+b'
 			),
+			"<hr/>",
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
 				'ajax',
