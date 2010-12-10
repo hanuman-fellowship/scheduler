@@ -403,7 +403,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<td width="20px"></td>
 		<td valign="top" style="font-size:14pt;text-align:left">
 			<b><u>
-		<? if ($operationsNotes) echo $role->link((!$isPersonnel)? "Notes from Personnel:" : "Notes for Operations:", array(
+		<? if ($operationsNotes || $isPersonnel) 
+		echo $role->link((!$isPersonnel)? "Notes from Personnel:" : "Notes for Operations:", array(
 			'personnel' => array(
 				'url' => array(
 					'controller' => 'OperationsNotes',
