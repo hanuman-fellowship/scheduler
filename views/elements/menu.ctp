@@ -14,27 +14,6 @@
 	"Hello, {$userName}" => array(
 		'role' => array('operations','manager','personnel')
 	),	
-	'Personnel' => array(
-		'role' => array('personnel'),
-		'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
-		'ajax',
-		'sub' => array(
-			'Notes for Operations...' => array(
-				'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
-				'ajax',
-				'shortcut' => 'ctrl+n'
-			),
-			"<hr/>",
-			'Change Password...' => array(
-				'url' => array('controller' => 'users', 'action' => 'changePassword'),
-				'ajax'
-			),
-			'Logout' => array(
-				'url' => array('controller' => 'users', 'action' => 'logout'),
-				'shortcut' => 'ctrl+l'
-			)
-		)
-	),	
 	'Operations' => array(
 		'role' => array('operations'),
 		'url' => '',
@@ -56,6 +35,27 @@
 				'url' => array('controller' => 'RequestAreas', 'action' => 'view'),
 				'ajax',
 				'shortcut' => 'ctrl+r'
+			),
+			"<hr/>",
+			'Change Password...' => array(
+				'url' => array('controller' => 'users', 'action' => 'changePassword'),
+				'ajax'
+			),
+			'Logout' => array(
+				'url' => array('controller' => 'users', 'action' => 'logout'),
+				'shortcut' => 'ctrl+l'
+			)
+		)
+	),	
+	'Personnel' => array(
+		'role' => array('personnel'),
+		'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
+		'ajax',
+		'sub' => array(
+			'Notes for Operations...' => array(
+				'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
+				'ajax',
+				'shortcut' => 'ctrl+n'
 			),
 			"<hr/>",
 			'Change Password...' => array(
@@ -136,11 +136,6 @@
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
 				'ajax',
 				'shortcut' => 'ctrl+p'
-			),
-			'View Profile...' => array(
-				'role' => array('operations'),
-				'url' => array('controller' => 'people', 'action' => 'profile'),
-				'ajax'
 			),
 			"<hr/>",
 			'New Person...' => array(

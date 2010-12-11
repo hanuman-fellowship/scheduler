@@ -71,9 +71,7 @@ class User extends AppModel {
 			}
 		}
 		$this->Manager->deleteAll(array(
-			'NOT' => array (
-				'area_id' => $data['User']['area_id']
-			)
+			'user_id' => $data['User']['id']
 		));
 		$this->saveAll($data);
 	}

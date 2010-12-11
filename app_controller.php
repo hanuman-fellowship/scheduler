@@ -55,6 +55,7 @@ class AppController extends Controller {
 		);
 		$managerMenu['Logout'] = array(
 			'url' => array('controller' => 'users', 'action' => 'logout'),
+			'shortcut' => 'ctrl+l'
 		);
 		$this->set('managerMenu', $managerMenu);
 
