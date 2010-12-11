@@ -3,6 +3,7 @@
 ?>
 <fieldset>
 	<legend><?php __('View Person Schedule');?></legend>
+<div class='tall'>
 <table>
 <tr>
 <?
@@ -11,7 +12,7 @@ foreach($people as $category) {
 	$categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
 	$categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
 ?>	
-	<td class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
+	<td valign='top' class='left' id='people<?=$categoryId; ?>' style='padding:10px'>
 		<strong><?=$categoryName?></strong><br/>
 <?	
 	foreach($category as $person) {
@@ -33,5 +34,6 @@ foreach($people as $category) {
 ?>
 </tr>
 </table>
+</div>
 </fieldset>
 <?=$this->element('message');?>

@@ -4,7 +4,7 @@
 $lists = array('available','all');
 foreach($lists as $list) {
 $rcId = 0;
-?><div style='clear:both'><?
+?><div class='tall' style='clear:both'><?
 ?><table id='<?=$list?>' <? if($list == 'all') { ?>style='display:none'<?}?>><?
 ?><tr><?
 	foreach($people as $person) {
@@ -12,7 +12,7 @@ $rcId = 0;
 		if ($person['available'] || $list == 'all') {
 			if ($rcId != $person['ResidentCategory']['id']) {
 				if ($rcId != 0) { echo "</td>";};
-				echo "<td class='left' style='float:left;padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
+				echo "<td class='left' valigh='top' style='padding:10px'><strong>{$person['ResidentCategory']['name']}</strong><br/>";	
 				$rcId = $person['ResidentCategory']['id'];
 			}
 			echo $html->link($person['name'],array($shift,$person['id']),array(
