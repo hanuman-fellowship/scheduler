@@ -54,7 +54,7 @@ class RequestAreasController extends AppController {
 		$this->set('username',$username);
 		$this->set('areaName',$areaName);
 		$this->set('operationsEmail',$operationsEmail);
-		$this->Email->send();
+//		$this->Email->send();
 
 		// email operations about the submitted request
 		$this->Email->reset();
@@ -74,7 +74,7 @@ class RequestAreasController extends AppController {
 		$this->set('username',$username);
 		$this->set('areaName',$areaName);
 		$this->set('userEmail',$userEmail);
-		$this->Email->send();
+//		$this->Email->send();
 
 		$this->redirect(array('controller'=>'requestAreas','action'=>'edit',$id*-1));
 	}
