@@ -52,12 +52,6 @@
 		'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
 		'ajax',
 		'sub' => array(
-			'Notes for Operations...' => array(
-				'url' => array('controller' => 'personnelNotes', 'action' => 'edit'),
-				'ajax',
-				'shortcut' => 'ctrl+n'
-			),
-			"<hr/>",
 			'Change Password...' => array(
 				'url' => array('controller' => 'users', 'action' => 'changePassword'),
 				'ajax'
