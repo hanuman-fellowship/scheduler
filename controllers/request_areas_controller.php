@@ -31,7 +31,7 @@ class RequestAreasController extends AppController {
 		$this->redirectIfNotManager($id * -1);
 		$this->RequestArea->submit($id);
 
-		$operationsEmail = "shantam@mountmadonna.org";
+		$operationsEmail = "operations@mountmadonna.org";
 	
 		$areaName = $this->RequestArea->field('name',array('RequestArea.id' => $id));
 		$userEmail = Authsome::get('User.email');
@@ -43,18 +43,18 @@ class RequestAreasController extends AppController {
 			'timeout' => '30',
 			'auth' => true,
 			'host' => 'ssl://smtp.gmail.com',
-			'username' => 'jason.galuten@gmail.com',
-			'password' => 'jas3141'
+			'username' => 'scheduler@mountmadonna.org',
+			'password' => 'omomomsched0m0m0m'
 		);
 		$this->Email->delivery = 'smtp';
-		$this->Email->from    = 'Scheduler at MMC <do-not-reply@mountmadonna.org>';
+		$this->Email->from    = 'Scheduler at MMC <scheduler@mountmadonna.org>';
 		$this->Email->to      = '<'.$userEmail.'>';
 		$this->Email->subject = 'Area Request Form Recieved!';
 		$this->Email->template = 'request_submit_mgr';
 		$this->set('username',$username);
 		$this->set('areaName',$areaName);
 		$this->set('operationsEmail',$operationsEmail);
-//		$this->Email->send();
+		$this->Email->send();
 
 		// email operations about the submitted request
 		$this->Email->reset();
@@ -63,18 +63,18 @@ class RequestAreasController extends AppController {
 			'timeout' => '30',
 			'auth' => true,
 			'host' => 'ssl://smtp.gmail.com',
-			'username' => 'jason.galuten@gmail.com',
-			'password' => 'jas3141'
+			'username' => 'scheduler@mountmadonna.org',
+			'password' => 'omomomsched0m0m0m'
 		);
 		$this->Email->delivery = 'smtp';
-		$this->Email->from    = 'Scheduler at MMC <do-not-reply@mountmadonna.org>';
+		$this->Email->from    = 'Scheduler at MMC <scheduler@mountmadonna.org>';
 		$this->Email->to      = '<'.$operationsEmail.'>';
 		$this->Email->subject = "{$areaName} Request Form Submitted";
 		$this->Email->template = 'request_submit_prsnl';
 		$this->set('username',$username);
 		$this->set('areaName',$areaName);
 		$this->set('userEmail',$userEmail);
-//		$this->Email->send();
+		$this->Email->send();
 
 		$this->redirect(array('controller'=>'requestAreas','action'=>'edit',$id*-1));
 	}
