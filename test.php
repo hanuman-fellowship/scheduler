@@ -1,16 +1,20 @@
 <?
 
-$i = array(
-	'hello' => array(
-		'yes' => 'cool'
-	),
-	'goodbye' => array(
-		'no' => 'not cool'
-	)
-);
+$b = '';
+$a = "hello";
+$b .= "<{$a}>, ";
+$b .= "<{$a}>, ";
+echo $b;
 
-$m = array_values($i);
-print_r($m);
+
+
+
+
+
+
+
+
+
 
 
 ?>

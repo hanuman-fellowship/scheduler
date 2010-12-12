@@ -2,6 +2,7 @@
 class UsersController extends AppController {
 
 	var $name = 'Users';
+	var $components = array('Email');
 		
     public function login() {
 		if (empty($this->data)) {
@@ -57,6 +58,47 @@ class UsersController extends AppController {
 		}
 	}
 
+	function _randomPassword($length = 4) {
+		$password = "";
+		$possible = "0123456789bcdfghjkmnpqrstvwxyz"; 
+		$i = 0; 
+		while ($i < $length) { 
+			$char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+			if (!strstr($password, $char)) { 
+				$password .= $char;
+				$i++;
+			}
+		}
+		return $password;
+	}
+
+	function resetPassword() {
+		if (!empty($this->data)) {
+			$this->User->recursive = -1;
+			if ($user = $this->User->findByEmail($this->data['User']['email'])) {
+				$userEmail = $user['User']['email'];
+				$username = Inflector::humanize($user['User']['username']);
+
+				$password = $this->_randomPassword();
+	
+				$this->User->save(array(
+					'id' => $user['User']['id'],
+					'password' => Authsome::hash($password)
+				));
+			
+				$this->_sendEmail($userEmail, 'Password Request', 'reset_password', array(
+					'username' => $username,
+					'password' => $password,
+					'operationsEmail' => $this->operationsEmail
+				));
+				$this->set('flash','Please check your email');
+			} else {
+				$this->set('errorMessage','Email not recognized');
+			}
+		}
+	}
+			
+
 	function delete($id = null) {
 		$this->redirectIfNot('operations');
 		if ($id) {
@@ -98,5 +140,20 @@ class UsersController extends AppController {
 		$this->Area->order = 'name';
 		$this->set('areas',$this->Area->sFind('list'));
 	}
+
+	function emailUsers() {
+		$this->redirectIfNot('operations');
+		if (!empty($this->data)) {
+			$E = $this->data['User'];
+			if (!$this->_sendEmail($E['to'],$E['subject'],null,$E['message'])) {
+				$this->set('errorMessage',$this->Email->smtpError);
+			} else {
+				$this->autoRender = false;
+				echo "Your message has been sent!";
+			}
+		}
+		$this->set('users', $this->User->find('all'));
+	}
+
 }
 ?>

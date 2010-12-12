@@ -18,6 +18,7 @@
 			<? 		$session->flash(); ?>
 			<? } ?>
 			<!-- content -->
+			<?=$this->Session->flash('email')?>
 			<?=$content_for_layout?>
 		</div>
 	</div>

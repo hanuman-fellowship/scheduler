@@ -31,50 +31,35 @@ class RequestAreasController extends AppController {
 		$this->redirectIfNotManager($id * -1);
 		$this->RequestArea->submit($id);
 
-		$operationsEmail = "operations@mountmadonna.org";
-	
 		$areaName = $this->RequestArea->field('name',array('RequestArea.id' => $id));
 		$userEmail = Authsome::get('User.email');
 		$username = Inflector::humanize(Authsome::get('User.username'));
 
 		// email the manager that the request was received
-		$this->Email->smtpOptions = array(
-			'port' => '465',
-			'timeout' => '30',
-			'auth' => true,
-			'host' => 'ssl://smtp.gmail.com',
-			'username' => 'scheduler@mountmadonna.org',
-			'password' => 'omomomsched0m0m0m'
-		);
-		$this->Email->delivery = 'smtp';
-		$this->Email->from    = 'Scheduler at MMC <scheduler@mountmadonna.org>';
-		$this->Email->to      = '<'.$userEmail.'>';
-		$this->Email->subject = 'Area Request Form Recieved!';
-		$this->Email->template = 'request_submit_mgr';
-		$this->set('username',$username);
-		$this->set('areaName',$areaName);
-		$this->set('operationsEmail',$operationsEmail);
-		$this->Email->send();
+		if (!$this->_sendEmail(
+			$userEmail, 
+			'Area Request Form Recieved!', 
+			'request_submit_mgr',
+			array(
+				'username' => $username,
+				'areaName' => $areaName,
+				'operationsEmail' => $this->operationsEmail
+			)
+		)) $this->set('errorMessage',$this->Email->smtpError);
+
+		$this->Email->reset();
 
 		// email operations about the submitted request
-		$this->Email->reset();
-		$this->Email->smtpOptions = array(
-			'port' => '465',
-			'timeout' => '30',
-			'auth' => true,
-			'host' => 'ssl://smtp.gmail.com',
-			'username' => 'scheduler@mountmadonna.org',
-			'password' => 'omomomsched0m0m0m'
-		);
-		$this->Email->delivery = 'smtp';
-		$this->Email->from    = 'Scheduler at MMC <scheduler@mountmadonna.org>';
-		$this->Email->to      = '<'.$operationsEmail.'>';
-		$this->Email->subject = "{$areaName} Request Form Submitted";
-		$this->Email->template = 'request_submit_prsnl';
-		$this->set('username',$username);
-		$this->set('areaName',$areaName);
-		$this->set('userEmail',$userEmail);
-		$this->Email->send();
+		if ($this->_sendEmail(
+			$this->operationsEmail, 
+			"{$areaName} Request Form Submitted",
+			'request_submit_prsnl',
+			array(
+				'username' => $username,
+				'areaName' => $areaName,
+				'userEmail' => $userEmail
+			)
+		)) $this->set('errorMessage',$this->Email->smtpError);
 
 		$this->redirect(array('controller'=>'requestAreas','action'=>'edit',$id*-1));
 	}

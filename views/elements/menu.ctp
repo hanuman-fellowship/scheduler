@@ -31,6 +31,12 @@
 				'ajax'
 			),
 			"<hr/>",
+			'Email Users...' => array(
+				'url' => array('controller' => 'users', 'action' => 'emailUsers'),
+				'ajax',
+				'shortcut' => 'ctrl+e'
+			),
+			"<hr/>",
 			'View Request...' => array(
 				'url' => array('controller' => 'RequestAreas', 'action' => 'view'),
 				'ajax',

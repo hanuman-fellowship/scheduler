@@ -9,6 +9,10 @@ echo $ajax->form($this->action,'post',array(
 ));
 echo $form->input('username', array('id'=>'username'));
 echo $form->input('password');
+echo $ajax->link('Forgot Password',array('controller'=>'users','action'=>'resetPassword'),array(
+	'update' => 'dialog_content',
+	'style' => 'font-size:10px'
+));
 echo $form->submit('Login');
 echo $form->end();
 ?>

@@ -2,6 +2,10 @@
 
 class AppController extends Controller {
 	var $helpers = array('Html','Session','Form','Ajax','Javascript','Role', 'Time','Dialog');
+// live:	
+	var $operationsEmail = 'operations@mountmadonna.org';
+// testing:
+//	var $operationsEmail = 'jason.galuten@gmail.com';
 	
     public $components = array(
     	'Session',
@@ -205,6 +209,39 @@ class AppController extends Controller {
 	function beforeRender() {
 		if ($this->modelClass != 'CakeError') {
 			$this->{$this->modelClass}->doQueue();
+		}
+	}
+
+	function _sendEmail($to, $subject, $template, $viewVars) {
+		$this->Email->from  = 'Scheduler at MMC <scheduler@mountmadonna.org>';
+		$this->Email->delivery = 'smtp';
+		$this->Email->smtpOptions = array(
+			'port' => '465',
+			'timeout' => '30',
+			'auth' => true,
+			'host' => 'ssl://smtp.gmail.com',
+			'username' => 'scheduler@mountmadonna.org',
+			'password' => 'omomomsched0m0m0m'
+		);
+		if (is_array($to)) {
+			$emails = '';
+			foreach($to as &$email) {
+				$email = "<{$email}>";
+			}
+			$this->Email->to = '<scheduler@mountmadonna.org>';
+			$this->Email->bcc = $to;
+		} else {
+			$this->Email->to = "<{$to}>";
+		}
+		$this->Email->subject = $subject;
+		if ($template) $this->Email->template = $template;
+		if (is_array($viewVars)) {
+			foreach($viewVars as $key => $val) {
+				$this->set($key, $val);
+			}
+			return $this->Email->send();
+		} else {
+			return $this->Email->send($viewVars);
 		}
 	}
 
