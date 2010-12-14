@@ -548,10 +548,11 @@ CREATE TABLE `request_shifts` (
 -- Table structure for table `request_floating_shifts`
 --
 CREATE TABLE `email_auths` (
-`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`username` VARCHAR( 30 ) NOT NULL ,
-`password` VARCHAR( 30 ) NOT NULL
-) ENGINE = MYISAM;
+  `id` int(11) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(30) NOT NULL
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
 
 CREATE TABLE `request_floating_shifts` (
   `id` int(11) NOT NULL auto_increment,

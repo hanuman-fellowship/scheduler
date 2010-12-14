@@ -154,8 +154,8 @@ class UsersController extends AppController {
 				$E['subject'],
 				null,
 				$E['message'],
-				"Operations <{$auth['EmailAuth']['username']}>",
-				$auth['EmailAuth']['username'],
+				"Operations <{$auth['EmailAuth']['email']}>",
+				$auth['EmailAuth']['email'],
 				$auth['EmailAuth']['password']
 			)) {
 				$this->set('errorMessage',$this->Email->smtpError);
@@ -171,7 +171,7 @@ class UsersController extends AppController {
 				'{n}.User.username'
 			)
 		);
-		$this->set('operationsEmail',$auth['EmailAuth']['username']);
+		$this->set('operationsEmail',$auth['EmailAuth']['email']);
 	}
 
 }
