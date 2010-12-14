@@ -239,5 +239,19 @@ class RequestArea extends AppModel {
 		return $area;
 	}	
 
+	function delete($ids) {
+		$deleteThese = '';
+		foreach($ids as $id) {
+			$other = $id*-1;
+			$deleteThese .= "'{$id}','{$other}',";
+		}
+		$deleteThese = substr($deleteThese,0,-1);
+		$this->query("DELETE FROM request_areas WHERE id IN ({$deleteThese})");
+		$this->query("DELETE FROM request_assignments WHERE request_shift_id IN
+			(SELECT id from request_shifts where request_area_id IN ({$deleteThese}))");
+		$this->query("DELETE FROM request_shifts WHERE request_area_id IN ({$deleteThese})");
+		$this->query("DELETE FROM request_floating_shifts WHERE request_area_id IN ({$deleteThese})");
+	}
+
 }
 ?>

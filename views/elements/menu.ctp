@@ -42,6 +42,11 @@
 				'ajax',
 				'shortcut' => 'ctrl+r'
 			),
+			'Clear Requests...' => array(
+				'url' => array('controller' => 'RequestAreas', 'action' => 'delete'),
+				'ajax',
+				'shortcut' => 'ctrl+d'
+			),
 			"<hr/>",
 			'Change Password...' => array(
 				'url' => array('controller' => 'users', 'action' => 'changePassword'),

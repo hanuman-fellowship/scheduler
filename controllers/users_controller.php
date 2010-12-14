@@ -147,7 +147,13 @@ class UsersController extends AppController {
 			$E = $this->data['User'];
 			if (!$E['to']) {
 				$this->set('errorMessage','This is not a journal entry. Who are we sending this to?');
-			} elseif (!$this->_sendEmail($E['to'],$E['subject'],null,$E['message'])) {
+			} elseif (!$this->_sendEmail(
+				$E['to'],
+				$E['subject'],
+				null,
+				$E['message'],
+				"Operations <{$this->operationsEmail}>"
+			)) {
 				$this->set('errorMessage',$this->Email->smtpError);
 			} else {
 				$this->render('sent');

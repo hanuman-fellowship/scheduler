@@ -75,4 +75,19 @@ class RequestAreasController extends AppController {
 		}
 	}
 
+	function delete($id = null) {
+		$this->redirectIfNot('operations');
+		$this->RequestArea->order = 'name';
+		$this->set('areas',$this->RequestArea->find('list'));
+		if (!empty($this->data) ) {
+			$this->set('area_id',$this->data['RequestArea']['area_id']);
+			$this->set('url', $this->referer());
+			if ($this->data['RequestArea']['area_id']) {
+				$this->RequestArea->delete($this->data['RequestArea']['area_id']);
+			}
+		} else {
+			$this->data['RequestArea']['area_id'] = array($id);
+		}
+	}
+
 }

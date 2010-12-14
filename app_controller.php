@@ -212,8 +212,9 @@ class AppController extends Controller {
 		}
 	}
 
-	function _sendEmail($to, $subject, $template, $viewVars) {
-		$this->Email->from  = 'Scheduler at MMC <scheduler@mountmadonna.org>';
+	function _sendEmail($to, $subject, $template, $viewVars, $from = null) {
+		$this->Email->from  = $from ? $from : 'Scheduler at MMC <scheduler@mountmadonna.org>';
+		if ($from) $this->Email->replyTo = $from;
 		$this->Email->delivery = 'smtp';
 		$this->Email->smtpOptions = array(
 			'port' => '465',
