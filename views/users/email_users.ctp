@@ -4,6 +4,18 @@
 	<table>
 	<tr>
 		<td colspan='2' class='left'>
+		<?=$ajax->link("From: Operations <{$operationsEmail}>",
+			array(
+				'controller' => 'EmailAuths',
+				'action' => 'edit'
+			),
+			array(
+				'update' => 'dialog_content',
+			))?>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2' class='left'>
 		To:
 		</td>
 	</tr>

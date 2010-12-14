@@ -143,6 +143,8 @@ class UsersController extends AppController {
 
 	function emailUsers() {
 		$this->redirectIfNot('operations');
+		$this->loadModel('EmailAuth');
+		$auth = $this->EmailAuth->findById(1);
 		if (!empty($this->data)) {
 			$E = $this->data['User'];
 			if (!$E['to']) {
@@ -152,7 +154,9 @@ class UsersController extends AppController {
 				$E['subject'],
 				null,
 				$E['message'],
-				"Operations <{$this->operationsEmail}>"
+				"Operations <{$auth['EmailAuth']['username']}>",
+				$auth['EmailAuth']['username'],
+				$auth['EmailAuth']['password']
 			)) {
 				$this->set('errorMessage',$this->Email->smtpError);
 			} else {
@@ -167,6 +171,7 @@ class UsersController extends AppController {
 				'{n}.User.username'
 			)
 		);
+		$this->set('operationsEmail',$auth['EmailAuth']['username']);
 	}
 
 }

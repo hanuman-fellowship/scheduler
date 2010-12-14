@@ -48,6 +48,11 @@
 				'shortcut' => 'ctrl+d'
 			),
 			"<hr/>",
+			'Email Settings...' => array(
+				'url' => array('controller' => 'EmailAuths', 'action' => 'edit'),
+				'ajax'
+			),
+			"<hr/>",
 			'Change Password...' => array(
 				'url' => array('controller' => 'users', 'action' => 'changePassword'),
 				'ajax'

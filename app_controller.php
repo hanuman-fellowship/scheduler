@@ -212,7 +212,7 @@ class AppController extends Controller {
 		}
 	}
 
-	function _sendEmail($to, $subject, $template, $viewVars, $from = null) {
+	function _sendEmail($to, $subject, $template, $viewVars, $from = null, $username = null,$password = null) {
 		$this->Email->from  = $from ? $from : 'Scheduler at MMC <scheduler@mountmadonna.org>';
 		if ($from) $this->Email->replyTo = $from;
 		$this->Email->delivery = 'smtp';
@@ -221,8 +221,8 @@ class AppController extends Controller {
 			'timeout' => '30',
 			'auth' => true,
 			'host' => 'ssl://smtp.gmail.com',
-			'username' => 'scheduler@mountmadonna.org',
-			'password' => 'omomomsched0m0m0m'
+			'username' => $username? $username : 'scheduler@mountmadonna.org',
+			'password' => $password? $password : 'omomomsched0m0m0m'
 		);
 		if (is_array($to)) {
 			$emails = '';
