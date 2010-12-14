@@ -3,11 +3,8 @@
  		<legend><?php __('Email Other Users');?></legend>
 	<table>
 	<tr>
-		<td width = '200px' colspan='2' class='left'>
+		<td colspan='2' class='left'>
 		To:
-		<? foreach($users as $email => $username) { ?>
-			<span class='email_address' style="display:none" id="<?=$email?>">&lt;<?=$email?>&gt;, </span>
-		<? } ?>
 		</td>
 	</tr>
 	<tr>
@@ -27,7 +24,13 @@
 		<label for='UserAll'>All</label>
 		</div>
 	</td>
-	<td valign='top' class='left' style='padding-left:30px'>
+	<td width='200px' valign='top' class='left' style='padding-left:30px'>
+		<div style='height:60px;border:1px solid #CCC;max-height:60px;overflow:auto'>
+		<? foreach($users as $email => $username) { ?>
+			<span class='email_address' style="display:none" id="<?=$email?>">&lt;<?=$email?>&gt;, </span>
+		<? } ?>
+		</div>
+		<br>
 		<?=$form->input('subject',array('size'=>'50','between'=>'&nbsp;','tabindex'=>1,'id'=>'subject'))?>
 		Message:<br>
 		<?=$form->textarea('message',array('cols'=>'50','rows'=>'20','tabindex'=>2))?>
