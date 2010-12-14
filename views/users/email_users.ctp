@@ -38,8 +38,10 @@
 	</td>
 	<td width='200px' valign='top' class='left' style='padding-left:30px'>
 		<div style='height:60px;border:1px solid #CCC;max-height:60px;overflow:auto'>
+		<? if (!isset($this->data['User']['to'])) $this->data['User']['to'] = array()?> 
+		<? if (!$this->data['User']['to']) $this->data['User']['to'] = array()?> 
 		<? foreach($users as $email => $username) { ?>
-			<span class='email_address' style="display:none" id="<?=$email?>">&lt;<?=$email?>&gt;, </span>
+			<span class='email_address' <?= in_array($email,$this->data['User']['to']) ? '' : "style='display:none'"?> id="<?=$email?>">&lt;<?=$email?>&gt;, </span>
 		<? } ?>
 		</div>
 		<br>
