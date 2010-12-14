@@ -349,6 +349,13 @@ function swap(a, b) {
 
 function checkAll(divId, all) {
 	var elements = $(divId).select('input');
+	$$('span.email_address').each(function(item) {
+		if (all.checked) {
+			item.show()
+		} else {
+			item.hide();
+		}
+	});
 	for (var i =0; i < elements.length; i++) {
 		elements[i].checked = all.checked;
 	}

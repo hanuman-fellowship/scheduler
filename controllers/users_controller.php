@@ -154,7 +154,13 @@ class UsersController extends AppController {
 			}
 		}
 		$this->User->order = 'username';
-		$this->set('users', $this->User->find('all'));
+		$this->set('users',
+			Set::combine(
+				array_values($this->User->find('all')),
+				'{n}.User.email',
+				'{n}.User.username'
+			)
+		);
 	}
 
 }
