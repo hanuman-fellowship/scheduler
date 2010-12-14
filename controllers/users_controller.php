@@ -145,13 +145,15 @@ class UsersController extends AppController {
 		$this->redirectIfNot('operations');
 		if (!empty($this->data)) {
 			$E = $this->data['User'];
-			if (!$this->_sendEmail($E['to'],$E['subject'],null,$E['message'])) {
+			if (!$E['to']) {
+				$this->set('errorMessage','This is not a journal entry. Who are we sending this to?');
+			} elseif (!$this->_sendEmail($E['to'],$E['subject'],null,$E['message'])) {
 				$this->set('errorMessage',$this->Email->smtpError);
 			} else {
-				$this->autoRender = false;
-				echo "Your message has been sent!";
+				$this->render('sent');
 			}
 		}
+		$this->User->order = 'username';
 		$this->set('users', $this->User->find('all'));
 	}
 
