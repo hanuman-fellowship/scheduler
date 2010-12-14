@@ -158,7 +158,12 @@ class UsersController extends AppController {
 				$auth['EmailAuth']['email'],
 				$auth['EmailAuth']['password']
 			)) {
-				$this->set('errorMessage',$this->Email->smtpError);
+				if (substr($this->Email->smtpError,0,3) == '535') {
+					$error = "SMTP Error: Bad Username/Password";
+				} else {
+					$error = $this->Email->smtpError;
+				}
+				$this->set('errorMessage',$error);
 			} else {
 				$this->render('sent');
 			}
