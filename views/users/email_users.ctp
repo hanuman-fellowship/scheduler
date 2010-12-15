@@ -20,8 +20,8 @@
 		</td>
 	</tr>
 	<tr>
-	<td valign='top' class='tall left'>
-		<div id='users'>
+	<td valign='top'>
+		<div id='users' class='left' style='overflow:auto;max-height:350px'>
 		<hr>
 		<?= $form->input('to',array(
 				'label'    =>  false,
@@ -47,7 +47,7 @@
 		<br>
 		<?=$form->input('subject',array('size'=>'50','between'=>'&nbsp;','tabindex'=>1,'id'=>'subject'))?>
 		Message:<br>
-		<?=$form->textarea('message',array('cols'=>'50','rows'=>'20','tabindex'=>2))?>
+		<?=$form->textarea('message',array('cols'=>'50','rows'=>'15','tabindex'=>2))?>
 	</td>
 	</tr>
 	</table>
@@ -56,6 +56,7 @@
 <?= $form->end();?>
 <?= $this->element('message',array('default_field'=>'subject'));?>
 <?= $javascript->codeBlock("
+	$('users').style.width = $('users').getWidth() + 20 + 'px';
 	$$('input[type=checkbox]').each(function(item) {
 		Event.observe(item, 'click', function(event) {
 			$(this.value).toggle();
