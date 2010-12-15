@@ -172,6 +172,7 @@ class RequestArea extends AppModel {
 		foreach($area['RequestFloatingShift'] as &$floating_shift) {
 			$floating_shift['id'] = $floating_shift['id'] * -1;
 			$floating_shift['request_area_id'] = $floating_shift['request_area_id'] * -1;
+			$floating_shift['note'] = addslashes($floating_shift['note']);
 			$floatingShiftValues .= "(
 				'{$floating_shift['id']}',
 				'{$floating_shift['person_id']}',
@@ -183,6 +184,7 @@ class RequestArea extends AppModel {
 		$shiftValues = substr_replace($shiftValues,'',-1);
 		$assignmentValues = substr_replace($assignmentValues,'',-1);
 		$floatingShiftValues = substr_replace($floatingShiftValues,'',-1);
+		$area['RequestArea']['notes'] = addslashes($area['RequestArea']['notes']);
 		$this->query("INSERT INTO request_areas (id,name,notes,manager) 
 			VALUES (
 				'{$area['RequestArea']['id']}',

@@ -34,6 +34,8 @@ class RequestAreasController extends AppController {
 		$areaName = $this->RequestArea->field('name',array('RequestArea.id' => $id));
 		$userEmail = Authsome::get('User.email');
 		$username = Inflector::humanize(Authsome::get('User.username'));
+		$this->loadModel('EmailAuth');
+		$auth = $this->EmailAuth->findById(1);
 
 		// email the manager that the request was received
 		if (!$this->_sendEmail(
@@ -43,7 +45,7 @@ class RequestAreasController extends AppController {
 			array(
 				'username' => $username,
 				'areaName' => $areaName,
-				'operationsEmail' => $this->operationsEmail
+				'operationsEmail' => $auth['EmailAuth']['email']
 			)
 		)) $this->set('errorMessage',$this->Email->smtpError);
 
@@ -51,7 +53,7 @@ class RequestAreasController extends AppController {
 
 		// email operations about the submitted request
 		if ($this->_sendEmail(
-			$this->operationsEmail, 
+			$auth['EmailAuth']['email'],
 			"{$areaName} Request Form Submitted",
 			'request_submit_prsnl',
 			array(
