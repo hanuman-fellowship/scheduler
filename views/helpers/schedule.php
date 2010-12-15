@@ -4,8 +4,7 @@ class ScheduleHelper extends AppHelper {
 	var $legend = array();
 	var $total_hours = array(
 		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
-	var $hours_by_person = array();
-	var $hours_by_area = array();
+	var $hours_by = array();
 	var $helpers = array('html','text','role','ajax','session');
 		
 	function displayPersonShift($assignment,$bound,$day) {
@@ -126,8 +125,7 @@ class ScheduleHelper extends AppHelper {
 			foreach ($shift[$request.'Assignment'] as $assignment) {
 				$people_displayed++;
 				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
-				$this->total_hours[$day] += $length;
-				$this->total_hours['total'] += $length;
+				$this->addHours($length,$day,$assignment['Person']['name']);
 				
 				$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 				if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) {
@@ -327,6 +325,7 @@ class ScheduleHelper extends AppHelper {
 		$output = array();
 		foreach($floating_shifts as $floating_shift) {
 			$hours = $floating_shift['hours'];
+			$this->addHours($hours,null,$floating_shift['Person']['name']);
 			$this->total_hours['total'] += $hours;
 			$hours = ($hours == 1) ? 
 				"$hours hour" :
@@ -387,23 +386,19 @@ class ScheduleHelper extends AppHelper {
 		return $output;
 	}
 
-	function addHours($hours,$day,$areaName,$personName = null) {
-		if ($areaName) {
-			if (!array_key_exists($areaName,$this->hours_by_area))
-				$this->hours_by_area[$areaName] = 0;
-			$this->hours_by_area[$areaName] += $hours;
-			if ($day) $this->total_hours[$day] += $hours;
-			$this->total_hours['total'] += $hours;
-		}
+	function addHours($hours,$day,$name) {
+		if (!array_key_exists($name,$this->hours_by))
+			$this->hours_by[$name] = 0;
+		$this->hours_by[$name] += $hours;
+		if ($day) $this->total_hours[$day] += $hours;
+		$this->total_hours['total'] += $hours;
 	}
 
 	function displayHoursBy() {
-		if ($this->hours_by_area) {
-			arsort($this->hours_by_area);
-			$View =& ClassRegistry::getObject('view');
-			echo $View->element('hours_by',array('data'=>$this->hours_by_area));
-		} else {
-		}
+		ksort($this->hours_by);
+		arsort($this->hours_by);
+		$View =& ClassRegistry::getObject('view');
+		echo $View->element('hours_by',array('data'=>$this->hours_by));
 	}
 
 }
