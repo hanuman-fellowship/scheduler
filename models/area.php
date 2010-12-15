@@ -54,7 +54,7 @@ class Area extends AppModel {
 
 	function sSave($data) {
 		if (isset($data['Area']['notes'])) {
-			$data['Area']['notes'] = trim($data['Area']['notes']);
+			$data['Area']['notes'] = addslashes(trim($data['Area']['notes']));
 		}
 		return parent::sSave($data);
 	}

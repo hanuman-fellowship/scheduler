@@ -142,6 +142,7 @@ class AppModel extends Model {
 				foreach($data as $row) {
 					$values .= '(';
 					foreach($row as $value) {
+						$value = addslashes($value);
 						$values .= "'{$value}',";
 					}
 					$values = substr_replace($values,'',-1);
