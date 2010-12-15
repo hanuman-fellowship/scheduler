@@ -140,9 +140,6 @@ function openDialog(id,noHighlight,position) {
 	behind.style.width = document.body.offsetWidth + 'px';
 	behind.style.display = 'table';
 	behind.style.zIndex = 1000;
-	if ($$('div.tall').first()) {
-		$$('div.tall').first().style.width = $('dialog').getWidth() + 'px';
-	}
 	$('dialog').show();
 	if (!noHighlight) {
 		$(id).style.backgroundColor = '#FFF8BA';

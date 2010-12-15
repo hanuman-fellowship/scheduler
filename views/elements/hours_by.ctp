@@ -5,7 +5,7 @@
 <table>
 	<?foreach($data as $name => $hours) {?>
 	<tr>
-		<td style='text-align:right;padding:10px;'>
+		<td style='text-align:right;padding-right:10px;'>
 			<?=$name?>:
 		</td>
 		<td style='text-align:left'>
