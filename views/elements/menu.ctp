@@ -93,8 +93,7 @@
 		'sub' => array(
 			'Select...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
-				'ajax',
-				'shortcut' => 'ctrl+h'
+				'ajax'
 			),
 			'View Past...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'past'),

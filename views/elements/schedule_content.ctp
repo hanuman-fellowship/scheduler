@@ -482,3 +482,4 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<?=$form->end()?>
 	<? } ?>
 <? } ?>
+<?$schedule->displayHoursBy()?>

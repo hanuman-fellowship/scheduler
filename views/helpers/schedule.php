@@ -4,6 +4,8 @@ class ScheduleHelper extends AppHelper {
 	var $legend = array();
 	var $total_hours = array(
 		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
+	var $hours_by_person = array();
+	var $hours_by_area = array();
 	var $helpers = array('html','text','role','ajax','session');
 		
 	function displayPersonShift($assignment,$bound,$day) {
@@ -31,9 +33,7 @@ class ScheduleHelper extends AppHelper {
 				}
 
 				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
-				$this->total_hours[$day] += ($length * $multiplier);
-				$this->total_hours['total'] += ($length * $multiplier);
-				
+				$this->addHours(($length * $multiplier),$day,$shift['Area']['name']);
 				/**
 				 * Make $legend an array of area ids, each of which is an array (short_name, name, manager)
 				 * for displaying the key (legend) at the bottom. Only one key needs to be made for each
@@ -93,8 +93,7 @@ class ScheduleHelper extends AppHelper {
 				$length = ($shift['specify_hours']) ? 
 					$shift['hours'] :
 					$this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
-				$this->total_hours[$day] += $length;
-				$this->total_hours['total'] += $length;
+				$this->addHours($length,$day,$shift['name']);
 				$output = "<span class='const'>".$this->role->link(
 					$title,
 					array(
@@ -269,7 +268,10 @@ class ScheduleHelper extends AppHelper {
 		$output = array();
 		foreach ($floating_shifts as $floating_shift) {
 			$hours = $floating_shift['hours'];
-			$this->total_hours['total'] += $hours;
+			$areaName = $floating_shift['Area']?
+				$floating_shift['Area']['name'] :
+				'Other';
+			$this->addHours($hours,null,$areaName);
 			$hours = ($hours == 1) ? 
 				"$hours hour " :
 				"$hours hours ";
@@ -384,5 +386,25 @@ class ScheduleHelper extends AppHelper {
 		$output .= date('M j, Y',$end);
 		return $output;
 	}
+
+	function addHours($hours,$day,$areaName,$personName = null) {
+		if ($areaName) {
+			if (!array_key_exists($areaName,$this->hours_by_area))
+				$this->hours_by_area[$areaName] = 0;
+			$this->hours_by_area[$areaName] += $hours;
+			if ($day) $this->total_hours[$day] += $hours;
+			$this->total_hours['total'] += $hours;
+		}
+	}
+
+	function displayHoursBy() {
+		if ($this->hours_by_area) {
+			arsort($this->hours_by_area);
+			$View =& ClassRegistry::getObject('view');
+			echo $View->element('hours_by',array('data'=>$this->hours_by_area));
+		} else {
+		}
+	}
+
 }
 ?>

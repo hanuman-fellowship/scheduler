@@ -8,6 +8,13 @@
 	"
 ));?>
 <?= $this->element('shortcut',array(
+	'shortcut' => 'ctrl+h',
+	'codeBlock' =>"
+		$('dialog_content').innerHTML = $('hoursBy').innerHTML;
+		openDialog('content',true);
+	"
+));?>
+<?= $this->element('shortcut',array(
 	'shortcut' => 'tab',
 	'propagate' => true,
 	'codeBlock' =>"
