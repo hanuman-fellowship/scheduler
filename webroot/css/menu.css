@@ -24,7 +24,7 @@ margin: 0;
 text-decoration: none;
 padding: 3px 7px;
 margin-right: 3px;
-color:#BBB;
+color:#000;
 }
 
 .top li span {
@@ -37,7 +37,7 @@ color:#999;
 }
 
 .top li a:hover, .changes a:hover {
-color: black;
+	background-color:#CCC;
 }
 
 .top li.selected{
@@ -46,6 +46,7 @@ color: black;
 .top li.selected a{ /*selected main tab style */
 color:black;
 border-bottom-color: white;
+	background-color:#CCC;
 }
 
 .top li.selected a:hover { /*selected main tab style */
