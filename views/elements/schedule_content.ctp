@@ -314,7 +314,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	<? } ?>	
 </table> 
 <? if (!$request && !$gaps) { ?>
-	<table align='center' width='850px' style='position:relative;top:-30px;font-size:18pt;text-align:center'>
+	<table align='center' width='850px' style='font-size:17pt;text-align:center'>
 		<tr>
 			<td align='left'>
 <?
