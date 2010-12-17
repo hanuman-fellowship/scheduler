@@ -40,7 +40,7 @@ class RequestAreasController extends AppController {
 		// email the manager that the request was received
 		if (!$this->_sendEmail(
 			$userEmail, 
-			'Area Request Form Recieved!', 
+			'Area Request Form Received!', 
 			'request_submit_mgr',
 			array(
 				'username' => $username,
