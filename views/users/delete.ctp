@@ -4,7 +4,7 @@
 <?
 foreach($users as $user) {
 	echo $html->link(
-		$user['User']['username'],
+		Inflector::humanize($user['User']['username']),
 		array($user['User']['id']),
 		array(
 			'class' => 'remove',
