@@ -26,7 +26,7 @@ div.shift {
 }
 
 span.const a:hover {
-	color:#777777;
+	background-color:#FFF8BA;
 }
 
 span.RC_1 {
@@ -66,13 +66,13 @@ a:link.extra_blank, a:visited.extra_blank {
 }
 
 a:hover.extra_blank, a:hover.extra {
-	color: #3366FF;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 
 a:hover.dayoff {
-	color: #888888;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
@@ -82,12 +82,12 @@ a:link, a:visited {
 }
 
 a:hover {
-	color: #3366FF;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 a:hover.remove {
-	color: #333333;
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
@@ -97,12 +97,12 @@ a:hover.remove {
 }
 
 a:hover.RC_0 {
+	background-color:#FFF8BA;
 	text-decoration: none;
-	color: #999999;
 }
 
 a:hover.remove_RC_0 {
-	color: #777777;
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
@@ -113,15 +113,17 @@ a:hover.remove_RC_0 {
 }
 
 a:hover.RC_1, a:hover.remove_RC_1 {
-	color: #00E600;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 a:hover.remove_RC_1 {
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
 a:hover.remove {
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
@@ -131,11 +133,12 @@ a:hover.remove {
 }
 
 a:hover.RC_2, a:hover.remove_RC_2 {
-	color:#FE803F;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 a:hover.remove_RC_2 {
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
@@ -146,11 +149,12 @@ a:hover.remove_RC_2 {
 }
 
 a:hover.RC_3, a:hover.remove_RC_3 {
-	color:#007FFF;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 a:hover.remove_RC_3 {
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
@@ -161,11 +165,12 @@ a:hover.remove_RC_3 {
 
 
 a:hover.RC_4, a:hover.remove_RC_4 {
-	color:#E900E9;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 a:hover.remove_RC_4 {
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
@@ -176,11 +181,12 @@ a:hover.remove_RC_4 {
 
 
 a:hover.RC_5, a:hover.remove_RC_5 {
-	color:#888888;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 a:hover.remove_RC_5 {
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
@@ -191,11 +197,12 @@ a:hover.remove_RC_5 {
 
 
 a:hover.RC_6, a:hover.remove_RC_6 {
-	color:#ff5555;
+	background-color:#FFF8BA;
 	text-decoration: none;
 }
 
 a:hover.remove_RC_6 {
+	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 
