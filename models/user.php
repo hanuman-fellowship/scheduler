@@ -70,9 +70,11 @@ class User extends AppModel {
 				);
 			}
 		}
-		$this->Manager->deleteAll(array(
-			'user_id' => $data['User']['id']
-		));
+		if (isset($data['User']['id'])) {
+			$this->Manager->deleteAll(array(
+				'user_id' => $data['User']['id']
+			));
+		}
 		$this->saveAll($data);
 	}
 

@@ -34,8 +34,17 @@ class UsersController extends AppController {
 		$this->redirectIfNot('operations');
 		if (!empty($this->data)) {
 			if ($this->User->valid($this->data)) {
+				$this->loadModel('EmailAuth');
+				$auth = $this->EmailAuth->findById(1);
 				$this->User->create();
+				$this->data['User']['password'] = $this->_randomPassword();
 				$this->User->sSave($this->data);
+				$this->_sendEmail($this->data['User']['email'], 'Your New Account in the Scheduler', 'new_user', array(
+					'username' => Inflector::humanize($this->data['User']['username']),
+					'password' => $this->data['User']['password'],
+					'operationsEmail' => $auth['EmailAuth']['email']
+				));
+				$this->render('added');
 				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->User->errorField);
@@ -76,6 +85,8 @@ class UsersController extends AppController {
 		if (!empty($this->data)) {
 			$this->User->recursive = -1;
 			if ($user = $this->User->findByEmail($this->data['User']['email'])) {
+				$this->loadModel('EmailAuth');
+				$auth = $this->EmailAuth->findById(1);
 				$userEmail = $user['User']['email'];
 				$username = Inflector::humanize($user['User']['username']);
 
@@ -89,7 +100,7 @@ class UsersController extends AppController {
 				$this->_sendEmail($userEmail, 'Password Request', 'reset_password', array(
 					'username' => $username,
 					'password' => $password,
-					'operationsEmail' => $this->operationsEmail
+					'operationsEmail' => $auth['EmailAuth']['email']
 				));
 				$this->set('flash','Please check your email');
 			} else {

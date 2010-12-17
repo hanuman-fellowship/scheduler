@@ -9,8 +9,7 @@
 <div class='tall'>
 	<?php
 		echo $form->input('username',array('id' => 'username'));
-		echo $form->input('password',array('id' => 'password'));
-		echo $form->input('email',array('id' => 'email'));
+		echo $form->input('email',array('id' => 'email','size'=>'40'));
 		echo "<fieldset class='left'>";
 		echo '<legend>Roles</legend>';
 		echo $form->checkBox('operations');
