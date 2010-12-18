@@ -29,26 +29,6 @@ span.const a:hover {
 	background-color:#FFF8BA;
 }
 
-span.RC_1 {
-	background-color:#E4F7E3;
-}
-
-span.RC_2 {
-	background-color:#F9F0E7;
-}
-
-span.RC_3 {
-	background-color:#E3ECF5;
-}
-
-span.RC_4 {
-	background-color:#F4E2F4;
-}
-
-span.RC_5 {
-	background-color:#FFC4C4;
-}
-
 .extra {
 	font-size: 20px;
 	padding:5px;
@@ -83,126 +63,9 @@ a:link, a:visited {
 
 a:hover {
 	background-color:#FFF8BA;
-	text-decoration: none;
 }
 
 a:hover.remove {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-.menu_RC_0, a:link.RC_0, a:visited.RC_0, a:link.remove_RC_0, a:visited.remove_RC_0, .RC_0 {
-	text-decoration: none;
-	color: #777777;
-}
-
-a:hover.RC_0 {
-	background-color:#FFF8BA;
-	text-decoration: none;
-}
-
-a:hover.remove_RC_0 {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-
-.board_RC_1, .menu_RC_1, a:link.RC_1, a:visited.RC_1, a:link.remove_RC_1, a:visited.remove_RC_1, #RC_1  {
-	text-decoration: none;
-	color:#009900;
-}
-
-a:hover.RC_1, a:hover.remove_RC_1 {
-	background-color:#FFF8BA;
-	text-decoration: none;
-}
-
-a:hover.remove_RC_1 {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-a:hover.remove {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-.board_RC_2, .menu_RC_2, a:link.RC_2, a:visited.RC_2, a:link.remove_RC_2, a:visited.remove_RC_2, #RC_2 {
-	text-decoration: none;
-	color:#CC6633;
-}
-
-a:hover.RC_2, a:hover.remove_RC_2 {
-	background-color:#FFF8BA;
-	text-decoration: none;
-}
-
-a:hover.remove_RC_2 {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-
-.board_RC_3, .menu_RC_3, a:link.RC_3, a:visited.RC_3, a:link.remove_RC_3, a:visited.remove_RC_3, #RC_3 {
-	text-decoration: none;
-	color:#0066CC;
-}
-
-a:hover.RC_3, a:hover.remove_RC_3 {
-	background-color:#FFF8BA;
-	text-decoration: none;
-}
-
-a:hover.remove_RC_3 {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-.board_RC_4, .menu_RC_4, a:link.RC_4, a:visited.RC_4, a:link.remove_RC_4, a:visited.remove_RC_4, #RC_4 {
-	text-decoration: none;
-	color:#990099;
-}
-
-
-a:hover.RC_4, a:hover.remove_RC_4 {
-	background-color:#FFF8BA;
-	text-decoration: none;
-}
-
-a:hover.remove_RC_4 {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-.board_RC_5, .menu_RC_5, a:link.RC_5, a:visited.RC_5, a:link.remove_RC_5, a:visited.remove_RC_5, #RC_5 {
-	text-decoration: none;
-	color:#000000;
-}
-
-
-a:hover.RC_5, a:hover.remove_RC_5 {
-	background-color:#FFF8BA;
-	text-decoration: none;
-}
-
-a:hover.remove_RC_5 {
-	background-color:#FFF8BA;
-	text-decoration:line-through;
-}
-
-.board_RC_6, .menu_RC_6, a:link.RC_6, a:visited.RC_6, a:link.remove_RC_6, a:visited.remove_RC_6, #RC_6 {
-	text-decoration: none;
-	color:#ff0000;
-}
-
-
-a:hover.RC_6, a:hover.remove_RC_6 {
-	background-color:#FFF8BA;
-	text-decoration: none;
-}
-
-a:hover.remove_RC_6 {
-	background-color:#FFF8BA;
 	text-decoration:line-through;
 }
 

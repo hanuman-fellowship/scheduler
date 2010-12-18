@@ -11,6 +11,7 @@ foreach($people as $category) {
 	$categoryData = current($category);
 	$categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
 	$categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
+	$categoryColor = $categoryData['PeopleSchedules']['ResidentCategory']['color'];
 ?>	
 	<td valign='top' class='left' id='people<?=$categoryId; ?>' style='padding:10px'>
 		<strong><?=$categoryName?></strong><br/>
@@ -22,8 +23,7 @@ foreach($people as $category) {
 			array('action'=>'schedule',$person['Person']['id']),
 			array(
 				'onClick' => 'wait()',
-				'class' => 'RC_' . $categoryId,
-				'style' => $last_style
+				'style' => $last_style . ';color:' . $categoryColor,
 			)
 		) . '<br>';
 	}

@@ -7,6 +7,7 @@
 		$categoryData = current($category);
 		$categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
 		$categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
+		$categoryColor = $categoryData['PeopleSchedules']['ResidentCategory']['color'];
 ?>	
 		<div class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
 			<span style='position:relative;left:10px;'>
@@ -16,7 +17,7 @@
 			'label'    =>  false,
 			'type'     => 'select',
 			'multiple' => 'checkbox',
-			'div' => 'board_RC_' . $categoryId,
+			'div'      => array('style' => 'color:'.$categoryColor),
 			'options'  => Set::combine(array_values($category),'{n}.Person.id','{n}.Person.name'),
 		));
 ?>	

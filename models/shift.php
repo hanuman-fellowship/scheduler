@@ -155,7 +155,7 @@ class Shift extends AppModel {
 			)
 		));
 		$this->id = '';
-		$this->sContain('Area','Assignment.Person.PeopleSchedules');
+		$this->sContain('Area','Assignment.Person.PeopleSchedules.ResidentCategory');
 		$shifts = $this->sFind('all', array(
 			'conditions' => array(
 				'Shift.start <' => $end,

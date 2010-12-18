@@ -16,7 +16,7 @@ $rcId = 0;
 				$rcId = $person['ResidentCategory']['id'];
 			}
 			echo $html->link($person['name'],array($shift,$person['id']),array(
-				'class' => 'RC_' . $person['ResidentCategory']['id'],
+				'style' => 'color:' . $person['ResidentCategory']['color'],
 				'onclick'=>'wait();saveScroll()'
 			)) . '<br>';
 		}

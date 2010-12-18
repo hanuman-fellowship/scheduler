@@ -9,6 +9,7 @@ foreach($people as $category) {
 	$categoryData = current($category);
 	$categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
 	$categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
+	$categoryColor = $categoryData['PeopleSchedules']['ResidentCategory']['color'];
 ?>	
 	<div class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
 		<strong><?=$categoryName?></strong><br/>
@@ -20,8 +21,7 @@ foreach($people as $category) {
 			array('action'=>'edit',$person['Person']['id']),
 			array(
 				'before' => 'wait()',
-				'class' => 'RC_' . $categoryId,
-				'style' => $last_style,
+				'style' => $last_style . ';color:' . $categoryColor,
 				'update' => 'dialog_content',
 				'complete' => "openDialog('dialog',true)"
 			)

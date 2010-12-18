@@ -1,3 +1,4 @@
+<span id='no_print'>
 <?=$javascript->link(array('functions','dropdowntabs'));?>
 <?=$html->css("dialog") ?>
 <? $hidden = !$this->session->read('Schedule.editable');?>
@@ -279,3 +280,4 @@ if ($session->read('Schedule.editable') && !isset($this->viewVars['area']['Reque
 <?
 }
 ?>
+</span>

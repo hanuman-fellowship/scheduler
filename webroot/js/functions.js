@@ -81,7 +81,7 @@ function resetActive() {
 	);
 	for (var i = 0; i < all.length; i++) {
 		all[i].rel = '';
-		all[i].style.backgroundColor = '';
+		all[i].style.backgroundColor = null;
 	}
 }
 

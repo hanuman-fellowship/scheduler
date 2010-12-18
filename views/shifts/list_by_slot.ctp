@@ -28,11 +28,14 @@ foreach($lists as $list) {
 		if ($shift['available'] === -1 ) continue; // the person is on that shift, so don't show it
 		foreach($shift['Assignment'] as $assignment) {
 			if ($shift['available'] || $list == 'all') {
+				$style = $assignment['Person']['id'] == 0 ?
+					'color:#000;font-style:italic' :
+					'color:' . $assignment['Person']['PeopleSchedules']['ResidentCategory']['color'];
 				echo $html->link(
 					"<span class='taken'>
 						{$shift['Shift']['name']}
 					</span> 
-					<span class='menu_RC_{$assignment['Person']['PeopleSchedules']['resident_category_id']}'>
+					<span style='{$style}'>
 						({$assignment['Person']['name']})
 					</span>",
 					array(

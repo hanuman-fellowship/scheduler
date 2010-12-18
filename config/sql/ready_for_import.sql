@@ -323,6 +323,7 @@ CREATE TABLE `people_schedules` (
 CREATE TABLE `resident_categories` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(30) NOT NULL,
+	`color` varchar(7) NOT NULL,
   `schedule_id` int(11) NOT NULL,
   UNIQUE KEY `schedule_id` (`schedule_id`,`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;

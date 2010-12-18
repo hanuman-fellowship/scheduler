@@ -144,7 +144,9 @@ class ScheduleHelper extends AppHelper {
 								'controller'=>'people','action'=>'schedule',$assignment['Person']['id']
 							),
 							'attributes' => array(
-								'class' => 'RC_' . $assignment['PeopleSchedules']['resident_category_id'],
+								'style' => $assignment['Person']['id'] == 0 ?
+									"color:#000;font-style:italic" :
+									"color:".$assignment['PeopleSchedules']['ResidentCategory']['color'],
 								'title' => "View {$assignment['Person']['name']}'s Schedule"
 							)
 						),
@@ -155,8 +157,10 @@ class ScheduleHelper extends AppHelper {
 								$assignment[$request.'Assignment']['id']
 							),
 							'attributes' => array(
-								'class' => 'remove_RC_'.$assignment['PeopleSchedules']['resident_category_id'],
-								'style' => 'margin:10px',
+								'class' => 'remove',
+								'style' => $assignment['Person']['id'] == 0 ?
+								'margin:10px;color:#000;font-style:italic' :
+								'margin:10px;color:'.$assignment['PeopleSchedules']['ResidentCategory']['color'],
 								'onmouseover' => "$('goto_{$assignment[$request.'Assignment']['id']}').show()",
 								'onmouseout' => "$('goto_{$assignment[$request.'Assignment']['id']}').hide()",
 								'onclick' => 'saveScroll()',
@@ -353,7 +357,7 @@ class ScheduleHelper extends AppHelper {
 			$output[] = "<span id='floating_".$floating_shift['id']."'>"
 			. $hours . " w/ " . $this->html->link(
 				$link_title, $link_url, array(
-					'class' => 'RC_' . $floating_shift['Person']['PeopleSchedules']['resident_category_id'],
+					'style' => "color:{$floating_shift['Person']['PeopleSchedules']['ResidentCategory']['color']}",
 					'title' => "View {$floating_shift['Person']['name']}'s Schedule"
 				)
 			) . $note . '</span>';
