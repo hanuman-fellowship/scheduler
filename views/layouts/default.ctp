@@ -5,6 +5,7 @@
 		<?=$title_for_layout?>
 	</title>	
 	<?=$html->css("screen") ?>
+	<?=$html->meta("smiley_favicon.ico",'smiley_favicon.ico',array('type'=>'icon')) ?>
 	<?=$javascript->link('shortcut');?>
 	<?=$javascript->link('prototype');?>
 	<?=$javascript->link('scriptaculous');?>
