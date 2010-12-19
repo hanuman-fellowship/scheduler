@@ -2,10 +2,6 @@
 
 class AppController extends Controller {
 	var $helpers = array('Html','Session','Form','Ajax','Javascript','Role', 'Time','Dialog');
-// live:	
-	var $operationsEmail = 'operations@mountmadonna.org';
-// testing:
-//	var $operationsEmail = 'jason.galuten@gmail.com';
 	
     public $components = array(
     	'Session',

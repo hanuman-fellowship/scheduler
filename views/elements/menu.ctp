@@ -164,7 +164,13 @@
 				'role' => array('operations'),
 				'url' => array('controller' => 'people', 'action' => 'retire'),
 				'ajax'
-			)
+			),
+			"<hr/>",
+			'Edit Category...' => array(
+				'role' => array('operations'),
+				'url' => array('controller' => 'ResidentCategories', 'action' => 'edit'),
+				'ajax'
+			),
 		)
 	),
 	'Areas' => array(
