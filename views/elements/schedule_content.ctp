@@ -33,7 +33,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<td width="9" rowspan="2">
 			&nbsp;
 		</td> 
-		<td class="title" <?= (isset($person)) ? 'id="total_hours"' : '';?> width="144" rowspan="2">
+		<td class="title" <?= (isset($person)) ? 'id="total_hours_'.$person['Person']['id'].'"' : '';?> width="144" rowspan="2">
 			<?= (isset($area)) ?
 				$area[$request.'Area']['manager'] :
 				'';?>
@@ -259,7 +259,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			<?// now that the total hours are added up, sneak them in at the top
 			?>
 			<script type="text/javascript">
-				$('total_hours').innerHTML = <?=$schedule->total_hours['total'];?>;
+				$('total_hours_<?=$person['Person']['id']?>').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
 		<? if ($isOperations && $editable && !$request
@@ -313,7 +313,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr> 
 	<? } ?>	
 </table> 
-<? if (!$request && !$gaps) { ?>
+<? if (!$request && !$gaps && !isset($print)) { ?>
 	<table align='center' width='850px' style='font-size:17pt;text-align:center'>
 		<tr>
 			<td align='left'>
@@ -349,7 +349,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr>
 </table>
 <? } ?>
-<? if (($isPersonnel || $isOperations) && isset($person) && !$gaps) { ?>
+<? if (($isPersonnel || $isOperations) && isset($person) && !$gaps && !isset($print)) { ?>
 <table align="center" width="774px" style="position:relative;top:-30px">
 	<tr>
 		<td valign="top" style="font-size:14pt;text-align:left">
@@ -483,3 +483,4 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	<? } ?>
 <? } ?>
 <?$schedule->displayHoursBy()?>
+<?$schedule->clearHours()?>

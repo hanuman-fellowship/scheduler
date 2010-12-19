@@ -405,5 +405,11 @@ class ScheduleHelper extends AppHelper {
 		echo $View->element('hours_by',array('data'=>$this->hours_by));
 	}
 
+	function clearHours() {
+		$this->total_hours = array(
+			'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
+		$this->hours_by = array();
+	}
+
 }
 ?>

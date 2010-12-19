@@ -139,32 +139,40 @@
 		'shortcut' => 'ctrl+p',
 		'ajax',
 		'sub' => array(
-			'hidden' => $hidden,
 			'role' => array('operations'),
 			'View Schedule...' => array(
-				'role' => array('operations'),
+				'hidden' => $hidden,
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
 				'ajax',
 				'shortcut' => 'ctrl+p'
 			),
-			"<hr/>",
+			array('hidden'=>$hidden,'title'=>"<hr/>"),
 			'New Person...' => array(
-				'role' => array('operations'),
+				'hidden' => $hidden,
 				'url' => array('controller' => 'people', 'action' => 'add'),
 				'ajax',
 				'shortcut' => 'shift+ctrl+p'
 			),
-			"<hr/>",
+			array('hidden'=>$hidden,'title'=>"<hr/>"),
 			'Restore Person...' => array(
-				'role' => array('operations'),
+				'hidden' => $hidden,
 				'url' => array('controller' => 'people', 'action' => 'restore'),
 				'ajax'
 			),
 			'Retire Person...' => array(
-				'role' => array('operations'),
+				'hidden' => $hidden,
 				'url' => array('controller' => 'people', 'action' => 'retire'),
 				'ajax'
-			)
+			),
+			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			'Print People...' => array(
+				'url' => array(
+					'controller' => 'people',
+					'action' => 'printm',
+					(isset($person)) ? $person : null 
+				),
+				'ajax'
+			),
 		)
 	),
 	'Areas' => array(
@@ -172,22 +180,22 @@
 		'shortcut' => 'ctrl+a',
 		'ajax',
 		'sub' => array(
-			'hidden' => $hidden,
 			'role' => array('operations'),
 			'View Schedule...' => array(
+				'hidden' => $hidden,
 				'url' => array('controller' => 'areas', 'action' => 'select'),
 				'ajax',
 				'shortcut' => 'ctrl+a'
 			),
-			"<hr/>",
+			array('hidden'=>$hidden,'title'=>"<hr/>"),
 			'New Area...' => array(
-				'role' => array('operations'),
+				'hidden' => $hidden,
 				'url' => array('controller' => 'areas', 'action' => 'add'),
 				'ajax'
 			),
-			"<hr/>",
+			array('hidden'=>$hidden,'title'=>"<hr/>"),
 			'Clear Area...' => array(
-				'role' => array('operations'),
+				'hidden' => $hidden,
 				'url' => array(
 					'controller' => 'areas',
 					'action' => 'clear',
@@ -197,10 +205,19 @@
 				'shortcut' => 'ctrl+c'
 			),
 			'Delete Area...' => array(
-				'role' => array('operations'),
+				'hidden' => $hidden,
 				'url' => array(
 					'controller' => 'areas',
 					'action' => 'delete',
+					(isset($area)) ? $area : null 
+				),
+				'ajax'
+			),
+			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			'Print Areas...' => array(
+				'url' => array(
+					'controller' => 'areas',
+					'action' => 'printm',
 					(isset($area)) ? $area : null 
 				),
 				'ajax'

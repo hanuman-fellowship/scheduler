@@ -16,20 +16,24 @@ class PeopleController extends AppController {
 			} else {
 				$person = $this->Person->getPerson($id);
 				$this->Person->addDisplayName($person['Person']);
-				$this->Session->write('last_person',$id);
+				if (!isset($this->params['requested'])) {
+					$this->set('change_messages',$this->getChangeMessages());
+					$this->Session->write('last_person',$id);
+					$this->Person->PersonnelNote->order = 'PersonnelNote.order asc';
+					$personnelNotes = $this->Person->PersonnelNote->findAllByPersonId($id);
+					$this->set('personnelNotes', Set::combine(
+						$personnelNotes,'{n}.PersonnelNote.id','{n}.PersonnelNote.note'));
+					$this->Person->OperationsNote->order = 'OperationsNote.order asc';
+					$personnelNotes = $this->Person->OperationsNote->findAllByPersonId($id);
+					$this->set('operationsNotes', Set::combine(
+					$personnelNotes,'{n}.OperationsNote.id','{n}.OperationsNote.note'));
+				} else {
+					$this->set('print',true);
+				}
 			}
 			$this->set('person',$person);		
-			$this->set('change_messages',$this->getChangeMessages());
 			$this->set('bounds', $this->getBounds());
 			if ($id == 'gaps') $this->render('gaps');
-			$this->Person->PersonnelNote->order = 'PersonnelNote.order asc';
-			$personnelNotes = $this->Person->PersonnelNote->findAllByPersonId($id);
-			$this->set('personnelNotes', Set::combine(
-				$personnelNotes,'{n}.PersonnelNote.id','{n}.PersonnelNote.note'));
-			$this->Person->OperationsNote->order = 'OperationsNote.order asc';
-			$personnelNotes = $this->Person->OperationsNote->findAllByPersonId($id);
-			$this->set('operationsNotes', Set::combine(
-				$personnelNotes,'{n}.OperationsNote.id','{n}.OperationsNote.note'));
 		} else {
 			$this->redirect(array('action'=>'selectSchedule'));
 		}
@@ -154,6 +158,28 @@ class PeopleController extends AppController {
 				$this->redirect(array('action'=>'schedule',$goto['key']));
 			}
 		}
+	}
+
+	function printm($id = null) {
+		$output = '';
+		if (!empty($this->data)) {
+			foreach($this->data['Person'] as $category) {
+				if (is_array($category)) {
+					foreach($category as $id) {
+						$output .= $this->requestAction(
+							array('controller'=>'people','action'=>'schedule'),
+							array('pass'=>array($id),'return')
+						);
+					}
+				}
+			}
+			$this->set('output',$output);
+			$this->set('back',$this->referer());
+		} else {
+			$this->set('people',$this->Person->listByResidentCategory());
+			$this->data['Person']['person_id'] = array($id);
+			$this->render('select_print');
+		}	
 	}
 
 }

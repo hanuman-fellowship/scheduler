@@ -9,8 +9,12 @@ class AreasController extends AppController {
 			$this->redirectIfNotValid($id);
 			$this->set('area',$this->Area->getArea($id));
 			$this->set('bounds', $this->getBounds());
-			$this->set('change_messages',$this->getChangeMessages());
-			$this->Session->write('last_area',$id);
+			if (!isset($this->params['requested'])) {
+				$this->set('change_messages',$this->getChangeMessages());
+				$this->Session->write('last_area',$id);
+			} else {
+				$this->set('print',true);
+			}
 		} else {
 			$this->set('change_messages',$this->getChangeMessages());
 			$this->set('area',0);
@@ -130,6 +134,27 @@ class AreasController extends AppController {
 			}
 		}
 	}
+
+	function printm($id = null) {
+		$output = '';
+		if (!empty($this->data)) {
+			foreach($this->data['Area']['area_id'] as $id) {
+				$output .= $this->requestAction(
+					array('controller'=>'areas','action'=>'schedule'),
+					array('pass'=>array($id),'return')
+				);
+			}
+			$this->set('output',$output);
+			$this->set('back',$this->referer());
+		} else {
+			$this->Area->recursive = -1;
+			$this->Area->order = 'name';
+			$this->set('areas',$this->Area->sFind('list'));
+			$this->data['Area']['area_id'] = array($id);
+			$this->render('select_print');
+		}	
+	}
+
 
 }
 ?>
