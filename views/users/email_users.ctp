@@ -21,15 +21,17 @@
 	</tr>
 	<tr>
 	<td valign='top'>
-		<div id='users' class='left' style='overflow:auto;max-height:350px'>
 		<hr>
+		<div id='users' class='left' style='overflow:auto;max-height:320px'>
 		<?= $form->input('to',array(
 				'label'    =>  false,
 				'type'     => 'select',
 				'multiple' => 'checkbox',
 				'options'  => $users
 			))?>
+		</div>
 		<hr/>
+		<div class='left'>
 		<?=$form->checkbox("all",array(
 			'onclick' => "checkAll('users',this)"
 		));?>
@@ -48,11 +50,11 @@
 		<?=$form->input('subject',array('size'=>'50','between'=>'&nbsp;','tabindex'=>1,'id'=>'subject'))?>
 		Message:<br>
 		<?=$form->textarea('message',array('cols'=>'50','rows'=>'15','tabindex'=>2))?>
+		<?= $form->submit('Send',array('tabindex'=>3));?>
 	</td>
 	</tr>
 	</table>
 	</fieldset>
-<?= $form->submit('Send',array('tabindex'=>3));?>
 <?= $form->end();?>
 <?= $this->element('message',array('default_field'=>'subject'));?>
 <?= $javascript->codeBlock("
