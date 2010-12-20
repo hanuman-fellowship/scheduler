@@ -95,5 +95,60 @@ class Area extends AppModel {
 		return $desc;
 	}
 
+	function getChanged($since = null) {
+		$since = $since ? date('Y-m-d H:i:s',$since) : 0;
+		$changed = array();
+		$this->Change = ClassRegistry::init('Change');
+		$this->Change->nudge(1); // so that the first one is not 0
+		$this->Change->id = '';
+		$this->Change->sContain('ChangeModel.ChangeField');
+		$changes = $this->Change->sFind('all',array(
+			'conditions' => array(
+				'Change.id >=' => 1,
+				'Change.created >=' => $since
+			)
+		));
+		$this->Change->nudge(-1); // move them back
+		foreach($changes as $change) {
+			foreach($change['ChangeModel'] as $changeModel) {
+				switch ($changeModel['name']) {
+					case 'Area' :
+						$changed[$changeModel['record_id']][$change['Change']['id']] = $change['Change']['description'];
+						break;
+					case 'Shift' :
+					case 'FloatingShift' :
+						foreach($changeModel['ChangeField'] as $changeField) {
+							if ($changeField['field_key'] == 'area_id') {
+								foreach(array('field_old_val','field_new_val') as $field) {
+									if ($changeField[$field]) {
+										$changed[$changeField[$field]][$change['Change']['id']] = $change['Change']['description'];
+									}
+								}
+							}
+						}
+						break;
+					case 'Assignment' :
+						foreach($changeModel['ChangeField'] as $changeField) {
+							if ($changeField['field_key'] == 'shift_id') {
+								foreach(array('field_old_val','field_new_val') as $field) {
+									if ($changeField[$field]) {
+										if ($shift = $this->Shift->sFind('first',array(
+											'recursive' => -1,
+											'conditions' => array('Shift.id' => $changeField[$field]),
+											'fields' => array('Shift.area_id')
+										))) {
+											$changed[$shift['Shift']['area_id']][$change['Change']['id']] = $change['Change']['description'];
+										}
+									}
+								}
+							}
+						}
+						break;
+				}
+			}
+		}
+		return $changed;
+	}
+
 }
 ?>

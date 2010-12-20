@@ -155,6 +155,26 @@ class AreasController extends AppController {
 		}	
 	}
 
+	function changed() {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			if (isset($this->data['Area']['since'])) {
+				if ($this->data['Area']['since'] != '' &&
+				!strtotime($this->data['Area']['since'])) {
+					$this->set('errorMessage',"Don't understand that time");
+					$this->set('errorField','since');
+				} else {
+					$since = strtotime($this->data['Area']['since']);
+					$changed = $this->Area->getChanged($since);
+					$areas = $this->Area->sFind('list');
+					foreach($areas as $id => $name) {
+						if (!in_array($id,array_keys($changed))) unset($areas[$id]);
+					}
+					$this->set('areas',$areas);
+				}
+			}
+		}	
+	}
 
 }
 ?>

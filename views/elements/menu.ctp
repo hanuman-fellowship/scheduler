@@ -214,6 +214,14 @@
 				'ajax'
 			),
 			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			"What's Changed..." => array(
+				'url' => array(
+					'controller' => 'areas',
+					'action' => 'changed'
+				),
+				'hidden' => $hidden,
+				'ajax'
+			),
 			'Print Areas...' => array(
 				'url' => array(
 					'controller' => 'areas',

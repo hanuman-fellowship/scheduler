@@ -1,12 +1,6 @@
 <?
 
-$b = '';
-$a = "hello";
-$b .= "<{$a}>, ";
-$b .= "<{$a}>, ";
-echo $b;
-
-
+if (strtotime('')) echo 'yes'; else echo 'no';
 
 
 
