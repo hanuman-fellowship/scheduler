@@ -165,6 +165,14 @@
 				'ajax'
 			),
 			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			"Affected Schedules..." => array(
+				'url' => array(
+					'controller' => 'people',
+					'action' => 'changed'
+				),
+				'hidden' => $hidden,
+				'ajax'
+			),
 			'Print People...' => array(
 				'url' => array(
 					'controller' => 'people',
@@ -214,7 +222,7 @@
 				'ajax'
 			),
 			array('hidden'=>$hidden,'title'=>"<hr/>"),
-			"What's Changed..." => array(
+			"Affected Schedules..." => array(
 				'url' => array(
 					'controller' => 'areas',
 					'action' => 'changed'

@@ -182,6 +182,23 @@ class PeopleController extends AppController {
 		}	
 	}
 
+	function changed() {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			if (isset($this->data['Person']['since'])) {
+				if ($this->data['Person']['since'] != '' &&
+				!strtotime($this->data['Person']['since'])) {
+					$this->set('errorMessage',"Don't understand that time");
+					$this->set('errorField','since');
+				} else {
+					$since = strtotime($this->data['Person']['since']);
+					$this->set('changed',$this->Person->getChanged($since));
+					$this->set('people',$this->Person->listByResidentCategory());
+				}
+			}
+		}	
+	}
+
 }
 	
 ?>

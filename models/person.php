@@ -419,5 +419,55 @@ class Person extends AppModel {
 			$shift[$request.'Assignment'] = array_merge($people, $other_assignments);
 		}
 	}
+
+	function getChanged($since = null) {
+		$since = $since ? date('Y-m-d H:i:s',$since) : 0;
+		$changed = array();
+		$this->Change = ClassRegistry::init('Change');
+		$this->Change->nudge(1); // move the ids up 1 so that the first one is not 0
+		$this->Change->id = '';
+		$this->Change->sContain('ChangeModel.ChangeField');
+		$changes = $this->Change->sFind('all',array(
+			'conditions' => array(
+				'Change.id >=' => 1,
+				'Change.created >=' => $since
+			)
+		));
+		$this->Change->nudge(-1); // move them back
+		foreach($changes as $change) {
+			foreach($change['ChangeModel'] as $changeModel) {
+				switch ($changeModel['name']) {
+					case 'PeopleSchedules' :
+						$changed[$changeModel['record_id']][$change['Change']['id']] = $change['Change']['description'];
+						break;
+					case 'Assignment' :
+					case 'FloatingShift' :
+						foreach($changeModel['ChangeField'] as $changeField) {
+							if ($changeField['field_key'] == 'person_id') {
+								foreach(array('field_old_val','field_new_val') as $field) {
+									if ($changeField[$field]) {
+										$changed[$changeField[$field]][$change['Change']['id']] = $change['Change']['description'];
+									}
+								}
+							}
+						}
+						break;
+					case 'Shift' :
+						$this->Assignment->id = '';
+						if ($assignments = $this->Assignment->sFind('all',array(
+							'recursive' => -1,
+							'conditions' => array('Assignment.shift_id' => $changeModel['record_id']),
+							'fields' => array('Assignment.person_id')
+						))) {
+							foreach($assignments as $assignment) {
+								$changed[$assignment['Assignment']['person_id']][$change['Change']['id']] = $change['Change']['description'];
+							}
+						}
+						break;
+				}
+			}
+		}
+		return $changed;
+	}
 }
 ?>
