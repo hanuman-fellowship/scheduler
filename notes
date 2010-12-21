@@ -1,17 +1,8 @@
 TODO:
 	
-	- kinda wierd to define the effective only when publishing... would be good
-	  to be able to make a working copy and then change the effective... somehow...
-
 	- order of people on request
 
 	- big board
-
-	- hours by area etc...
-
-	- notes on person and area
-
-	- personnel
 
 	- templates
 
@@ -45,4 +36,3 @@ TODO:
 
 	- Changes
 		- views/changes/history needs work
-		- jump is slow. could it do all of the calculations first, and then update the database all at once?

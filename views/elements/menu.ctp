@@ -301,7 +301,7 @@ if ($session->read('Schedule.editable') && !isset($this->viewVars['area']['Reque
 		'id' => 'undoLink',
 		'title' => 'ctrl+u'
 	)) : "<span class='no_link'>Undo</span>";?>
-	<?=$ajax->link('View History',
+	<?=$ajax->link('View All Changes',
 		array('controller'=>'changes','action'=>'history'),
 		array(
 			'update'=>'dialog_content',
