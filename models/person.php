@@ -438,8 +438,6 @@ class Person extends AppModel {
 			foreach($change['ChangeModel'] as $changeModel) {
 				switch ($changeModel['name']) {
 					case 'PeopleSchedules' :
-						$changed[$changeModel['record_id']][$change['Change']['id']] = $change['Change']['description'];
-						break;
 					case 'Assignment' :
 					case 'OffDay' :
 					case 'FloatingShift' :
