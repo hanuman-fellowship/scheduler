@@ -1,7 +1,7 @@
 <? if (!isset($areas)) { ?>
 
 <fieldset>
-	<legend><?php __("What Areas Have Changed");?></legend>
+	<legend><?php __("Affected Area's Schedules");?></legend>
 <?= $ajax->form($this->action,'post',array(
 	'model'=>'Area',
 	'update'=>'dialog_content',
@@ -23,7 +23,7 @@
 
 <?= $form->create('Area',array('action'=>'printm','type'=>'post','onsubmit'=>'wait()'));?>
 	<fieldset>
- 		<legend><?php __('What Areas Have Changed');?></legend>
+ 		<legend><?php __("Affected Area's Schedules");?></legend>
 	<div class='tall left' id='areas' style='width:300px'>
 	<?=$form->input('area_id',array('label'=>false,'type'=>'select','multiple'=>'checkbox','options'=>$areas));?>
 	</div>

@@ -441,6 +441,7 @@ class Person extends AppModel {
 						$changed[$changeModel['record_id']][$change['Change']['id']] = $change['Change']['description'];
 						break;
 					case 'Assignment' :
+					case 'OffDay' :
 					case 'FloatingShift' :
 						foreach($changeModel['ChangeField'] as $changeField) {
 							if ($changeField['field_key'] == 'person_id') {
