@@ -185,7 +185,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			</div> 
 		</td> 
 	<? foreach ($bounds['days'] as $day => $d) { ?>
-		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
+		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : array('screen'=>'','print'=>''); ?>
 		<? if ($isOperations && $editable && !$this->params['isAjax'] && !$request
 		|| ($request && $editRequest)) { ?>
 		<td <?=$off_day['screen']?> id="<?=$slot_num.'_'.$day?>"
@@ -211,7 +211,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				'title' => isset($area) ? 'New Shift...' : 'Assign Shift...'
 			)) : '';?>
 		<? } else { ?>
-		<td <?=$off_day;?> >
+		<td <?=$off_day['screen']?> >
 		<? } ?>
 			<div align="center" class="shift"> 
 				<p> 
