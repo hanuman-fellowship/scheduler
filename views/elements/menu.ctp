@@ -1,4 +1,4 @@
-<span id='no_print'>
+<span class='no_print'>
 <?=$javascript->link(array('functions','dropdowntabs'));?>
 <?=$html->css("dialog") ?>
 <? $hidden = !$this->session->read('Schedule.editable');?>

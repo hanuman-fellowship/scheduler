@@ -261,7 +261,10 @@ class ScheduleHelper extends AppHelper {
 	function offDays($off_days,$day) {
 		foreach ($off_days as $off_day) {
 			if ($off_day['day_id'] == $day) {
-				return 'class="dayoff_bg"';
+				return array(
+					'screen' => 'class="dayoff_bg"',
+					'print' => '<span class="dayoff_x">X</span>'
+				);
 			}
 		}
 	}

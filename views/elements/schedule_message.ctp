@@ -1,4 +1,4 @@
-<div class='schedule_message'>
+<div class='schedule_message no_print'>
 <? 
 $schedule = $session->read('Schedule');
 $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');

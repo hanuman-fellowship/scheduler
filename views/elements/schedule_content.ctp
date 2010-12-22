@@ -188,7 +188,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : ''; ?>
 		<? if ($isOperations && $editable && !$this->params['isAjax'] && !$request
 		|| ($request && $editRequest)) { ?>
-		<td <?=$off_day;?> id="<?=$slot_num.'_'.$day?>"
+		<td <?=$off_day['screen']?> id="<?=$slot_num.'_'.$day?>"
 			onmouseover='showAddShift($("add_<?=$slot_num?>_<?=$day?>"))'
 			onmouseout='hideAddShift($("add_<?=$slot_num?>_<?=$day?>"))'
 		> 
@@ -215,6 +215,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<? } ?>
 			<div align="center" class="shift"> 
 				<p> 
+				<?=$off_day['print']?>
 		<? if (isset($area)) { ?>
 			<? foreach ($area[$request.'Shift'] as $shift) { ?>
 						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day,$editRequest);?>
@@ -294,7 +295,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog('notes',false,'top')",
-							'title' => 'Edit Notes...'
+							'title' => 'Edit Notes...',
+							'class' => !$notes? 'no_print' : ''
 						),
 						'ajax'
 					)
@@ -326,7 +328,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		array(
 			'escape' => false,
 			'id' => 'previousSchedule',
-			'title' => 'Previous Schedule (shift+left)'
+			'title' => 'Previous Schedule (shift+left)',
+			'class' => 'no_print'
 		)
 	);
 ?>
@@ -341,7 +344,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		array(
 			'escape' => false,
 			'id' => 'nextSchedule',
-			'title' => 'Next Schedule (shift+right)'
+			'title' => 'Next Schedule (shift+right)',
+			'class' => 'no_print'
 		)
 	);
 ?>
@@ -350,7 +354,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 </table>
 <? } ?>
 <? if (($isPersonnel || $isOperations) && isset($person) && !$gaps && !isset($print)) { ?>
-<table align="center" width="774px" style="position:relative;top:-30px">
+<table align="center" width="774px" class='no_print' style="position:relative;top:-30px">
 	<tr>
 		<td valign="top" style="font-size:14pt;text-align:left">
 		<? if ($isPersonnel) { ?>
