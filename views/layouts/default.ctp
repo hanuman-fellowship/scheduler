@@ -4,8 +4,7 @@
 	<title>
 		<?=$title_for_layout?>
 	</title>	
-	<?=$html->css("screen",null,array('media'=>'screen')) ?>
-	<?=$html->css("print",null,array('media'=>'print')) ?>
+	<?=$html->css("schedule") ?>
 	<?=$html->meta("smiley_favicon.ico",'smiley_favicon.ico',array('type'=>'icon')) ?>
 	<?=$javascript->link('shortcut');?>
 	<?=$javascript->link('prototype');?>
