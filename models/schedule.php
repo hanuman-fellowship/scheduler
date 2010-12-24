@@ -133,7 +133,7 @@ class Schedule extends AppModel {
 				default:
 					foreach($record as $data) {
 						$data['schedule_id'] = $branch_id;
-						$this->{$model}->forceSave($data);
+						$this->{$model}->qInsert($data);
 					}
 			}
 		}
