@@ -47,7 +47,7 @@ function typeActivate(e) {
 	dialog.each(function(element) {
 		if (element.innerHTML.stripTags().toLowerCase().strip().startsWith(stringWindow) && !done) {
 			activate(element);
-			element.scrollIntoView();
+			element.scrollIntoView(false);
 			done = true;
 		}
 	});
