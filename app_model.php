@@ -172,6 +172,7 @@ class AppModel extends Model {
 		$values = "'{$data['schedule_id']}'";
 		unset($data['schedule_id']);
 		foreach($data as $key => $val) {
+			$val = addslashes($val);
 			$keys .= ",{$key}";
 			$values .= ",'{$val}'";
 		}
