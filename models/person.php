@@ -115,7 +115,7 @@ class Person extends AppModel {
 		return $person['Person']['name'];
 	}
 
-	function getPerson($id,$simple = false) {
+	function getPerson($id, $simple = false) {
 		if ($simple) {
 			$this->sContain(
 				'PeopleSchedules.ResidentCategory'
@@ -128,38 +128,44 @@ class Person extends AppModel {
 				'FloatingShift.Area'
 			);
 		}
-		$person = $this->find('first',array(
+		$people = $this->find( is_array($id)? 'all' : 'first',array(
 			'conditions' => array('Person.id' => $id)
 		));
-		$this->Assignment->Shift->addAssignedShifts($person);
-
-		// move the constant shifts into place with the other shifts
-		if (!isset($person['PeopleSchedules']['ResidentCategory']['ConstantShift'])) {
-			$person['PeopleSchedules']['ResidentCategory']['ConstantShift'] = array();
+		if (array_key_exists("Person",$people)) { // it's only one person
+			$people = array($people);
 		}
-		foreach($person['PeopleSchedules']['ResidentCategory']['ConstantShift'] as $constant) {
-			foreach($person['Assignment'] as $offset => $assignment) {
-				if (!isset($assignment['Shift'])) {
-					continue;
-				}
-				if ($assignment['Shift']['day_id'] === $constant['day_id']) {
-					if ($assignment['Shift']['start'] >= $constant['start']) {
+		foreach($people as &$person) {
+
+			$this->Assignment->Shift->addAssignedShifts($person);
+
+			// move the constant shifts into place with the other shifts
+			if (!isset($person['PeopleSchedules']['ResidentCategory']['ConstantShift'])) {
+				$person['PeopleSchedules']['ResidentCategory']['ConstantShift'] = array();
+			}
+			foreach($person['PeopleSchedules']['ResidentCategory']['ConstantShift'] as $constant) {
+				foreach($person['Assignment'] as $offset => $assignment) {
+					if (!isset($assignment['Shift'])) {
 						continue;
 					}
-					$insert = $offset + 1;
-					break;
+					if ($assignment['Shift']['day_id'] === $constant['day_id']) {
+						if ($assignment['Shift']['start'] >= $constant['start']) {
+							continue;
+						}
+						$insert = $offset + 1;
+						break;
+					}
+				}
+				if (isset($insert)) {
+					array_splice($person['Assignment'],
+						$insert,0,array(array('ConstantShift'=>$constant)));
+					unset($insert);
+				} else {
+					$person['Assignment'][] = array('ConstantShift'=>$constant);
 				}
 			}
-			if (isset($insert)) {
-				array_splice($person['Assignment'],
-					$insert,0,array(array('ConstantShift'=>$constant)));
-				unset($insert);
-			} else {
-				$person['Assignment'][] = array('ConstantShift'=>$constant);
-			}
+			unset ($person['PeopleSchedules']['ResidentCategory']['ConstantShift']);
 		}
-		unset ($person['PeopleSchedules']['ResidentCategory']['ConstantShift']);
-		return $person;
+		return (count($people) == 1)? $people[0] : $people;
 	}	
 
 	function getGaps() {
@@ -194,6 +200,7 @@ class Person extends AppModel {
 	}
 
 	function getBoard() {
+		return $this->getPerson($this->getCurrent());
 	}
 
 	function getAvailable($shift_id) {

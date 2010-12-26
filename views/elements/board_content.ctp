@@ -1,4 +1,36 @@
-<a style="text-align: center; font-size: 14pt;" onmouseout='document.body.style.cursor="default"' onmouseover='document.body.style.cursor="pointer"' onclick="$('ysc2').toggle()"><strong>YSC 2</strong></a>
+<?
+$isPersonnel = in_array(
+	'personnel',
+	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
+);
+$isOperations = in_array(
+	'operations',
+	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
+);
+$editable = $this->Session->read('Schedule.editable');
+if (isset($area['RequestArea'])) {
+	$request = 'Request';
+	$editRequest = ($area['RequestArea']['id'] < 0) ? true : false;
+} else {
+	$request = '';
+	$editRequest = false;
+	$groupName = $this->session->read('Schedule.Group.name');
+}
+?>
+<? foreach($people as $category) {
+  $categoryData = current($category);
+  $categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
+  $categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
+  $categoryColor = $categoryData['PeopleSchedules']['ResidentCategory']['color'];
+?>
+<div align='center'>
+<?= $html->link($categoryName,array(
+	'style' => "font-size: 14pt;",
+	'onmouseout' => 'document.body.style.cursor="default"',
+	'onmouseover' => 'document.body.style.cursor="pointer"',
+	'onclick' => "$('ysc2').toggle()"
+));?>
+<? } ?>
 <table id="ysc2" style="display: none;" border="2" cellpadding="5" cellspacing="5" width="1000px">
 	<tbody><tr>
 		<td bordercolor="#000000" align="center">YSC 2</td>
