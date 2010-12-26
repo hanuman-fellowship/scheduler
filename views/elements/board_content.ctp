@@ -1,5 +1,3 @@
-<? $this->set('title_for_layout', "Big Board"); ?>
-<?=$this->element('menu')?>
 <a style="text-align: center; font-size: 14pt;" onmouseout='document.body.style.cursor="default"' onmouseover='document.body.style.cursor="pointer"' onclick="$('ysc2').toggle()"><strong>YSC 2</strong></a>
 <table id="ysc2" style="display: none;" border="2" cellpadding="5" cellspacing="5" width="1000px">
 	<tbody><tr>
