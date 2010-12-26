@@ -128,6 +128,7 @@ class Person extends AppModel {
 				'FloatingShift.Area'
 			);
 		}
+		$this->order = array('PeopleSchedules.resident_category_id','Person.first','Person.last');
 		$people = $this->find( is_array($id)? 'all' : 'first',array(
 			'conditions' => array('Person.id' => $id)
 		));
@@ -200,7 +201,8 @@ class Person extends AppModel {
 	}
 
 	function getBoard() {
-		return $this->getPerson($this->getCurrent());
+		$people = $this->getPerson($this->getCurrent());
+		return Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
 	}
 
 	function getAvailable($shift_id) {

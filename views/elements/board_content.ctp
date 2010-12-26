@@ -8,30 +8,24 @@ $isOperations = in_array(
 	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
 );
 $editable = $this->Session->read('Schedule.editable');
-if (isset($area['RequestArea'])) {
-	$request = 'Request';
-	$editRequest = ($area['RequestArea']['id'] < 0) ? true : false;
-} else {
-	$request = '';
-	$editRequest = false;
-	$groupName = $this->session->read('Schedule.Group.name');
-}
+$groupName = $this->session->read('Schedule.Group.name');
 ?>
 <? foreach($people as $category) {
-  $categoryData = current($category);
+	$categoryData = current($category);
   $categoryName = $categoryData['PeopleSchedules']['ResidentCategory']['name'];
   $categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
   $categoryColor = $categoryData['PeopleSchedules']['ResidentCategory']['color'];
 ?>
 <div align='center'>
-<?= $html->link($categoryName,array(
+<?= $html->tag('a',$categoryName,array(
 	'style' => "font-size: 14pt;",
 	'onmouseout' => 'document.body.style.cursor="default"',
 	'onmouseover' => 'document.body.style.cursor="pointer"',
-	'onclick' => "$('ysc2').toggle()"
+	'onclick' => "$('category_{$categoryId}').toggle()"
 ));?>
+</div>
 <? } ?>
-<table id="ysc2" style="display: none;" border="2" cellpadding="5" cellspacing="5" width="1000px">
+<table id="category_3" style="display: none;" border="2" cellpadding="5" cellspacing="5" width="1000px">
 	<tbody><tr>
 		<td bordercolor="#000000" align="center">YSC 2</td>
 		<td bordercolor="#000000" align="center"><strong>Hours</strong></td>
