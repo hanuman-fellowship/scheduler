@@ -111,11 +111,6 @@
 				'ajax',
 				'shortcut' => 'shift+ctrl+n'
 			),
-			'New Blank...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'add'),
-				'ajax',
-				'shortcut' => 'shift+ctrl+b'
-			),
 			"<hr/>",
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
@@ -145,6 +140,10 @@
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
 				'ajax',
 				'shortcut' => 'ctrl+p'
+			),
+			'Big Board' => array(
+				'url' => array('controller' => 'people', 'action' => 'board'),
+				'shortcut' => 'ctrl+b'
 			),
 			array('hidden'=>$hidden,'title'=>"<hr/>"),
 			'New Person...' => array(
