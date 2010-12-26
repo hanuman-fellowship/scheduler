@@ -7,7 +7,7 @@ class ScheduleHelper extends AppHelper {
 	var $hours_by = array();
 	var $helpers = array('html','text','role','ajax','session');
 		
-	function displayPersonShift($assignment,$bound,$day) {
+	function displayPersonShift($assignment,$bound,$day,$board = false) {
 		if (isset($assignment['Shift'])) {
 			$assignment_id = isset($assignment['assignment_id']) ? $assignment['assignment_id'] : 0;
 			$gaps = ($assignment_id == 0) ? true : false;
@@ -75,7 +75,7 @@ class ScheduleHelper extends AppHelper {
 							$ajax
 						)
 					),
-					!$this->session->read('Schedule.editable')
+					!$this->session->read('Schedule.editable') || $board
 				) . "<br/>";
 				return "<span class='shift'>{$output}</span>";
 			}
@@ -107,7 +107,7 @@ class ScheduleHelper extends AppHelper {
 							'ajax'
 						)
 					),
-					!$this->session->read('Schedule.editable')
+					!$this->session->read('Schedule.editable') || $board
 				) . "</span><br/>";
 				return "<span id='constant_{$shift['id']}'>{$output}</span>";
 			}
