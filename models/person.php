@@ -137,6 +137,7 @@ class Person extends AppModel {
 		}
 		foreach($people as &$person) {
 
+			$this->addDisplayName($person['Person']);
 			$this->Assignment->Shift->addAssignedShifts($person);
 
 			// move the constant shifts into place with the other shifts

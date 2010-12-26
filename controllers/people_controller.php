@@ -41,6 +41,7 @@ class PeopleController extends AppController {
 
 	function board() {
 		$this->set('change_messages',$this->getChangeMessages());
+		$this->set('bounds', $this->getBounds());
 		$this->set('people',$this->Person->getBoard());
 	}
 
