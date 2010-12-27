@@ -15,7 +15,6 @@ class PeopleController extends AppController {
 				$person = $this->Person->getGaps();
 			} else {
 				$person = $this->Person->getPerson($id);
-				$this->Person->addDisplayName($person['Person']);
 				if (!isset($this->params['requested'])) {
 					$this->set('change_messages',$this->getChangeMessages());
 					$this->Session->write('last_person',$id);
