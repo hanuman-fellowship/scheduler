@@ -21,7 +21,8 @@ $groupName = $this->session->read('Schedule.Group.name');
 	'style' => "font-weight:bold;font-size: 14pt",
 	'onmouseout' => 'document.body.style.cursor="default"',
 	'onmouseover' => 'document.body.style.cursor="pointer"',
-	'onclick' => "$('category_{$categoryId}').toggle()"
+	'onclick' => "$('category_{$categoryId}').toggle()",
+	'title' => 'Hide/Show'
 ));?>
 </div>
 <table align='center' id="category_<?=$categoryId?>" border="2" cellpadding="5" cellspacing="5" width="1000px">
@@ -58,7 +59,11 @@ $groupName = $this->session->read('Schedule.Group.name');
 			</div> 
 		</td> 
 	<? } ?>
-		<td></td>
+		<td style='font-size:12px'>
+			<?$floating = $schedule->displayPersonFloating($person['FloatingShift'],true)?>
+			<?$notes = $person['PeopleSchedules']['notes']?>
+			<?=$floating?> <?= ($floating && $notes)? '<hr>' : ''?> <i><?=$notes?></i>
+		</td>
 	</tr>
 	<script type="text/javascript">
 		$('total_hours_<?=$person['Person']['id']?>').innerHTML = <?=$schedule->total_hours['total'];?>;

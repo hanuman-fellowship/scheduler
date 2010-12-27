@@ -269,7 +269,7 @@ class ScheduleHelper extends AppHelper {
 		}
 	}
 	
-	function displayPersonFloating($floating_shifts) {
+	function displayPersonFloating($floating_shifts,$board = false) {
 		$output = array();
 		foreach ($floating_shifts as $floating_shift) {
 			$hours = $floating_shift['hours'];
@@ -293,7 +293,7 @@ class ScheduleHelper extends AppHelper {
 						'ajax'
 					)
 				),
-				!$this->session->read('Schedule.editable')
+				!$this->session->read('Schedule.editable') || $board
 			);
 			$link_title = $floating_shift['Area'] ? $floating_shift['Area']['short_name'] : '';
 			$link_url = $floating_shift['Area'] ? 
@@ -319,7 +319,8 @@ class ScheduleHelper extends AppHelper {
 				array(
 					'title' => $floating_shift['area_id'] != 0 ?
 						"View {$floating_shift['Area']['name']} Schedule"
-						: ''
+						: '',
+					'style' => 'font-weight:bold'
 				)
 			) . $note . '</span>';
 			
