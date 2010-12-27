@@ -102,25 +102,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	<tr> 
 		<td width='200px' colspan='3'> 
 			<div align="center">
-		<?= isset($groupName) ? 
-			$role->link(
-				$groupName,
-				array(
-					'operations' => array(
-						'url' => array('controller'=>'schedules','action'=>'change'),
-						'attributes'=>array(
-							'update'=>'dialog_content',
-							'complete'=>"openDialog('effective',false,'bottom')",
-							'title' => 'Change date range...',
-							'id' => 'effective',
-							'escape' => false
-						),
-						'ajax'
-					)
-				),
-				($this->params['isAjax'] || !$editable || $request)
-			)
-		: ''?>
+		<?= isset($groupName) ? $groupName : ''?>
 			</div>
 		</td> 
 	</tr> 
