@@ -59,7 +59,7 @@ $groupName = $this->session->read('Schedule.Group.name');
 			</div> 
 		</td> 
 	<? } ?>
-		<td style='font-size:12px'>
+		<td align='center' style='font-size:12px'>
 			<?$floating = $schedule->displayPersonFloating($person['FloatingShift'],true)?>
 			<?$notes = $person['PeopleSchedules']['notes']?>
 			<?=$floating?> <?= ($floating && $notes)? '<hr>' : ''?> <i><?=$notes?></i>
