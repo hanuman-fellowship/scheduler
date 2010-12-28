@@ -61,11 +61,9 @@ class PeopleController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Person->valid($this->data)) {
 				$this->Person->create();
-				$this->record();
-				$changes = $this->Person->sSave($this->data);
-				$this->stop($this->Person->PeopleSchedules->description($changes));
+				$this->Person->sSave($this->data);
 				deleteCache('people');
-				$this->set('url', $this->referer());
+				$this->set('url', array('controller'=>'people','action'=>'schedule',$this->Person->id));
 			} else {
 				$this->set('errorField',$this->Person->errorField);
 				$this->set('errorMessage',$this->Person->errorMessage);
@@ -76,13 +74,32 @@ class PeopleController extends AppController {
 		$this->set(compact('residentCategory'));
 	}
 	
+	function category($id = null) {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			if ($this->Person->PeopleSchedules->valid($this->data)) {
+				$this->Person->PeopleSchedules->sSave($this->data);
+				$this->set('url', $this->referer());
+			 } else {
+				$this->set('errorField',$this->Person->PeopleSchedules->errorField);
+				$this->set('errorMessage',$this->Person->PeopleSchedules->errorMessage);
+			}
+		}
+		if (empty($this->data)) {
+			$this->data = $this->Person->PeopleSchedules->sFind('first',array(
+				'conditions' => array('person_id' => $id),
+				'recursive' => -1
+			));
+		}
+		$residentCategory = $this->Person->PeopleSchedules->ResidentCategory->sFind('list');
+		$this->set(compact('residentCategory'));
+	}
+
 	function edit($id = null) {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Person->valid($this->data)) {
-				$this->record();
-				$changes = $this->Person->sSave($this->data);
-				$this->stop($this->Person->description($changes));
+				$this->Person->sSave($this->data);
 				$this->set('url', 
 					array('controller' => 'people', 'action' => 'schedule', $this->data['Person']['id']));
 			 } else {
@@ -95,9 +112,6 @@ class PeopleController extends AppController {
 			$this->data['Person']['resident_category_id'] = 
 				$this->data['PeopleSchedules']['resident_category_id'];
 		}
-		$this->loadModel('ResidentCategory');
-		$residentCategory = $this->ResidentCategory->sFind('list');
-		$this->set(compact('residentCategory'));
 	}
 
 	function editNotes($id = null) {

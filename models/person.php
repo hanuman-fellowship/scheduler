@@ -34,18 +34,15 @@ class Person extends AppModel {
 	}
 
 	function sSave($data) {
-		$resident_category_id = $data['Person']['resident_category_id'];
-		unset($data['Person']['resident_category_id']);
+		if (isset($data['Person']['name'])) {
+			if ($data['Person']['name'] == $data['Person']['auto_name']) {
+				unset($data['Person']['name']);
+			}
+			unset($data['Person']['auto_name']);
+		}
 		$this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
-			$this->addPeopleSchedules($this->id, $resident_category_id);
-		} else {
-			$peopleSchedules = $this->PeopleSchedules->sFind('first', array(
-				'recursive' => -1,
-				'conditions' => array('PeopleSchedules.person_id' => $data['Person']['id'])
-			));
-			$peopleSchedules['PeopleSchedules']['resident_category_id'] = $resident_category_id;
-			$this->PeopleSchedules->sSave($peopleSchedules);
+			$this->addPeopleSchedules($this->id, $data['Person']['resident_category_id']);
 		}
 	}
 	
@@ -347,11 +344,13 @@ class Person extends AppModel {
 
 	function addDisplayName(&$person) {
 		// first time this function is called, set up a list of people's last names grouped by first name
-		$person['name'] = ($person['name']) ? $person['name'] : $person['first'];
 		if (!checkCache('people.names')) {
 			writeCache('people.names',
 				Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first'));
 		}
+		
+		if ($person['name']) return;
+		$person['name'] = $person['first'];
 
 		// now find out how many letters of the last name we need for each first name
 		$lastNames = readCache("people.names.{$person['first']}");

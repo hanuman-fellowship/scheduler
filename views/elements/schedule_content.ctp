@@ -60,7 +60,22 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				);?>
 				</span>
 			<? } else { ?>
-				<?= $person['PeopleSchedules']['ResidentCategory']['name'] ?>
+				<?=$role->link(
+					$person['PeopleSchedules']['ResidentCategory']['name'],
+					array(
+						'operations' => array(
+							'url' => array('action'=>'category',$person['Person']['id']),
+							'attributes'=>array(
+								'update'=>'dialog_content',
+								'complete'=>"openDialog('category_name')",
+								'id' => 'category_name',
+								'title' => 'Edit Category...'
+							),
+							'ajax'
+						)
+					),
+					($this->params['isAjax'] || !$editable)
+				);?>
 			<? } ?>
 				<br />
 				<?= $request ? "Request Form" : "Schedule";?>
