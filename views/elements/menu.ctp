@@ -117,12 +117,12 @@
 				'ajax',
 				'shortcut' => 'shift+ctrl+d'
 			),
-//			'Merge...' => array(
-//				'url' => array('controller' => 'schedules', 'action' => 'merge'),
-//				'ajax',
-//				'hidden' => $hidden,
-//				'shortcut' => 'ctrl+m'
-//			)
+			'Merge...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'merge'),
+				'ajax',
+				'hidden' => $hidden,
+				'shortcut' => 'ctrl+m'
+			)
 		)
 	),
 	array(
