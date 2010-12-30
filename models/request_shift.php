@@ -12,7 +12,7 @@ class RequestShift extends AppModel {
 		$end = $this->dbTime($data['RequestShift']['end']);
 		if ($end <= $start) {	
 			$this->errorField = 'start';
-			$this->errorMessage = "Start must be before end";
+			$this->errorMessage = "Oops! Those hours don't make sense";
 			return false;
 		}
 		$num_people = $data['RequestShift']['num_people'];
