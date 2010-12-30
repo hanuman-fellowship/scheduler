@@ -44,7 +44,7 @@ class PeopleController extends AppController {
 		$this->set('people',$this->Person->getBoard());
 	}
 
-    function selectSchedule() {
+	function selectSchedule() {
 		$this->set('people',$this->Person->listByResidentCategory());
 	}
 

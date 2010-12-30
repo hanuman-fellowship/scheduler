@@ -200,7 +200,11 @@ class Person extends AppModel {
 
 	function getBoard() {
 		$people = $this->getPerson($this->getCurrent());
-		return Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
+		$people = Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
+		foreach ($people as &$category) {
+			$category = Set::sort(array_values($category),'{n}.Person.name','asc');
+		}
+		return $people;
 	}
 
 	function getAvailable($shift_id) {
@@ -221,9 +225,13 @@ class Person extends AppModel {
 		$list = array();
 		foreach($people as $person_num => $person) {
 			$this->addDisplayName($person['Person']);
-			$list[$person_num] = $person['Person'];
+			$list[$person_num]['Person'] = $person['Person'];
 			$list[$person_num]['ResidentCategory'] = $person['PeopleSchedules']['ResidentCategory'];
 			$list[$person_num]['available'] = $this->available($person, $shift); 
+		}
+		$list = Set::combine($list,'{n}.Person.id','{n}','{n}.ResidentCategory.id');
+		foreach ($list as &$category) {
+			$category = Set::sort(array_values($category),'{n}.Person.name','asc');
 		}
 		return $list;
 	}
@@ -302,7 +310,7 @@ class Person extends AppModel {
 	function listByResidentCategory($simple = false) {	
 		$currentPeople = $this->getCurrent();
 
-		$this->order = array('PeopleSchedules.resident_category_id','Person.first','Person.last');
+		$this->order = array('PeopleSchedules.resident_category_id');
 		$this->sContain(
 			'PeopleSchedules.ResidentCategory'
 		);
@@ -315,6 +323,9 @@ class Person extends AppModel {
 		$people = $simple ?
 			Set::combine($people,'{n}.Person.id','{n}.Person.name') :
 			Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
+		foreach ($people as &$category) {
+			$category = Set::sort(array_values($category),'{n}.Person.name','asc');
+		}
 		return $people;
 	}
 
