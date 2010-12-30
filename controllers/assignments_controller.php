@@ -27,8 +27,6 @@ class AssignmentsController extends AppController {
 			$this->stop($this->Assignment->description($changes));
 			$this->redirect($this->referer());
 		}
-		$this->loadModel('Person');
-		$this->loadModel('Shift');
 		$this->set('people',$this->Assignment->Person->getAvailable($shift_id));
 		$this->set('shift',$shift_id);	
 	}		
