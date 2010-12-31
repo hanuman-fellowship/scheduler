@@ -36,7 +36,8 @@ class Person extends AppModel {
 			$this->errorMessage = "Last name must be letters only";
 			return false;
 		}	
-		if ($this->findByFirst(trim($data['Person']['first'])) &&
+		if (!isset($data['Person']['id']) &&
+		    $this->findByFirst(trim($data['Person']['first'])) &&
 		    $this->findByLast(trim($data['Person']['last']))) {
 			$this->errorField = 'last';
 			$this->errorMessage = 'Person exists. Try "Restore"';
