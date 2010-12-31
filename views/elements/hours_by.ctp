@@ -13,6 +13,19 @@
 		</td>
 	</tr>
 	<? } ?>
+	<tr>
+		<td colspan='2'>
+			<hr>
+		</td>
+	<tr>
+	<tr>
+		<td style='text-align:right;padding-right:10px;'>
+			Total:
+		</td>
+		<td style='text-align:left'>
+			<?=$total?>
+		</td>
+	</tr>
 </table>
 </div>
 </fieldset>

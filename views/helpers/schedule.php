@@ -334,7 +334,6 @@ class ScheduleHelper extends AppHelper {
 		foreach($floating_shifts as $floating_shift) {
 			$hours = $floating_shift['hours'];
 			$this->addHours($hours,null,$floating_shift['Person']['name']);
-			$this->total_hours['total'] += $hours;
 			$hours = ($hours == 1) ? 
 				"$hours hour" :
 				"$hours hours ";
@@ -406,7 +405,7 @@ class ScheduleHelper extends AppHelper {
 		ksort($this->hours_by);
 		arsort($this->hours_by);
 		$View =& ClassRegistry::getObject('view');
-		echo $View->element('hours_by',array('data'=>$this->hours_by));
+		echo $View->element('hours_by',array('data'=>$this->hours_by,'total'=>$this->total_hours['total']));
 	}
 
 	function clearHours() {
