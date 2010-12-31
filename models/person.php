@@ -21,11 +21,27 @@ class Person extends AppModel {
 			$this->errorMessage = "First name must not be blank";
 			return false;
 		}	
+		if (trim($data['Person']['last']) == '') {
+			$this->errorField = 'last';
+			$this->errorMessage = "Last name must not be blank";
+			return false;
+		}	
 		if (!ctype_alpha(str_replace(' ','',$data['Person']['first']))) {
 			$this->errorField = 'first';
 			$this->errorMessage = "First name must be letters only";
 			return false;
 		}	
+		if (!ctype_alpha(str_replace(' ','',$data['Person']['last']))) {
+			$this->errorField = 'last';
+			$this->errorMessage = "Last name must be letters only";
+			return false;
+		}	
+		if ($this->findByFirst(trim($data['Person']['first'])) &&
+		    $this->findByLast(trim($data['Person']['last']))) {
+			$this->errorField = 'last';
+			$this->errorMessage = 'Person exists. Try "Restore"';
+			return false;
+		}
 		return true;
 	}
 
@@ -34,12 +50,6 @@ class Person extends AppModel {
 	}
 
 	function sSave($data) {
-		if (isset($data['Person']['name'])) {
-			if ($data['Person']['name'] == $data['Person']['auto_name']) {
-				unset($data['Person']['name']);
-			}
-			unset($data['Person']['auto_name']);
-		}
 		$this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
 			$this->addPeopleSchedules($this->id, $data['Person']['resident_category_id']);
@@ -359,8 +369,11 @@ class Person extends AppModel {
 			writeCache('people.names',
 				Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first'));
 		}
-		
-		if ($person['name']) return;
+
+		if ($person['display_name']) {
+			$person['name'] = $person['display_name'];
+			return;
+		}
 		$person['name'] = $person['first'];
 
 		// now find out how many letters of the last name we need for each first name

@@ -9,6 +9,10 @@
 	<?php
 		echo $form->input('first',array('id' => 'first'));
 		echo $form->input('last',array('id' => 'last'));
+		echo $form->input('display_name');
+	?>
+		<i>(leave blank to auto-generate)</i><br>
+	<?
 		echo $form->select('resident_category_id',$residentCategory,null,array('empty'=>false));
 	?>
 <?php echo $form->end('Submit');?>

@@ -283,7 +283,7 @@ CREATE TABLE `people` (
   `id` int(11) NOT NULL auto_increment,
   `first` varchar(30) NOT NULL,
   `last` varchar(30) NOT NULL,
-  `name` varchar(30) NOT NULL,
+  `display_name` varchar(30) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

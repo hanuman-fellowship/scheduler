@@ -109,8 +109,6 @@ class PeopleController extends AppController {
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Person->getPerson($id, true);
-			$this->data['Person']['resident_category_id'] = 
-				$this->data['PeopleSchedules']['resident_category_id'];
 		}
 	}
 
