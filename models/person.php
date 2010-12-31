@@ -368,8 +368,12 @@ class Person extends AppModel {
 	function addDisplayName(&$person) {
 		// first time this function is called, set up a list of people's last names grouped by first name
 		if (!checkCache('people.names')) {
+			$people = $this->getPeople();
+			foreach($people as $key => $prsn) {
+				if ($prsn['Person']['display_name']) unset($people[$key]);
+			}
 			writeCache('people.names',
-				Set::combine($this->getPeople(),'{n}.Person.id','{n}.Person.last','{n}.Person.first'));
+				Set::combine($people,'{n}.Person.id','{n}.Person.last','{n}.Person.first'));
 		}
 
 		if ($person['display_name']) {
