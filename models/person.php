@@ -55,6 +55,7 @@ class Person extends AppModel {
 		if(!isset($data['Person']['id'])) { // if this is a new person
 			$this->addPeopleSchedules($this->id, $data['Person']['resident_category_id']);
 		}
+		deleteCache('people');
 	}
 	
 	function retireMany($data) {
