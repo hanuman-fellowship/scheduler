@@ -64,7 +64,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 					$person['PeopleSchedules']['ResidentCategory']['name'],
 					array(
 						'operations' => array(
-							'url' => array('action'=>'category',isset($gaps)? '' : $person['Person']['id']),
+							'url' => array('action'=>'category',$gaps? '' : $person['Person']['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
 								'complete'=>"openDialog('category_name')",
@@ -74,7 +74,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$editable || isset($gaps))
+					($this->params['isAjax'] || !$editable || $gaps)
 				);?>
 			<? } ?>
 				<br />
