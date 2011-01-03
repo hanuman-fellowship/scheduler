@@ -107,7 +107,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$editable)
+					($this->params['isAjax'])
 				);?>
 				</span>
 			<? } ?>

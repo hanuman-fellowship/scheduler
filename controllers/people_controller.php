@@ -96,7 +96,7 @@ class PeopleController extends AppController {
 	}
 
 	function edit($id = null) {
-		$this->redirectIfNotEditable();
+		$this->redirectIfNot('operations');
 		if (!empty($this->data)) {
 			if ($this->Person->valid($this->data)) {
 				$this->Person->sSave($this->data);
