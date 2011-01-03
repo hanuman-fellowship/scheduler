@@ -33,7 +33,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<td width="9" rowspan="2">
 			&nbsp;
 		</td> 
-		<td class="title" <?= (isset($person)) ? 'id="total_hours_'.$person['Person']['id'].'"' : '';?> width="144" rowspan="2">
+		<td class="title" <?= (isset($person)) ? 'id="total_hours_'. ($gaps? '' : $person['Person']['id']) .'"' : '';?> width="144" rowspan="2">
 			<?= (isset($area)) ?
 				$area[$request.'Area']['manager'] :
 				'';?>
@@ -64,7 +64,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 					$person['PeopleSchedules']['ResidentCategory']['name'],
 					array(
 						'operations' => array(
-							'url' => array('action'=>'category',$person['Person']['id']),
+							'url' => array('action'=>'category',isset($gaps)? '' : $person['Person']['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
 								'complete'=>"openDialog('category_name')",
@@ -74,7 +74,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 							'ajax'
 						)
 					),
-					($this->params['isAjax'] || !$editable)
+					($this->params['isAjax'] || !$editable || isset($gaps))
 				);?>
 			<? } ?>
 				<br />
@@ -257,7 +257,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			<?// now that the total hours are added up, sneak them in at the top
 			?>
 			<script type="text/javascript">
-				$('total_hours_<?=$person['Person']['id']?>').innerHTML = <?=$schedule->total_hours['total'];?>;
+				$('total_hours_<?= $gaps? '' : $person['Person']['id']?>').innerHTML = <?=$schedule->total_hours['total'];?>;
 			</script>
 		<? } ?>
 		<? if ($isOperations && $editable && !$request

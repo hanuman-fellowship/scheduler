@@ -176,7 +176,7 @@
 				'url' => array(
 					'controller' => 'people',
 					'action' => 'printm',
-					(isset($person)) ? $person : null 
+					(isset($person) && !isset($gaps)) ? $person : null 
 				),
 				'ajax'
 			),

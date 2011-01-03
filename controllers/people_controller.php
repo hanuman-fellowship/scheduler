@@ -15,20 +15,20 @@ class PeopleController extends AppController {
 				$person = $this->Person->getGaps();
 			} else {
 				$person = $this->Person->getPerson($id);
-				if (!isset($this->params['requested'])) {
-					$this->set('change_messages',$this->getChangeMessages());
-					$this->Session->write('last_person',$id);
-					$this->Person->PersonnelNote->order = 'PersonnelNote.order asc';
-					$personnelNotes = $this->Person->PersonnelNote->findAllByPersonId($id);
-					$this->set('personnelNotes', Set::combine(
-						$personnelNotes,'{n}.PersonnelNote.id','{n}.PersonnelNote.note'));
-					$this->Person->OperationsNote->order = 'OperationsNote.order asc';
-					$personnelNotes = $this->Person->OperationsNote->findAllByPersonId($id);
-					$this->set('operationsNotes', Set::combine(
-					$personnelNotes,'{n}.OperationsNote.id','{n}.OperationsNote.note'));
-				} else {
-					$this->set('print',true);
-				}
+				$this->Session->write('last_person',$id);
+			}
+			if (!isset($this->params['requested'])) {
+				$this->set('change_messages',$this->getChangeMessages());
+				$this->Person->PersonnelNote->order = 'PersonnelNote.order asc';
+				$personnelNotes = $this->Person->PersonnelNote->findAllByPersonId($id);
+				$this->set('personnelNotes', Set::combine(
+					$personnelNotes,'{n}.PersonnelNote.id','{n}.PersonnelNote.note'));
+				$this->Person->OperationsNote->order = 'OperationsNote.order asc';
+				$personnelNotes = $this->Person->OperationsNote->findAllByPersonId($id);
+				$this->set('operationsNotes', Set::combine(
+				$personnelNotes,'{n}.OperationsNote.id','{n}.OperationsNote.note'));
+			} else {
+				$this->set('print',true);
 			}
 			$this->set('person',$person);		
 			$this->set('bounds', $this->getBounds());
