@@ -333,10 +333,21 @@ class Person extends AppModel {
 		));
 		$this->addDisplayNamesAll($people);
 		$people = $simple ?
-			Set::combine($people,'{n}.Person.id','{n}.Person.name') :
+			Set::combine($people,'{n}.Person.id','{n}.Person.name','{n}.PeopleSchedules.resident_category_id') :
 			Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
 		foreach ($people as &$category) {
-			$category = Set::sort(array_values($category),'{n}.Person.name','asc');
+			if ($simple) {
+				asort($category);
+			} else {
+				$category = Set::sort(array_values($category),'{n}.Person.name','asc');
+			}
+		}
+		if ($simple) {
+			$simplePeople = array();
+			foreach ($people as $category) {
+				$simplePeople += $category;
+			}
+			return $simplePeople;
 		}
 		return $people;
 	}
