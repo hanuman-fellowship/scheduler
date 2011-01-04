@@ -4,7 +4,7 @@ class OperationsNotesController extends AppController {
 	var $name = 'OperationsNotes';
 	
 	function edit($id = null) {
-		$this->redirectIfNot('personnel');
+		$this->redirectIfNot('operations');
 		if (!empty($this->data)) {
 			$this->OperationsNote->save($this->data);
 			$this->set('url',$this->referer());
@@ -18,7 +18,7 @@ class OperationsNotesController extends AppController {
 	}
 
 	function add($person_id = null) {
-		$this->redirectIfNot('personnel');
+		$this->redirectIfNot('operations');
 		if (!empty($this->data)) {
 			$this->OperationsNote->create();
 			$this->OperationsNote->save($this->data);
