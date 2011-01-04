@@ -19,7 +19,7 @@
 a {
 	text-decoration:none;
 }
-    </style>
+</style>
 
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -27,12 +27,21 @@ a {
     <td><p>&nbsp;</p>
       <table width="400" border="0" align="center" cellpadding="0" cellspacing="0">
       <tr>
-        <td><div align="center" class="style1">
-          <p>SCHEDULER</p>
-          <p><span class="style2">version 2.0b </span></p>
-          <p class="style3">&copy; 2010 Hanuman Fellowship | All Rights Reserved<br />
-          </p>
-        </div></td>
+        <td>
+				<?=$ajax->link('
+					<div align="center" class="style1">
+						<p>SCHEDULER</p>
+						<p><span class="style2">version 2.0b </span></p>
+						<p class="style3">&copy; 2011 Hanuman Fellowship | All Rights Reserved<br />
+						</p>
+					</div>',
+					array('controller'=>'people','action'=>'schedule'),
+					array(
+						'update'=>'dialog_content',
+						'escape'=>false,
+						'complete'=>"openDialog('menu_People',true,'bottom')"
+					))?>
+				</td>
       </tr>
     </table></td>
   </tr>
