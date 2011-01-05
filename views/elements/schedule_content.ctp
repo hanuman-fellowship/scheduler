@@ -17,6 +17,7 @@ if (isset($area['RequestArea'])) {
 	$groupName = $this->session->read('Schedule.Group.name');
 }
 $gaps = isset($gaps);
+$print = isset($print);
 $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $person['PeopleSchedules']['notes']);
 ?>
 <table  style='' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
@@ -125,7 +126,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 <table style="<?= $request ? "background-image:url({$html->url('/img/lines.jpg')})" : "";?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
-		<div align='center'>
+		<div align='center' class='no_print'>
 		<? if (isset($area)) { ?>
 			<? if ($request) { ?>
 				<?=$html->link('View<br/>Schedule',
@@ -139,7 +140,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 						'style'=>'color:green'
 					)
 				); ?>
-			<? } elseif ($area['hasRequest'] && $isOperations) { ?>
+			<? } elseif ($area['hasRequest'] && $isOperations && !$print) { ?>
 				<?=$html->link('View<br/>Request',
 					array(
 						'controller'=>'RequestAreas',
@@ -312,7 +313,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr> 
 	<? } ?>	
 </table> 
-<? if (!$request && !$gaps && !isset($print)) { ?>
+<? if (!$request && !$gaps && !$print) { ?>
 	<table align='center' width='850px' style='font-size:17pt;text-align:center'>
 		<tr>
 			<td align='left'>
@@ -350,7 +351,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr>
 </table>
 <? } ?>
-<? if (($isPersonnel || $isOperations) && isset($person) && !$gaps && !isset($print)) { ?>
+<? if (($isPersonnel || $isOperations) && isset($person) && !$gaps && !$print) { ?>
 <table align="center" width="774px" class='no_print' style="position:relative;top:-30px">
 	<tr>
 		<td valign="top" style="font-size:14pt;text-align:left">
