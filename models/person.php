@@ -466,6 +466,11 @@ class Person extends AppModel {
 				$this->addDisplayName($person['Person']);
 				$person[$request.'Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
 			}
+			$categories = Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
+			$people = array();
+			foreach($categories as $category) {
+				$people = array_merge($people,Set::sort(array_values($category),'{n}.Person.name','asc'));
+			}
 			$shift[$request.'Assignment'] = array_merge($people, $other_assignments);
 		}
 	}
