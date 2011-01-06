@@ -3,8 +3,6 @@ class ScheduleGroup extends AppModel {
 
 	var $name = 'ScheduleGroup';
 	
-	var $actsAs = array('Linkable');
-
 	var $hasMany = array(
 		'Schedule'
 	);
@@ -12,14 +10,16 @@ class ScheduleGroup extends AppModel {
 	function getPublished() {
 		$published = $this->find('all',array(
 			'order' => 'ScheduleGroup.start desc',
-			'conditions' => array(
-				'Schedule.name' => 'Published'
-			),
-			'link' => array(
+			'contain' => array(
 				'Schedule'
 			)
 		));
-		$published = Set::combine($published,'{n}.ScheduleGroup.id','{n}.ScheduleGroup');
+		foreach($published as &$schedules) {
+			foreach($schedules['Schedule'] as $num => $schedule) {
+				if ($schedule['name'] != 'Published') unset($schedules['Schedule'][$num]);
+			}
+			$schedules['Schedule'] = Set::sort($schedules['Schedule'],'{n}.updated','desc');
+		}
 		return $published;
 	}
 
