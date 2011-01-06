@@ -26,7 +26,7 @@
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-	Router::connect('/', array('controller' => 'people', 'action' => 'board'));
+	Router::connect('/', array('controller' => 'areas', 'action' => 'schedule'));
 
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 	

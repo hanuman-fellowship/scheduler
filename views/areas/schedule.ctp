@@ -1,8 +1,3 @@
-<? if ($this->params['isAjax'] && $area['Area']['id'] == 0) {
-	echo $javascript->codeBlock("window.location = '{$html->url('/')}'");
-	echo "Redirecting...";
-	die;
-} ?>
 <? if (isset($print)) { ?>
 	<div style='page-break-after:always'>
 <? } else { ?>
