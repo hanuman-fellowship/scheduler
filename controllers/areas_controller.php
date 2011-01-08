@@ -19,7 +19,8 @@ class AreasController extends AppController {
 			if ($this->params['isAjax']) {
 				$this->render('redirect');
 			} else {
-				$this->redirect(array('controller'=>'people','action'=>'board'));
+				$this->set('change_messages',$this->getChangeMessages());
+				$this->set('area',0);
 			}
 		}
 	}
