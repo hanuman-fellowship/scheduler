@@ -7,10 +7,7 @@
 	<tr>
 		<td style='padding-right:10px'>
 	<?=$change['Change']['id'] == 0 ? "<span style='color:green'>&darr;&nbsp;first undo</td><td></td><tr><td>" : ""?>
-	<?=$ajax->link($change['Change']['description'],array('action'=>'jump',$change['Change']['id']),array(
-		'before' => "wait()",
-		'complete' => "window.location.reload()"
-	))?>
+	<?=$change['Change']['description']?>
 		</td>
 		<td style='color:#888'>
 	<?=$time->timeAgoInWords($change['Change']['created'])?>
