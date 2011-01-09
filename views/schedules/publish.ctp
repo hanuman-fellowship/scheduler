@@ -10,8 +10,8 @@
 		<?=$form->radio(
 			'group',
 			array(
-				'update' => "Update \"{$this->Session->read('Schedule.Group.name')}\"",
-				'new' => 'New Schedule'
+				'update' => "Add to Schedule Group \"{$this->Session->read('Schedule.Group.name')}\"",
+				'new' => 'New Schedule Group'
 			),
 			array(
 				'separator' => '<br/>',
