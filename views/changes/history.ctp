@@ -17,7 +17,7 @@
 
 <? } ?>
 <?=$this->javascript->codeBlock("
-	$('redos').scrollIntoView(true);
+	$('redos').up('tr').previous('tr').scrollIntoView(true);
 	setScroll();
 ");?>
 </table>
