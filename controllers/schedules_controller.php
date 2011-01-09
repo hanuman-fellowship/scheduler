@@ -34,8 +34,9 @@ class SchedulesController extends AppController {
 	
 	function delete($id = null) {
 		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
-			$this->setSchedule($this->Schedule->delete($id));	
- 		    $this->redirect($this->referer());
+			$this->Schedule->delete($id);
+			$this->setSchedule('latest');
+			$this->redirect($this->referer());
 		}
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
