@@ -9,6 +9,7 @@ class ScheduleGroup extends AppModel {
 
 	function getPublished() {
 		$published = $this->find('all',array(
+			'order' => 'ScheduleGroup.start desc',
 			'contain' => array(
 				'Schedule'
 			)
@@ -19,7 +20,6 @@ class ScheduleGroup extends AppModel {
 			}
 			$schedules['Schedule'] = Set::sort($schedules['Schedule'],'{n}.updated','desc');
 		}
-		$published = Set::sort($published,'{n}.Schedule.0.updated','desc');
 		return $published;
 	}
 
