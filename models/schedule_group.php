@@ -18,7 +18,7 @@ class ScheduleGroup extends AppModel {
 			foreach($schedules['Schedule'] as $num => $schedule) {
 				if ($schedule['name'] != 'Published') unset($schedules['Schedule'][$num]);
 			}
-			$schedules['Schedule'] = Set::sort($schedules['Schedule'],'{n}.updated','desc');
+			$schedules['Schedule'] = Set::sort(array_values($schedules['Schedule']),'{n}.updated','desc');
 		}
 		return $published;
 	}
