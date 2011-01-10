@@ -55,7 +55,7 @@ class SchedulesController extends AppController {
 				$this->saveSetting('auto_select',$id);
 			}
 			$this->setSchedule($id);
-   		    $this->redirect($this->referer());
+			$this->redirect($this->referer());
 		}
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
