@@ -1,4 +1,7 @@
+<? $simple = isset($simple) ?>
+<? if (!$simple) { ?>
 <div class='schedule_message no_print'>
+<? } ?>
 <? 
 $schedule = $session->read('Schedule');
 $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
@@ -29,15 +32,15 @@ if (isset($area['RequestArea'])) {
 		}
 	}
 } else {
-	$message = $schedule['latest'] ? "" : "<span style='color:blue'>Viewing an old schedule: </span>";
-	$message = $schedule['username'] != '' ? "Viewing: " : $message;
-	$message = $schedule['editable'] ? "<span style='color:green'>Editing: </span>" : $message; 
+	$message = $schedule['latest'] ? "" : ($simple? '' : "<span style='color:blue'>Viewing an old schedule: </span>");
+	$message = $schedule['username'] != '' ? ($simple? '' : "Viewing: ") : $message;
+	$message = $schedule['editable'] ? ($simple? '' : "<span style='color:green'>Editing: </span>") : $message; 
 	if (in_array('operations',$userRoles)) {
 		$title = ($schedule['username'] != '') ?
 			$schedule['editable'] ? $schedule['name'] : 
 				$schedule['name']." (".$schedule['username'].")" : 
 			"Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']);
-		echo $message.' '.$this->ajax->link(
+		echo $message.($simple? $title : ' '.$this->ajax->link(
 			$title,
 			array('controller'=>'schedules','action'=>'past'),
 			array(
@@ -47,10 +50,11 @@ if (isset($area['RequestArea'])) {
 				'id' =>'past',
 				'title' => 'View past schedules...'
 			)
-		);
+		));
 	} else {
-		echo ' '.$this->ajax->link(
-			$message."Published on " . $time->format('F jS, Y g:ia',$schedule['updated']),
+		$message .= "Published on " . $time->format('F jS, Y g:ia',$schedule['updated']);
+		echo ($simple? $message : ' '.$this->ajax->link(
+			$message,
 			array('controller'=>'schedules','action'=>'past'),
 			array(
 				'escape'=>false,
@@ -59,10 +63,10 @@ if (isset($area['RequestArea'])) {
 				'id' =>'past',
 				'title' => 'View past schedules...'
 			)
-		);
+		));
 	}
 echo $schedule['editable'] ? 
-	$ajax->link(
+	($simple? '' : $ajax->link(
 		'Publish',
 		array('controller' => 'schedules', 'action' => 'publish'),
 		array(
@@ -71,8 +75,10 @@ echo $schedule['editable'] ?
 			'complete' => "openDialog('publish',true,'bottom')",
 			'id' => 'publish'
 		)
-	)
+	))
 	: '';
 }
 ?>
+<? if (!$simple) { ?>
 </div>
+<? } ?>

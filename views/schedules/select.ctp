@@ -4,26 +4,32 @@
 foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 	echo "<div id='autoSelect_{$autoSelect}' class='tall'  style='display:{$disp}'>";
 	echo "<div style='clear:both'>";
-	$style = $session->read('Schedule.latest') ? 
-		array('<i>','</i>') :
-		array(null,null);
-	echo $style[0];
-	echo $html->link('Latest Published',array('latest',$autoSelect),array('onClick'=>'wait()'));
-	echo $style[1];
+	$latest_selected = $session->read('Schedule.latest') ? 
+		'selected' :
+		'';
+	echo $html->link('Latest Published',
+		array('latest',$autoSelect),
+		array(
+			'onClick'=>'wait()',
+			'class'=> $latest_selected
+		)
+	);
 	echo "</div>";
 ?>
 	<div class='left' style='float:left;padding:10px'>
 	<b>My Schedules</b><br/>
 <?
 	foreach($schedules['mine'] as $schedule) {
-		$style = ($schedule['Schedule']['id'] == $schedule_id) ? 
-			array('<i>','</i>') :
-			array(null,null);
-		echo $style[0];
+		$mine_selected = ($schedule['Schedule']['id'] == $schedule_id) ? 
+			'selected' :
+			'';
 		echo $html->link($schedule['Schedule']['name'],
 			array($schedule['Schedule']['id'],$autoSelect),
-			array('onClick'=>'wait()'));
-		echo $style[1];
+			array(
+				'onClick'=>'wait()',
+				'class'=> $mine_selected
+			)
+		);
 		echo '<br/>';
 	}
 	?>
@@ -35,16 +41,17 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 		if( $schedule['Schedule']['user_id'] == Authsome::get('id')) {
 			continue;
 		}
-		$style = ($schedule['Schedule']['id'] == $schedule_id) ? 
-			array('<i>','</i>') :
-			array(null,null);
-		echo $style[0];
+		$other_selected = ($schedule['Schedule']['id'] == $schedule_id) ? 
+			'selected' :
+			'';
 		echo $html->link(
 			"{$schedule['Schedule']['name']} ({$schedule['User']['username']})",
 			array($schedule['Schedule']['id'],$autoSelect),
-			array('onClick'=>'wait()')
+			array(
+				'onClick'=>'wait()',
+				'class'=> $other_selected
+			)
 		);
-		echo $style[1];
 		echo '<br/>';
 	}
 	?>

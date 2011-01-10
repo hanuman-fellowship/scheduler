@@ -17,13 +17,14 @@ foreach($people as $category) {
 		<strong><?=$categoryName?></strong><br/>
 <?	
 	foreach($category as $person) {
-		$last_style = ($last == $person['Person']['id']) ? 'font-weight:bold;font-style:italic' : '';
+		$last_selected = ($last == $person['Person']['id']) ? 'selected' : '';
 		echo $html->link(
 			$person['Person']['name'],
 			array('action'=>'schedule',$person['Person']['id']),
 			array(
 				'onClick' => 'wait()',
-				'style' => $last_style . ';color:' . $categoryColor,
+				'style' => 'color:' . $categoryColor,
+				'class' => $last_selected
 			)
 		) . '<br>';
 	}

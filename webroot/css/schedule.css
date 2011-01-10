@@ -138,3 +138,7 @@ a.add {
 	padding:3px;
 	background-color:#DDDDDD
 }
+
+a.selected {
+	background-color:#FFF8BA;
+}
