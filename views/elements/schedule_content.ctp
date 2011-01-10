@@ -305,13 +305,14 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		</td> 
 	</tr> 
 	<? } ?>	
-	<? if (isset($person)) { ?>
 	<tr> 
-		<td align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
-			<?=$schedule->displayLegend();?>
+		<td align="<? isset($person)? 'center' : 'left'?>" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
+			<?= isset($person)? 
+				$schedule->displayLegend() :
+				$schedule->displayTotalArea()
+			?>
 		</td> 
 	</tr> 
-	<? } ?>	
 </table> 
 <? if (!$request && !$gaps && !$print) { ?>
 	<table align='center' width='850px' style='font-size:17pt;text-align:center'>

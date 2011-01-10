@@ -3,7 +3,7 @@ class ScheduleHelper extends AppHelper {
 
 	var $legend = array();
 	var $total_hours = array(
-		'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
+		'unassigned'=>0,'total'=>0,'1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0);
 	var $hours_by = array();
 	var $helpers = array('html','text','role','ajax','session');
 		
@@ -122,9 +122,9 @@ class ScheduleHelper extends AppHelper {
 				$this->displayTime($shift['end']);
 			$people = '';
 			$people_displayed = 0;
+			$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 			foreach ($shift[$request.'Assignment'] as $assignment) {
 				$people_displayed++;
-				$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
 				$this->addHours($length,$day,$assignment['Person']['name']);
 				
 				$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
@@ -193,6 +193,7 @@ class ScheduleHelper extends AppHelper {
 				
 			}
 			for ($i = $people_displayed; $i < $shift['num_people']; $i++) {
+				$this->total_hours['unassigned']+= $length;
 				$unassigned = "<span class='assignment'>".$this->role->link(
 					'________',
 					array(
@@ -399,6 +400,11 @@ class ScheduleHelper extends AppHelper {
 		$this->hours_by[$name] += $hours;
 		if ($day) $this->total_hours[$day] += $hours;
 		$this->total_hours['total'] += $hours;
+	}
+
+	function displayTotalArea() {
+		echo "Total Hours: {$this->total_hours['total']} of ";
+		echo $this->total_hours['total'] + $this->total_hours['unassigned'];
 	}
 
 	function displayHoursBy() {
