@@ -32,8 +32,9 @@ class SchedulesController extends AppController {
 		$this->set('groupName',$groupName);
 	}
 	
-	function delete($id = null) {
-		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id)) ) {
+	function delete($id = null,$force = false) {
+		if ($id && Authsome::get('id') == $this->Schedule->field('user_id', array('id' => $id))
+		|| $force ) {
 			$this->Schedule->delete($id);
 			$this->setSchedule('latest');
 			$this->redirect($this->referer());
@@ -47,7 +48,7 @@ class SchedulesController extends AppController {
 		)));
 		$this->set('schedule_id',scheduleId());			
 	}
-	
+
 	function select($id = null, $autoSelect = 0) {
 		if ($id) {
 			if ($autoSelect) {
