@@ -306,7 +306,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	</tr> 
 	<? } ?>	
 	<tr> 
-		<td align="<? isset($person)? 'center' : 'left'?>" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
+		<td align="<?= isset($person)? 'center' : 'left'?>" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
 			<?= isset($person)? 
 				$schedule->displayLegend() :
 				$schedule->displayTotalArea()
