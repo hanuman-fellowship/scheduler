@@ -10,38 +10,25 @@ class PeopleSchedules extends AppModel {
 	);
 
 	function sSave($data) {
+		if (isset($data['PeopleSchedules']['id'])) {
+			$name = $this->Person->getNameFromPeopleSchedulesId($data['PeopleSchedules']['id']);
+		}
 		if (isset($data['PeopleSchedules']['notes'])) {
 			$data['PeopleSchedules']['notes'] = trim($data['PeopleSchedules']['notes']);
+			$description = "{$name}'s notes changed: {$data['PeopleSchedules']['notes']}";
 		}
-		return parent::sSave($data);
+		if (isset($data['PeopleSchedules']['resident_category_id']) &&
+		isset($data['PeopleSchedules']['id'])) {
+			$category = $this->ResidentCategory->sFind('first',array(
+				'recursive' => -1,
+				'conditions' => array(
+					'ResidentCategory.id' => $data['PeopleSchedules']['resident_category_id']
+				)
+			));
+			$description = "{$name}'s category changed to {$category['ResidentCategory']['name']}";
+		}
+		parent::sSave($data);
+		return isset($description) ? $description : '';
 	}
 
-	function description($changes) {
-		if (isset($changes['newData'])) {
-			$person = $this->Person->getPerson($changes['newData']['person_id'],true);
-			if ($changes['oldData']['id'] == '') {
-				$desc = $this->restore ? 
-					"Person restored: {$person['Person']['first']}" :
-					"New person created: {$person['Person']['first']}";
-			} else {
-				$desc = 'Person changed: '.
-				"{$person['Person']['first']}";
-				$listed = false;
-				foreach($changes['newData'] as $field => $val) {
-					if ($changes['newData'][$field] != $changes['oldData'][$field]) {
-						$desc .= $listed ? ', ' : ' ';
-						$desc .= 
-							Inflector::humanize($field).':'.$val;
-						$listed = true;
-					}
-				}
-			}
-		} else {
-			$person = $this->Person->getPerson($changes['person_id'],true);
-			$desc = "Person retired: {$person['Person']['first']}";
-		}
-		return $desc;
-	}
-	
-	
 }

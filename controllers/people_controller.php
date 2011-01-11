@@ -60,9 +60,10 @@ class PeopleController extends AppController {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Person->valid($this->data)) {
+				$this->record();
 				$this->Person->create();
-				$this->Person->sSave($this->data);
-				deleteCache('people');
+				$description = $this->Person->sSave($this->data);
+				$this->stop($description);
 				$this->set('url', array('controller'=>'people','action'=>'schedule',$this->Person->id));
 			} else {
 				$this->set('errorField',$this->Person->errorField);
@@ -78,7 +79,9 @@ class PeopleController extends AppController {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			if ($this->Person->PeopleSchedules->valid($this->data)) {
-				$this->Person->PeopleSchedules->sSave($this->data);
+				$this->record();
+				$description = $this->Person->PeopleSchedules->sSave($this->data);
+				$this->stop($description);
 				$this->set('url', $this->referer());
 			 } else {
 				$this->set('errorField',$this->Person->PeopleSchedules->errorField);
@@ -130,8 +133,8 @@ class PeopleController extends AppController {
 		if (!empty($this->data)) {
 			$this->set('url', $this->referer());
 			$this->record();
-			$changes = $this->Person->retireMany($this->data);
-			$this->stop($this->Person->description($changes));
+			$description = $this->Person->retireMany($this->data);
+			$this->stop($description);
 			deleteCache('people');
 			$this->Person->doQueue(); // perform the deletes so that the new cache is made correctly	
 		}
@@ -141,9 +144,8 @@ class PeopleController extends AppController {
 	function restore($id = null) {
 		if ($id) {
 			$this->record();
-			$changes = $this->Person->restore($id);
-			$this->stop($this->Person->description($changes));
-			deleteCache('people');
+			$description = $this->Person->restore($id);
+			$this->stop($description);
 			$this->redirect($this->loadPage());
 		}
 		$this->savePage();

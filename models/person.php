@@ -46,16 +46,14 @@ class Person extends AppModel {
 		return true;
 	}
 
-	function description($changes) {
-		if (!is_array($changes)) return $changes;
-	}
-
 	function sSave($data) {
 		$this->save($data);
 		if(!isset($data['Person']['id'])) { // if this is a new person
 			$this->addPeopleSchedules($this->id, $data['Person']['resident_category_id']);
+			$description = "Person created: {$data['Person']['first']} {$data['Person']['last']}";
 		}
 		deleteCache('people');
+		return isset($description)? $description : '';
 	}
 	
 	function retireMany($data) {
@@ -102,6 +100,9 @@ class Person extends AppModel {
 		} else {
 			$this->addPeopleSchedules($id, $latest['PeopleSchedules']['resident_category_id']);	
 		}
+		deleteCache('people');
+		$person = $this->findById($id);
+		return "Person restored: {$person['Person']['first']} {$person['Person']['last']}";
 	}
 
 	function addPeopleSchedules($person_id, $rcId = 1) {
@@ -111,6 +112,11 @@ class Person extends AppModel {
 				'resident_category_id' => $rcId
 			)
 		));
+	}
+
+	function getNameFromPeopleSchedulesId($id) {
+		$peopleSchedules = $this->PeopleSchedules->findById($id);
+		return $this->getName($peopleSchedules['PeopleSchedules']['person_id']);
 	}
 
 	function getName($person_id) {
