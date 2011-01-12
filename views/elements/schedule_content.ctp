@@ -22,22 +22,18 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 ?>
 <table  style='' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
-		<td width="99" rowspan="2"> 
-			<div align="right"> 
-				<p>
+		<td width="99" rowspan="2" colspan="3"> 
+			<p style='position:relative;top:-10;left:20px;'>
 				<?= (isset($area)) ?
 				'Manager: ' :  
-				'Total Hours: ';?>
-				</p> 
-			</div>
-		</td> 
-		<td width="9" rowspan="2">
-			&nbsp;
-		</td> 
-		<td class="title" <?= (isset($person)) ? 'id="total_hours_'. ($gaps? '' : $person['Person']['id']) .'"' : '';?> width="144" rowspan="2">
+				"<a id='total_hours' title='Display Hour Breakdown... (ctrl+h)' href='javascript:showHoursBy()'>Total Hours:</a> ";?>
+		<span class="title" style='padding-left:3px;position:relative;top:3px' <?= (isset($person)) ? 'id="total_hours_'. ($gaps? '' : $person['Person']['id']) .'"' : '';?> >
 			<?= (isset($area)) ?
 				$area[$request.'Area']['manager'] :
-				'';?>
+				''
+				;?>
+				</span>
+			</p>
 		</td> 
 		<td width="222" rowspan="2"> 
 			<div align="center" class="title"> 
@@ -309,7 +305,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<td align="<?= isset($person)? 'center' : 'left'?>" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
 			<?= isset($person)? 
 				$schedule->displayLegend() :
-				$schedule->displayTotalArea()
+				"<a id='total_hours' title='Display hour breakdown (ctrl+h)' href='javascript:showHoursBy()'>".$schedule->displayTotalArea()."</a>"
 			?>
 		</td> 
 	</tr> 

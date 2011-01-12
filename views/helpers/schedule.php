@@ -403,8 +403,8 @@ class ScheduleHelper extends AppHelper {
 	}
 
 	function displayTotalArea() {
-		echo "Total Hours: {$this->total_hours['total']} of ";
-		echo $this->total_hours['total'] + $this->total_hours['unassigned'];
+		return "Total Hours: " . $this->total_hours['total'] . " of " .
+			($this->total_hours['total'] + $this->total_hours['unassigned']);
 	}
 
 	function displayHoursBy() {

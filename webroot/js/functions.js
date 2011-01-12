@@ -3,6 +3,12 @@ var stopClick = false;
 var stringWindow = '';
 var lastTime;
 
+
+function showHoursBy() {
+	$('dialog_content').innerHTML = $('hoursBy').innerHTML;
+	openDialog('total_hours',true,'left');
+}
+
 function saveOrder(id) {
 	oldOrder = $(id+'_order').value;
 	order = Sortable.serialize(id);

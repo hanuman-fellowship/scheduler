@@ -10,8 +10,7 @@
 <?= $this->element('shortcut',array(
 	'shortcut' => 'ctrl+h',
 	'codeBlock' =>"
-		$('dialog_content').innerHTML = $('hoursBy').innerHTML;
-		openDialog('content',true);
+		showHoursBy();
 	"
 ));?>
 <?= $this->element('shortcut',array(
