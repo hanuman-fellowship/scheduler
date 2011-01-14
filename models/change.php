@@ -1,208 +1,161 @@
 <?php  
-/**
- * Track Changes - Change Model class file
- *
- * Saves, manages, and performs changes (including undo and redo).
- *
- * The ids of the this model (and the foreign keys to this model)
- * are dynamic. 0 represents the latest change,
- * while positive ids represent increasingly older changes. The nudge()
- * method is used to change all of the ids by 1 when a new change is created,
- * or when a change is undone or redone.
- *
- * When an change is undone, the ids are all decremented, thus the change
- * just performed becomes -1, and the next possible change to undo (if it exists)
- * becomes 0. Negative ids are changes to be redone.
- *
- * When a change is redone, the ids are all incremented, thus the change
- * just performed becomes 0 (which makes it the next possible change to undo),
- * and the next change to redo (if it exists) becomes -1.
- * 
- * The applyChange() method always retrieves change data at id -1
- * (there are database issues with interacting with id 0)
- * so when undoing a change the ids are nudged down before
- * geting the data, and when redoing a change the ids are nudged up
- * after getting the data. In this way, the id being used is always -1.
- *
- * @author Jason Galuten <jason@galuten.com>
- * @copyright Copyright (c) 2010, Jason Galuten
- * @version 0.1
- */
+
 class Change extends AppModel { 
 
     var $name = 'Change'; 
     var $hasMany = array('ChangeField','ChangeModel');
-    var $id = 0; // the current change is always 0 
-    
-    /**
-     * Do Undo
-     * 
-     * If there is an id 0 then there is a change to be undone. First nudge
-     * the ids down (data in this model is always retrieved at id -1),
-     * then get and apply the change.
-     * 
-     * Return false if there is no change to undo.
-     */
+
     function doUndo() { 
-    	$this->id = 0;
-        if ($this->sFind('first')) { // is there an undo? (if so, the id would be 0)
-            $this->nudge(-1); // decrement undo tables ids so the next undo will be 0 
-            $this->applyChange('undo'); // read the change and apply it to the database 
-            return true; 
-        } else { 
-            return false; 
-        } 
+			if ($undo = $this->firstUndo()) {
+				$this->applyChange($undo);
+				return true; 
+			} else { 
+				return false; 
+			} 
     } 
  
-    /**
-     * Do Redo
-     * 
-     * If there is an id -1 then there is a change to redo. Get and apply
-     * the change and then nudge the ids up (so that the change is
-     * undoable at id 0, etc,)
-     * 
-     * Return false if there is no change to redo.
-     */    
     function doRedo() {
-		$this->id = -1;
-        if ($this->sFind('first')) { // is there a change to redo? (redoable changes are always negative) 
-            $this->applyChange('redo'); 
-            $this->nudge(1);             
-            return true; 
-        } else { 
-            return false; 
-        } 
-    } 
-
-    function applyChange($direction) { 
-        // for undo, the nudge happens before this function, for redo it's after 
-        // so that either way the table id we use is -1 
-        $this->id = -1;  
-        $field_val = ($direction == 'undo') ? 'field_old_val' : 'field_new_val';
-        $this->sContain('ChangeModel.ChangeField'); 
-        $data = $this->sFind('first');
-        foreach ($data['ChangeModel'] as $model_num => $change_model) { 
-            $model_data = Set::combine($change_model,  
-                'ChangeField.{n}.field_key',  
-                "ChangeField.{n}.{$field_val}" 
-            );
-            // now perform the action specified in the Change            
-            $model = ClassRegistry::init($change_model['name']);
-            // if it's not an update, then reverse the action if it's an undo.
-            if ($change_model['action'] != 2) {
-            	$change_model['action'] ^= ($direction == 'undo') ? 1 : 0;
-            }
-            switch ($change_model['action']) {
-            	case 0: // delete
-					$model->qDelete($change_model['record_id']);
-                	break;
-                case 1: // create
-                	$model->qInsert($model_data);
-                	break;
-                case 2: // update
-                	foreach($model_data as $field => $value) {
-               			$update["{$model->name}.$field"] = "'{$value}'";
-               		}
-                	$model->updateAll($update, array(
-                		"{$model->name}.id"          => $model_data['id'],
-                		"{$model->name}.schedule_id" => $model_data['schedule_id']
-                	));
-                	break;
-            } 
-			if ($change_model['name'] == 'PeopleSchedules') {
-				deleteCache('people');
+			if ($redo = $this->firstRedo()) {
+				$this->applyChange($redo);
+				return true;
+			} else {
+				return false;
 			}
-        } 
-    } 
+    }
 
+		function firstUndo() {
+			$this->sContain('ChangeModel.ChangeField'); 
+			return $this->sFind('first',array(
+				'conditions' => array(
+					'Change.undone' => 0
+				),
+				'order' => 'Change.created desc'
+			));
+		}
+
+		function firstRedo() {
+			$this->sContain('ChangeModel.ChangeField'); 
+			return $this->sFind('first',array(
+				'conditions' => array(
+					'Change.undone' => 1
+				),
+				'order' => 'Change.created asc'
+			));
+		}
+
+    function applyChange($data) { 
+			$direction = $data['Change']['undone']? 'redo' : 'undo';
+			$field_val = ($direction == 'undo') ? 'field_old_val' : 'field_new_val';
+			foreach ($data['ChangeModel'] as $model_num => $change_model) { 
+				$model_data = Set::combine($change_model,  
+					'ChangeField.{n}.field_key',  
+					"ChangeField.{n}.{$field_val}" 
+				);
+				// now perform the action specified in the Change            
+				$model = ClassRegistry::init($change_model['name']);
+				// if it's not an update, then reverse the action if it's an undo.
+				if ($change_model['action'] != 2) {
+					$change_model['action'] ^= ($direction == 'undo') ? 1 : 0;
+				}
+				switch ($change_model['action']) {
+					case 0: // delete
+						$model->qDelete($change_model['record_id']);
+						break;
+					case 1: // create
+						$model->qInsert($model_data);
+						break;
+					case 2: // update
+						foreach($model_data as $field => $value) {
+							$update["{$model->name}.$field"] = "'{$value}'";
+						}
+						$model->updateAll($update, array(
+							"{$model->name}.id"          => $model_data['id'],
+							"{$model->name}.schedule_id" => $model_data['schedule_id']
+						));
+						break;
+				} 
+				if ($change_model['name'] == 'PeopleSchedules') {
+					deleteCache('people');
+				}
+			} 
+			$this->save(array('Change' => array(
+				'id' => $data['Change']['id'],
+				'undone' => ($direction == 'undo') ? 1 : 0
+			)));
+			
+    } 
 
     function getOldData($model_name, $id) { 
     	$model =& ClassRegistry::init($model_name);
-        $this->oldData = $model->find('first', 
-			array ( 
-				'conditions' => array (
-					"{$model_name}.id"          => $id,
-					"{$model_name}.schedule_id" => scheduleId()
-				), 
-				'recursive' => -1 
-			) 
-		);
+			$this->oldData = $model->find('first', 
+				array ( 
+					'conditions' => array (
+						"{$model_name}.id"          => $id,
+						"{$model_name}.schedule_id" => scheduleId()
+					), 
+					'recursive' => -1 
+				) 
+			);
     }             
      
     function saveChange($action) {
-        $model_name = key($this->newData);
-        $fields = array_keys($this->newData[$model_name]);
-		// if it's a create, get the last inserted id, otherwise get the oldData id
-		$id = ($action == 1) ? 
-			ClassRegistry::init($model_name)->getLastInsertId() : 
-			$this->oldData[$model_name]['id'];
-		if ($action != 0) {
-			$this->newData[$model_name]['id'] = $id;
-			$fields[] = 'id';
-		}
-		$last_id = $this->ChangeModel->qInsert(array(
-			'change_id'   => 0, 
-			'name'        => $model_name, 
-			'action'      => $action, 
-			'record_id'   => $id,
-			'schedule_id' => scheduleId()
-		));
-		foreach ($fields as $field_key) { 
-			$this->ChangeField->qInsert(array(
-				'change_id' => 0,
-				'change_model_id' => $last_id,
-				'field_key' => $field_key,
-				'field_old_val' => $this->oldData[$model_name][$field_key],
-				'field_new_val' => $this->newData[$model_name][$field_key],
+			$model_name = key($this->newData);
+			$fields = array_keys($this->newData[$model_name]);
+			// if it's a create, get the last inserted id, otherwise get the oldData id
+			$id = ($action == 1) ? 
+				ClassRegistry::init($model_name)->getLastInsertId() : 
+				$this->oldData[$model_name]['id'];
+			if ($action != 0) {
+				$this->newData[$model_name]['id'] = $id;
+				$fields[] = 'id';
+			}
+			$this->save(array( 
+				'Change' => array( 
+					'description' => '',
+					'schedule_id' => scheduleId()
+				) 
+			));
+			$change_model_id = $this->ChangeModel->qInsert(array(
+				'change_id'   => $this->id, 
+				'name'        => $model_name, 
+				'action'      => $action, 
+				'record_id'   => $id,
 				'schedule_id' => scheduleId()
 			));
-		}
-    }     
-     
-    /**
-     * Clear Hanging
-     *
-     * Any time something happens that makes redoing impossible 
-     * (i.e. when some changes have been undone and a new 
-     * change is made) this function is called.
-     */
-    function clearHanging() { 
-    	$scheduleID = scheduleId();
-		$this->query("DELETE FROM changes 
-			WHERE changes.id < 0 AND changes.schedule_id = {$scheduleID}");
-		$this->query("DELETE FROM change_models 
-			WHERE change_models.change_id < 0 AND change_models.schedule_id = {$scheduleID}");
-		$this->query("DELETE FROM change_fields 
-			WHERE change_fields.change_id < 0 AND change_fields.schedule_id = {$scheduleID}");
+			foreach ($fields as $field_key) { 
+				$this->ChangeField->qInsert(array(
+					'change_id' => $this->id,
+					'change_model_id' => $change_model_id,
+					'field_key' => $field_key,
+					'field_old_val' => $this->oldData[$model_name][$field_key],
+					'field_new_val' => $this->newData[$model_name][$field_key],
+					'schedule_id' => scheduleId()
+				));
+			}
     }     
 
-    /**
-     * Nudge
-     *
-     * increments or decrements all of the ids in the Change model
-     * and the foreign keys in the ChangeModel and ChangeField models
-     *
-     * $i should be 1 or -1 
-     */
-    function nudge($i) { 
-        $this->updateAll(
-        	array('Change.id' => "Change.id + {$i}"),
-        	array('Change.schedule_id' => scheduleId())
-        );      
-        $this->ChangeModel->updateAll(
-        	array('ChangeModel.change_id' => "ChangeModel.change_id + {$i}"),
-        	array('ChangeModel.schedule_id' => scheduleId())
-        );      
-        $this->ChangeField->updateAll(
-        	array('ChangeField.change_id' => "ChangeField.change_id + {$i}"),
-        	array('ChangeField.schedule_id' => scheduleId())
-        );      
-    } 
-     
-	/**
-	 * Jumps to the specified change. (Performs the undos/redos up to the one specified)
-	 *
-	 */
+    function clearHanging() { 
+    	$scheduleID = scheduleId();
+			$redos = $this->sFind('all',array(
+				'conditions' => array('Change.undone' => 1),
+				'recursive' => -1,
+				'fields' => array('Change.id')
+			));
+			$ids = '';
+			foreach($redos as $redo) {
+				$ids .= $redo['Change']['id'] . ',';
+			}
+			$ids = substr_replace($ids,'',-1);
+			if ($ids) {
+				$this->query("DELETE FROM changes 
+					WHERE changes.id IN ({$ids}) AND changes.schedule_id = {$scheduleID}");
+				$this->query("DELETE FROM change_models 
+					WHERE change_models.change_id IN ({$ids}) AND change_models.schedule_id = {$scheduleID}");
+				$this->query("DELETE FROM change_fields 
+					WHERE change_fields.change_id IN ({$ids}) AND change_fields.schedule_id = {$scheduleID}");
+			}
+    }     
+
 	function jumpTo($id) {
 		$direction = 'redo';
 		$distance = abs($id);
@@ -221,14 +174,20 @@ class Change extends AppModel {
 
 	function getMessages() {
 		return array(
-			'undo' => $this->field('description', array(
-				'Change.schedule_id' => scheduleId(),
-				'Change.id' => 0
-			)),
-			'redo' => $this->field('description', array(
-				'Change.schedule_id' => scheduleId(),
-				'Change.id' => -1
-			))
+			'undo' => $this->field('description',
+				array(
+					'Change.schedule_id' => scheduleId(),
+					'Change.undone' => 0
+				),
+				'Change.created desc'
+			),
+			'redo' => $this->field('description',
+				array(
+					'Change.schedule_id' => scheduleId(),
+					'Change.undone' => 1
+				),
+				'Change.created asc'
+			)
 		);
 	}
 

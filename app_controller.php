@@ -118,8 +118,7 @@ class AppController extends Controller {
 	
 	function record() {
 		$this->loadModel('Change');
-        $this->Change->clearHanging(); 
-        $this->Change->nudge(1);
+		$this->Change->clearHanging(); 
 	}
 	
 	function stop($description) {
@@ -127,9 +126,8 @@ class AppController extends Controller {
 		$this->loadModel('Change');
         $this->Change->save(array( 
             'Change' => array( 
-                'id' => 0, 
-                'description' => $description,
-                'schedule_id' => scheduleId()
+                'id' => $this->Change->id, 
+                'description' => $description
             ) 
         )); 	
 	}	
