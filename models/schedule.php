@@ -192,8 +192,8 @@ class Schedule extends AppModel {
 			}		
 		}
 				
-		// find matching data and reference the ids from one schedule to another		
 		/*
+		// find matching data and reference the ids from one schedule to another		
 		foreach($data as $modelName => $schedules) {
 			foreach($schedules[$sched_ids['a']] as $a_record_id => $a_data) {
 				$a_data['id']          = null;
@@ -215,11 +215,12 @@ class Schedule extends AppModel {
 		foreach($sched_ids as $key => $sched_id) {
 			$this->Change->id = '';
 			setScheduleId($sched_id);
-			$this->Change->clearHanging(); // get rid of redos
-			$this->Change->nudge(1); // move the ids up so that the first record is not 0
 			$this->Change->sContain('ChangeModel.ChangeField');
-			$changes[$key] = $this->Change->sFind('all');
-			$this->Change->nudge(-1); // move the ids back
+			$changes[$key] = $this->Change->sFind('all',array(
+				'conditions' => array(
+					'Change.undone' => 0
+				)
+			));
 		}
 		setScheduleId($scheduleID);
 
@@ -406,23 +407,26 @@ class Schedule extends AppModel {
 				}
 			}
 		}
-		// save changes from b as redos for a
+
+		// copy changes
 		if (!$this->conflicts) {
-			$new_change_id = 0;		
+			$this->Change->clearHanging();
 			foreach($changes['b'] as $change) {
-				$new_change_id --;
-				$change['Change']['id']          = $new_change_id;
+				unset($change['Change']['id']);
 				$change['Change']['schedule_id'] = $sched_ids['a'];
-				$this->Change->save(array('Change' => $change['Change']));
-				foreach($change['ChangeModel'] as $change_model) {
+				$this->Change->create();
+				$toApply = array('Change' => $change['Change']);
+				$this->Change->save($toApply);
+				foreach($change['ChangeModel'] as $modelNum => $change_model) {
 					$change_model_data = array('ChangeModel' => $change_model);
-					$change_model_data['ChangeModel']['change_id']   = $new_change_id;
+					$change_model_data['ChangeModel']['change_id']   = $this->Change->id;
 					$change_model_data['ChangeModel']['schedule_id'] = $sched_ids['a'];
 					unset($change_model_data['ChangeModel']['ChangeField']);
 					unset($change_model_data['ChangeModel']['id']);
 					$change_model_id = $this->Change->ChangeModel->qInsert($change_model_data);
-					foreach($change_model['ChangeField'] as $field) {
-						$field['change_id']       = $new_change_id;
+					$toApply['ChangeModel'][$modelNum] = $change_model_data['ChangeModel'];
+					foreach($change_model['ChangeField'] as $fieldNum => $field) {
+						$field['change_id']       = $this->Change->id;
 						$field['change_model_id'] = $change_model_id;
 						$field['schedule_id']     = $sched_ids['a'];
 						if ($field['field_key'] == 'schedule_id') {
@@ -432,13 +436,12 @@ class Schedule extends AppModel {
 						$change_field_data = array('ChangeField' => $field);
 						unset($change_field_data['ChangeField']['id']);
 						$this->Change->ChangeField->qInsert($change_field_data);
+						$toApply['ChangeModel'][$modelNum]['ChangeField'][$fieldNum] = $change_field_data['ChangeField'];
 					}
 				}
+				$this->Change->applyChange($toApply,'fromMerge');
 			}
 			$this->Change->doQueue();
-			// apply all the new changes
-			while($this->Change->doRedo()) {
-			}
 		} else {
 			echo 'Conflicts merging b into a<br><br>';
 			debug($this->conflicts);

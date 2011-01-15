@@ -1,7 +1,7 @@
 <?
 
-if (strtotime('')) echo 'yes'; else echo 'no';
-
+$a = -1;
+if ($a) echo 'yes';
 
 
 
