@@ -69,17 +69,30 @@ class SchedulesController extends AppController {
 
 	function merge($id = null) {
 		$this->redirectIfNotEditable();
-		$conflicts = !empty($this->data) ? $this->data['Schedule'] : array();
+
+		// if there's post data get it as $conflicts
+		$conflicts = isset($this->data['Schedule']['conflicts']) ? $this->data['Schedule'] : array();
+
+		$confirm = empty($this->data);
+
+		// replopulate $id when receiving post data
 		$id = isset($this->data['Schedule']['schedule_id']) ? $this->data['Schedule']['schedule_id'] : $id;
+
 		if ($id) {
-			$merged = $this->Schedule->merge($id,$conflicts);
-			if ($merged['success']) {
-				$this->set('descriptions',$merged['descriptions']);
-				$this->render('merged');
+			$merged = $this->Schedule->merge($id,$conflicts,'dry_run');
+			$this->set('schedule_id',$id);
+			$this->set('descriptions',$merged['descriptions']);
+			if ($confirm) {
+				$this->set('schedule',$this->Schedule->findById($id));
+				$this->render('confirm_merge');
 			} else {
-				$this->set('conflicts',$merged['conflicts']);
-				$this->set('schedule_id',$id);
-				$this->render('conflicts');
+				if ($merged['success']) {
+					$this->Schedule->merge($id,$conflicts);
+					$this->render('merged');
+				} else {
+					$this->set('conflicts',$merged['conflicts']);
+					$this->render('conflicts');
+				}
 			}
 		}
 		$this->Schedule->order = 'id';

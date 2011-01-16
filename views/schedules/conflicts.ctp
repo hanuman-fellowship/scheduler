@@ -24,6 +24,7 @@ Check the changes you'd like to import (despite the conflict)</span><hr>
 	<? } ?>
 	</div>
 <? } ?>
+<?=$form->hidden('conflicts')?>
 <?=$form->submit('Merge')?>
 <?=$form->end()?>
 </div>

@@ -1,7 +1,7 @@
 <fieldset>
 	<legend><?php __('Merge Successful');?></legend>
+<div class='left'>New Changes:</div><hr>
 <div class='tall left'>
-<b>New Changes:</b><br><br>
 <? foreach($descriptions as $description) { ?>
 	<?=$description?><br>
 <? } ?>

@@ -160,7 +160,7 @@ class Schedule extends AppModel {
 	/**
 	 * Merge the branch passed into the current schedule
 	 */
-	function merge($id,$conflicts) {
+	function merge($id,$conflicts,$dry_run = false) {
 
 		if ($conflicts) $this->bypass = true;
 		$this->id = scheduleId();
@@ -418,7 +418,7 @@ class Schedule extends AppModel {
 		}
 
 		// copy changes
-		if (!$this->conflicts) {
+		if (!$this->conflicts && !$dry_run) {
 			$this->Change->clearHanging();
 			$descriptions = array();
 			foreach($changes['b'] as $change) {
@@ -455,7 +455,12 @@ class Schedule extends AppModel {
 			$this->Change->doQueue();
 			return array('success' => true, 'descriptions' => $descriptions);
 		} else {
-			return array('success' => false, 'conflicts' => $this->conflicts);
+			$descriptions = Set::combine($changes['b'],'{n}.Change.id','{n}.Change.description');
+			if ($this->conflicts) {
+				return array('success' => false, 'conflicts' => $this->conflicts,'descriptions'=>$descriptions);
+			} else {
+				return array('success' => true, 'descriptions' => $descriptions);
+			}
 		}
 	}
 
