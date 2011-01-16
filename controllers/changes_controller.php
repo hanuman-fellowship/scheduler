@@ -16,7 +16,7 @@ class ChangesController extends AppController {
 	} 
 	
 	function history() {
-		$this->redirectIfNotEditable();
+		$this->redirectIfNot('operations');
 		$this->Change->recursive = -1;
 		$this->Change->order = 'created desc';
 		$this->set('changes',$this->Change->sFind('all'));
