@@ -469,8 +469,8 @@ class Schedule extends AppModel {
 			'a' => $change0['Change']['description'],
 			'b' => $change1['Change']['description'],
 		);
-		$this->conflicts[$conflict_key['a']]['a'] = $new_conflict['a'];
-		$this->conflicts[$conflict_key['a']]['conflicts'][$conflict_key['b']] = array('b' => $new_conflict['b']);
+		$this->conflicts[$conflict_key['b']]['b'] = $new_conflict['b'];
+		$this->conflicts[$conflict_key['b']]['conflicts'][$conflict_key['a']] = array('a' => $new_conflict['a']);
 	}
 
 	function updateEffective($data) {

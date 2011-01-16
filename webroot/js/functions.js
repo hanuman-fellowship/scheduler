@@ -3,7 +3,6 @@ var stopClick = false;
 var stringWindow = '';
 var lastTime;
 
-
 function showHoursBy() {
 	$('dialog_content').innerHTML = $('hoursBy').innerHTML;
 	openDialog('total_hours',true,'left');
