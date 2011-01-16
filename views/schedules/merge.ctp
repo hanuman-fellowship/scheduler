@@ -3,9 +3,12 @@
 <?
 foreach($schedules as $schedule) {
 	if (!in_array($schedule['Schedule']['id'],array($schedule_id, $parent_id))) {
-		echo $html->link($schedule['Schedule']['name'],
+		echo $ajax->link($schedule['Schedule']['name'],
 			array($schedule['Schedule']['id']),
-			array('onClick'=>'wait()')
+			array(
+				'before'=>'wait()',
+				'update'=>'dialog_content',
+			)
 		);
 		echo '<br/>';
 	}

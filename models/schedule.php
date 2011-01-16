@@ -26,6 +26,7 @@ class Schedule extends AppModel {
 	);
 
 	var $conflicts = array();
+	var $bypass = false;
 
 	function valid($data) {
 		$effective = isset($data['Schedule']['effective']);
@@ -159,8 +160,9 @@ class Schedule extends AppModel {
 	/**
 	 * Merge the branch passed into the current schedule
 	 */
-	function merge($id) {
+	function merge($id,$conflicts) {
 
+		if ($conflicts) $this->bypass = true;
 		$this->id = scheduleId();
 		$my_parent = $this->field('parent_id');
 		$this->id = $id;
@@ -225,7 +227,14 @@ class Schedule extends AppModel {
 		setScheduleId($scheduleID);
 
 		// get rid of changes that are identical (from a previous merge)
+		// also get rid of conflicting changes that the user bypassed 
 		foreach($changes['b'] as $bKey => $b_change) {
+			if (array_key_exists($b_change['Change']['id'],$conflicts)) {
+				if (!$conflicts[$b_change['Change']['id']]) {
+					unset($changes['b'][$bKey]);
+					continue;
+				}
+			}
 			foreach($changes['a'] as $aKey => $a_change) {
 				if ($a_change['Change']['description'] == $b_change['Change']['description']
 					&& $a_change['Change']['created'] == $b_change['Change']['created']) {
@@ -411,11 +420,13 @@ class Schedule extends AppModel {
 		// copy changes
 		if (!$this->conflicts) {
 			$this->Change->clearHanging();
+			$descriptions = array();
 			foreach($changes['b'] as $change) {
 				unset($change['Change']['id']);
 				$change['Change']['schedule_id'] = $sched_ids['a'];
 				$this->Change->create();
 				$toApply = array('Change' => $change['Change']);
+				$descriptions[] = $change['Change']['description'];
 				$this->Change->save($toApply);
 				foreach($change['ChangeModel'] as $modelNum => $change_model) {
 					$change_model_data = array('ChangeModel' => $change_model);
@@ -442,13 +453,14 @@ class Schedule extends AppModel {
 				$this->Change->applyChange($toApply,'fromMerge');
 			}
 			$this->Change->doQueue();
+			return array('success' => true, 'descriptions' => $descriptions);
 		} else {
-			echo 'Conflicts merging b into a<br><br>';
-			debug($this->conflicts);
+			return array('success' => false, 'conflicts' => $this->conflicts);
 		}
 	}
 
 	function addConflict($change0, $change1) {
+		if ($this->bypass) return;
 		$conflict_key = array(
 			'a'  => $change0['Change']['id'],
 			'b'  => $change1['Change']['id']

@@ -69,11 +69,19 @@ class SchedulesController extends AppController {
 
 	function merge($id = null) {
 		$this->redirectIfNotEditable();
+		$conflicts = !empty($this->data) ? $this->data['Schedule'] : array();
+		$id = isset($this->data['Schedule']['schedule_id']) ? $this->data['Schedule']['schedule_id'] : $id;
 		if ($id) {
-			$this->Schedule->merge($id);
-			$this->redirect($this->loadPage());
+			$merged = $this->Schedule->merge($id,$conflicts);
+			if ($merged['success']) {
+				$this->set('descriptions',$merged['descriptions']);
+				$this->render('merged');
+			} else {
+				$this->set('conflicts',$merged['conflicts']);
+				$this->set('schedule_id',$id);
+				$this->render('conflicts');
+			}
 		}
-		$this->savePage();
 		$this->Schedule->order = 'id';
 		$this->Schedule->contain();
 		$this->set('schedules',$this->Schedule->find('all',array(

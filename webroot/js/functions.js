@@ -127,14 +127,19 @@ function clickLink(link) {
 }
 
 function hideDialog() {
-	if (!stopClick && $('dialog').style.zIndex != 999) {
-		if(highlighted != '') {
-			$(highlighted).style.backgroundColor = '';
+	if ($('reload_on_close')) {
+		wait();
+		window.location.reload();
+	} else {
+		if (!stopClick && $('dialog').style.zIndex != 999) {
+			if(highlighted != '') {
+				$(highlighted).style.backgroundColor = '';
+			}
+			$('dialog').style.display = 'none';
+			$('behind_dialog').style.display = 'none';
 		}
-		$('dialog').style.display = 'none';
-		$('behind_dialog').style.display = 'none';
+		stopClick = false;
 	}
-	stopClick = false;
 }
 
 function openDialog(id,noHighlight,position) {
@@ -258,7 +263,6 @@ function keepOnScreen(id) {
 	$(id).style.top = newTop+'px';
 }
 	
-
 function wait() {
 	$('dialog').style.zIndex = 999;
 	$('error').hide();
