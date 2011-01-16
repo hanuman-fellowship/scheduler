@@ -99,16 +99,14 @@ class Area extends AppModel {
 		$since = $since ? date('Y-m-d H:i:s',$since) : 0;
 		$changed = array();
 		$this->Change = ClassRegistry::init('Change');
-		$this->Change->nudge(1); // so that the first one is not 0
 		$this->Change->id = '';
 		$this->Change->sContain('ChangeModel.ChangeField');
 		$changes = $this->Change->sFind('all',array(
 			'conditions' => array(
-				'Change.id >=' => 1,
+				'Change.undone' => 0,
 				'Change.created >=' => $since
 			)
 		));
-		$this->Change->nudge(-1); // move them back
 		foreach($changes as $change) {
 			foreach($change['ChangeModel'] as $changeModel) {
 				switch ($changeModel['name']) {
