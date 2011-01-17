@@ -71,7 +71,7 @@ class SchedulesController extends AppController {
 		$this->redirectIfNotEditable();
 
 		// if there's post data get it as $choices
-		$choices = isset($this->data['Schedule']['conflicts']) ? $this->data['Schedule'] : array();
+		$choices = isset($this->data['Schedule']) ? $this->data['Schedule'] : array();
 
 		$confirm = empty($this->data);
 
