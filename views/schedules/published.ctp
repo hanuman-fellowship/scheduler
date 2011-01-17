@@ -1,5 +1,5 @@
 <fieldset>
-	<legend><?php __('Past Schedules');?></legend>
+	<legend><?php __('Published Schedules');?></legend>
 <div class='tall left' style='width:30em'>
 <?  $root = $this->html->url('/'); ?>
 <table width='100%'>

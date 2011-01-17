@@ -63,7 +63,7 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',scheduleId());		
 	}
 	
-	function past() {
+	function published() {
 		$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
 	}
 

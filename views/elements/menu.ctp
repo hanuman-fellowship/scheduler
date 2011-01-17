@@ -99,26 +99,26 @@ $editable = $this->Session->read('Schedule.editable');
 		'url' => array('controller' => 'schedules', 'action' => 'select'),
 		'ajax',
 		'sub' => array(
-			'Select...' => array(
+			'Works in Progress...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
 				'ajax'
 			),
-			'View Past...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'past'),
+			'Published...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'published'),
 				'ajax',
 				'shortcut' => 'ctrl+o'
 			),
+			"<hr/>",
 			'View Gaps' => array(
 				'url' => array('controller' => 'people', 'action' => 'schedule','gaps'),
 				'shortcut' => 'ctrl+g'
 			),
 			"<hr/>",
-			'New Copy...' => array(
+			'Edit a Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'copy'),
 				'ajax',
 				'shortcut' => 'shift+ctrl+n'
 			),
-			"<hr/>",
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
 				'ajax',
