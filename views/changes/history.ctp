@@ -5,19 +5,16 @@
 <table width='100%'>
 <? foreach($changes as $change) { ?>
 	<tr>
-		<td style='padding-right:10px'>
-	<?=$change['Change']['id'] == 0 ? "<span style='color:green'>&darr;&nbsp;first undo</td><td></td><tr><td>" : ""?>
+		<td class='undone<?=$change['Change']['undone']?>' style='padding-right:10px;<?= $change['Change']['undone'] ? 'text-decoration:line-through' : ''?>'>
 	<?=$change['Change']['description']?>
 		</td>
 		<td style='color:#888'>
 	<?=$time->timeAgoInWords($change['Change']['created'])?>
 		</td>
 	</tr>
-	<?=$change['Change']['id'] == -1 ? "<tr><td><span id='redos' style='color:green'>&uarr;&nbsp;first redo</td<td></td></tr>" : ""?>
-
 <? } ?>
 <?=$this->javascript->codeBlock("
-	$('redos').up('tr').previous('tr').scrollIntoView(true);
+	$$('.undone1').last().up('tr').previous('tr',7).scrollIntoView(true);
 	setScroll();
 ");?>
 </table>
