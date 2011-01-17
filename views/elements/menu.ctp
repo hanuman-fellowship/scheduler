@@ -99,9 +99,10 @@ $editable = $this->Session->read('Schedule.editable');
 		'url' => array('controller' => 'schedules', 'action' => 'select'),
 		'ajax',
 		'sub' => array(
-			'Works in Progress...' => array(
+			'In Progress...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'ctrl+i'
 			),
 			'Published...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'published'),
