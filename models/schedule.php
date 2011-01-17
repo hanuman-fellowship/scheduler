@@ -226,15 +226,15 @@ class Schedule extends AppModel {
 		}
 		setScheduleId($scheduleID);
 
-		// get rid of changes that are identical (from a previous merge)
-		// also get rid of conflicting changes that the user bypassed 
 		foreach($changes['b'] as $bKey => $b_change) {
+			// get rid of changes that the user bypassed 
 			if (array_key_exists($b_change['Change']['id'],$choices)) {
 				if (!$choices[$b_change['Change']['id']]) {
 					unset($changes['b'][$bKey]);
 					continue;
 				}
 			}
+			// get rid of changes that are identical (from a previous merge)
 			foreach($changes['a'] as $aKey => $a_change) {
 				if ($a_change['Change']['description'] == $b_change['Change']['description']
 					&& $a_change['Change']['created'] == $b_change['Change']['created']) {
