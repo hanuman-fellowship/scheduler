@@ -1,5 +1,7 @@
 <fieldset>
-	<legend><?php __('Merge Schedule');?></legend>
+	<legend><?php __('Merge');?></legend>
+	Choose a schedule to import changes from:<hr>
+	<div class='tall left'>
 <?
 foreach($schedules as $schedule) {
 	if (!in_array($schedule['Schedule']['id'],array($schedule_id, $parent_id))) {
@@ -14,5 +16,6 @@ foreach($schedules as $schedule) {
 	}
 }	
 ?>
+</div>
 </fieldset>
 <?=$this->element('message');?>

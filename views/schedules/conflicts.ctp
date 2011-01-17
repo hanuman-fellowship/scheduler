@@ -1,8 +1,9 @@
 <fieldset>
-	<legend><?php __('Conflicts');?></legend>
-<span style='font-size:12px'>Check the boxes next to <span style='color:green'>changes</span> you'd like to import.<br>
-<span style='color:red'>Conflicts</span> are listed with your changes <i>underneath</i> the change to be imported.<br>
-</span><hr>
+	<legend><?php __("Import changes from <b>{$schedule['Schedule']['name']}</b>?");?></legend>
+<? if ($changes) { ?>
+Check the boxes next to changes you'd like to import.
+<?= $conflicts? "<br><span style='color:red'>Conflicts</span> are listed with your changes <i>underneath</i> the change to be imported.<br>
+</span>" : ""?><hr>
 <div class='tall left'>
 <?= $ajax->form($this->action,'post',array(
 	'model' => 'Schedule',
@@ -28,8 +29,14 @@
 	</div>
 	<? } ?>
 <? } ?>
-<?=$form->hidden('conflicts')?>
-<?=$form->submit('Merge')?>
-<?=$form->end()?>
 </div>
+<hr>
+<?=$form->hidden('conflicts')?>
+<?=$form->submit('Import')?>
+<?=$form->end()?>
+<? } else { ?>
+<br>
+<i>Nothing new here!</i>
+<br>
+<? } ?>
 <?=$this->element('message');?>

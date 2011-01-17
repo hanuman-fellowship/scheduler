@@ -453,14 +453,10 @@ class Schedule extends AppModel {
 				$this->Change->applyChange($toApply,'fromMerge');
 			}
 			$this->Change->doQueue();
-			return array('success' => true, 'descriptions' => $descriptions);
+			return array('descriptions' => $descriptions);
 		} else {
 			$descriptions = Set::combine($changes['b'],'{n}.Change.id','{n}.Change.description');
-			if ($this->conflicts) {
-				return array('success' => false, 'conflicts' => $this->conflicts,'descriptions'=>$descriptions);
-			} else {
-				return array('success' => true, 'descriptions' => $descriptions);
-			}
+			return array('conflicts' => $this->conflicts,'descriptions'=>$descriptions);
 		}
 	}
 
