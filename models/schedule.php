@@ -172,6 +172,23 @@ class Schedule extends AppModel {
 			return false;
 		}
 
+		// find what changes the user chose to remove and undo them
+		if (!$dry_run) {
+			foreach($choices as $key => $choice) {
+				$parts = explode('_',$key);
+				if ($parts[0] == 'remove') {
+					if ($choice) {
+						$removeMe = $parts[1];
+						$this->Change->sContain('ChangeModel.ChangeField');
+						$this->Change->applyChange(
+							$this->Change->findById($removeMe)
+						);
+					}
+				}
+			}
+			$this->Change->doQueue();
+		}
+
 		$sched_ids = array('a' => scheduleId(), 'b' => $id);
 
 		// get all of the model data for both schedules and

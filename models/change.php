@@ -62,6 +62,12 @@ class Change extends AppModel {
 					$model->qDelete($change_model['record_id']);
 					break;
 				case 1: // create
+			//		if (!$model->find('first',array(
+			//			'conditions'=> array(
+			//				"{$change_model['name']}.id" => $model_data['id'],
+			//				"{$change_model['name']}.schedule_id" => $model_data['schedule_id']
+			//			)
+			//		))) 
 					$model->qInsert($model_data);
 					break;
 				case 2: // update

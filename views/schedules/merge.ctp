@@ -1,4 +1,5 @@
 <fieldset>
+
 <? if (isset($parent_id)) { ?>
 	<legend><?php __('Merge');?></legend>
 	Choose a schedule to import changes from:<hr>
@@ -18,7 +19,9 @@ foreach($schedules as $schedule) {
 }	
 ?>
 </div>
+
 <? } else { ?>
+
 	<legend><?php __("Import changes from <b>{$schedule['Schedule']['name']}</b>?");?></legend>
 <? if ($changes) { ?>
 Check the boxes next to changes you'd like to import.
@@ -32,6 +35,7 @@ Check the boxes next to changes you'd like to import.
 	'inputDefaults' => array('between' => '&nbsp;')
 ))?>
 <?=$form->hidden('schedule_id',array('value'=>$schedule_id))?>
+<? $myChanges = array() ?>
 <? foreach($changes as $change_id => $change) { ?>
 	<? $conflicts = is_array($change) ?>
 	<span style='color:<?=$conflicts ? 'red' : 'green'?>'>
@@ -40,11 +44,35 @@ Check the boxes next to changes you'd like to import.
 	</span>
 	<? if ($conflicts) { ?>
 	<div style='padding-left:2em'>
-		<? foreach($change['conflicts'] as $description) { ?>
-		<span style='font-size:10px'><i>
+		<? foreach($change['conflicts'] as $myChange => $description) { ?>
+		<i>
+			<span class="desc_<?=$myChange?>">
 			<?=$description['a']?>
-		</i></span>
+			</span>
+		</i>
+			<? $dup = array_key_exists($myChange,$myChanges)? "dup{$myChanges[$myChange]}_" : ''?>
+			<? $dupId = "Schedule"?>
+			<? if ($dup) $dupId .= 'Dup'.$myChanges[$myChange]?>
+			<? $dupId .= "Remove".$myChange?>
+			<?=$form->checkbox("{$dup}remove_{$myChange}",array(
+				'checked'=> $conflicts ? '' : 'checked',
+				'onClick' => "
+					$$('.box_{$myChange}').each(function(e){
+						e.checked = $('{$dupId}').checked;
+					});
+					$$('.desc_{$myChange}').each(function(e){
+						e.style.textDecoration = $('{$dupId}').checked ? 'line-through' : ''
+					});
+				",
+				'class' => "box_{$myChange}",
+				))?>
+			<?=$form->label("{$dup}remove_{$myChange}","Remove")?><br>
 		<br>
+			<? if ($dup) {
+				$myChanges[$myChange]++;
+			} else {
+				$myChanges[$myChange] = 1;
+			} ?>
 		<? } ?>
 	</div>
 	<? } ?>
@@ -60,5 +88,6 @@ Check the boxes next to changes you'd like to import.
 <br>
 <? } ?>
 <? } ?>
+
 </fieldset>
 <?=$this->element('message');?>
