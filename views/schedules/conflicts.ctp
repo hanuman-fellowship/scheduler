@@ -1,7 +1,8 @@
 <fieldset>
 	<legend><?php __('Conflicts');?></legend>
-<span style='font-size:12px'>The changes to be imported are in <span style='color:blue'>blue</span>, and your conflicting changes are in <span style='color:red'>red</span>.<br>
-Check the changes you'd like to import (despite the conflict)</span><hr>
+<span style='font-size:12px'>Check the boxes next to <span style='color:green'>changes</span> you'd like to import.<br>
+<span style='color:red'>Conflicts</span> are listed with your changes <i>underneath</i> the change to be imported.<br>
+</span><hr>
 <div class='tall left'>
 <?= $ajax->form($this->action,'post',array(
 	'model' => 'Schedule',
@@ -10,19 +11,22 @@ Check the changes you'd like to import (despite the conflict)</span><hr>
 	'inputDefaults' => array('between' => '&nbsp;')
 ))?>
 <?=$form->hidden('schedule_id',array('value'=>$schedule_id))?>
-<? foreach($conflicts as $change_id => $conflict) { ?>
-	<span style='color:blue'>
-		<?=$form->checkbox($change_id)?>
-		<?=$form->label($change_id,$conflict['b'])?><br>
+<? foreach($changes as $change_id => $change) { ?>
+	<? $conflicts = is_array($change) ?>
+	<span style='color:<?=$conflicts ? 'red' : 'green'?>'>
+		<?=$form->checkbox($change_id,array('checked'=> $conflicts ? '' : 'checked'))?>
+		<?=$form->label($change_id,$conflicts ? $change['b'] : $change)?><br>
 	</span>
+	<? if ($conflicts) { ?>
 	<div style='padding-left:2em'>
-	<? foreach($conflict['conflicts'] as $description) { ?>
-		<span style='color:red'>
+		<? foreach($change['conflicts'] as $description) { ?>
+		<span style='font-size:10px'><i>
 			<?=$description['a']?>
-		</span>
+		</i></span>
 		<br>
-	<? } ?>
+		<? } ?>
 	</div>
+	<? } ?>
 <? } ?>
 <?=$form->hidden('conflicts')?>
 <?=$form->submit('Merge')?>

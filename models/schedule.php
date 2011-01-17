@@ -160,9 +160,9 @@ class Schedule extends AppModel {
 	/**
 	 * Merge the branch passed into the current schedule
 	 */
-	function merge($id,$conflicts,$dry_run = false) {
+	function merge($id,$choices,$dry_run = false) {
 
-		if ($conflicts) $this->bypass = true;
+		if ($choices) $this->bypass = true;
 		$this->id = scheduleId();
 		$my_parent = $this->field('parent_id');
 		$this->id = $id;
@@ -229,8 +229,8 @@ class Schedule extends AppModel {
 		// get rid of changes that are identical (from a previous merge)
 		// also get rid of conflicting changes that the user bypassed 
 		foreach($changes['b'] as $bKey => $b_change) {
-			if (array_key_exists($b_change['Change']['id'],$conflicts)) {
-				if (!$conflicts[$b_change['Change']['id']]) {
+			if (array_key_exists($b_change['Change']['id'],$choices)) {
+				if (!$choices[$b_change['Change']['id']]) {
 					unset($changes['b'][$bKey]);
 					continue;
 				}

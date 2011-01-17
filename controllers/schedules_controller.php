@@ -71,7 +71,7 @@ class SchedulesController extends AppController {
 		$this->redirectIfNotEditable();
 
 		// if there's post data get it as $conflicts
-		$conflicts = isset($this->data['Schedule']['conflicts']) ? $this->data['Schedule'] : array();
+		$choices = isset($this->data['Schedule']['conflicts']) ? $this->data['Schedule'] : array();
 
 		$confirm = empty($this->data);
 
@@ -79,7 +79,7 @@ class SchedulesController extends AppController {
 		$id = isset($this->data['Schedule']['schedule_id']) ? $this->data['Schedule']['schedule_id'] : $id;
 
 		if ($id) {
-			$merged = $this->Schedule->merge($id,$conflicts,'dry_run');
+			$merged = $this->Schedule->merge($id,$choices,'dry_run');
 			$this->set('schedule_id',$id);
 			$this->set('descriptions',$merged['descriptions']);
 			if ($confirm) {
@@ -87,10 +87,10 @@ class SchedulesController extends AppController {
 				$this->render('confirm_merge');
 			} else {
 				if ($merged['success']) {
-					$this->Schedule->merge($id,$conflicts);
+					$this->Schedule->merge($id,$choices);
 					$this->render('merged');
 				} else {
-					$this->set('conflicts',$merged['conflicts']);
+					$this->set('changes',array_replace($merged['descriptions'],$merged['conflicts']));
 					$this->render('conflicts');
 				}
 			}
