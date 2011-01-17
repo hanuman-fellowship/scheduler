@@ -73,7 +73,7 @@ class SchedulesController extends AppController {
 		// if there's post data get it as $choices
 		$choices = isset($this->data['Schedule']) ? $this->data['Schedule'] : array();
 
-		$confirm = empty($this->data);
+		$confirmed = !empty($this->data);
 
 		// replopulate $id when receiving post data
 		$id = isset($this->data['Schedule']['schedule_id']) ? $this->data['Schedule']['schedule_id'] : $id;
@@ -84,24 +84,23 @@ class SchedulesController extends AppController {
 			$merged = $this->Schedule->merge($id,$choices,'dry_run');
 			$this->set('schedule_id',$id);
 			$this->set('descriptions',$merged['descriptions']);
-			if ($confirm) {
-				$this->set('changes',array_replace($merged['descriptions'],$merged['conflicts']));
-				$this->set('conflicts',$merged['conflicts']? true : false);
-				$this->render('conflicts');
-			} else {
+			if ($confirmed) {
 				$this->Schedule->merge($id,$choices);
-				$this->render('merged');
+				$this->set('url',$this->referer());
 			}
+			$this->set('changes',array_replace($merged['descriptions'],$merged['conflicts']));
+			$this->set('conflicts',$merged['conflicts']? true : false);
+		} else {
+			$this->Schedule->order = 'id';
+			$this->Schedule->contain();
+			$this->set('schedules',$this->Schedule->find('all',array(
+				'conditions' => array(
+					'Schedule.name <>' => 'Published'
+				)
+			)));
+			$this->set('schedule_id',scheduleId());		
+			$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => scheduleId())));		
 		}
-		$this->Schedule->order = 'id';
-		$this->Schedule->contain();
-		$this->set('schedules',$this->Schedule->find('all',array(
-			'conditions' => array(
-				'Schedule.name <>' => 'Published'
-			)
-		)));
-		$this->set('schedule_id',scheduleId());		
-		$this->set('parent_id',$this->Schedule->field('parent_id',array('id' => scheduleId())));		
 	}
 	
 	function change() {
