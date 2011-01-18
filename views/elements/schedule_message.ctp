@@ -42,26 +42,26 @@ if (isset($area['RequestArea'])) {
 			"Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']);
 		echo $message.($simple? $title : ' '.$this->ajax->link(
 			$title,
-			array('controller'=>'schedules','action'=>'past'),
+			array('controller'=>'schedules','action'=>'published'),
 			array(
 				'escape'=>false,
 				'update' => 'dialog_content',
-				'complete' => "openDialog('past',true,'bottom')",
-				'id' =>'past',
-				'title' => 'View past schedules...'
+				'complete' => "openDialog('published',true,'bottom')",
+				'id' =>'published',
+				'title' => 'View Published Schedules...'
 			)
 		));
 	} else {
 		$message .= "Published on " . $time->format('F jS, Y g:ia',$schedule['updated']);
 		echo ($simple? $message : ' '.$this->ajax->link(
 			$message,
-			array('controller'=>'schedules','action'=>'past'),
+			array('controller'=>'schedules','action'=>'published'),
 			array(
 				'escape'=>false,
 				'update' => 'dialog_content',
-				'complete' => "openDialog('past',true,'bottom')",
-				'id' =>'past',
-				'title' => 'View past schedules...'
+				'complete' => "openDialog('published',true,'bottom')",
+				'id' =>'published',
+				'title' => 'View Published Schedules...'
 			)
 		));
 	}
