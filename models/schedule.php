@@ -301,6 +301,81 @@ class Schedule extends AppModel {
 			}
 		}
 		
+		// CONFLICT CHART //
+		//                //
+/*////
+
+	In order to merge the b schedule into the a schedule,
+	we have to compare the changes between two schedules.
+
+	"my"            => the schedule being worked on.
+	"your"          => the schedule chosen for the merge.
+
+	Actions:
+
+	0 = delete
+	1 = create
+	2 = update
+
+			$conflict_chart = array(
+				string $ifMyModel => array(
+					int $doesThisAction => array(
+						string $thenYourModel => array(int $cantDoThis[,int $orThis, int $orThis])
+					)
+				)
+			);
+
+  -----------
+
+			The following EXAMPLE, There would be a conflict IF:
+				
+				my Area
+					has been deleted AND
+						your Shift (which is related to my Area) is
+							deleted, created or updated,
+					
+			Likewise, this would also be a conflict:
+
+				my Area
+					has been deleted AND
+						your FloatingShift (which is related to my Area) is
+							deleted, created, or updated
+
+			Also, further down in the chart, this would conflict:
+
+				my Assignment
+					has been created AND
+						your Assignment, which has the same
+							shift_id (as my Assignment) is
+								deleted or updated
+							
+
+
+		$conflict_chart = array(
+			'Area' => array(
+				0 => array(
+					'Shift' => array(0,1,2),
+					'FloatingShift' => array(0,1,2)
+				)
+			)
+			'Assignment' => array(
+				0 => array(
+					'Shift' => array(0,2)
+				),
+				1 => array(
+					'Shift' => array(0,2),
+					'Assignment' => array(
+						'shift_id' => array(1)
+					),
+					'PeopleSchedules' => array(
+						'person_id' => array(0)
+					)
+				)
+			)
+		);
+
+*/////
+
 		$conflict_chart = array(
 			'Area' => array(
 				0 => array(
