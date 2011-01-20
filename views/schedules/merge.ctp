@@ -27,13 +27,13 @@ foreach($schedules as $schedule) {
 Check the boxes next to changes you'd like to import.
 <?= $conflicts? "<br><span style='color:red'>Conflicts</span> are listed with your changes <i>underneath</i> the change to be imported.<br>
 </span>" : ""?><hr>
-<div class='tall left'>
 <?= $ajax->form($this->action,'post',array(
 	'model' => 'Schedule',
 	'before'=>'wait()',
 	'update' =>'dialog_content',
 	'inputDefaults' => array('between' => '&nbsp;')
 ))?>
+<div class='tall left'>
 <?=$form->hidden('schedule_id',array('value'=>$schedule_id))?>
 <? $myChanges = array() ?>
 <? foreach($changes as $change_id => $change) { ?>
@@ -80,8 +80,7 @@ Check the boxes next to changes you'd like to import.
 </div>
 <hr>
 <?=$form->hidden('conflicts')?>
-<?=$form->submit('Import')?>
-<?=$form->end()?>
+<?=$form->end('Import')?>
 <? } else { ?>
 <br>
 <i>Nothing new here!</i>
