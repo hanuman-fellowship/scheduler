@@ -1,6 +1,8 @@
 TODO:
 	
-	- rename "View Past" to "Published Schedules..."
+	- move "other" to the top of assignment dialog. (and disable keyboard commands when typing in field)
+	
+	- order of constant shifts (appearing before things they should be after, etc.)
 
 	- templates
 

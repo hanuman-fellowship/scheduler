@@ -89,7 +89,7 @@
 	))?>
 	<?=$form->label('show','Show Reasons')?>
 	<br>
-<?= $form->submit('Print Selected');?>
+<?= $form->submit('Print Selected',array('class'=>'choose'));?>
 <?= $form->end();?>
 <?= $this->element('message');?>
 

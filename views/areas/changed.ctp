@@ -24,9 +24,18 @@
 <?= $form->create('Area',array('action'=>'printm','type'=>'post','onsubmit'=>'wait()'));?>
 	<fieldset>
  		<legend><?php __("Affected Area's Schedules");?></legend>
-	<div class='tall left' id='areas' style='width:300px'>
-	<?=$form->input('area_id',array('label'=>false,'type'=>'select','multiple'=>'checkbox','options'=>$areas));?>
+	<div class='left reasons' style='display:none'>
+	<? foreach($areas as $areaId => $areaName) { ?>
+		<b><?=$areaName?></b>
+		<div style='padding-left:2em'>
+			<? foreach($changed[$areaId] as $description) { ?>
+				<?=$description?><br>
+			<? } ?>
+		</div>
+	<? } ?>
 	</div>
+	<div class='tall left choose' id='areas' style='width:300px'>
+	<?=$form->input('area_id',array('label'=>false,'type'=>'select','multiple'=>'checkbox','options'=>$areas));?>
 	<hr/>
 	<div class='left'>
 	<?=$form->checkbox('check_all',array(
@@ -34,8 +43,21 @@
 	));?>
 	<?=$form->label('check_all');?>
 	</div>
+	</div>
 	</fieldset>
-<?= $form->submit('Print Selected');?>
+	<?=$form->checkbox('show',array(
+		'onClick' => "
+			$$('.reasons').each(function(e){
+				e.toggle();
+			});
+			$$('.choose').each(function(e){
+				e.toggle();
+			});
+		"
+	))?>
+	<?=$form->label('show','Show Reasons')?>
+	<br>
+<?= $form->submit('Print Selected',array('class'=>'choose'));?>
 <?php echo $form->end();?>
 <?=$this->element('message',array('default_field'=>''));?>
 

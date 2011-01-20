@@ -175,6 +175,7 @@ class AreasController extends AppController {
 						if (!in_array($id,array_keys($changed))) unset($areas[$id]);
 					}
 					$this->set('areas',$areas);
+					$this->set('changed',$changed);
 				}
 			}
 		}	
