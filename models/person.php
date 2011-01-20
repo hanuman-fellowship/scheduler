@@ -169,7 +169,6 @@ class Person extends AppModel {
 							continue;
 						}
 						$insert = $offset + 1;
-						break;
 					}
 				}
 				if (isset($insert)) {
