@@ -4,6 +4,12 @@
 		<input type="checkbox" id="conflictsBox" value="0" onclick="toggleConflicts()" />
 		<label for='conflictsBox'>Ignore Conflicts</label>
 	</div>
+<div style="float:right">
+	<?=$form->create('Assignment',array('type'=>'post','onSubmit'=>'wait()'));?>
+	Other: <?=$form->text('other',array('id' => 'other','tabindex'=>1));?>
+	<?=$form->hidden('shift',array('value'=>$shift));?>
+	<?=$form->end();?>
+</div>
 <?
 $lists = array('available','all');
 foreach($lists as $list) {
@@ -35,12 +41,6 @@ foreach($people as $category) {
 }
 ?>
 	</table>
-</div>
-<div style="clear:both">
-	<?=$form->create('Assignment',array('type'=>'post','onSubmit'=>'wait()'));?>
-	Other: <?=$form->text('other',array('id' => 'other','tabindex'=>1));?>
-	<?=$form->hidden('shift',array('value'=>$shift));?>
-	<?=$form->end();?>
 </div>
 </fieldset>
 <?=$this->element('message');?>
