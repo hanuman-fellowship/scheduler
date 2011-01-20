@@ -25,6 +25,7 @@
 	<fieldset>
  		<legend><?php __("Affected People's Schedules");?></legend>
 	<div class='tall'>
+
 <?
 	foreach($people as $category) {
 		$categoryData = current($category);
@@ -39,7 +40,18 @@
 		}
 		if ($options) {
 ?>	
-		<div class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
+		<div class='left reasons' style='display:none'>
+			<strong><?=$categoryName?></strong></span><br/>
+		<? foreach($options as $personId => $personName) { ?>
+			<span style='color:<?=$categoryColor?>'><?=$personName?></span>
+			<div style='padding-left:2em'>
+				<? foreach($changed[$personId] as $description) { ?>
+					<?=$description?><br>
+				<? } ?>
+			</div>
+		<? } ?>
+		</div>
+		<div class='left choose' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
 			<span style='position:relative;left:10px;'>
 			<strong><?=$categoryName?></strong></span><br/>
 <?	
@@ -65,6 +77,18 @@
 ?>
 	</div>
 	</fieldset>
+	<?=$form->checkbox('show',array(
+		'onClick' => "
+			$$('.reasons').each(function(e){
+				e.toggle();
+			});
+			$$('.choose').each(function(e){
+				e.toggle();
+			});
+		"
+	))?>
+	<?=$form->label('show','Show Reasons')?>
+	<br>
 <?= $form->submit('Print Selected');?>
 <?= $form->end();?>
 <?= $this->element('message');?>
