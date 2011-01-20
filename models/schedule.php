@@ -384,9 +384,6 @@ class Schedule extends AppModel {
 				)
 			),
 			'Assignment' => array(
-				0 => array(
-					'Shift' => array(0,2)
-				),
 				1 => array(
 					'Shift' => array(0,2),
 					'Assignment' => array(
@@ -416,10 +413,10 @@ class Schedule extends AppModel {
 			),
 			'Shift' => array(
 				0 => array(
-					'Assignment' => array(0,1,2)
+					'Assignment' => array(1,2)
 				),
 				2 => array(
-					'Assignment' => array(0,1,2)
+					'Assignment' => array(1,2)
 				)
 			),
 			'PeopleSchedules' => array(
