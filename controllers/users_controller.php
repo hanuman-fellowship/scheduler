@@ -192,13 +192,13 @@ class UsersController extends AppController {
 
 	function notes() {
 		if(!Authsome::get('id')) $this->redirect('/');
+		$this->set('change_messages',$this->getChangeMessages());
 		if(!empty($this->data)) {
 			$this->savePage();
 			$this->User->save($this->data);
 		} else {
 			$this->data = $this->User->findById(Authsome::get('id'));
 		}
-		$this->set('back',$this->loadPage());
 	}
 
 }

@@ -8,8 +8,8 @@ $editable = $this->Session->read('Schedule.editable');
 <span class='no_print'>
 <?=$javascript->link(array('functions','dropdowntabs'));?>
 <?=$html->css("dialog") ?>
-<? $hidden = !$this->session->read('Schedule.editable');?>
-<? $scheduleName = $this->session->read('Schedule.name');?>
+<? $hidden = !$this->Session->read('Schedule.editable');?>
+<? $scheduleName = $this->Session->read('Schedule.name');?>
 <? $userName = Inflector::humanize(Authsome::get('username')); ?>
 <? $gaps = isset($person['Person']) ? false : true;?>
 <?=$role->menu(array(
@@ -39,6 +39,10 @@ $editable = $this->Session->read('Schedule.editable');
 				'ajax'
 			),
 			"<hr/>",
+			'Notepad' => array(
+				'url' => array('controller' => 'users', 'action' => 'notes'),
+				'shortcut' => 'ctrl+n'
+			),
 			'Email Users...' => array(
 				'url' => array('controller' => 'users', 'action' => 'emailUsers'),
 				'ajax',
@@ -164,12 +168,14 @@ $editable = $this->Session->read('Schedule.editable');
 			'Restore Person...' => array(
 				'hidden' => $hidden,
 				'url' => array('controller' => 'people', 'action' => 'restore'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'shift+ctrl+s'
 			),
 			'Retire Person...' => array(
 				'hidden' => $hidden,
 				'url' => array('controller' => 'people', 'action' => 'retire'),
-				'ajax'
+				'ajax',
+				'shortcut' => 'shift+ctrl+t'
 			),
 			array('hidden'=>$hidden,'title'=>"<hr/>"),
 			"Affected Schedules..." => array(
