@@ -69,9 +69,9 @@
 			// Default settings
 			t.settings = s = extend({
 				theme_advanced_path : true,
-				theme_advanced_toolbar_location : 'bottom',
-				theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect",
-				theme_advanced_buttons2 : "bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
+				theme_advanced_toolbar_location : 'top',
+				theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect",
+				theme_advanced_buttons2 : "bullist,numlist,|,outdent,indent,|,undo,redo,|,cleanup,help,code",
 				theme_advanced_buttons3 : "hr,removeformat,visualaid,|,sub,sup,|,charmap",
 				theme_advanced_blockformats : "p,address,pre,h1,h2,h3,h4,h5,h6",
 				theme_advanced_toolbar_align : "center",

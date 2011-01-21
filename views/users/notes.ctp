@@ -1,3 +1,13 @@
+<?=$javascript->link('tiny_mce/tiny_mce');?>
+<?=$javascript->codeBlock("
+    tinyMCE.init({ 
+		content_css : '{$this->webroot}css/tiny_mce.css',
+		theme : 'advanced', 
+		mode : 'textareas', 
+		convert_urls : false,
+		auto_focus : 'UserNotes'
+	}); 
+")?>
 <? $this->set('title_for_layout', 'Scheduler: Notepad')?>
 <?=$this->element('menu');?>
 <?=$this->element('schedule_message');?>
