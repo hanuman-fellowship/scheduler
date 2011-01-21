@@ -1,19 +1,15 @@
 TODO:
 	
-	- move "other" to the top of assignment dialog. (and disable keyboard commands when typing in field)
-	
+	- import shifts from request
+
+	- notepad for operations
+
 	- templates
 
 	- edit times
 
-	- merge... display conflicts nicely and find a way to deal with them. put conflicts into
-	  session and then let the user play with the schedule? maybe the conflicts on the schedule
-	  could show up red, and mousing over them would show the conflict...
-
 	- check to see if more than one published schedule is happening now
 		- default to the one that is ending soonest, and offer the others as options
-
-	- show schedules as a tree going down from pubished based on which they were copied from
 
 	- order working copies by date or by name in the select schedule dialog
 	
@@ -21,14 +17,12 @@ TODO:
 		- combine displayAreaFloating and DisplayPersonFloating
 
 	BUGS:
+		- Multiple notes appearing when creating one note (from personnel)
+		- Error sometimes when typing person into assignment
 		- Why does it save two id entries in the change_fields when doing assignments::swap?
 		- Retire everone and then assign a shift by typing in the "other"
 			Undefined index:   [APP/config/bootstrap.php, line 89]
-		- Add Person
-			Undefined index:  Person [APP/models/people_schedules.php, line 34]
 
 	- Floating Shift
 		- Description is a little screwy
 
-	- Changes
-		- views/changes/history needs work

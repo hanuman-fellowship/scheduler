@@ -13,7 +13,6 @@ class SchedulesController extends AppController {
 		fclose($file);
 	}
 
-
 	function copy() {
 		$this->redirectIfNot('operations');
 		$groupName = $this->Session->read('Schedule.Group.name');

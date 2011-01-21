@@ -190,5 +190,16 @@ class UsersController extends AppController {
 		$this->set('operationsEmail',$auth['EmailAuth']['email']);
 	}
 
+	function notes() {
+		if(!Authsome::get('id')) $this->redirect('/');
+		if(!empty($this->data)) {
+			$this->savePage();
+			$this->User->save($this->data);
+		} else {
+			$this->data = $this->User->findById(Authsome::get('id'));
+		}
+		$this->set('back',$this->loadPage());
+	}
+
 }
 ?>
