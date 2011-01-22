@@ -24,7 +24,7 @@
 <?= $form->create('Area',array('action'=>'printm','type'=>'post','onsubmit'=>'wait()'));?>
 	<fieldset>
  		<legend><?php __("Affected Area's Schedules");?></legend>
-	<div class='left reasons' style='display:none'>
+	<div class='tall left reasons' style='display:none'>
 	<? foreach($areas as $areaId => $areaName) { ?>
 		<b><?=$areaName?></b>
 		<div style='padding-left:2em'>
