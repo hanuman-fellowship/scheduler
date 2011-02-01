@@ -120,7 +120,6 @@ class RoleHelper extends AppHelper {
 							));
 							$subMenus[$menuNum] .= "<span class='shortcut'>{$sub['shortcut']}</span>";
 						}
-						$subNum++;
 						if (array_key_exists('url',$sub)) {
 							if (array_key_exists('ajax',$sub)) {
 								$type = 'ajax';
@@ -138,6 +137,7 @@ class RoleHelper extends AppHelper {
 							}				
 							$confirm = array_key_exists('confirm',$sub) ? $sub['confirm'] : null;
 							$subMenus[$menuNum] .= $this->{$type}->link($sub_title,$sub['url'],$attributes,$confirm);
+							$subNum++;
 						} else {
 							$subMenus[$menuNum] .= "<span>{$sub_title}</span>";
 						}
