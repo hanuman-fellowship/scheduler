@@ -7,13 +7,18 @@ class Boundary extends AppModel {
 		'Day',
 		'Slot'
 	);
-	
+
 	function getBounds() {
 		$this->sContain('Day','Slot');
 		$bounds = $this->sFind('all');				
 		$days = Set::combine($bounds,'{n}.Day.id','{n}.Day.name');
 		$slots = Set::combine($bounds,'{n}.Slot.id','{n}.Slot.name');
 		$bounds = Set::combine($bounds,'{n}.Boundary.day_id',"{n}.Boundary", '{n}.Boundary.slot_id');
+		foreach($days as $num => $day) {
+			if ($day == '') {
+				unset($days[$num]);
+			}
+		}
 		return compact('days','slots','bounds');
 	}
 

@@ -8,7 +8,6 @@ $editable = $this->Session->read('Schedule.editable');
 <span class='no_print'>
 <?=$javascript->link(array('functions','dropdowntabs'));?>
 <?=$html->css("dialog") ?>
-<? $hidden = !$this->Session->read('Schedule.editable');?>
 <? $scheduleName = $this->Session->read('Schedule.name');?>
 <? $userName = Inflector::humanize(Authsome::get('username')); ?>
 <? $gaps = isset($person['Person']) ? false : true;?>
@@ -118,6 +117,12 @@ $editable = $this->Session->read('Schedule.editable');
 				'url' => array('controller' => 'people', 'action' => 'schedule','gaps'),
 				'shortcut' => 'ctrl+g'
 			),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
+			'Edit Days...' => array(
+				'url' => array('controller' => 'days', 'action' => 'edit'),
+				'hidden' => !$editable,
+				'ajax'
+			),
 			"<hr/>",
 			'Edit a Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'copy'),
@@ -132,7 +137,7 @@ $editable = $this->Session->read('Schedule.editable');
 			'Merge...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax',
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'shortcut' => 'ctrl+m'
 			)
 		)
@@ -148,7 +153,7 @@ $editable = $this->Session->read('Schedule.editable');
 		'sub' => array(
 			'role' => array('operations'),
 			'View Schedule...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
 				'ajax',
 				'shortcut' => 'ctrl+p'
@@ -157,33 +162,33 @@ $editable = $this->Session->read('Schedule.editable');
 				'url' => array('controller' => 'people', 'action' => 'board'),
 				'shortcut' => 'ctrl+b'
 			),
-			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			'New Person...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array('controller' => 'people', 'action' => 'add'),
 				'ajax',
 				'shortcut' => 'shift+ctrl+p'
 			),
-			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			'Restore Person...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array('controller' => 'people', 'action' => 'restore'),
 				'ajax',
 				'shortcut' => 'shift+ctrl+s'
 			),
 			'Retire Person...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array('controller' => 'people', 'action' => 'retire'),
 				'ajax',
 				'shortcut' => 'shift+ctrl+t'
 			),
-			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			"Affected Schedules..." => array(
 				'url' => array(
 					'controller' => 'people',
 					'action' => 'changed'
 				),
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'ajax'
 			),
 			'Print People...' => array(
@@ -203,20 +208,20 @@ $editable = $this->Session->read('Schedule.editable');
 		'sub' => array(
 			'role' => array('operations'),
 			'View Schedule...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array('controller' => 'areas', 'action' => 'select'),
 				'ajax',
 				'shortcut' => 'ctrl+a'
 			),
-			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			'New Area...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array('controller' => 'areas', 'action' => 'add'),
 				'ajax'
 			),
-			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			'Clear Area...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array(
 					'controller' => 'areas',
 					'action' => 'clear',
@@ -226,7 +231,7 @@ $editable = $this->Session->read('Schedule.editable');
 				'shortcut' => 'ctrl+c'
 			),
 			'Delete Area...' => array(
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'url' => array(
 					'controller' => 'areas',
 					'action' => 'delete',
@@ -234,13 +239,13 @@ $editable = $this->Session->read('Schedule.editable');
 				),
 				'ajax'
 			),
-			array('hidden'=>$hidden,'title'=>"<hr/>"),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			"Affected Schedules..." => array(
 				'url' => array(
 					'controller' => 'areas',
 					'action' => 'changed'
 				),
-				'hidden' => $hidden,
+				'hidden' => !$editable,
 				'ajax'
 			),
 			'Print Areas...' => array(
@@ -254,7 +259,7 @@ $editable = $this->Session->read('Schedule.editable');
 		)
 	),
 	'Shifts' => array(
-		'hidden' => $hidden,
+		'hidden' => !$editable,
 		'role' => array('operations'),
 		'url' => array(
 			'controller' => 'shifts',

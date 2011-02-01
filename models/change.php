@@ -83,6 +83,9 @@ class Change extends AppModel {
 			if ($change_model['name'] == 'PeopleSchedules') {
 				deleteCache('people');
 			}
+			if ($change_model['name'] == 'Day') {
+				deleteCache('bounds');
+			}
 		} 
 		if (!$fromMerge) {
 			$this->save(array('Change' => array(
