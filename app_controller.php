@@ -96,7 +96,11 @@ class AppController extends Controller {
 		$params = ($id == 'latest') ? 
 			array(
 				'conditions' => array('Schedule.user_id' => null),
-				'order' => 'Schedule.id desc'
+				'order' => array(
+					'ScheduleGroup.end desc',
+					'ScheduleGroup.start desc',
+					'Schedule.updated desc'
+				)
 			):
 			array(
 				'conditions' => array('Schedule.id' => $id)
