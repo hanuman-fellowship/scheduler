@@ -9,7 +9,7 @@ class ScheduleGroup extends AppModel {
 
 	function getPublished() {
 		$published = $this->find('all',array(
-			'order' => 'ScheduleGroup.start desc',
+			'order' => 'ScheduleGroup.end desc, ScheduleGroup.start desc',
 			'contain' => array(
 				'Schedule'
 			)
