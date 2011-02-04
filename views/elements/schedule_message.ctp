@@ -5,6 +5,11 @@
 <? 
 $schedule = $session->read('Schedule');
 $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
+$now = date('Y-m-d H:i:s');
+$current = (
+	$schedule['Group']['start'] < $now &&
+	$schedule['Group']['end'] > $now
+);
 
 if (isset($area['RequestArea'])) {
 	if ($area['RequestArea']['id'] < 0) {
@@ -32,7 +37,7 @@ if (isset($area['RequestArea'])) {
 		}
 	}
 } else {
-	$message = $schedule['latest'] ? "" : ($simple? '' : "<span style='color:blue'>Viewing an old schedule: </span>");
+	$message = $current && $schedule['latest_in_group'] ? "" : ($simple? '' : "<span style='color:blue'>Viewing an old schedule: </span>");
 	$message = $schedule['username'] != '' ? ($simple? '' : "Viewing: ") : $message;
 	$message = $schedule['editable'] ? ($simple? '' : "<span style='color:green'>Editing: </span>") : $message; 
 	if (in_array('operations',$userRoles)) {

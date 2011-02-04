@@ -116,6 +116,18 @@ class AppController extends Controller {
 		);
 		$latest = ($id == 'latest' || $id == $latestSchedule) ? true : false;
 		$this->Session->write('Schedule.latest', $latest);
+		
+		$latest_in_group = $this->Schedule->field('id',
+			array(
+				'Schedule.schedule_group_id' => $schedule['ScheduleGroup']['id']
+			),
+			'Schedule.id desc'
+		);
+		$this->Session->write(
+			'Schedule.latest_in_group', 
+			($latest_in_group == $schedule['Schedule']['id'])
+		);
+
 		setScheduleId($schedule['Schedule']['id']);
 
 		$now = date('Y-m-d H:i:s');
