@@ -113,6 +113,18 @@ class AppController extends Controller {
 		$latest = ($id == 'latest' || $id == $latestSchedule) ? true : false;
 		$this->Session->write('Schedule.latest', $latest);
 		setScheduleId($schedule['Schedule']['id']);
+
+		$now = date('Y-m-d H:i:s');
+		$num_cur_schedules = $this->Schedule->ScheduleGroup->find('count',
+			array(
+				'conditions' => array(
+					'ScheduleGroup.start <' => "{$now}",
+					'ScheduleGroup.end >' => "{$now}"
+				)
+			)
+		);
+		$this->Session->write('Schedule.Group.alternate',($num_cur_schedules > 1));
+
 		deleteCache();
 	}
 	

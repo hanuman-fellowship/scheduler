@@ -142,3 +142,12 @@ a.add {
 a.selected {
 	background-color:#FFF8BA;
 }
+
+a#alternate, a#alternate:hover {
+	position:relative;
+	left:10px;
+	color:blue;
+	font-size:16px;
+	text-decoration:underline;
+	font-style:italic;
+}

@@ -79,6 +79,17 @@ echo $schedule['editable'] ?
 	: '';
 }
 ?>
+<? if ($session->read('Schedule.Group.alternate') && Authsome::get('id') == '') { ?>
+	<?= $this->ajax->link(
+		'ALTERNATE SCHEDULES',
+		array('controller'=>'schedules','action'=>'alternate'),
+		array(
+			'update' => 'dialog_content',
+			'complete' => "openDialog('alternate',true,'bottom')",
+			'id' => 'alternate'
+		)
+	) ?>
+<? } ?>
 <? if (!$simple) { ?>
 </div>
 <? } ?>
