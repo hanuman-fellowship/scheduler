@@ -12,12 +12,6 @@ $editable = $this->Session->read('Schedule.editable');
 <? $userName = Inflector::humanize(Authsome::get('username')); ?>
 <? $gaps = isset($person['Person']) ? false : true;?>
 <?=$role->menu(array(
-	'Login' => array(
-		'role' => array(''),
-		'url' => array('controller' => 'users', 'action' => 'login'),
-		'shortcut' => 'ctrl+l',
-		'ajax'
-	),
 	"Hello, {$userName}" => array(
 		'role' => array('operations','manager','personnel')
 	),	
@@ -95,6 +89,7 @@ $editable = $this->Session->read('Schedule.editable');
 		'sub' => $managerMenu
 	),
 	array(
+		'role' => array('manager','operations','personnel'),
 		'title' => ' | '
 	),
 	'Schedules' => array(
@@ -293,9 +288,19 @@ $editable = $this->Session->read('Schedule.editable');
 			)
 		)
 	)
-));
-if ($isOperations && !isset($this->viewVars['area']['RequestArea'])) {
-?>
+))?>
+<? if (!Authsome::get('id')) { ?>
+	<?= $ajax->link(
+		'Login',
+		array('controller'=>'users','action'=>'login'),
+		array(
+			'id' => 'login',
+			'update' => 'dialog_content',
+			'complete' => "openDialog('login',true,'bottom')"
+		)
+	)?>
+<? } ?>
+<? if ($isOperations && !isset($this->viewVars['area']['RequestArea'])) { ?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'ctrl+u',
 	'codeBlock' => "clickLink($('undoLink'))"

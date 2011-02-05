@@ -1,9 +1,9 @@
-.top{
+.top {
 border-bottom: 1px solid gray;
 margin-bottom:15px;
 }
 
-.top ul{
+.top ul, #login {
 padding: 3px 0;
 margin-left: 0;
 margin-top: 1px;
@@ -20,7 +20,7 @@ display: inline;
 margin: 0;
 }
 
-.top li a, .changes a {
+.top li a, .changes a, a#login {
 text-decoration: none;
 padding: 3px 7px;
 margin-right: 3px;
@@ -36,16 +36,16 @@ color:#999;
 .top li a:visited {
 }
 
-.top li a:hover, .changes a:hover {
+.top li a:hover, .changes a:hover, a#login:hover {
 	background-color:#CCC;
 }
 
 .top li.selected{
 }
 
-.top li.selected a{ /*selected main tab style */
-color:black;
-border-bottom-color: white;
+.top li.selected a { /*selected main tab style */
+	color:black;
+	border-bottom-color: white;
 	background-color:#CCC;
 }
 
@@ -95,6 +95,12 @@ background-color: #CCC;
 	font-weight:bold;
 	font-family:arial, verdana, sans-serif;
 	color:white;
+}
+
+#login {
+	position:absolute;
+	right:10px;
+	top:7px;
 }
 
 .changes span.no_link {
