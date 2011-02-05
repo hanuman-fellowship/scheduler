@@ -61,6 +61,21 @@ class SchedulesController extends AppController {
 		$this->set('schedules',$this->Schedule->viewList());
 		$this->set('schedule_id',scheduleId());		
 	}
+
+	function alternate() {
+		$now = date('Y-m-d H:i:s');
+		$this->set('alternates',
+			$num_cur_schedules = $this->Schedule->ScheduleGroup->find('all',
+				array(
+					'conditions' => array(
+						'ScheduleGroup.start <' => "{$now}",
+						'ScheduleGroup.end >' => "{$now}"
+					),
+					'recursive' => -1
+				)
+			)
+		);
+	}
 	
 	function published() {
 		$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
