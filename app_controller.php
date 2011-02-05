@@ -92,12 +92,17 @@ class AppController extends Controller {
 
 	function setSchedule($id) {
 		$this->loadModel('Schedule');
+		$now = date('Y-m-d H:i:s');
 		$this->Schedule->contain('User','ScheduleGroup');
 		$params = ($id == 'latest') ? 
 			array(
-				'conditions' => array('Schedule.user_id' => null),
+				'conditions' => array(
+					'Schedule.name' => 'Published',
+					'ScheduleGroup.start <' => "{$now}",
+					'ScheduleGroup.end >' => "{$now}"
+				),
 				'order' => array(
-					'ScheduleGroup.end desc',
+					'ScheduleGroup.end asc',
 					'ScheduleGroup.start desc',
 					'Schedule.updated desc'
 				)
@@ -119,6 +124,7 @@ class AppController extends Controller {
 		
 		$latest_in_group = $this->Schedule->field('id',
 			array(
+				'Schedule.name' => 'Published',
 				'Schedule.schedule_group_id' => $schedule['ScheduleGroup']['id']
 			),
 			'Schedule.id desc'
@@ -130,7 +136,6 @@ class AppController extends Controller {
 
 		setScheduleId($schedule['Schedule']['id']);
 
-		$now = date('Y-m-d H:i:s');
 		$num_cur_schedules = $this->Schedule->ScheduleGroup->find('count',
 			array(
 				'conditions' => array(

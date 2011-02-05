@@ -1,7 +1,4 @@
 <? $simple = isset($simple) ?>
-<? if (!$simple) { ?>
-<div class='schedule_message no_print'>
-<? } ?>
 <? 
 $schedule = $session->read('Schedule');
 $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
@@ -10,7 +7,24 @@ $current = (
 	$schedule['Group']['start'] < $now &&
 	$schedule['Group']['end'] > $now
 );
-
+?>
+<? if (!$simple) { ?>
+<div class='schedule_message no_print'>
+<span id='group_name'><?=$schedule['Group']['name']?></span>
+<? } ?>
+<? if ($session->read('Schedule.Group.alternate') && Authsome::get('id') == '') { ?>
+	<?= $this->ajax->link(
+		'ALTERNATE SCHEDULES',
+		array('controller'=>'schedules','action'=>'alternate'),
+		array(
+			'update' => 'dialog_content',
+			'complete' => "openDialog('alternate',true,'bottom')",
+			'id' => 'alternate'
+		)
+	) ?>
+<? } ?>
+<?= $simple? '' : "<span id='published'>"?>
+<?
 if (isset($area['RequestArea'])) {
 	if ($area['RequestArea']['id'] < 0) {
 		echo "<span style='color:green'>Editing:</span> {$area['RequestArea']['name']} Request Form";
@@ -44,31 +58,11 @@ if (isset($area['RequestArea'])) {
 		$title = ($schedule['username'] != '') ?
 			$schedule['editable'] ? $schedule['name'] : 
 				$schedule['name']." (".$schedule['username'].")" : 
-			"Publishd on " . $time->format('F jS, Y g:ia',$schedule['updated']);
-		echo $message.($simple? $title : ' '.$this->ajax->link(
-			$title,
-			array('controller'=>'schedules','action'=>'published'),
-			array(
-				'escape'=>false,
-				'update' => 'dialog_content',
-				'complete' => "openDialog('published',true,'bottom')",
-				'id' =>'published',
-				'title' => 'View Published Schedules...'
-			)
-		));
+			"Published on " . $time->format('F jS, Y g:ia',$schedule['updated']);
+		echo $message.$title;
 	} else {
 		$message .= "Published on " . $time->format('F jS, Y g:ia',$schedule['updated']);
-		echo ($simple? $message : ' '.$this->ajax->link(
-			$message,
-			array('controller'=>'schedules','action'=>'published'),
-			array(
-				'escape'=>false,
-				'update' => 'dialog_content',
-				'complete' => "openDialog('published',true,'bottom')",
-				'id' =>'published',
-				'title' => 'View Published Schedules...'
-			)
-		));
+		echo $message;
 	}
 echo $schedule['editable'] ? 
 	($simple? '' : $ajax->link(
@@ -84,17 +78,7 @@ echo $schedule['editable'] ?
 	: '';
 }
 ?>
-<? if ($session->read('Schedule.Group.alternate') && Authsome::get('id') == '') { ?>
-	<?= $this->ajax->link(
-		'ALTERNATE SCHEDULES',
-		array('controller'=>'schedules','action'=>'alternate'),
-		array(
-			'update' => 'dialog_content',
-			'complete' => "openDialog('alternate',true,'bottom')",
-			'id' => 'alternate'
-		)
-	) ?>
-<? } ?>
 <? if (!$simple) { ?>
+</span>
 </div>
 <? } ?>

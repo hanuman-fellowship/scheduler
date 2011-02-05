@@ -108,14 +108,10 @@ a.redo {
 	padding:2px;
 }
 
-.schedule_message, .schedule_message a {
+.schedule_message {
 	font-size:13px;
-	color:#CCC;
+	color:#999;
 	font-weight:bold;
-}
-
-.schedule_message a:hover {
-	color:#777;
 }
 
 .schedule_message {
@@ -146,8 +142,17 @@ a.selected {
 a#alternate, a#alternate:hover {
 	position:relative;
 	left:10px;
-	color:blue;
-	font-size:16px;
+	color:orange;
 	text-decoration:underline;
 	font-style:italic;
+}
+
+#group_name {
+	color:black;
+}
+
+#published {
+	position:absolute;
+	top:18px;
+	left:0px;
 }
