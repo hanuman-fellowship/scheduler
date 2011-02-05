@@ -296,9 +296,14 @@ $editable = $this->Session->read('Schedule.editable');
 		array(
 			'id' => 'login',
 			'update' => 'dialog_content',
-			'complete' => "openDialog('login',true,'bottom')"
+			'complete' => "openDialog('login',true,'bottom')",
+			'title' => '(ctrl+l)'
 		)
 	)?>
+	<?= $this->element('shortcut',array(
+		'shortcut' => 'ctrl+l',
+		'codeBlock' => "clickLink($('login'))"
+	));?>
 <? } ?>
 <? if ($isOperations && !isset($this->viewVars['area']['RequestArea'])) { ?>
 <?= $this->element('shortcut',array(
