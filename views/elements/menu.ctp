@@ -11,6 +11,7 @@ $editable = $this->Session->read('Schedule.editable');
 <? $scheduleName = $this->Session->read('Schedule.name');?>
 <? $userName = Inflector::humanize(Authsome::get('username')); ?>
 <? $gaps = isset($person['Person']) ? false : true;?>
+<nobr>
 <?=$role->menu(array(
 	"Hello, {$userName}" => array(
 		'role' => array('operations','manager','personnel')
@@ -289,6 +290,7 @@ $editable = $this->Session->read('Schedule.editable');
 		)
 	)
 ))?>
+</nobr>
 <? if (!Authsome::get('id')) { ?>
 	<?= $ajax->link(
 		'Login',
