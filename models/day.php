@@ -23,6 +23,8 @@ class Day extends AppModel {
 	}
 
 	function sSave($data) {
+		$this->Shift = ClassRegistry::init('Shift');  
+		$this->ConstantShift = ClassRegistry::init('ConstantShift');  
 		foreach($data['Day'] as $key => $value) {
 			if ($key == 'number') {
 				$number = $value;
@@ -35,6 +37,21 @@ class Day extends AppModel {
 					'name' => ($key <= $number) ? $value : ''
 				)
 			));
+			if ($key > $number) {
+				foreach(array('Shift','ConstantShift') as $model) {
+					$this->{$model}->id = '';
+					$records = $this->{$model}->sFind('all',array(
+						'conditions' => array(
+							"{$model}.day_id" => $key
+						),
+						'recursive' => -1,
+						'fields' => array('id')
+					));
+					foreach($records as $record) {
+						$this->{$model}->sDelete($record[$model]['id']);
+					}
+				}
+			}
 		}
 		deleteCache('bounds');
 		return "Days changed";
