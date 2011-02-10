@@ -109,7 +109,8 @@ class SchedulesController extends AppController {
 			$this->Schedule->contain();
 			$this->set('schedules',$this->Schedule->find('all',array(
 				'conditions' => array(
-					'Schedule.name <>' => 'Published'
+					'Schedule.name <>' => 'Published',
+					'Schedule.parent_id' => $this->Session->read('Schedule.parent_id')
 				)
 			)));
 			$this->set('schedule_id',scheduleId());		
