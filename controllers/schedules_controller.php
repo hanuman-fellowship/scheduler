@@ -149,5 +149,21 @@ class SchedulesController extends AppController {
 		$this->set('groupName',$this->Session->read('Group.name'));
 		$this->set('scheduleName',$scheduleName);
 	}
+
+	function template() {
+		$this->redirectIfNot('operations');
+		$groupName = $this->Session->read('Schedule.Group.name');
+		if (!empty($this->data)) {
+			if ($this->Schedule->valid($this->data)) {
+				$this->Schedule->template($this->data['Schedule']['name']);	
+				$this->set('url', $this->referer());
+			} else {
+				$this->set('errorField',$this->Schedule->errorField);
+				$this->set('errorMessage',$this->Schedule->errorMessage);
+			}
+		} 
+		$this->set('groupName',$groupName);
+	}
+
 }
 ?>

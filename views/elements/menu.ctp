@@ -125,6 +125,10 @@ $editable = $this->Session->read('Schedule.editable');
 				'ajax',
 				'shortcut' => 'shift+ctrl+n'
 			),
+			'Save as Template...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'template'),
+				'ajax'
+			),
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
 				'ajax',

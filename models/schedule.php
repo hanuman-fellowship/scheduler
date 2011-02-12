@@ -624,5 +624,39 @@ class Schedule extends AppModel {
 		return scheduleId();
 	}
 
+	function template($name) {
+		$original = $this->findById(scheduleId());
+		$new = array(
+			'user_id'           => 0,
+			'parent_id'         => 0,
+			'name'              => $name,
+			'schedule_group_id' => 0
+		);
+		$this->create();
+		$this->save($new);
+		$new_id = $this->id;
+		foreach($original as $model => $record) {
+			switch ($model) {
+				case 'Schedule':
+				case 'FloatingShift':
+				case 'PeopleSchedules':
+				case 'Assignment':
+				case 'User':
+				case 'ScheduleGroup':
+				case 'OffDay':
+				case 'Change':
+				case 'ChangeModel':
+				case 'ChangeField':
+					continue;
+				default:
+					foreach($record as $data) {
+						$data['schedule_id'] = $new_id;
+						$this->{$model}->qInsert($data);
+					}
+			}
+		}
+	}
+
+
 }
 ?>
