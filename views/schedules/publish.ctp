@@ -1,4 +1,5 @@
-<? $group = isset($this->data['Schedule']['group']) ? $this->data['Schedule']['group'] : 'update';?>
+<? $fromTemplate = $this->session->read('Schedule.schedule_group_id') == 0 ?>
+<? $group = isset($this->data['Schedule']['group']) || $fromTemplate ? $this->data['Schedule']['group'] : 'update';?>
 <fieldset>
 	<legend><?php __("Publish Schedule <i>{$scheduleName}</i>");?></legend>
 <?= $ajax->form($this->action,'post',array(
@@ -7,15 +8,17 @@
 	'before'=>"wait()"
 )); ?>
 		<div class='left'>
+		<? $choices = array(
+			'update' => "Add to Schedule Group \"{$this->Session->read('Schedule.Group.name')}\"",
+			'new' => 'New Schedule Group'
+		) ?>
+		<? if ($fromTemplate) array_shift($choices) ?>
 		<?=$form->radio(
 			'group',
-			array(
-				'update' => "Add to Schedule Group \"{$this->Session->read('Schedule.Group.name')}\"",
-				'new' => 'New Schedule Group'
-			),
+			$choices,
 			array(
 				'separator' => '<br/>',
-				'value' => $group,
+				'value' => $fromTemplate ? 'new' : $group,
 				'onchange' => "$('nameDiv').toggle();$('name').select()",
 				'legend' => false
 			)

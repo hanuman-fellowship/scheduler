@@ -120,15 +120,6 @@ $editable = $this->Session->read('Schedule.editable');
 				'ajax'
 			),
 			"<hr/>",
-			'New From Template...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'copyTemplate'),
-				'ajax'
-			),
-			'Save as Template...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'template'),
-				'ajax'
-			),
-			"<hr/>",
 			'Edit a Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'copy'),
 				'ajax',
@@ -144,7 +135,16 @@ $editable = $this->Session->read('Schedule.editable');
 				'ajax',
 				'hidden' => !$editable,
 				'shortcut' => 'ctrl+m'
-			)
+			),
+			"<hr/>",
+			'New From Template...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'copyTemplate'),
+				'ajax'
+			),
+			'Save as Template...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'template'),
+				'ajax'
+			),
 		)
 	),
 	array(
