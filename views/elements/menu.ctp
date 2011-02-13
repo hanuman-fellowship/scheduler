@@ -145,6 +145,10 @@ $editable = $this->Session->read('Schedule.editable');
 				'url' => array('controller' => 'schedules', 'action' => 'template'),
 				'ajax'
 			),
+			'Delete Template...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'deleteTemplate'),
+				'ajax'
+			),
 		)
 	),
 	array(

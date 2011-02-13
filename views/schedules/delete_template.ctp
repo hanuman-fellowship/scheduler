@@ -1,5 +1,5 @@
 <fieldset>
-	<legend><?php __('Delete Schedule');?></legend>
+	<legend><?php __('Delete Template');?></legend>
 <?
 foreach($schedules as $schedule) {
 	$selected = ($schedule['Schedule']['id'] == $schedule_id) ? 
@@ -9,7 +9,7 @@ foreach($schedules as $schedule) {
 		array(
 			'class'=>$selected
 		),
-		"Delete the schedule \"{$schedule['Schedule']['name']}\"?"
+		"Delete the template \"{$schedule['Schedule']['name']}\"?"
 	);
 	echo '<br/>';
 }

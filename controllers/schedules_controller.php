@@ -66,6 +66,24 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',scheduleId());			
 	}
 
+	function deleteTemplate($id = null) {
+		$this->redirectIfNot('operations');
+		if ($id) {
+			$this->Schedule->delete($id);
+			$this->setSchedule('latest');
+			$this->redirect($this->referer());
+		}
+		$this->Schedule->order = 'name';
+		$this->Schedule->contain();
+		$this->set('schedules',$this->Schedule->find('all',array(
+			'conditions' => array(
+				'Schedule.schedule_group_id' => 0,
+				'Schedule.user_id' => 0
+			)
+		)));
+		$this->set('schedule_id',scheduleId());			
+	}
+
 	function select($id = null, $autoSelect = 0) {
 		if ($id) {
 			if ($autoSelect) {
