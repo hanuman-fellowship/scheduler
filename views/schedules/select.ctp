@@ -38,7 +38,8 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 	<b>Other Schedules</b><br/>
 	<?
 	foreach($schedules['all'] as $schedule) {
-		if( $schedule['Schedule']['user_id'] == Authsome::get('id')) {
+		if( $schedule['Schedule']['user_id'] == Authsome::get('id') ||
+		$schedule['Schedule']['user_id'] == 0) {
 			continue;
 		}
 		$other_selected = ($schedule['Schedule']['id'] == $schedule_id) ? 

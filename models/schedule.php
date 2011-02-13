@@ -107,7 +107,7 @@ class Schedule extends AppModel {
 			'user_id'           => $user_id,
 			'parent_id'         => $parent_id,
 			'name'              => $name,
-			'schedule_group_id' => $original['ScheduleGroup']['id']
+			'schedule_group_id' => $original['Schedule']['schedule_group_id']
 		);
 		$this->create();
 		$this->save($branch_data);
@@ -119,6 +119,9 @@ class Schedule extends AppModel {
 				case 'ScheduleGroup':
 					continue;
 				case 'ChangeField':
+					if ($schedule_id != scheduleId()) { // we are copying a template
+						continue;
+					}
 					foreach($record as &$field_data) {
 						if ($field_data['field_key'] == 'schedule_id') {
 							if ($field_data['field_old_val'] != null) {
@@ -128,6 +131,13 @@ class Schedule extends AppModel {
 								$field_data['field_new_val'] = $branch_id;
 							}
 						}
+					}
+				case 'PeopleSchedules' :
+					if ($schedule_id != scheduleId()) { // we are copying a template
+						// add the current people to the copy
+						$this->contain('PeopleSchedules');
+						$currentPeople = $this->findById(scheduleId());
+						$record = $currentPeople['PeopleSchedules'];
 					}
 				default:
 					foreach($record as $data) {

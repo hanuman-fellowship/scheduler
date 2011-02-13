@@ -18,13 +18,12 @@ class SchedulesController extends AppController {
 		$groupName = $this->Session->read('Schedule.Group.name');
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
-				myDebug($this->data);
 				$this->setSchedule($this->Schedule->copy(
 					$this->data['Schedule']['id'] ? $this->data['Schedule']['id'] : scheduleId(),
 					Authsome::get('id'),
 					$this->data['Schedule']['name']
 				));	
-				//$this->set('url', $this->referer());
+				$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Schedule->errorField);
 				$this->set('errorMessage',$this->Schedule->errorMessage);
@@ -41,7 +40,10 @@ class SchedulesController extends AppController {
 		$this->redirectIfNot('operations');
 		$groupName = $this->Session->read('Schedule.Group.name');
 		$this->set('templates',$this->Schedule->find('list',array(
-			'conditions' => array('schedule_group_id' => 0),
+			'conditions' => array(
+				'schedule_group_id' => 0,
+				'user_id' => 0
+			),
 			'order' => 'Schedule.name asc'
 		)));
 		$this->set('groupName',$groupName);
