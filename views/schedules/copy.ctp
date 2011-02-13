@@ -20,6 +20,12 @@
 		));
 	?>
 	<i>(this name will not be published)</i>
+	<?= $template ?
+	"<hr>
+	Areas, shifts, etc. will be taken from the template<br>
+	People will be taken from the schedule you are currently viewing
+	<hr>" : ''
+	?>
 <?php echo $form->end('Submit');?>
 </fieldset>
 <? $no_wait = false ?>
