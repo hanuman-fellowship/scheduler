@@ -13,21 +13,37 @@ class SchedulesController extends AppController {
 		fclose($file);
 	}
 
-	function copy() {
+	function copy($id = null) {
 		$this->redirectIfNot('operations');
 		$groupName = $this->Session->read('Schedule.Group.name');
 		if (!empty($this->data)) {
 			if ($this->Schedule->valid($this->data)) {
+				myDebug($this->data);
 				$this->setSchedule($this->Schedule->copy(
+					$this->data['Schedule']['id'] ? $this->data['Schedule']['id'] : scheduleId(),
 					Authsome::get('id'),
 					$this->data['Schedule']['name']
 				));	
-				$this->set('url', $this->referer());
+				//$this->set('url', $this->referer());
 			} else {
 				$this->set('errorField',$this->Schedule->errorField);
 				$this->set('errorMessage',$this->Schedule->errorMessage);
 			}
 		} 
+		$this->set('id',$id);
+		$this->set('template',$this->Schedule->field('name',array(
+			'Schedule.id' => $id
+		)));
+		$this->set('groupName',$groupName);
+	}
+
+	function copyTemplate() {
+		$this->redirectIfNot('operations');
+		$groupName = $this->Session->read('Schedule.Group.name');
+		$this->set('templates',$this->Schedule->find('list',array(
+			'conditions' => array('schedule_group_id' => 0),
+			'order' => 'Schedule.name asc'
+		)));
 		$this->set('groupName',$groupName);
 	}
 	

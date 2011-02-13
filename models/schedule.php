@@ -94,11 +94,11 @@ class Schedule extends AppModel {
 		);
 	}
 
-	function copy($user_id, $name) {
-		$original = $this->findById(scheduleId());
+	function copy($schedule_id,$user_id, $name) {
+		$original = $this->findById($schedule_id);
 		if (is_null($original['Schedule']['parent_id'])) { // it has been published
 			// make the old one the parent of the new one
-			$parent_id = scheduleId();
+			$parent_id = $schedule_id;
 		} else { // it is a branch itself
 			// give the new one the same parent
 			$parent_id = $original['Schedule']['parent_id'];
@@ -115,9 +115,7 @@ class Schedule extends AppModel {
 		foreach($original as $model => $record) {
 			switch ($model) {
 				case 'Schedule':
-					continue;
 				case 'User':
-					continue;
 				case 'ScheduleGroup':
 					continue;
 				case 'ChangeField':
