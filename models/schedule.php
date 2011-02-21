@@ -76,6 +76,16 @@ class Schedule extends AppModel {
 		return true;
 	}
 
+	function listTemplates() {
+		return $this->find('list',array(
+			'conditions' => array(
+				'schedule_group_id' => 0,
+				'user_id' => 0
+			),
+			'order' => 'Schedule.name asc'
+		));
+	}
+
 	function viewList() {
 		$user_id = Authsome::get('id');
 		$this->contain('User');

@@ -39,13 +39,7 @@ class SchedulesController extends AppController {
 	function copyTemplate() {
 		$this->redirectIfNot('operations');
 		$groupName = $this->Session->read('Schedule.Group.name');
-		$this->set('templates',$this->Schedule->find('list',array(
-			'conditions' => array(
-				'schedule_group_id' => 0,
-				'user_id' => 0
-			),
-			'order' => 'Schedule.name asc'
-		)));
+		$this->set('templates',$this->listTemplates());
 		$this->set('groupName',$groupName);
 	}
 	
@@ -199,6 +193,18 @@ class SchedulesController extends AppController {
 			}
 		} 
 		$this->set('groupName',$groupName);
+	}
+
+	function newRequest($area_id) {
+		$this->redirectIfNotManager($area_id);
+		if (!empty($this->data)) {
+			
+		}
+		$this->set('templates',$this->Schedule->listTemplates());
+		$this->set('areaName',$this->Schedule->Area->field('name',array(
+			'Area.id' => $area_id,
+			'Area.schedule_id' => scheduleId()
+		)));
 	}
 
 }
