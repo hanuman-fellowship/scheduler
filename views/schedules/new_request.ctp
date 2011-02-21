@@ -1,6 +1,6 @@
 <fieldset>
 	<legend><?php __("New {$areaName} Request");?></legend>
-	<? if (empty($this->data)) { ?>
+	<? if (empty($this->data) || isset($errorMessage)) { ?>
 	<div class='left'>
 	<?= $ajax->form($this->action,'post',array(
 		'model'=>'Schedule',

@@ -198,10 +198,15 @@ class SchedulesController extends AppController {
 	function newRequest($area_id = null) {
 		if (!empty($this->data)) {
 			$area_id = $this->data['Schedule']['area_id'];	
-			if ($this->data['Schedule']['based_on'] == 'template') {
-				$this->set('templates',$this->Schedule->listTemplates());
+			if ($this->Schedule->valid($this->data)) {
+				if ($this->data['Schedule']['based_on'] == 'template') {
+					$this->set('templates',$this->Schedule->listTemplates());
+				} else {
+					$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
+				}
 			} else {
-				$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
+				$this->set('errorField',$this->Schedule->errorField);
+				$this->set('errorMessage',$this->Schedule->errorMessage);
 			}
 		}
 		$this->redirectIfNotManager($area_id);

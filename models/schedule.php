@@ -29,6 +29,20 @@ class Schedule extends AppModel {
 	var $bypass = false;
 
 	function valid($data) {
+		$nameExists = $this->field('id',array('name' => $data['Schedule']['name']));
+		if (isset($data['Schedule']['based_on'])) {
+			if ($data['Schedule']['name'] == '') {
+				$this->errorField = 'ScheduleName';
+				$this->errorMessage = "Name must not be blank";
+				return false;
+			}	
+			if ($nameExists) {
+				$this->errorField = 'ScheduleName';
+				$this->errorMessage = "That name already exists";
+				return false;
+			}
+			return true;
+		}
 		$effective = isset($data['Schedule']['effective']);
 		$publish = isset($data['Schedule']['group']); // true = publish; false = copy;
 		if (isset($data['Schedule']['name'])) {
@@ -37,8 +51,6 @@ class Schedule extends AppModel {
 					return true;
 				}
 				$nameExists = $this->ScheduleGroup->field('id',array('name' => $data['Schedule']['name']));
-			} else {
-				$nameExists = $this->field('id',array('name' => $data['Schedule']['name']));
 			}
 			if ($data['Schedule']['name'] == '') {
 				$this->errorField = 'name';
