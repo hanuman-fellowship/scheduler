@@ -39,7 +39,7 @@ class SchedulesController extends AppController {
 	function copyTemplate() {
 		$this->redirectIfNot('operations');
 		$groupName = $this->Session->read('Schedule.Group.name');
-		$this->set('templates',$this->listTemplates());
+		$this->set('templates',$this->Schedule->listTemplates());
 		$this->set('groupName',$groupName);
 	}
 	
@@ -195,12 +195,17 @@ class SchedulesController extends AppController {
 		$this->set('groupName',$groupName);
 	}
 
-	function newRequest($area_id) {
-		$this->redirectIfNotManager($area_id);
+	function newRequest($area_id = null) {
 		if (!empty($this->data)) {
-			
+			$area_id = $this->data['Schedule']['area_id'];	
+			if ($this->data['Schedule']['based_on'] == 'template') {
+				$this->set('templates',$this->Schedule->listTemplates());
+			} else {
+				$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
+			}
 		}
-		$this->set('templates',$this->Schedule->listTemplates());
+		$this->redirectIfNotManager($area_id);
+		$this->set('area_id',$area_id);
 		$this->set('areaName',$this->Schedule->Area->field('name',array(
 			'Area.id' => $area_id,
 			'Area.schedule_id' => scheduleId()
