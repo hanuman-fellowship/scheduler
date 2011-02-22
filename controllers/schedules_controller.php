@@ -195,7 +195,12 @@ class SchedulesController extends AppController {
 		$this->set('groupName',$groupName);
 	}
 
-	function newRequest($area_id = null) {
+	function newRequest($area_id = null, $name = null, $schedule_id = null) {
+		if ($name) {
+			$newScheduleId = $this->Schedule->addRequest($area_id,$name,$schedule_id);
+			$this->setSchedule($newScheduleId);
+			$this->redirect(array('controller'=>'areas','action'=>'schedule',$area_id));
+		}
 		if (!empty($this->data)) {
 			$area_id = $this->data['Schedule']['area_id'];	
 			if ($this->Schedule->valid($this->data)) {

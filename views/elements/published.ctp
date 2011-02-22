@@ -1,9 +1,9 @@
-<? if (isset($addRequest)) { ?>
+<? if (isset($newRequest)) { ?>
 	<? $baseUrl = array(
 		'controller' => 'schedules',
-		'action' => 'addRequest',
-		$addRequest['area_id'],
-		$addRequest['name']
+		'action' => 'newRequest',
+		$newRequest['area_id'],
+		$newRequest['name']
 	) ?>
 <? } else { ?>
 	<? $baseUrl = array(

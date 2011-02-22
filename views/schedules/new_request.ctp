@@ -25,13 +25,13 @@
 	<? } else { ?>
 		Import shifts from:<br>
 		<hr>
-		<? if (isset($templates)) { ?>
+		<? if ($this->data['Schedule']['based_on'] == 'template') { ?>
 			<div class='tall left'>
 			<? foreach($templates as $id => $name) { ?>
 				<?=$html->link($name,
 					array(
 						'controller'=>'schedules',
-						'action'=>'addRequest',
+						'action'=>'newRequest',
 						$area_id,
 						$this->data['Schedule']['name'],
 						$id
@@ -43,7 +43,7 @@
 			</div>
 		<? } else { ?>
 			<?=$this->element('published',array(
-				'addRequest'=>array(
+				'newRequest'=>array(
 					'area_id' => $this->data['Schedule']['area_id'],
 					'name' => $this->data['Schedule']['name']
 				)))?>

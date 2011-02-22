@@ -88,6 +88,11 @@ class Schedule extends AppModel {
 		return true;
 	}
 
+	function addRequest($area_id,$name,$schedule_id) {
+
+		return $schedule_id;
+	}
+
 	function listTemplates() {
 		return $this->find('list',array(
 			'conditions' => array(
