@@ -23,4 +23,14 @@ class ScheduleGroup extends AppModel {
 		return $published;
 	}
 
+	function firstInGroup($id) {
+		return $this->Schedule->field('id',
+			array(
+				'Schedule.schedule_group_id' => $id,
+				'Schedule.name' => 'Published'
+			),
+			array('Schedule.id desc')
+		);
+	}
+
 }

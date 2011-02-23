@@ -4,16 +4,15 @@ class ScheduleGroupsController extends AppController {
 	var $name = 'ScheduleGroups';
 
 	function select($id) {
-		$schedule_id = $this->ScheduleGroup->Schedule->field('id',
-			array(
-				'Schedule.schedule_group_id' => $id,
-				'Schedule.name' => 'Published'
-			),
-			array('Schedule.id desc')
-		);
-		$this->setSchedule($schedule_id);
+		$this->setSchedule($this->ScheduleGroup->firstInGroup($id));
 		$this->redirect($this->referer());
 	}
 	
+	function newRequest($area_id,$name,$id) {
+		$this->redirectIfNotManager($area_id);
+		$newScheduleId = $this->ScheduleGroup->Schedule->addRequest($area_id,$name,$this->ScheduleGroup->firstInGroup($id));
+		$this->setSchedule($newScheduleId);
+		$this->redirect(array('controller'=>'areas','action'=>'schedule',$area_id));
+	}
 
 }
