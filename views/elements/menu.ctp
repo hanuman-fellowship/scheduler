@@ -289,7 +289,7 @@ $request = $this->Session->read('Schedule.request');
 		)
 	),
 	'Shifts' => array(
-		'hidden' => !$editable || !$request,
+		'hidden' => !$editable || (!$isOperations && !$request),
 		'role' => array('operations','manager'),
 		'url' => array(
 			'controller' => 'shifts',
