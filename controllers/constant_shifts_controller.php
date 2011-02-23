@@ -28,7 +28,11 @@ class ConstantShiftsController extends AppController {
 		$this->set('residentCategories',$this->ResidentCategory->sFind('list'));
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
-		$this->set('days',$this->Day->sFind('list'));
+		$this->set('days',$this->Day->sFind('list',array(
+			'conditions' => array(
+				'Day.name <>' => ''
+			)
+		)));
 	}
 
 	function edit($id = null) {
@@ -56,7 +60,11 @@ class ConstantShiftsController extends AppController {
 		$this->set('residentCategories',$this->ResidentCategory->sFind('list'));
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
-		$this->set('days',$this->Day->sFind('list'));
+		$this->set('days',$this->Day->sFind('list',array(
+			'conditions' => array(
+				'Day.name <>' => ''
+			)
+		)));
 	}
 	
 	function delete($id) {

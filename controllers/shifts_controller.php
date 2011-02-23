@@ -36,7 +36,11 @@ class ShiftsController extends AppController {
 		$this->set('end',$end);
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
-		$this->set('days',$this->Day->sFind('list'));
+		$this->set('days',$this->Day->sFind('list',array(
+			'conditions' => array(
+				'Day.name <>' => ''
+			)
+		)));
 	}
 	
 	function edit($id = null) {
@@ -67,7 +71,11 @@ class ShiftsController extends AppController {
 		$this->set('areas',$this->Area->sFind('list'));
 		$this->loadModel('Day');
 		$this->Day->order = 'id';
-		$this->set('days',$this->Day->sFind('list'));
+		$this->set('days',$this->Day->sFind('list',array(
+			'conditions' => array(
+				'Day.name <>' => ''
+			)
+		)));
 	}
 	
 	function delete($id) {
