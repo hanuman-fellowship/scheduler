@@ -4,6 +4,7 @@ $isOperations = in_array(
 	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
 );
 $editable = $this->Session->read('Schedule.editable');
+$request = $this->Session->read('Schedule.request');
 ?>
 <span class='no_print'>
 <?=$javascript->link(array('functions','dropdowntabs'));?>
@@ -94,24 +95,30 @@ $editable = $this->Session->read('Schedule.editable');
 		'title' => ' | '
 	),
 	'Schedules' => array(
-		'role' => array('operations'),
+		'role' => array('operations','manager'),
 		'url' => array('controller' => 'schedules', 'action' => 'select'),
 		'ajax',
+		'hidden' => !$isOperations && !$request,
 		'sub' => array(
 			'In Progress...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'select'),
 				'ajax',
-				'shortcut' => 'ctrl+i'
+				'shortcut' => 'ctrl+i',
+				'hidden' => $request
 			),
 			'Published...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'published'),
 				'ajax',
 				'shortcut' => 'ctrl+o'
 			),
-			"<hr/>",
+			array(
+				'title' => "<hr/>",
+				'hidden' => $request
+			),
 			'View Gaps' => array(
 				'url' => array('controller' => 'people', 'action' => 'schedule','gaps'),
-				'shortcut' => 'ctrl+g'
+				'shortcut' => 'ctrl+g',
+				'hidden' => $request
 			),
 			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			'Edit Days...' => array(
@@ -119,35 +126,47 @@ $editable = $this->Session->read('Schedule.editable');
 				'hidden' => !$editable,
 				'ajax'
 			),
-			"<hr/>",
+			array(
+				'title' => "<hr/>",
+				'hidden' => $request
+			),
 			'Edit a Copy...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'copy'),
 				'ajax',
-				'shortcut' => 'shift+ctrl+n'
+				'shortcut' => 'shift+ctrl+n',
+				'hidden' => $request
 			),
 			'Delete...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'delete'),
 				'ajax',
-				'shortcut' => 'shift+ctrl+d'
+				'shortcut' => 'shift+ctrl+d',
+				'hidden' => $request
 			),
 			'Merge...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'merge'),
 				'ajax',
 				'hidden' => !$editable,
-				'shortcut' => 'ctrl+m'
+				'shortcut' => 'ctrl+m',
+				'hidden' => $request
 			),
-			"<hr/>",
+			array(
+				'title' => "<hr/>",
+				'hidden' => $request
+			),
 			'New From Template...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'copyTemplate'),
-				'ajax'
+				'ajax',
+				'hidden' => $request
 			),
 			'Save as Template...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'template'),
-				'ajax'
+				'ajax',
+				'hidden' => $request
 			),
 			'Delete Template...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'deleteTemplate'),
-				'ajax'
+				'ajax',
+				'hidden' => $request
 			),
 		)
 	),
@@ -159,6 +178,7 @@ $editable = $this->Session->read('Schedule.editable');
 		'url' => array('controller' => 'people', 'action' => 'schedule'),
 		'shortcut' => 'ctrl+p',
 		'ajax',
+		'hidden' => $request,
 		'sub' => array(
 			'role' => array('operations'),
 			'View Schedule...' => array(
@@ -214,6 +234,7 @@ $editable = $this->Session->read('Schedule.editable');
 		'url' => array('controller' => 'areas', 'action' => 'select'),
 		'shortcut' => 'ctrl+a',
 		'ajax',
+		'hidden' => $request,
 		'sub' => array(
 			'role' => array('operations'),
 			'View Schedule...' => array(
@@ -268,8 +289,8 @@ $editable = $this->Session->read('Schedule.editable');
 		)
 	),
 	'Shifts' => array(
-		'hidden' => !$editable,
-		'role' => array('operations'),
+		'hidden' => !$editable || !$request,
+		'role' => array('operations','manager'),
 		'url' => array(
 			'controller' => 'shifts',
 			'action' => 'add',
@@ -298,7 +319,8 @@ $editable = $this->Session->read('Schedule.editable');
 			),
 			'New Constant Shift...' => array(
 				'url' => array('controller' => 'constant_shifts', 'action' => 'add'),
-				'ajax'
+				'ajax',
+				'hidden' => $request
 			)
 		)
 	)
@@ -320,7 +342,7 @@ $editable = $this->Session->read('Schedule.editable');
 		'codeBlock' => "clickLink($('login'))"
 	));?>
 <? } ?>
-<? if ($isOperations && !isset($this->viewVars['area']['RequestArea'])) { ?>
+<? if ($isOperations || $request == 2) { ?>
 <?= $this->element('shortcut',array(
 	'shortcut' => 'ctrl+u',
 	'codeBlock' => "clickLink($('undoLink'))"
@@ -330,7 +352,7 @@ $editable = $this->Session->read('Schedule.editable');
 	'codeBlock' => "clickLink($('redoLink'))"
 ));?>
 <div class='changes'>
-	<? if ($editable) { ?>
+	<? if ($editable || $request == 2) { ?>
 		<span class='change_message' id='undo_message' style='display:none'><?=$change_messages['undo']?></span>
 		<span class='change_message' id='redo_message' style='display:none'><?=$change_messages['redo']?></span>
 		<?= $change_messages['redo'] ? $html->link('Redo',array('controller'=>'changes','action'=>'redo'),array(

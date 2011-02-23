@@ -8,17 +8,11 @@ $isOperations = in_array(
 	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
 );
 $editable = $this->Session->read('Schedule.editable');
-if (isset($area['RequestArea'])) {
-	$request = 'Request';
-	$editRequest = ($area['RequestArea']['id'] < 0) ? true : false;
-} else {
-	$request = '';
-	$editRequest = false;
-	$groupName = $this->session->read('Schedule.Group.name');
-}
+$groupName = $this->session->read('Schedule.Group.name');
+$request = $this->Session->read('Schedule.request');
 $gaps = isset($gaps);
 $print = isset($print);
-$notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $person['PeopleSchedules']['notes']);
+$notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['PeopleSchedules']['notes']);
 ?>
 <table  style='' width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
 	<tr> 
@@ -29,7 +23,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				"<a id='total_hours' title='Display Hour Breakdown... (ctrl+h)' href='javascript:showHoursBy()'>Total Hours:</a> ";?>
 		<span class="title" style='padding-left:3px;position:relative;top:3px' <?= (isset($person)) ? 'id="total_hours_'. ($gaps? '' : $person['Person']['id']) .'"' : '';?> >
 			<?= (isset($area)) ?
-				$area[$request.'Area']['manager'] :
+				$area['Area']['manager'] :
 				''
 				;?>
 				</span>
@@ -38,13 +32,12 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<td width="222" rowspan="2"> 
 			<div align="center" class="title"> 
 			<? if (isset($area)) { ?>
-				<?= $request ? "<span style='color:#999'>" : '';?>
 				<span id='area_name'>
 				<?=$role->link(
-					$area[$request.'Area']['name'],
+					$area['Area']['name'],
 					array(
 						'operations' => array(
-							'url' => array('action'=>'edit',$area[$request.'Area']['id']),
+							'url' => array('action'=>'edit',$area['Area']['id']),
 							'attributes'=>array(
 								'update'=>'dialog_content',
 								'complete'=>"openDialog('area_name')",
@@ -76,7 +69,6 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			<? } ?>
 				<br />
 				<?= $request ? "Request Form" : "Schedule";?>
-				<?= $request ? "</span>" : '';?>
 			</div>
 		</td> 
 		<td width="107">
@@ -129,7 +121,6 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 					array(
 						'controller'=>'areas',
 						'action'=>'schedule',
-						abs($area['RequestArea']['id'])
 					),
 					array(
 						'escape'=>false,
@@ -181,13 +172,13 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 	<? foreach ($bounds['days'] as $day => $d) { ?>
 		<? $off_day = (isset($person) && !$gaps) ? $schedule->offDays($person['OffDay'], $day) : array('screen'=>'','print'=>''); ?>
 		<? if ($isOperations && $editable && !$this->params['isAjax'] && !$request
-		|| ($request && $editRequest)) { ?>
+		|| ($request == 2)) { ?>
 		<td <?=$off_day['screen']?> id="<?=$slot_num.'_'.$day?>"
 			onmouseover='showAddShift($("add_<?=$slot_num?>_<?=$day?>"))'
 			onmouseout='hideAddShift($("add_<?=$slot_num?>_<?=$day?>"))'
 		> 
 			<? $url = (isset($area)) ? 
-				array('controller'=>'shifts','action'=>'add',$area[$request.'Area']['id'],
+				array('controller'=>'shifts','action'=>'add',$area['Area']['id'],
 					$day,
 					str_replace(":","-",$bounds['bounds'][$slot_num][$day]['start'])) 
 				:
@@ -211,8 +202,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 				<p> 
 				<?=$off_day['print']?>
 		<? if (isset($area)) { ?>
-			<? foreach ($area[$request.'Shift'] as $shift) { ?>
-						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day,$editRequest);?>
+			<? foreach ($area['Shift'] as $shift) { ?>
+						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day,$request == 2);?>
 			<? } ?>
 		<? } else { ?>
 			<? foreach ($person['Assignment'] as $assignment) { ?>
@@ -244,8 +235,8 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 		<td id="0_0" onmouseover='showAddShift($("add_0_0"))'
 			onmouseout='hideAddShift($("add_0_0"))' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 		<? if (isset($area)) { ?>
-			<?=$schedule->displayAreaFloating($area['FloatingShift'],$editRequest);?>
-			<? $area_id = $area[$request.'Area']['id']; ?>
+			<?=$schedule->displayAreaFloating($area['FloatingShift'],$request == 2);?>
+			<? $area_id = $area['Area']['id']; ?>
 			<? $person_id = 0; ?>
 		<? } else { ?>
 			<?= !$gaps ? $schedule->displayPersonFloating($person['FloatingShift']) : '';?>
@@ -258,7 +249,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			</script>
 		<? } ?>
 		<? if ($isOperations && $editable && !$request
-		|| ($request && $editRequest)) { ?>
+		|| ($request == 2)) { ?>
 			<?= !$gaps ? $ajax->link(
 				' + ',
 				array('controller'=>'floatingShifts','action'=>'add',$area_id,$person_id),
@@ -274,7 +265,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 			<br/>
 		</td> 
 	</tr> 
-	<? if (($isOperations && $editable && !$request && !$gaps) || $notes || $editRequest) { ?>
+	<? if (($isOperations && $editable && !$request && !$gaps) || $notes || $request == 2) { ?>
 	<tr> 
 		<td id="notes" align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
 			<i>
@@ -284,7 +275,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 					'operations' => array(
 						'url' => array(
 							'action'=>'editNotes',
-							isset($area)? $area[$request.'Area']['id'] : $person['Person']['id']
+							isset($area)? $area['Area']['id'] : $person['Person']['id']
 						),
 						'attributes'=>array(
 							'update'=>'dialog_content',
@@ -295,7 +286,7 @@ $notes = $gaps ? false : (isset($area) ? $area["{$request}Area"]['notes'] : $per
 						'ajax'
 					)
 				),
-				$editable && !$request || ($request && $editRequest) ? 'operations' : '' 
+				$editable && !$request || ($request == 2) ? 'operations' : '' 
 			);?>
 			</i>
 		</td> 

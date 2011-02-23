@@ -199,7 +199,7 @@ class SchedulesController extends AppController {
 		if ($name) {
 			$newScheduleId = $this->Schedule->addRequest($area_id,$name,$schedule_id);
 			$this->setSchedule($newScheduleId);
-			$this->redirect(array('controller'=>'areas','action'=>'schedule',$area_id));
+			$this->redirect('/');
 		}
 		if (!empty($this->data)) {
 			$area_id = $this->data['Schedule']['area_id'];	
@@ -225,8 +225,7 @@ class SchedulesController extends AppController {
 	function editRequest($id = null) {
 		if ($id) {
 			$this->setSchedule($id);
-			$area = $this->Schedule->Area->sFind('first');
-			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $area['Area']['id']));
+			$this->redirect('/');
 		}
 		$this->set('requests',$this->Schedule->find('list', array(
 			'conditions' => array(

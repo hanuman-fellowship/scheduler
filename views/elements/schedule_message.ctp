@@ -10,7 +10,9 @@ $current = (
 ?>
 <? if (!$simple) { ?>
 <div class='schedule_message no_print'>
-<span id='group_name'><?=$schedule['Group']['name']?></span>
+<span id='group_name'>
+<?= ($schedule['request']) ? 'AREA REQUEST FORM' : $schedule['Group']['name']?>
+</span>
 <? } ?>
 <? if ($session->read('Schedule.Group.alternate') && Authsome::get('id') == '') { ?>
 	<?= $this->ajax->link(
@@ -25,25 +27,25 @@ $current = (
 <? } ?>
 <?= $simple? '' : "<span id='published'>"?>
 <?
-if (isset($area['RequestArea'])) {
-	if ($area['RequestArea']['id'] < 0) {
-		echo "<span style='color:green'>Editing:</span> {$area['RequestArea']['name']} Request Form";
+if ($schedule['request']) {
+	if ($schedule['request'] == 2) {
+		echo "<span style='color:green'>Editing:</span> {$schedule['name']}";
 		echo $html->link(
 			'Submit',
-			array('controller' => 'RequestAreas', 'action' => 'submit', $area['RequestArea']['id']),
+			array('controller' => 'Areas', 'action' => 'submit', $area['Area']['id']),
 			array(
 				'class' => 'button',
-				'confirm' => "Submit {$area['RequestArea']['name']} Request Form?",
+				'confirm' => "Submit {$area['Area']['name']} Request Form?",
 				'title' => 'Submit Request Form'
 			)
 		);
 	} else {
-		echo "<span style='color:blue'>Viewing:</span> {$area['RequestArea']['name']} Request Form";
-		if(in_array($area['RequestArea']['id'],
+		echo "<span style='color:blue'>Viewing:</span> {$area['Area']['name']} Request Form";
+		if(in_array($area['Area']['id'],
 		Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id'))) {
 			echo " (Submitted)" . $html->link(
 				'Edit',
-				array('controller' => 'RequestAreas', 'action' => 'edit', $area['RequestArea']['id'],true),
+				array('controller' => 'Areas', 'action' => 'edit', $area['Area']['id'],true),
 				array(
 					'class' => 'button'
 				)

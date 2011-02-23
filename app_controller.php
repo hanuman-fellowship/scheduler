@@ -32,8 +32,14 @@ class AppController extends Controller {
 			$this->Session->write('Schedule.editable',false);
 		}	
 
-		// request areas for manager menu
 		$this->loadModel('Area');
+
+		if ($this->params['url']['url'] == '/' && $this->Session->read('Schedule.request')) {
+			$area = $this->Area->sFind('first');
+			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $area['Area']['id']));
+		}
+
+		// request areas for manager menu
 		$managerAreas = $this->Area->sFind('list', array(
 			'conditions' => array(
 				'Area.id' => Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id')
@@ -220,7 +226,7 @@ class AppController extends Controller {
 	}
 
 	function redirectIfNotEditable() {
-		if (!$this->Session->read('Schedule.editable')) {
+		if (!$this->Session->read('Schedule.editable') && $this->Session->read('Schedule.request') != 2) {
 			$this->redirect('/');
 		}
 	}

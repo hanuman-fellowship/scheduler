@@ -16,7 +16,9 @@ class ChangesController extends AppController {
 	} 
 	
 	function history() {
-		$this->redirectIfNot('operations');
+		if ($this->Session->read('Schedule.request') != 2) {
+			$this->redirectIfNot('operations');
+		}
 		$this->Change->recursive = -1;
 		$this->Change->order = 'created desc';
 		$this->set('changes',$this->Change->sFind('all'));
