@@ -222,5 +222,19 @@ class SchedulesController extends AppController {
 		)));
 	}
 
+	function editRequest($id = null) {
+		if ($id) {
+			$this->setSchedule($id);
+			$area = $this->Schedule->Area->sFind('first');
+			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $area['Area']['id']));
+		}
+		$this->set('requests',$this->Schedule->find('list', array(
+			'conditions' => array(
+				'Schedule.request' => 2,
+				'Schedule.user_id' => Authsome::get('id')
+			)
+		)));
+	}
+
 }
 ?>

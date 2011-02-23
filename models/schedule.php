@@ -89,8 +89,58 @@ class Schedule extends AppModel {
 	}
 
 	function addRequest($area_id,$name,$schedule_id) {
-
-		return $schedule_id;
+		$original = $this->findById($schedule_id);
+		$area = $this->Area->sFind('first',array(
+			'conditions' => array(
+				'Area.id' => $area_id
+			)
+		));
+		$branch_data = array(
+			'user_id'           => Authsome::get('id'),
+			'name'              => "{$name} ({$area['Area']['name']})",
+			'request'           => 2
+		);
+		$this->create();
+		$this->save($branch_data);
+		$branch_id = $this->id;
+		foreach($original as $model => $record) {
+			switch ($model) {
+				case 'Assignment':
+				case 'Change':
+				case 'ChangeModel':
+				case 'ChangeField':
+				case 'ConstantShift':
+				case 'FloatingShift':
+				case 'OffDay':
+				case 'Schedule':
+				case 'User':
+				case 'ScheduleGroup':
+					continue 2;
+				case 'Area':
+					foreach($record as $index => $data) {
+						if ($data['id'] != $area_id) unset($record[$index]);
+					}
+					break;
+				case 'Shift':
+					foreach($record as $index => $data) {
+						if ($data['area_id'] != $area_id) unset($record[$index]);
+					}
+					break;
+				case 'PeopleSchedules' :
+					if ($schedule_id != scheduleId()) { // we are copying a template
+						// add the current people to the copy
+						$this->contain('PeopleSchedules');
+						$currentPeople = $this->findById(scheduleId());
+						$record = $currentPeople['PeopleSchedules'];
+					}
+					break;
+			}
+			foreach($record as $data) {
+				$data['schedule_id'] = $branch_id;
+				$this->{$model}->qInsert($data);
+			}
+		}
+		return $branch_id;
 	}
 
 	function listTemplates() {

@@ -41,7 +41,13 @@ class AppController extends Controller {
 			'order' => 'Area.name'
 		));
 		if (count(Authsome::get('Manager')) > 0) {
-			$managerMenu = array();
+			$managerMenu = array(
+				'Edit Existing Request...' => array(
+					'url' => array('controller' => 'schedules', 'action' => 'editRequest'),
+					'ajax'
+				),
+				'<hr/>'
+			);
 			foreach($managerAreas as $areaId => $areaName) {
 				$managerMenu["New {$areaName} Request..."] = array(
 					'url' => array('controller' => 'schedules', 'action' => 'newRequest',$areaId),
