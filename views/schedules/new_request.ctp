@@ -18,7 +18,7 @@
 			),
 			array(
 				'separator' => '<br>',
-				'value' => 'published'
+				'value' => empty($this->data)? 'published' : $this->data['Schedule']['based_on']
 		))?>
 	</div>
 	<?=$form->end('Continue');?>
