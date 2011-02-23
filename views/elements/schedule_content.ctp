@@ -203,7 +203,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 				<?=$off_day['print']?>
 		<? if (isset($area)) { ?>
 			<? foreach ($area['Shift'] as $shift) { ?>
-						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day,$request == 2);?>
+						<?=$schedule->displayAreaShift($shift,$bounds['bounds'][$slot_num][$day],$day,$request);?>
 			<? } ?>
 		<? } else { ?>
 			<? foreach ($person['Assignment'] as $assignment) { ?>
@@ -235,7 +235,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		<td id="0_0" onmouseover='showAddShift($("add_0_0"))'
 			onmouseout='hideAddShift($("add_0_0"))' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
 		<? if (isset($area)) { ?>
-			<?=$schedule->displayAreaFloating($area['FloatingShift'],$request == 2);?>
+			<?=$schedule->displayAreaFloating($area['FloatingShift'],$request);?>
 			<? $area_id = $area['Area']['id']; ?>
 			<? $person_id = 0; ?>
 		<? } else { ?>

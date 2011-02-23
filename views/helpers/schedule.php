@@ -114,8 +114,7 @@ class ScheduleHelper extends AppHelper {
 		}
 	}
 
-	function displayAreaShift($shift,$bound,$day,$editRequest) {
-		$request = isset($shift['RequestAssignment']) ? 'Request' : '';
+	function displayAreaShift($shift,$bound,$day,$request) {
 		// if the shift is within the bounds for this day and time
 		if ($shift['start'] >= $bound['start'] && $shift['start'] < $bound['end'] && $shift['day_id'] == $day) {
 			$time = $this->displayTime($shift['start']) . " - " . 
@@ -123,7 +122,7 @@ class ScheduleHelper extends AppHelper {
 			$people = '';
 			$people_displayed = 0;
 			$length = $this->timeToHours($shift['end']) - $this->timeToHours($shift['start']);
-			foreach ($shift[$request.'Assignment'] as $assignment) {
+			foreach ($shift['Assignment'] as $assignment) {
 				$people_displayed++;
 				$this->addHours($length,$day,$assignment['Person']['name']);
 				
@@ -131,8 +130,8 @@ class ScheduleHelper extends AppHelper {
 				if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
-						'onmouseover' => "$('goto_{$assignment[$request.'Assignment']['id']}').show()",
-						'onmouseout' => "$('goto_{$assignment[$request.'Assignment']['id']}').hide()",
+						'onmouseover' => "$('goto_{$assignment['Assignment']['id']}').show()",
+						'onmouseout' => "$('goto_{$assignment['Assignment']['id']}').hide()",
 						'class' => 'assignment'
 					));
 				}
@@ -154,26 +153,26 @@ class ScheduleHelper extends AppHelper {
 							'url' => array(
 								'controller'=>'assignments',
 								'action'=>'unassign',
-								$assignment[$request.'Assignment']['id']
+								$assignment['Assignment']['id']
 							),
 							'attributes' => array(
 								'class' => 'remove',
 								'style' => $assignment['Person']['id'] == 0 ?
 								'margin:10px;color:#000;font-style:italic' :
 								'margin:10px;color:'.$assignment['PeopleSchedules']['ResidentCategory']['color'],
-								'onmouseover' => "$('goto_{$assignment[$request.'Assignment']['id']}').show()",
-								'onmouseout' => "$('goto_{$assignment[$request.'Assignment']['id']}').hide()",
+								'onmouseover' => "$('goto_{$assignment['Assignment']['id']}').show()",
+								'onmouseout' => "$('goto_{$assignment['Assignment']['id']}').hide()",
 								'onclick' => 'saveScroll()',
 								'title' => 'Unassign'
 							)
 						)
 					),
 					$this->session->read('Schedule.editable') && !$request
-					|| ($request && $editRequest) ? 'operations' : '' 
+					|| ($request == 2) ? 'operations' : '' 
 				) . '<br/>';
 				if (in_array('operations',$userRoles) && !$request && 
 				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0
-				|| ($request && $editRequest)) {
+				|| ($request == 2)) {
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
@@ -184,7 +183,7 @@ class ScheduleHelper extends AppHelper {
 								right:-3.0em;
 								background-color:#DDDDDD;
 								padding:5px',
-							'id'=>"goto_{$assignment[$request.'Assignment']['id']}"
+							'id'=>"goto_{$assignment['Assignment']['id']}"
 						)
 					);
 				}
@@ -209,7 +208,7 @@ class ScheduleHelper extends AppHelper {
 						)
 					),
 					$this->session->read('Schedule.editable') && !$request
-					|| ($request && $editRequest) ? 'operations' : '' 
+					|| ($request == 2) ? 'operations' : '' 
 				)."</span>";
 				$people .= "{$unassigned}<br/>";
 			}
@@ -230,9 +229,9 @@ class ScheduleHelper extends AppHelper {
 					)
 				),
 				$this->session->read('Schedule.editable') && !$request
-				|| ($request && $editRequest) ? 'operations' : '' 
+				|| ($request == 2) ? 'operations' : '' 
 			);
-			if (($request && $editRequest) || $this->session->read('Schedule.editable') && !$request) {
+			if (($request == 2) || $this->session->read('Schedule.editable') && !$request) {
 				$time .= $this->html->link(
 					'delete',
 					array('controller'=>'shifts','action'=>'delete',$shift['id']),
@@ -329,8 +328,7 @@ class ScheduleHelper extends AppHelper {
 		return (!$output ? '' : 'Plus ' . $this->text->toList($output));	
 	}
 	
-	function displayAreaFloating($floating_shifts,$editRequest) {
-		$request = isset($floating_shifts[0]['request_area_id']);
+	function displayAreaFloating($floating_shifts,$request) {
 		$output = array();
 		foreach($floating_shifts as $floating_shift) {
 			$hours = $floating_shift['hours'];
@@ -352,7 +350,7 @@ class ScheduleHelper extends AppHelper {
 					)
 				),
 				$this->session->read('Schedule.editable') && !$request
-				|| ($request && $editRequest) ? 'operations' : '' 
+				|| ($request == 2) ? 'operations' : '' 
 			);
 			$link_title = $floating_shift['Person']['name'];
 			$link_url = array('controller'=>'people','action'=>'schedule',$floating_shift['Person']['id']);
