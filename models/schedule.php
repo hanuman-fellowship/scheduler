@@ -97,7 +97,7 @@ class Schedule extends AppModel {
 		));
 		$branch_data = array(
 			'user_id'           => Authsome::get('id'),
-			'name'              => "{$name} ({$area['Area']['name']})",
+			'name'              => "{$name} ({$area['Area']['short_name']} Request)",
 			'request'           => 2
 		);
 		$this->create();

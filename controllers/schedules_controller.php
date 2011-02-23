@@ -236,5 +236,16 @@ class SchedulesController extends AppController {
 		)));
 	}
 
+	function deleteRequest($id = null) {
+		if ($id) {
+			$this->delete($id);
+		}
+		$this->set('requests',$this->Schedule->find('list', array(
+			'conditions' => array(
+				'Schedule.request' => 2,
+				'Schedule.user_id' => Authsome::get('id')
+			)
+		)));
+	}
 }
 ?>

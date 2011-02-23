@@ -46,6 +46,10 @@ class AppController extends Controller {
 					'url' => array('controller' => 'schedules', 'action' => 'editRequest'),
 					'ajax'
 				),
+				'Delete Request...' => array(
+					'url' => array('controller' => 'schedules', 'action' => 'deleteRequest'),
+					'ajax'
+				),
 				'<hr/>'
 			);
 			foreach($managerAreas as $areaId => $areaName) {
