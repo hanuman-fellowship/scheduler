@@ -158,7 +158,8 @@ class Schedule extends AppModel {
 		$this->contain('User');
 		$schedules = $this->find('all',array(
 			'conditions' => array(
-				'Schedule.user_id <>' => null 
+				'Schedule.user_id <>' => null,
+				'Schedule.request' => 0
 			),
 			'order' => 'Schedule.user_id, Schedule.name'
 		));

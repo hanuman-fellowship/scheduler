@@ -54,7 +54,8 @@ class SchedulesController extends AppController {
 		$this->Schedule->contain();
 		$this->set('schedules',$this->Schedule->find('all',array(
 			'conditions' => array(
-				'Schedule.user_id' => Authsome::get('id')
+				'Schedule.user_id' => Authsome::get('id'),
+				'Schedule.request' => 0
 			)
 		)));
 		$this->set('schedule_id',scheduleId());			
@@ -140,7 +141,8 @@ class SchedulesController extends AppController {
 			$this->set('schedules',$this->Schedule->find('all',array(
 				'conditions' => array(
 					'Schedule.name <>' => 'Published',
-					'Schedule.parent_id' => $this->Session->read('Schedule.parent_id')
+					'Schedule.parent_id' => $this->Session->read('Schedule.parent_id'),
+					'Schedule.request' => 0
 				)
 			)));
 			$this->set('schedule_id',scheduleId());		
