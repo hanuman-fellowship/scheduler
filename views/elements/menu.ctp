@@ -45,7 +45,7 @@ $request = $this->Session->read('Schedule.request');
 			),
 			"<hr/>",
 			'View Request...' => array(
-				'url' => array('controller' => 'RequestAreas', 'action' => 'view'),
+				'url' => array('controller' => 'schedules', 'action' => 'viewRequest'),
 				'ajax',
 				'shortcut' => 'ctrl+r'
 			),

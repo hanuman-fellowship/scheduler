@@ -250,12 +250,16 @@ class SchedulesController extends AppController {
 	}
 
 	function submitRequest() {
+		$this->redirectIfNotManager($this->Session->read('last_area'));
 		$this->Schedule->save(array('Schedule'=>array(
 			'id' => $this->Session->read('Schedule.id'),
 			'request' => 1
 		)));
 		$this->Session->write('Schedule.request',1);
 		$this->redirect($this->referer());
+	}
+
+	function viewRequest() {
 	}
 
 }
