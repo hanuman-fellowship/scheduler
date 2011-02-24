@@ -743,6 +743,19 @@ class Schedule extends AppModel {
 		}
 	}
 
+	function getLatestId() {
+		$this->contain('User','ScheduleGroup');
+		$latest = $this->find('first',array(
+			'conditions' => array(
+				'Schedule.name' => 'Published'
+			),
+			'order' => array(
+				'ScheduleGroup.end desc'
+			)
+		));
+		return $latest['Schedule']['id'];
+	}
+
 
 }
 ?>

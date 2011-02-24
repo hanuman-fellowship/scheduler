@@ -32,17 +32,18 @@ class AppController extends Controller {
 			$this->Session->write('Schedule.editable',false);
 		}	
 
-		$this->loadModel('Area');
+		$this->loadModel('Schedule');
 
 		if ($this->params['url']['url'] == '/' && $this->Session->read('Schedule.request')) {
-			$area = $this->Area->sFind('first');
+			$area = $this->Schedule->Area->sFind('first');
 			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $area['Area']['id']));
 		}
 
 		// request areas for manager menu
-		$managerAreas = $this->Area->sFind('list', array(
+		$managerAreas = $this->Schedule->Area->find('list', array(
 			'conditions' => array(
-				'Area.id' => Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id')
+				'Area.id' => Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id'),
+				'Area.schedule_id' => $this->Schedule->getLatestId()
 			),
 			'order' => 'Area.name'
 		));
