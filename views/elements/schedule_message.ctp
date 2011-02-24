@@ -32,7 +32,7 @@ if ($schedule['request']) {
 		echo "<span style='color:green'>Editing:</span> {$schedule['name']}";
 		echo $html->link(
 			'Submit',
-			array('controller' => 'Areas', 'action' => 'submit', $area['Area']['id']),
+			array('controller' => 'schedules', 'action' => 'submitRequest'),
 			array(
 				'class' => 'button',
 				'confirm' => "Submit {$area['Area']['name']} Request Form?",
@@ -43,13 +43,7 @@ if ($schedule['request']) {
 		echo "<span style='color:blue'>Viewing:</span> {$area['Area']['name']} Request Form";
 		if(in_array($area['Area']['id'],
 		Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id'))) {
-			echo " (Submitted)" . $html->link(
-				'Edit',
-				array('controller' => 'Areas', 'action' => 'edit', $area['Area']['id'],true),
-				array(
-					'class' => 'button'
-				)
-			);
+			echo " (Submitted)";
 		}
 	}
 } else {

@@ -248,5 +248,15 @@ class SchedulesController extends AppController {
 			)
 		)));
 	}
+
+	function submitRequest() {
+		$this->Schedule->save(array('Schedule'=>array(
+			'id' => $this->Session->read('Schedule.id'),
+			'request' => 1
+		)));
+		$this->Session->write('Schedule.request',1);
+		$this->redirect($this->referer());
+	}
+
 }
 ?>
