@@ -21,8 +21,6 @@ class Area extends AppModel {
 			}
 		}
 		$this->Person->addAssignedPeople($area);
-		$this->RequestArea = ClassRegistry::init('RequestArea');
-		$area['hasRequest'] = $this->RequestArea->field('id',array('RequestArea.id'=>$id)) ? true : false;
 		return $area;
 	}
 	

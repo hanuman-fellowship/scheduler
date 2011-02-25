@@ -259,7 +259,24 @@ class SchedulesController extends AppController {
 		$this->redirect($this->referer());
 	}
 
-	function viewRequest() {
+	function viewRequest($id = null) {
+		if ($id) {
+			$current_schedule = $this->Session->read('Schedule.id');
+			$this->setSchedule($id);
+			$area = $this->Schedule->Area->sFind('first',array(
+				'recursive' => -1,
+				'fields' => array('Area.id')
+			));
+			$this->set('area',$this->Schedule->Area->getArea($area['Area']['id']));
+			$this->set('bounds', $this->getBounds());
+			$this->setSchedule($current_schedule);
+		} else {
+			$this->set('requests',$this->Schedule->find('list', array(
+				'conditions' => array(
+					'Schedule.request' => 1
+				)
+			)));
+		}
 	}
 
 }

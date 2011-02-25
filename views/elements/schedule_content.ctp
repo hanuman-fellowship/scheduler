@@ -9,7 +9,8 @@ $isOperations = in_array(
 );
 $editable = $this->Session->read('Schedule.editable');
 $groupName = $this->session->read('Schedule.Group.name');
-$request = $this->Session->read('Schedule.request');
+$request = isset($request) ? 1 : 0;
+$request = $request ? $request : $this->Session->read('Schedule.request');
 $gaps = isset($gaps);
 $print = isset($print);
 $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['PeopleSchedules']['notes']);
@@ -111,11 +112,12 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		</td> 
 	</tr> 
 </table> 
-<table style="<?= $request ? "background-image:url({$html->url('/img/lines.jpg')})" : "";?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
+<table style="<?= $request == 2 ? "background-image:url({$html->url('/img/request.jpg')})" : "";?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		<div align='center' class='no_print'>
 		<? if (isset($area)) { ?>
+		<? /*
 			<? if ($request) { ?>
 				<?=$html->link('View<br/>Schedule',
 					array(
@@ -140,6 +142,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 					)
 				); ?>
 			<? } ?>
+		*/ ?>
 		<? } ?>
 		</div>
 		</td> 
@@ -296,7 +299,15 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		<td align="<?= isset($person)? 'center' : 'left'?>" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
 			<?= isset($person)? 
 				$schedule->displayLegend() :
-				"<a id='total_hours' title='Display hour breakdown (ctrl+h)' href='javascript:showHoursBy()'>".$schedule->displayTotalArea()."</a>"
+				($request == 1 ? 
+				$form->button('Accept Shifts',array(
+					'onclick' => "wait();window.location='{$html->url(array(
+						'controller' => 'schedules',
+						'action' => 'accept',
+						$area['Area']['schedule_id']
+					))}'"
+				)) : 
+				"<a id='total_hours' title='Display hour breakdown (ctrl+h)' href='javascript:showHoursBy()'>".$schedule->displayTotalArea()."</a>")
 			?>
 		</td> 
 	</tr> 

@@ -30,10 +30,5 @@
 
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 	
-	Router::connect('/areas/request/edit/*', array('controller' => 'RequestAreas', 'action' => 'edit'));
-	Router::connect('/areas/request/view/*', array('controller' => 'RequestAreas', 'action' => 'view'));
-	Router::connect('/assignments/request/assign/*', array('controller' => 'RequestAssignments', 'action' => 'assign'));
-	Router::connect('/shifts/request/delete/*', array('controller' => 'RequestShifts', 'action' => 'delete'));
-	Router::connect('/areas/request/publish/*', array('controller' => 'RequestAreas', 'action' => 'publish'));
 	Router::connect('/notes/*', array('controller' => 'users', 'action' => 'notes'));
 ?>
