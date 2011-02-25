@@ -314,5 +314,28 @@ class SchedulesController extends AppController {
 		}
 	}
 
+	function accept($id) {
+		$this->redirectIfNotEditable();
+		$current = $this->Session->read('Schedule.id');
+		$this->record();
+		$this->setSchedule($id);
+		$this->Schedule->Area->sContain('Shift');
+		$acceptedArea = $this->Schedule->Area->sFind('first');
+		$this->setSchedule($current);
+		$this->Schedule->Area->clear($acceptedArea['Area']['id'],false);
+		foreach($acceptedArea['Shift'] as $shift) {
+			$shift['schedule_id'] = $current;
+			unset($shift['id']);
+			$this->Schedule->Area->Shift->create();
+			$this->Schedule->Area->Shift->sSave(array('Shift'=>$shift));
+		}
+		$this->stop("{$acceptedArea['Area']['name']} Request accepted");
+		$this->redirect(array(
+			'controller'=>'areas',
+			'action'=>'schedule',
+			$acceptedArea['Area']['id']
+		));
+	}
+
 }
 ?>

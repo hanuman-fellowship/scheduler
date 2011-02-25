@@ -41,9 +41,11 @@ class Shift extends AppModel {
 	}
 
 	function sSave($data) {
-		$times = array('start', 'end');
-		foreach($times as $time) {
-			$data['Shift'][$time] = $this->dbTime($data['Shift'][$time]);
+		if (is_array($data['Shift']['start'])) {
+			$times = array('start', 'end');
+			foreach($times as $time) {
+				$data['Shift'][$time] = $this->dbTime($data['Shift'][$time]);
+			}
 		}
 		return parent::sSave($data);
 	}
