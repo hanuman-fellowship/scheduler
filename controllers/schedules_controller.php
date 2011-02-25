@@ -256,6 +256,41 @@ class SchedulesController extends AppController {
 			'request' => 1
 		)));
 		$this->Session->write('Schedule.request',1);
+
+		$areaName = $this->Schedule->Area->field('name',array(
+			'Area.schedule_id' => $this->Session->read('Schedule.id')
+		));
+		$userEmail = Authsome::get('User.email');
+		$username = Inflector::humanize(Authsome::get('User.username'));
+		$this->loadModel('EmailAuth');
+		$auth = $this->EmailAuth->findById(1);
+
+		// email the manager that the request was received
+		if (!$this->_sendEmail(
+			$userEmail, 
+			'Area Request Form Received!', 
+			'request_submit_mgr',
+			array(
+				'username' => $username,
+				'areaName' => $areaName,
+				'operationsEmail' => $auth['EmailAuth']['email']
+			)
+		)) $this->set('errorMessage',$this->Email->smtpError);
+
+		$this->Email->reset();
+
+		// email operations about the submitted request
+		if ($this->_sendEmail(
+			$auth['EmailAuth']['email'],
+			"{$areaName} Request Form Submitted",
+			'request_submit_prsnl',
+			array(
+				'username' => $username,
+				'areaName' => $areaName,
+				'userEmail' => $userEmail
+			)
+		)) $this->set('errorMessage',$this->Email->smtpError);
+
 		$this->redirect($this->referer());
 	}
 
