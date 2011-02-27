@@ -6,7 +6,7 @@
 		echo $ajax->link($name,array($id),array(
 			'before' => 'wait()',
 			'update' => 'dialog_content',
-			'complete' => "openDialog('menu_Operations',true,'bottom')"
+			'complete' => "openDialog('menu_Operations',true,'bottom',true)"
 		));
 		echo '<br/>';
 	}
