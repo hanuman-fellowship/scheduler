@@ -5,6 +5,52 @@ class SchedulesController extends AppController {
 
 	var $helpers = array('schedule');
 
+	function importRequests() {
+		$areas = $this->Schedule->query("Select * from request_areas where id > 0");
+		foreach($areas as $area) {
+			$this->setSchedule('latest');
+			$this->setSchedule($this->Schedule->copy(scheduleId(),0,$area['request_areas']['name']));
+			$this->Schedule->doQueue();
+			$schedule_id = scheduleId();
+			$this->Schedule->query("update schedules set parent_id = NULL, schedule_group_id = '0', request = '1' where id = '{$schedule_id}'");
+			$this->Schedule->query("delete from areas where schedule_id = '{$schedule_id}'");
+			$this->Schedule->query("delete from shifts where schedule_id = '{$schedule_id}'");
+			$this->Schedule->query("delete from assignments where schedule_id = '{$schedule_id}'");
+			$this->Schedule->query("delete from floating_shifts where schedule_id = '{$schedule_id}'");
+			$this->Schedule->query("delete from constant_shifts where schedule_id = '{$schedule_id}'");
+			$this->Schedule->query("delete from off_days where schedule_id = '{$schedule_id}'");
+			$this->Schedule->Area->forceSave(array(
+				'id' => $area['request_areas']['id'],
+				'name' => $area['request_areas']['name'],
+				'manager' => $area['request_areas']['manager'],
+				'notes' => $area['request_areas']['notes'],
+				'short_name' => '',
+				'schedule_id' => $schedule_id
+			));
+			$shifts = $this->Schedule->query("select * from request_shifts where request_area_id = '{$area['request_areas']['id']}'");
+			foreach($shifts as $shift) {
+				$this->Schedule->Shift->forceSave(array(
+					'id' => $shift['request_shifts']['id'],
+					'area_id' => $shift['request_shifts']['request_area_id'],
+					'day_id' => $shift['request_shifts']['day_id'],
+					'start' => $shift['request_shifts']['start'],
+					'end' => $shift['request_shifts']['end'],
+					'num_people' => $shift['request_shifts']['num_people'],
+					'schedule_id' => $schedule_id
+				));
+				$assignments = $this->Schedule->query("select * from request_assignments where request_shift_id = {$shift['request_shifts']['id']}");
+				foreach($assignments as $assignment) {
+					$this->Schedule->Assignment->forceSave(array(
+						'person_id' => $assignment['request_assignments']['person_id'],
+						'name' => $assignment['request_assignments']['name'],
+						'shift_id' => $assignment['request_assignments']['request_shift_id'],
+						'schedule_id' => $schedule_id
+					));
+				}
+			}
+		}
+	}
+
 	// just a test
 	function export() {
 		$file = fopen('hello.html', 'w');
