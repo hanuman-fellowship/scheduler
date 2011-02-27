@@ -49,11 +49,6 @@ $request = $this->Session->read('Schedule.request');
 				'ajax',
 				'shortcut' => 'ctrl+r'
 			),
-			'Clear Requests...' => array(
-				'url' => array('controller' => 'RequestAreas', 'action' => 'delete'),
-				'ajax',
-				'shortcut' => 'ctrl+d'
-			),
 			"<hr/>",
 			'Email Settings...' => array(
 				'url' => array('controller' => 'EmailAuths', 'action' => 'edit'),
