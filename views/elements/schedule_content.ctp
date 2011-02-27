@@ -299,13 +299,14 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		<td align="<?= isset($person)? 'center' : 'left'?>" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
 			<?= isset($person)? 
 				$schedule->displayLegend() :
-				($request == 1 && $editable ? 
+				($request == 1 && isset($accept) ? 
 				$form->button('Accept Shifts',array(
 					'onclick' => "wait();window.location='{$html->url(array(
 						'controller' => 'schedules',
 						'action' => 'accept',
 						$area['Area']['schedule_id']
-					))}'"
+					))}'",
+					'id' => 'accept'
 				)) : 
 				"<a id='total_hours' title='Display hour breakdown (ctrl+h)' href='javascript:showHoursBy()'>".$schedule->displayTotalArea()."</a>")
 			?>

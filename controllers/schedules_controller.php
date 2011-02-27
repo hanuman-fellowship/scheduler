@@ -27,6 +27,17 @@ class SchedulesController extends AppController {
 				'short_name' => '',
 				'schedule_id' => $schedule_id
 			));
+			$floating_shifts = $this->Schedule->query("select * from request_floating_shifts where request_area_id = '{$area['request_areas']['id']}'");
+			foreach($floating_shifts as $floating_shift) {
+				$this->Schedule->FloatingShift->forceSave(array(
+					'id' => $shift['request_floating_shifts']['id'],
+					'person_id' => $shift['request_floating_shifts']['person_id'],
+					'area_id' => $shift['request_floating_shifts']['area_id'],
+					'hours' => $shift['request_floating_shifts']['hours'],
+					'note' => $shift['request_floating_shifts']['note'],
+					'schedule_id' => $schedule_id
+				));
+			}
 			$shifts = $this->Schedule->query("select * from request_shifts where request_area_id = '{$area['request_areas']['id']}'");
 			foreach($shifts as $shift) {
 				$this->Schedule->Shift->forceSave(array(
@@ -343,6 +354,8 @@ class SchedulesController extends AppController {
 	function viewRequest($id = null) {
 		if ($id) {
 			$current_schedule = $this->Session->read('Schedule.id');
+			if ($this->Session->read('Schedule.editable'))
+				$this->set('accept',true);
 			$this->setSchedule($id);
 			$area = $this->Schedule->Area->sFind('first',array(
 				'recursive' => -1,

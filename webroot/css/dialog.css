@@ -41,6 +41,15 @@
 	cursor:move;
 }
 
+#accept {
+	z-index:9999;
+	position:absolute;
+	font-size:20px;
+	top:10px;
+	right:20px;
+	cursor:pointer;
+}
+
 .tall {
 	max-height:400px;
 	overflow:auto;
