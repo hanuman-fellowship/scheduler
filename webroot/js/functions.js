@@ -219,7 +219,7 @@ function openDialog(id,noHighlight,position,grabAnywhere) {
 
 	$('dialog').style.zIndex = 1001;
 	$('drag_here').style.width = dialogWidth + 'px';
-	if (grabAnywhere) {$('drag_here').style.height = dialogHeight + 'px';}
+	$('drag_here').style.height = grabAnywhere ? dialogHeight + 'px' : '30px';
 	new Draggable('dialog',{scroll:window,handle:'drag_here'});
 //	new Resizeable('dialog_content', {top: 0, left:0, right:10, bottom:10});
 	document.onclick = hideDialog;
