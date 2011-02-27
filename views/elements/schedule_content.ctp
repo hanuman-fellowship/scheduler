@@ -299,7 +299,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		<td align="<?= isset($person)? 'center' : 'left'?>" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
 			<?= isset($person)? 
 				$schedule->displayLegend() :
-				($request == 1 ? 
+				($request == 1 && $editable ? 
 				$form->button('Accept Shifts',array(
 					'onclick' => "wait();window.location='{$html->url(array(
 						'controller' => 'schedules',
