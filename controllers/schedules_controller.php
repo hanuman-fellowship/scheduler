@@ -5,6 +5,8 @@ class SchedulesController extends AppController {
 
 	var $helpers = array('schedule');
 
+	var $components = array('Email');
+
 	// just a test
 	function export() {
 		$file = fopen('hello.html', 'w');
