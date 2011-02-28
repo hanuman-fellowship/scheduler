@@ -47,9 +47,13 @@ $request = $this->Session->read('Schedule.request');
 			'View Request...' => array(
 				'url' => array('controller' => 'schedules', 'action' => 'viewRequest'),
 				'ajax',
-				'shortcut' => 'ctrl+r'
+				'shortcut' => 'ctrl+r',
+				'hidden' => $request
 			),
-			"<hr/>",
+			array(
+				'title' => "<hr/>",
+				'hidden' => $request
+			),
 			'Email Settings...' => array(
 				'url' => array('controller' => 'EmailAuths', 'action' => 'edit'),
 				'ajax'
