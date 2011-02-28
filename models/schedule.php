@@ -2,6 +2,7 @@
 class Schedule extends AppModel {
 
 	var $name = 'Schedule';
+	var $actsAs = array('Linkable');
 	
 	var $hasMany = array(
 		'Area',
@@ -754,6 +755,18 @@ class Schedule extends AppModel {
 			)
 		));
 		return $latest['Schedule']['id'];
+	}
+
+	function requestByArea($area_id) {
+		$request = $this->find('first',array(
+			'conditions' => array(	
+				'Schedule.request' => 1,
+				'Area.id' => $area_id
+			),
+			'order' => 'Schedule.updated desc',
+			'link' => array('Area')
+		));
+		return $request ? $request['Schedule']['id'] : false;
 	}
 
 

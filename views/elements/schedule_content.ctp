@@ -116,33 +116,22 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		<div align='center' class='no_print'>
-		<? if (isset($area)) { ?>
-		<? /*
-			<? if ($request) { ?>
-				<?=$html->link('View<br/>Schedule',
+		<? if (isset($area) && !$request) { ?>
+			<? if ($request_id && $isOperations && !$print) { ?>
+				<?=$ajax->link('View<br/>Request',
 					array(
-						'controller'=>'areas',
-						'action'=>'schedule',
+						'controller'=>'schedules',
+						'action'=>'viewRequest',
+						$request_id
 					),
 					array(
 						'escape'=>false,
-						'style'=>'color:green'
-					)
-				); ?>
-			<? } elseif ($area['hasRequest'] && $isOperations && !$print) { ?>
-				<?=$html->link('View<br/>Request',
-					array(
-						'controller'=>'RequestAreas',
-						'action'=>'view',
-						$area['Area']['id']
-					),
-					array(
-						'escape'=>false,
-						'style'=>'color:green'
+						'style'=>'color:green',
+						'update' => 'dialog_content',
+						'complete' => "openDialog('menu_Operations',true,'bottom',true)"
 					)
 				); ?>
 			<? } ?>
-		*/ ?>
 		<? } ?>
 		</div>
 		</td> 

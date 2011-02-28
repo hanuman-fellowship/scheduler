@@ -12,6 +12,8 @@ class AreasController extends AppController {
 			if (!isset($this->params['requested'])) {
 				$this->set('change_messages',$this->getChangeMessages());
 				$this->Session->write('last_area',$id);
+				$this->loadModel('Schedule');
+				$this->set('request_id',$this->Schedule->requestByArea($id));
 			} else {
 				$this->set('print',true);
 			}
