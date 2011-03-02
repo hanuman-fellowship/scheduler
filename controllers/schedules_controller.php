@@ -310,11 +310,7 @@ class SchedulesController extends AppController {
 			$this->set('bounds', $this->getBounds());
 			$this->setSchedule($current_schedule);
 		} else {
-			$this->set('requests',$this->Schedule->find('list', array(
-				'conditions' => array(
-					'Schedule.request' => 1
-				)
-			)));
+			$this->set('requests',$this->Schedule->getRequests());
 		}
 	}
 

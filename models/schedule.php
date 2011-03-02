@@ -769,6 +769,17 @@ class Schedule extends AppModel {
 		return $request ? $request['Schedule']['id'] : false;
 	}
 
+	function getRequests() {
+		$requests = $this->find('all',array(
+			'conditions' => array(	
+				'Schedule.request' => 1,
+			),
+			'order' => 'Area.name asc, Schedule.updated desc',
+			'link' => array('Area')
+		));
+		return Set::combine($requests,'{n}.Schedule.id','{n}','{n}.Area.id');
+	}
+
 
 }
 ?>
