@@ -203,15 +203,25 @@ class SchedulesController extends AppController {
 		if ($name) {
 			$newScheduleId = $this->Schedule->addRequest($area_id,$name,$schedule_id);
 			$this->setSchedule($newScheduleId);
-			$this->redirect('/');
+			if (!$schedule_id) {
+				$this->set('blank',true);
+			} else {
+				$this->redirect('/');
+			}
 		}
 		if (!empty($this->data)) {
 			$area_id = $this->data['Schedule']['area_id'];	
 			if ($this->Schedule->valid($this->data)) {
-				if ($this->data['Schedule']['based_on'] == 'template') {
-					$this->set('templates',$this->Schedule->listTemplates());
-				} else {
-					$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
+				switch ($this->data['Schedule']['based_on']) {
+					case 'template' :
+						$this->set('templates',$this->Schedule->listTemplates());
+						break;
+					case 'published' :
+						$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
+						break;
+					case 'blank' :
+						$this->redirect(array($area_id,$this->data['Schedule']['name']));
+						break;
 				}
 			} else {
 				$this->set('errorField',$this->Schedule->errorField);

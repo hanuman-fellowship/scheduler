@@ -1,3 +1,7 @@
+<? if (isset($blank)) { ?>
+	<?=$javascript->codeBlock("window.location = '{$html->url('/')}'")?>
+	<? die; ?>
+<? } ?>
 <fieldset>
 	<legend><?php __("New {$areaName} Request");?></legend>
 	<? if (empty($this->data) || isset($errorMessage)) { ?>
@@ -9,12 +13,14 @@
 		'inputDefaults' => array('between' => '&nbsp;')
 	)); ?>
 		<?= $form->hidden('area_id',array('value'=>$area_id))?>
-		<?= $form->input('name') ?>
+		<?= $form->input('name',array('size'=>'50')) ?>
+		<i>(Examples: "January Session", "New Year's Retreat", "Without Michael")</i>
 		<hr>
 		<?=$form->radio('based_on',
 			array(
 				'published' => 'Published Schedule',
-				'template' => 'Template'
+				'template' => 'Template',
+				'blank' => 'Blank'
 			),
 			array(
 				'separator' => '<br>',

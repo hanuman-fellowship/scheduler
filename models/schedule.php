@@ -90,6 +90,16 @@ class Schedule extends AppModel {
 	}
 
 	function addRequest($area_id,$name,$schedule_id) {
+		if (!$schedule_id) {
+			$schedule_id = $this->field('id',
+				array(
+					'Schedule.id' => scheduleId()
+				)
+			);
+			$blank = true;
+		} else {
+			$blank = false;
+		}
 		$original = $this->findById($schedule_id);
 		$area = $this->Area->sFind('first',array(
 			'conditions' => array(
@@ -124,7 +134,7 @@ class Schedule extends AppModel {
 					break;
 				case 'Shift':
 					foreach($record as $index => $data) {
-						if ($data['area_id'] != $area_id) unset($record[$index]);
+						if ($data['area_id'] != $area_id || $blank) unset($record[$index]);
 					}
 					break;
 				case 'PeopleSchedules' :
