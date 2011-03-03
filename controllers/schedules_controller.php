@@ -260,6 +260,17 @@ class SchedulesController extends AppController {
 		)));
 	}
 
+	function deletePublishedRequest($id = null) {
+		$this->redirectIfNot('operations');
+		$this->set('requests',$this->Schedule->getRequests(true));
+		if (!empty($this->data)) {
+			$this->set('url', $this->referer());
+			$this->Schedule->deleteRequests($this->data);
+		} else {
+			$this->data['Schedule']['schedule_id'] = array($id);
+		}
+	}
+
 	function submitRequest() {
 		$this->redirectIfNotManager($this->Session->read('last_area'));
 		$this->Schedule->save(array('Schedule'=>array(

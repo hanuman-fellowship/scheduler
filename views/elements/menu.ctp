@@ -50,6 +50,11 @@ $request = $this->Session->read('Schedule.request');
 				'shortcut' => 'ctrl+r',
 				'hidden' => $request
 			),
+			'Delete Requests...' => array(
+				'url' => array('controller' => 'schedules', 'action' => 'deletePublishedRequest'),
+				'ajax',
+				'hidden' => $request
+			),
 			array(
 				'title' => "<hr/>",
 				'hidden' => $request

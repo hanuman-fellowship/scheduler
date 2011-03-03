@@ -779,7 +779,7 @@ class Schedule extends AppModel {
 		return $request ? $request['Schedule']['id'] : false;
 	}
 
-	function getRequests() {
+	function getRequests($forDelete = false) {
 		$requests = $this->find('all',array(
 			'conditions' => array(	
 				'Schedule.request' => 1,
@@ -787,7 +787,18 @@ class Schedule extends AppModel {
 			'order' => 'Area.name asc, Schedule.updated desc',
 			'link' => array('Area')
 		));
-		return Set::combine($requests,'{n}.Schedule.id','{n}','{n}.Area.id');
+		return $forDelete ?
+			Set::combine($requests,'{n}.Schedule.id','{n}.Schedule.name','{n}.Area.name') :
+			Set::combine($requests,'{n}.Schedule.id','{n}','{n}.Area.id');
+	}
+
+	function deleteRequests($data) {
+		foreach($data['Schedule'] as $key => $requests) {
+			if (!is_array($requests) || !$requests) continue;
+			foreach($requests as $id) {
+				$this->delete($id);
+			}
+		}
 	}
 
 
