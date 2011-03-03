@@ -74,8 +74,7 @@ class SchedulesController extends AppController {
 		$this->Schedule->contain();
 		$this->set('schedules',$this->Schedule->find('all',array(
 			'conditions' => array(
-				'Schedule.schedule_group_id' => 0,
-				'Schedule.user_id' => 0
+				'Schedule.template' => 1
 			)
 		)));
 		$this->set('schedule_id',scheduleId());			

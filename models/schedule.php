@@ -157,8 +157,7 @@ class Schedule extends AppModel {
 	function listTemplates() {
 		return $this->find('list',array(
 			'conditions' => array(
-				'schedule_group_id' => 0,
-				'user_id' => 0
+				'Schedule.template' => 1,
 			),
 			'order' => 'Schedule.name asc'
 		));
@@ -727,7 +726,8 @@ class Schedule extends AppModel {
 			'user_id'           => 0,
 			'parent_id'         => 0,
 			'name'              => $name,
-			'schedule_group_id' => 0
+			'schedule_group_id' => 0,
+			'template'          => 1
 		);
 		$this->create();
 		$this->save($new);
