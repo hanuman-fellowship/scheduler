@@ -9,8 +9,10 @@
 	<?php
 		echo $form->hidden('id');
 		echo $form->input('name',array('id' => 'name'));
-		echo $form->input('color',array('id' => 'color'));
 	?>
+<a href="javascript:pickColor('pick1299802156');" id="pick1299802156" style="border: 1px solid #000000; font-family:Verdana; font-size:10px; text-decoration: none;">&nbsp;&nbsp;&nbsp;</a>
+<input id="pick1299802156field" size="7" onChange="relateColor('pick1299802156', this.value);" name="ResidentCategoryColor">
+<?=$javascript->codeBlock("relateColor('pick1299802156', getObj('pick1299802156field').value)")?>
 <?php echo $form->end('Submit');?>
 	</fieldset>
 <?=$this->element('message',array('default_field'=>'name'));?>

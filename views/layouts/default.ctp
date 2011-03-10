@@ -11,6 +11,7 @@
 	<?=$javascript->link('scriptaculous');?>
 	<?=$javascript->link('dragdrop');?>
 	<?=$javascript->link('effects');?>
+	<?=$javascript->link('color_picker');?>
 	<?= $this->element('keyboard_navigation')?>
 </head>
 <body  onload="setScroll()" onkeypress="typeActivate(event)">  

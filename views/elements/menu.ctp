@@ -216,6 +216,15 @@ $request = $this->Session->read('Schedule.request');
 				'shortcut' => 'shift+ctrl+t'
 			),
 			array('hidden'=>!$editable,'title'=>"<hr/>"),
+			"Edit Category..." => array(
+				'url' => array(
+					'controller' => 'residentCategories',
+					'action' => 'edit'
+				),
+				'hidden' => !$editable,
+				'ajax'
+			),
+			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			"Affected Schedules..." => array(
 				'url' => array(
 					'controller' => 'people',
