@@ -26,8 +26,8 @@
 				'separator' => '<br>',
 				'value' => empty($this->data)? 'published' : $this->data['Schedule']['based_on']
 		))?>
-	</div>
 	<?=$form->end('Continue');?>
+	</div>
 	<? } else { ?>
 		Import shifts from:<br>
 		<hr>
