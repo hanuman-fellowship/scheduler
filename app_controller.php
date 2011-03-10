@@ -129,6 +129,10 @@ class AppController extends Controller {
 				'conditions' => array('Schedule.id' => $id)
 			);		
 		$schedule = $this->Schedule->find('first',$params);
+		if (!$schedule) {
+			unset($params['conditions']['ScheduleGroup.end >']);
+			$schedule = $this->Schedule->find('first',$params);
+		}
 		$this->Session->write('Schedule', $schedule['Schedule']);	
 		$this->Session->write('Schedule.username', $schedule['User']['username']);
 		$this->Session->write('Schedule.Group',$schedule['ScheduleGroup']);
