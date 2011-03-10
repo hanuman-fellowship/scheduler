@@ -30,7 +30,9 @@
 	<?= ($num > 1) ? "<b>({$num})</b>" : ''?> <br>
 		<div id="s<?=$area_id?>list" style='margin-left:2em;display:none'>
 			<? foreach($schedules as $request) { ?>
-				<div>
+				<table width="100%">
+				<tr>
+				<td align='left'>
 				<?=$this->ajax->link($request['Schedule']['name'],
 					array($request['Schedule']['id']),
 					array(
@@ -39,10 +41,12 @@
 						'complete' => "openDialog('menu_Operations',true,'bottom',true)"
 					)
 				)?>
-			<div style="float:right">
+				</td>
+				<td align='right'>
 				<?= $time->format('F jS, Y g:ia',$request['Schedule']['updated']) ?>
-			</div>
-			</div>
+			</td>
+			</tr>
+			</table>
 			<? } ?>
 		</div>
 		</td>
