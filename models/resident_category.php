@@ -39,5 +39,26 @@ class ResidentCategory extends AppModel {
 		return $desc;
 	}
 
+	function sDelete($ids) {
+		$categories = (!is_array($ids)) ?  array($ids) : $ids;
+		$list = '';
+		foreach($categories as $id) {
+			$people = $this->Person->PeopleSchedules->sFind('all',array(
+				'conditions' => array(
+					'PeopleSchedules.resident_category_id' => $id
+				),
+				'fields' => array(
+					'distinct Person.id'
+				)
+			));
+			foreach($people as $person) {
+				$this->Person->retire($person['Person']['id']);
+			}
+			parent::sDelete($id);
+		}
+		$list = substr($list,0,-2);	
+		return "Categories deleted:{$list}";
+	}
+
 }
 ?>

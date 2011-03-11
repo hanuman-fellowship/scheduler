@@ -43,5 +43,22 @@ class ResidentCategoriesController extends AppController {
 		}
 	}
 
+	function delete($id = null) {
+		$this->redirectIfNotEditable();
+		$this->set('categories',$this->ResidentCategory->sFind('list'));
+		if (!empty($this->data)) {
+			$this->set('category_id',$this->data['ResidentCategory']['category_id']);
+			$this->set('url', $this->referer());
+			if ($this->data['ResidentCategory']['category_id']) {
+				$this->record();
+				$description = $this->ResidentCategory->sDelete($this->data['ResidentCategory']['category_id']);
+				deleteCache('people');
+				$this->stop($description);
+			}
+		} else {
+			$this->data['ResidentCategory']['category_id'] = array($id);
+		}
+	}
+
 }
 ?>

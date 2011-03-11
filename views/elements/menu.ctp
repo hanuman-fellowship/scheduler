@@ -232,6 +232,14 @@ $request = $this->Session->read('Schedule.request');
 				'hidden' => !$editable,
 				'ajax'
 			),
+			"Delete Category..." => array(
+				'url' => array(
+					'controller' => 'residentCategories',
+					'action' => 'delete'
+				),
+				'hidden' => !$editable,
+				'ajax'
+			),
 			array('hidden'=>!$editable,'title'=>"<hr/>"),
 			"Affected Schedules..." => array(
 				'url' => array(
