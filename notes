@@ -4,14 +4,7 @@ TODO:
 
 	- replace ctrl+s with the real symbol. check google docs menus.
 
-	- import shifts from request
-
-	- templates
-
 	- edit times
-
-	- check to see if more than one published schedule is happening now
-		- default to the one that is ending soonest, and offer the others as options
 
 	- order working copies by date or by name in the select schedule dialog
 	
