@@ -231,6 +231,14 @@ $request = $this->Session->read('Schedule.request');
 				'hidden' => !$editable,
 				'ajax'
 			),
+			"Reorder Categories..." => array(
+				'url' => array(
+					'controller' => 'residentCategories',
+					'action' => 'reorder'
+				),
+				'hidden' => !$editable,
+				'ajax'
+			),
 			"Delete Category..." => array(
 				'url' => array(
 					'controller' => 'residentCategories',

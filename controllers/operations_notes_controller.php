@@ -34,7 +34,6 @@ class OperationsNotesController extends AppController {
 	}
 
 	function reorder() {
-		debug($this->data);
 		$order = explode(',',$this->data['OperationsNote']['lonotes_order']);
 		foreach($order as $num => $id) {
 			$this->OperationsNote->save(array(

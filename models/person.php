@@ -217,6 +217,9 @@ class Person extends AppModel {
 
 	function getBoard() {
 		$people = $this->getPerson($this->getCurrent());
+		if ($this->PeopleSchedules->ResidentCategory->field('sort_order',array('schedule_id' => scheduleId()),'sort_order desc') > 0) {
+			$people = Set::sort($people,'{n}.PeopleSchedules.ResidentCategory.sort_order','asc');
+		}
 		$people = Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
 		foreach ($people as &$category) {
 			$category = Set::sort(array_values($category),'{n}.Person.name','asc');
@@ -337,6 +340,9 @@ class Person extends AppModel {
 			)
 		));
 		$this->addDisplayNamesAll($people);
+		if ($this->PeopleSchedules->ResidentCategory->field('sort_order',array('schedule_id' => scheduleId()),'sort_order desc') > 0) {
+			$people = Set::sort($people,'{n}.PeopleSchedules.ResidentCategory.sort_order','asc');
+		}
 		$people = $simple ?
 			Set::combine($people,'{n}.Person.id','{n}.Person.name','{n}.PeopleSchedules.resident_category_id') :
 			Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');

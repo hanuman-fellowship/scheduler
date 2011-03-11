@@ -60,5 +60,27 @@ class ResidentCategoriesController extends AppController {
 		}
 	}
 
+	function reorder() {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			$order = explode(',',$this->data['ResidentCategory']['lcategories_order']);
+			$this->record();
+			foreach($order as $num => $id) {
+				$this->ResidentCategory->sSave(array(
+					'ResidentCategory' => array(
+						'id' => $id,
+						'sort_order' => $num
+					)
+				));
+			}
+			$this->stop('Categories reordered');
+		}
+		$this->ResidentCategory->order = 'ResidentCategory.sort_order asc';
+		$this->ResidentCategory->recursive = -1;
+		$categories = $this->ResidentCategory->sFind('all');
+		$this->set('categories', Set::combine(
+			$categories,'{n}.ResidentCategory.id','{n}.ResidentCategory.name'));
+	}
+
 }
 ?>
