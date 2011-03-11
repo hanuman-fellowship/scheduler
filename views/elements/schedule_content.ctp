@@ -116,8 +116,8 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		<div align='center' class='no_print'>
-		<? if (isset($area) && !$request) { ?>
-			<? if ($request_id && $isOperations && !$print) { ?>
+		<? if (isset($area) && !$request && !$print) { ?>
+			<? if ($request_id && $isOperations) { ?>
 				<?=$ajax->link('View<br/>Request',
 					array(
 						'controller'=>'schedules',
