@@ -3,6 +3,22 @@ class ResidentCategoriesController extends AppController {
 
 	var $name = 'ResidentCategories';
 
+	function add() {
+		$this->redirectIfNotEditable();
+		if (!empty($this->data)) {
+			if ($this->ResidentCategory->valid($this->data)) {
+				$this->ResidentCategory->create();
+				$this->record();
+				$changes = $this->ResidentCategory->sSave($this->data);
+				$this->stop($this->ResidentCategory->description($changes));
+				$this->set('url', $this->referer());
+			} else {
+				$this->set('errorField',$this->ResidentCategory->errorField);
+				$this->set('errorMessage',$this->ResidentCategory->errorMessage);
+			}
+		}
+	}
+
 	function edit($id = null) {
 		$this->redirectIfNotEditable();
 		if ($id || $this->data) {

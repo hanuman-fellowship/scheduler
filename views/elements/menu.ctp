@@ -216,6 +216,14 @@ $request = $this->Session->read('Schedule.request');
 				'shortcut' => 'shift+ctrl+t'
 			),
 			array('hidden'=>!$editable,'title'=>"<hr/>"),
+			"New Category..." => array(
+				'url' => array(
+					'controller' => 'residentCategories',
+					'action' => 'add'
+				),
+				'hidden' => !$editable,
+				'ajax'
+			),
 			"Edit Category..." => array(
 				'url' => array(
 					'controller' => 'residentCategories',
