@@ -34,9 +34,11 @@ class AppController extends Controller {
 
 		$this->loadModel('Schedule');
 
-		if ($this->params['url']['url'] == '/' && $this->Session->read('Schedule.request')) {
-			$area = $this->Schedule->Area->sFind('first');
-			$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $area['Area']['id']));
+		if (isset($this->params['url']['url'])) {
+			if ($this->params['url']['url'] == '/' && $this->Session->read('Schedule.request')) {
+				$area = $this->Schedule->Area->sFind('first');
+				$this->redirect(array('controller' => 'areas', 'action' => 'schedule', $area['Area']['id']));
+			}
 		}
 
 		// request areas for manager menu
