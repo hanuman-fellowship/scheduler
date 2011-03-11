@@ -130,6 +130,11 @@ function hideDialog() {
 		wait();
 		window.location.reload();
 	} else {
+		if ($('colorpicker')) {
+			if ($('colorpicker').visible()) {
+				stopClick = true;
+			}
+		}
 		if (!stopClick && $('dialog').style.zIndex != 999) {
 			if(highlighted != '') {
 				$(highlighted).style.backgroundColor = '';

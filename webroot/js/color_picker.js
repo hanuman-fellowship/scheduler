@@ -67,9 +67,10 @@
 			return;
 		}
      	curId = id;
-     	var thelink = getObj(id);
-     	picker.style.top = cumulative(thelink) + 20;
-     	picker.style.left = getAbsoluteOffsetLeft(thelink);     
+     	var thelink = $(id);
+     	picker.style.top = $('dialog').offsetTop + 'px';
+     	picker.style.left = $('dialog').offsetLeft + 'px';
+			picker.style.zIndex = '11111';
 	picker.style.display = 'block';
      }
      
