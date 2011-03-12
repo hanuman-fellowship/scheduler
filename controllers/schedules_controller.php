@@ -273,6 +273,10 @@ class SchedulesController extends AppController {
 
 	function submitRequest() {
 		$this->redirectIfNotManager($this->Session->read('last_area'));
+		$this->loadModel('EmailAuth');
+		if (!$this->EmailAuth->field('email',array('id' => 1))) {
+		  $this->redirect(array('controller' => 'emailAuths', 'action' => 'noEmail','Operations'));
+		}
 		$this->Schedule->save(array('Schedule'=>array(
 			'id' => $this->Session->read('Schedule.id'),
 			'request' => 1
@@ -284,10 +288,6 @@ class SchedulesController extends AppController {
 		));
 		$userEmail = Authsome::get('User.email');
 		$username = Inflector::humanize(Authsome::get('User.username'));
-		$this->loadModel('EmailAuth');
-		if (!$this->EmailAuth->field('email',array('id' => 1))) {
-		  $this->redirect(array('controller' => 'emailAuths', 'action' => 'noEmail','Operations'));
-		}
 		$auth = $this->EmailAuth->findById(1);
 
 		// email the manager that the request was received
