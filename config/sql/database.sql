@@ -239,7 +239,7 @@ CREATE TABLE `days` (
 
 LOCK TABLES `days` WRITE;
 /*!40000 ALTER TABLE `days` DISABLE KEYS */;
-INSERT INTO `days` VALUES (6,'Saturday',1),(5,'Friday',1),(4,'Thursday',1),(3,'Wednesday',1),(2,'Tuesday',1),(1,'Monday',1),(7,'Sunday',1);
+INSERT INTO `days` VALUES (1,'Monday',1),(2,'Tuesday',1),(3,'Wednesday',1),(4,'Thursday',1),(5,'Friday',1),(6,'Saturday',1),(7,'Sunday',1);
 /*!40000 ALTER TABLE `days` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,6 +252,7 @@ DROP TABLE IF EXISTS `email_auths`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `email_auths` (
   `id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(30) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -459,6 +460,7 @@ CREATE TABLE `resident_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `color` varchar(7) NOT NULL,
+	`sort_order` int(11) NOT NULL,
   `schedule_id` int(11) NOT NULL,
   UNIQUE KEY `schedule_id` (`schedule_id`,`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -470,7 +472,6 @@ CREATE TABLE `resident_categories` (
 
 LOCK TABLES `resident_categories` WRITE;
 /*!40000 ALTER TABLE `resident_categories` DISABLE KEYS */;
-INSERT INTO `resident_categories` VALUES (5,'Intern','#000000',1),(4,'Resident','#990099',1),(3,'YSL','#0066CC',1),(2,'YSC 2','#CC6633',1),(1,'YSC 1','#009900',1),(6,'Temporary','#FF0000',1);
 /*!40000 ALTER TABLE `resident_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
