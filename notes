@@ -1,10 +1,14 @@
 TODO:
 	
+	- edit times
+
+	- restore should ask what category to put them in instead of guessing
+
+	- rename resident_categories to category
+
 	- a view for multiple schedules at once... 4?
 
 	- replace ctrl+s with the real symbol. check google docs menus.
-
-	- edit times
 
 	- order working copies by date or by name in the select schedule dialog
 	
