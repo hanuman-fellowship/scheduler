@@ -54,6 +54,7 @@ class ResidentCategory extends AppModel {
 			foreach($people as $person) {
 				$this->Person->retire($person['Person']['id']);
 			}
+			$list .= $this->field('name',array('id' => $id, 'schedule_id' => scheduleId())) . ', ';
 			parent::sDelete($id);
 		}
 		$list = substr($list,0,-2);	
