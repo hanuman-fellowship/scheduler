@@ -1,6 +1,6 @@
 <fieldset>
 	<legend><?php __('Reorder Categories');?></legend>
-	<i>Drag a category to change the order</i><hr>
+	<i>Drag the categories to change the order</i><hr>
 <div class='tall left'>
 <ul id='lcategories'>
 	<? $category_ids = ''?>
@@ -9,10 +9,6 @@
 		<li id='lpnote_<?=$id?>'>
 		<i>
 			<?=$html->tag('span',$category,array(
-				'onclick' => "
-					if (saveOrder('lcategories')) 
-						clickLink(this.up('li').down('a.edit'));
-				",
 				'onmouseover' => "this.style.cursor='pointer'",
 			))?>
 		</i></li>
@@ -33,7 +29,7 @@
 		)
 ));?>
 <?=$form->hidden('lcategories_order',array('id'=>'lcategories_order','value'=>$category_ids));?>
-<?=$form->submit('submit',array('id'=>'lcategories_submit','style'=>'display:none'));?>
+<?=$form->submit('Submit',array('id'=>'lcategories_submit','onclick'=>"saveOrder('lcategories')"));?>
 <?=$form->end()?>
 </fieldset>
 </div>
