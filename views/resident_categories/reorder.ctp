@@ -29,7 +29,7 @@
 		)
 ));?>
 <?=$form->hidden('lcategories_order',array('id'=>'lcategories_order','value'=>$category_ids));?>
-<?=$form->submit('Submit',array('id'=>'lcategories_submit','onclick'=>"saveOrder('lcategories')"));?>
+<?=$form->submit('Submit',array('onclick'=>"saveOrder('lcategories')"));?>
 <?=$form->end()?>
 </fieldset>
 </div>

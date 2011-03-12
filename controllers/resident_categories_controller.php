@@ -38,6 +38,7 @@ class ResidentCategoriesController extends AppController {
 				$this->data = $this->ResidentCategory->sFind('first');
 			}
 		} else {
+			$this->ResidentCategory->order = array('sort_order asc');
 			$this->set('categories',$this->ResidentCategory->sFind('list'));
 			$this->render('select_edit');
 		}
