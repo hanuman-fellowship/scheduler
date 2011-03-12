@@ -87,19 +87,9 @@ class Person extends AppModel {
 		return $internal ? $person['Person']['name'] : $changes;
 	}
 	
-	function restore($id) {
+	function restore($id, $category) {
 		$this->PeopleSchedules->restore = true;
-		// get the latest PeopleSchedules entry for this person
-		$latest = $this->PeopleSchedules->find('first', array(
-			'conditions' => array('PeopleSchedules.person_id' => $id),
-			'order' => 'PeopleSchedules.schedule_id desc',
-			'recursive' => -1
-		));
-		if (!$latest) { // if there is no entry, make one. Otherwise copy the latest
-			$this->addPeopleSchedules($id);	
-		} else {
-			$this->addPeopleSchedules($id, $latest['PeopleSchedules']['resident_category_id']);	
-		}
+		$this->addPeopleSchedules($id, $category);	
 		deleteCache('people');
 		$person = $this->findById($id);
 		return "Person restored: {$person['Person']['first']} {$person['Person']['last']}";

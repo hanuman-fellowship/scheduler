@@ -141,12 +141,17 @@ class PeopleController extends AppController {
 		$this->set('people',$this->Person->listByResidentCategory());
 	}
 
-	function restore($id = null) {
+	function restore($id = null, $category = null) {
 		if ($id) {
-			$this->record();
-			$description = $this->Person->restore($id);
-			$this->stop($description);
-			$this->redirect($this->loadPage());
+			if ($category) {
+				$this->record();
+				$description = $this->Person->restore($id, $category);
+				$this->stop($description);
+				$this->redirect($this->loadPage());
+			}
+			$this->set('id', $id);
+			$this->Person->PeopleSchedules->ResidentCategory->order = array('sort_order asc');
+			$this->set('categories',$this->Person->PeopleSchedules->ResidentCategory->sFind('list'));
 		}
 		$this->savePage();
 		$this->set('people',$this->Person->getRestorable());
