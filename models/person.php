@@ -217,9 +217,7 @@ class Person extends AppModel {
 
 	function getBoard() {
 		$people = $this->getPerson($this->getCurrent());
-		if ($this->PeopleSchedules->ResidentCategory->field('sort_order',array('schedule_id' => scheduleId()),'sort_order desc') > 0) {
-			$people = Set::sort($people,'{n}.PeopleSchedules.ResidentCategory.sort_order','asc');
-		}
+		$this->categorySort($people);
 		$people = Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
 		foreach ($people as &$category) {
 			$category = Set::sort(array_values($category),'{n}.Person.name','asc');
@@ -340,9 +338,7 @@ class Person extends AppModel {
 			)
 		));
 		$this->addDisplayNamesAll($people);
-		if ($this->PeopleSchedules->ResidentCategory->field('sort_order',array('schedule_id' => scheduleId()),'sort_order desc') > 0) {
-			$people = Set::sort($people,'{n}.PeopleSchedules.ResidentCategory.sort_order','asc');
-		}
+		$this->categorySort($people);
 		$people = $simple ?
 			Set::combine($people,'{n}.Person.id','{n}.Person.name','{n}.PeopleSchedules.resident_category_id') :
 			Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
@@ -473,6 +469,7 @@ class Person extends AppModel {
 				'conditions' => array('Person.id' => $people_ids),
 				'order' => 'PeopleSchedules.resident_category_id, Person.first, Person.last'
 			));
+			$this->categorySort($people);
 			foreach($people as &$person) {
 				$this->addDisplayName($person['Person']);
 				$person[$request.'Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
@@ -532,5 +529,12 @@ class Person extends AppModel {
 		}
 		return $changed;
 	}
+
+	function categorySort(&$people) {
+		if ($this->PeopleSchedules->ResidentCategory->field('sort_order',array('schedule_id' => scheduleId()),'sort_order desc') > 0) {
+			$people = Set::sort($people,'{n}.PeopleSchedules.ResidentCategory.sort_order','asc');
+		}
+	}
+
 }
 ?>
