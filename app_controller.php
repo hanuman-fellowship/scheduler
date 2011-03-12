@@ -265,6 +265,9 @@ class AppController extends Controller {
 
 	function _sendEmail($to, $subject, $template, $viewVars, $from = null, $username = null,$password = null) {
 		$this->loadModel('EmailAuth');
+		if (!$this->EmailAuth->field('email',array('id' => 2))) {
+			$this->redirect(array('controller' => 'emailAuths', 'action' => 'noEmail','Scheduler'));
+		}
 		$auth = $this->EmailAuth->findById(2);
 		$this->Email->from  = $from ? $from : "{$auth['EmailAuth']['name']} <{$auth['EmailAuth']['email']}>";
 		if ($from) $this->Email->replyTo = $from;

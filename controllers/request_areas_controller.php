@@ -35,6 +35,9 @@ class RequestAreasController extends AppController {
 		$userEmail = Authsome::get('User.email');
 		$username = Inflector::humanize(Authsome::get('User.username'));
 		$this->loadModel('EmailAuth');
+		if (!$this->EmailAuth->field('email',array('id' => 1))) {
+		  $this->redirect(array('controller' => 'emailAuths', 'action' => 'noEmail','Operations'));
+		}
 		$auth = $this->EmailAuth->findById(1);
 
 		// email the manager that the request was received

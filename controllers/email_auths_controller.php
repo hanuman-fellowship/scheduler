@@ -33,5 +33,9 @@ class EmailAuthsController extends AppController {
 		}
 	}
 
+	function noEmail($name) {
+		$this->set('name',$name);
+	}
+
 }
 ?>

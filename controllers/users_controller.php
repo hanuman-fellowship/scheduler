@@ -35,6 +35,9 @@ class UsersController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->User->valid($this->data)) {
 				$this->loadModel('EmailAuth');
+				if (!$this->EmailAuth->field('email',array('id' => 1))) {
+				  $this->redirect(array('controller' => 'emailAuths', 'action' => 'noEmail','Operations'));
+				}
 				$auth = $this->EmailAuth->findById(1);
 				$this->User->create();
 				$this->data['User']['password'] = $this->_randomPassword();
@@ -87,6 +90,9 @@ class UsersController extends AppController {
 			$this->User->recursive = -1;
 			if ($user = $this->User->findByEmail($this->data['User']['email'])) {
 				$this->loadModel('EmailAuth');
+				if (!$this->EmailAuth->field('email',array('id' => 1))) {
+				  $this->redirect(array('controller' => 'emailAuths', 'action' => 'noEmail','Operations'));
+				}
 				$auth = $this->EmailAuth->findById(1);
 				$userEmail = $user['User']['email'];
 				$username = Inflector::humanize($user['User']['username']);
@@ -157,6 +163,9 @@ class UsersController extends AppController {
 	function emailUsers() {
 		$this->redirectIfNot('operations');
 		$this->loadModel('EmailAuth');
+		if (!$this->EmailAuth->field('email',array('id' => 1))) {
+		  $this->redirect(array('controller' => 'emailAuths', 'action' => 'noEmail','Operations'));
+		}
 		$auth = $this->EmailAuth->findById(1);
 		if (!empty($this->data)) {
 			$E = $this->data['User'];
