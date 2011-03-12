@@ -6,7 +6,7 @@ Your new temporary password is: <?=$password?>
 
 This is an automated response, so please do not reply to this email.
 
-You are welcome to contact operations at <?=$operationsEmail?> with any questions.
+You are welcome to contact <?=$operationsName?> at <?=$operationsEmail?> with any questions.
 
 Automatically Yours,
 The Scheduler

@@ -295,7 +295,8 @@ class SchedulesController extends AppController {
 			array(
 				'username' => $username,
 				'areaName' => $areaName,
-				'operationsEmail' => $auth['EmailAuth']['email']
+				'operationsEmail' => $auth['EmailAuth']['email'],
+				'operationsName' => $auth['EmailAuth']['name']
 			)
 		)) $this->set('errorMessage',$this->Email->smtpError);
 

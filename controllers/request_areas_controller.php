@@ -46,6 +46,7 @@ class RequestAreasController extends AppController {
 				'username' => $username,
 				'areaName' => $areaName,
 				'operationsEmail' => $auth['EmailAuth']['email']
+				'operationsName' => $auth['EmailAuth']['name']
 			)
 		)) $this->set('errorMessage',$this->Email->smtpError);
 

@@ -9,10 +9,11 @@ echo $ajax->form($this->action,'post',array(
 	'inputDefaults' => array('between' => '&nbsp;')
 ));
 echo $form->hidden('id',array('value'=>'1'));
+echo $form->input('name', array('id'=>'name','size'=>'30'));
 echo $form->input('email', array('id'=>'email','size'=>'30'));
 echo $form->input('password', array('id'=>'password','size'=>'30'));
 echo $form->submit('Submit');
 echo $form->end();
 ?>
 </fieldset>
-<?=$this->element('message',array('default_field'=>'email'));?>
+<?=$this->element('message',array('default_field'=>'name'));?>

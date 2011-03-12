@@ -4,7 +4,7 @@
 	<table>
 	<tr>
 		<td colspan='2' class='left'>
-		<?=$ajax->link("From: Operations <{$operationsEmail}>",
+		<?=$ajax->link("From: {$operationsName} <{$operationsEmail}>",
 			array(
 				'controller' => 'EmailAuths',
 				'action' => 'edit'

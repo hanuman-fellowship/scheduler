@@ -59,8 +59,12 @@ $request = $this->Session->read('Schedule.request');
 				'title' => "<hr/>",
 				'hidden' => $request
 			),
-			'Email Settings...' => array(
-				'url' => array('controller' => 'EmailAuths', 'action' => 'edit'),
+			'Operations Email Settings...' => array(
+				'url' => array('controller' => 'EmailAuths', 'action' => 'operations'),
+				'ajax'
+			),
+			'Scheduler Email Settings...' => array(
+				'url' => array('controller' => 'EmailAuths', 'action' => 'scheduler'),
 				'ajax'
 			),
 			"<hr/>",

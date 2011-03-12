@@ -42,7 +42,8 @@ class UsersController extends AppController {
 				$this->_sendEmail($this->data['User']['email'], 'Your New Account in the Scheduler', 'new_user', array(
 					'username' => Inflector::humanize($this->data['User']['username']),
 					'password' => $this->data['User']['password'],
-					'operationsEmail' => $auth['EmailAuth']['email']
+					'operationsEmail' => $auth['EmailAuth']['email'],
+					'operationsName' => $auth['EmailAuth']['name']
 				));
 				$this->render('added');
 				$this->set('url', $this->referer());
@@ -100,7 +101,8 @@ class UsersController extends AppController {
 				$this->_sendEmail($userEmail, 'Password Request', 'reset_password', array(
 					'username' => $username,
 					'password' => $password,
-					'operationsEmail' => $auth['EmailAuth']['email']
+					'operationsEmail' => $auth['EmailAuth']['email'],
+					'operationsName' => $auth['EmailAuth']['name']
 				));
 				$this->set('flash','Please check your email');
 			} else {
@@ -165,7 +167,7 @@ class UsersController extends AppController {
 				$E['subject'],
 				null,
 				$E['message'],
-				"Operations <{$auth['EmailAuth']['email']}>",
+				"{$auth['EmailAuth']['name']} <{$auth['EmailAuth']['email']}>",
 				$auth['EmailAuth']['email'],
 				$auth['EmailAuth']['password']
 			)) {
@@ -188,6 +190,7 @@ class UsersController extends AppController {
 			)
 		);
 		$this->set('operationsEmail',$auth['EmailAuth']['email']);
+		$this->set('operationsName',$auth['EmailAuth']['name']);
 	}
 
 	function notes() {

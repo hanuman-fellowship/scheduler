@@ -1,4 +1,4 @@
-Hello Operations Team,
+Hello <?=$operationsName?>,
 
 <?=$username?> has submitted the <?=$areaName?> Request form, and it is avaialable for viewing in the Scheduler. <?=$username?> can be contacted at <?=$userEmail?>.
 
