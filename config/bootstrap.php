@@ -132,7 +132,7 @@ function readCache($path = null) {
 		$parts = explode('.',$path);
 		$data = $all;
 		foreach($parts as $part) {
-			$data = $data[$part];
+			if ($part) $data = $data[$part];
 		}
 		return $data;
 	} else {
