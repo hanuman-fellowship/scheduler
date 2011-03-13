@@ -119,8 +119,8 @@ class PeopleController extends AppController {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
 			$this->record();
-			$changes = $this->Person->PeopleSchedules->sSave($this->data);
-			$this->stop($this->Person->PeopleSchedules->description($changes));
+			$description = $this->Person->PeopleSchedules->sSave($this->data);
+			$this->stop($description);
 			$this->set('url',$this->referer());
 		} else {
 			$this->data = $this->Person->PeopleSchedules->sFind('first',array(

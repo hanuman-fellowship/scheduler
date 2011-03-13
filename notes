@@ -18,8 +18,6 @@ TODO:
 	BUGS:
 		- Multiple notes appearing when creating one note (from personnel)
 		- Why does it save two id entries in the change_fields when doing assignments::swap?
-		- Retire everone and then assign a shift by typing in the "other"
-			Undefined index:   [APP/config/bootstrap.php, line 89]
 
 	- Floating Shift
 		- Description is a little screwy
