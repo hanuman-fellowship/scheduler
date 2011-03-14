@@ -22,5 +22,24 @@ class Boundary extends AppModel {
 		return compact('days','slots','bounds');
 	}
 
+	function valid($data) {
+		foreach($data as $key => $val) {
+			$parts = explode('_',$key);
+			if ($val == '') {
+				$this->errorField = $key;
+				$this->errorMessage = "Please fill in every field";
+				return false;
+			}
+			if ($parts[0] == 'bound') {
+				if (!strtotime($val)) {
+					$this->errorField = $key;
+					$this->errorMessage = "Sorry, this time doesn't make sense to me";
+					return false;
+				}
+
+			}
+		}
+	}
+
 }
 ?>

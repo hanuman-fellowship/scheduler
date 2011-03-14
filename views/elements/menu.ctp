@@ -133,6 +133,11 @@ $request = $this->Session->read('Schedule.request');
 				'hidden' => !$editable,
 				'ajax'
 			),
+			'Edit Times...' => array(
+				'url' => array('controller' => 'boundaries', 'action' => 'edit'),
+				'hidden' => !$editable,
+				'ajax'
+			),
 			array(
 				'title' => "<hr/>",
 				'hidden' => $request
