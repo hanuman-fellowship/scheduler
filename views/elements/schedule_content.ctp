@@ -112,7 +112,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		</td> 
 	</tr> 
 </table> 
-<table style="<?= $request == 2 ? "background-image:url({$html->url('/img/request.jpg')})" : "";?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
+<table style="<?= $request && !$this->params['isAjax'] ? "background-image:url({$html->url('/img/request.jpg')})" : "";?>" width="774" border="2" align="center" cellpadding="0" cellspacing="0" > 
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		<div align='center' class='no_print'>
