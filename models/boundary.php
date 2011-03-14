@@ -31,12 +31,20 @@ class Boundary extends AppModel {
 				return false;
 			}
 			if ($parts[0] == 'bound') {
-				if (!strtotime($val)) {
+				$time = strtotime($val);
+				if (!$time) {
 					$this->errorField = $key;
 					$this->errorMessage = "Sorry, this time doesn't make sense to me";
 					return false;
 				}
-
+				$next = $parts[0].'_'.($parts[1]+1).'_'.$parts[2];
+				if (isset($data[$next])) {
+					if ($time >= strtotime($data[$next])) {
+						$this->errorField = $key;
+						$this->errorMessage = "Times can't overlap";
+						return false;
+					}
+				}
 			}
 		}
 	}
