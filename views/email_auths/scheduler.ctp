@@ -8,7 +8,7 @@ echo $ajax->form($this->action,'post',array(
 	'before'=>'wait()',
 	'inputDefaults' => array('between' => '&nbsp;')
 ));
-echo $form->hidden('id',array('value'=>'1'));
+echo $form->hidden('id',array('value'=>'2'));
 echo $form->input('name', array('id'=>'name','size'=>'30'));
 echo $form->input('email', array('id'=>'email','size'=>'30'));
 echo $form->input('password', array('id'=>'password','size'=>'30'));
