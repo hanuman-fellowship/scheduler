@@ -71,6 +71,7 @@ class Change extends AppModel {
 					$model->qInsert($model_data);
 					break;
 				case 2: // update
+					$update = array();
 					foreach($model_data as $field => $value) {
 						$update["{$model->name}.$field"] = "'{$value}'";
 					}
@@ -83,7 +84,9 @@ class Change extends AppModel {
 			if ($change_model['name'] == 'PeopleSchedules') {
 				deleteCache('people');
 			}
-			if ($change_model['name'] == 'Day') {
+			if ($change_model['name'] == 'Day' || 
+					$change_model['name'] == 'Slot' ||
+					$change_model['name'] == 'Boundary') {
 				deleteCache('bounds');
 			}
 		} 
@@ -118,7 +121,7 @@ class Change extends AppModel {
 			$this->oldData[$model_name]['id'];
 		if ($action != 0) {
 			$this->newData[$model_name]['id'] = $id;
-			$fields[] = 'id';
+			if (!in_array('id',$fields)) $fields[] = 'id';
 		}
 		$this->save(array( 
 			'Change' => array( 

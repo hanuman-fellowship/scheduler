@@ -57,4 +57,4 @@
 </table> 
 <?= $form->end('Submit');?>
 	</fieldset>
-<?=$this->element('message');?>
+<?=$this->element('message',array('default_field'=>'slot_1'));?>

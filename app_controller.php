@@ -184,7 +184,8 @@ class AppController extends Controller {
         $this->Change->save(array( 
             'Change' => array( 
                 'id' => $this->Change->id, 
-                'description' => $description
+                'description' => $description,
+								'schedule_id' => scheduleId()
             ) 
         )); 	
 	}	
