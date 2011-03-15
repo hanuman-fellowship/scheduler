@@ -1,7 +1,5 @@
 TODO:
 	
-	- edit times
-
 	- if there is more than one request, ask which one... then default to that.
 
 	- rename resident_categories to category
@@ -17,7 +15,6 @@ TODO:
 
 	BUGS:
 		- Multiple notes appearing when creating one note (from personnel)
-		- Why does it save two id entries in the change_fields when doing assignments::swap?
 
 	- Floating Shift
 		- Description is a little screwy
