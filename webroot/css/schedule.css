@@ -167,3 +167,12 @@ a#accept {
 a#accept:hover {
 	color:blue;
 }
+
+.star {
+	position:absolute;
+	font-size:13pt;
+	height:12px;
+	left:-2px;
+	padding-right:2px;
+	padding-left:2px;
+}

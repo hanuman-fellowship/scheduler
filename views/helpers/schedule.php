@@ -130,11 +130,37 @@ class ScheduleHelper extends AppHelper {
 				if (in_array('operations',$userRoles) && $this->session->read('Schedule.editable')) {
 					$people .= $this->html->tag('span', null, array(
 						'style'=>"position:relative",
-						'onmouseover' => "$('goto_{$assignment['Assignment']['id']}').show()",
-						'onmouseout' => "$('goto_{$assignment['Assignment']['id']}').hide()",
+						'onmouseover' => "assignHover('{$assignment['Assignment']['id']}','over')",
+						'onmouseout' => "assignHover('{$assignment['Assignment']['id']}','out')",
 						'class' => 'assignment'
 					));
 				}
+				$people .= $this->role->link('*',
+					array(
+						'' => array(
+							'url' => null,
+							'attributes' => array(
+								'class' => 'star',
+								'style' => $assignment['Assignment']['star'] ? '' : 'display:none',
+							)
+						),
+						'operations' => array(
+							'url' => array(
+								'controller' => 'assignments',
+								'action' => 'star',
+								$assignment['Assignment']['id']
+							),
+							'attributes' => array(
+								'class' => 'star',
+								'style' => $assignment['Assignment']['star'] ? '' : 'display:none;color:#CCC',
+								'onclick' => 'saveScroll()',
+								'id' => "star_{$assignment['Assignment']['id']}"
+							)
+						)
+					),
+					$this->session->read('Schedule.editable') && !$request
+					|| ($request == 2) ? 'operations' : '' 
+				);
 				$people .= $this->role->link(
 					$assignment['Person']['name'],
 					array(
@@ -160,8 +186,8 @@ class ScheduleHelper extends AppHelper {
 								'style' => $assignment['Person']['id'] == 0 ?
 								'margin:10px;color:#000;font-style:italic' :
 								'margin:10px;color:'.$assignment['PeopleSchedules']['ResidentCategory']['color'],
-								'onmouseover' => "$('goto_{$assignment['Assignment']['id']}').show()",
-								'onmouseout' => "$('goto_{$assignment['Assignment']['id']}').hide()",
+								'onmouseover' => "assignHover('{$assignment['Assignment']['id']}','over')",
+								'onmouseout' => "assignHover('{$assignment['Assignment']['id']}','out')",
 								'onclick' => 'saveScroll()',
 								'title' => 'Unassign'
 							)
@@ -169,7 +195,8 @@ class ScheduleHelper extends AppHelper {
 					),
 					$this->session->read('Schedule.editable') && !$request
 					|| ($request == 2) ? 'operations' : '' 
-				) . '<br/>';
+				);
+				$people .= '<br/>';
 				if (in_array('operations',$userRoles) && !$request && 
 				$this->session->read('Schedule.editable') && $assignment['Person']['id'] != 0
 				|| ($request == 2)) {
@@ -183,7 +210,7 @@ class ScheduleHelper extends AppHelper {
 								right:-3.0em;
 								background-color:#DDDDDD;
 								padding:5px',
-							'id'=>"goto_{$assignment['Assignment']['id']}"
+							'id'=>"view_{$assignment['Assignment']['id']}"
 						)
 					);
 				}

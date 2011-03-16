@@ -436,10 +436,12 @@ class Person extends AppModel {
 		$currentPeople = $this->getCurrent();
 		foreach($data[$request.'Shift'] as &$shift) {
 			$people_ids = array();
+			$stars = array();
 			$other_assignments = array();
 			foreach($shift[$request.'Assignment'] as &$assignment) {
 				if (in_array($assignment['person_id'], $currentPeople)) {
 					$people_ids[$assignment['id']] = $assignment['person_id'];
+					$stars[$assignment['id']] = $assignment['star'];
 				}
 				if ($assignment['person_id'] == 0) {
 					$other_assignments[] = array(
@@ -450,7 +452,9 @@ class Person extends AppModel {
 						'PeopleSchedules' => array(
 							'resident_category_id' => 0
 						),
-						$request.'Assignment' => array('id' => $assignment['id'])
+						$request.'Assignment' => array(
+							'id' => $assignment['id'],
+							'star' => $assignment['star'])
 					);
 				}
 			}
@@ -463,6 +467,7 @@ class Person extends AppModel {
 			foreach($people as &$person) {
 				$this->addDisplayName($person['Person']);
 				$person[$request.'Assignment']['id'] = array_search($person['Person']['id'],$people_ids);
+				$person[$request.'Assignment']['star'] = $stars[$person[$request.'Assignment']['id']];
 			}
 			$categories = Set::combine($people,'{n}.Person.id','{n}','{n}.PeopleSchedules.resident_category_id');
 			$people = array();

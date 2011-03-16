@@ -3,6 +3,19 @@ var stopClick = false;
 var stringWindow = '';
 var lastTime;
 
+function assignHover(id, action) {
+	var star = $('star_'+id);
+	var view = $('view_'+id);
+	if (action == 'over') {
+		view.show();
+		star.show();
+	}
+	if (action == 'out') {
+		view.hide();
+		if (star.style.color) star.hide();
+	}
+}
+
 function showHoursBy() {
 	$('dialog_content').innerHTML = $('hoursBy').innerHTML;
 	openDialog('total_hours',true,'left');
