@@ -29,8 +29,8 @@ a {
       <tr>
         <td><div align="center" class="style1">
           <p>SCHEDULER</p>
-          <p><span class="style2">version 2.0b </span></p>
-          <p class="style3">&copy; 2010 Hanuman Fellowship | All Rights Reserved<br />
+          <p><span class="style2">version 2.0 </span></p>
+          <p class="style3">&copy; 2007, 2011 Hanuman Fellowship | All Rights Reserved<br />
           </p>
         </div></td>
       </tr>
