@@ -65,7 +65,13 @@ class ScheduleHelper extends AppHelper {
 					);
 					$ajax = '';
 				}
-				$output = $this->role->link('*',
+				$output = $this->html->tag('span', null, array(
+					'style'=>"position:relative",
+					'onmouseover' => "assignHover('{$assignment_id}','over')",
+					'onmouseout' => "assignHover('{$assignment_id}','out')",
+					'class' => 'assignment'
+				));
+				$output .= $this->role->link('*',
 					array(
 						'' => array(
 							'url' => null,
@@ -84,7 +90,7 @@ class ScheduleHelper extends AppHelper {
 								'class' => 'star_p',
 								'style' => $star ? '' : 'display:none;color:#CCC',
 								'onclick' => 'saveScroll()',
-								'id' => "star_{$assignment['assignment_id']}"
+								'id' => "star_{$assignment_id}"
 							)
 						)
 					),
@@ -103,7 +109,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					!$this->session->read('Schedule.editable') || $board
 				) . "<br/>";
-				return "<span class='shift'>{$output}</span>";
+				return "<span class='shift'>{$output}</span></span>";
 			}
 		}
 		if (isset($assignment['ConstantShift'])) {
