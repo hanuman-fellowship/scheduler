@@ -17,7 +17,15 @@ class UsersController extends AppController {
             return;
         }
 		if ($autoSelect = $this->loadSetting('auto_select')) {
-			$this->setSchedule($autoSelect);
+			$this->loadModel('Schedule');
+			if ($this->Schedule->field('name',array('id' => $autoSelect)) != 'Published') {
+				$this->setSchedule($autoSelect);
+			} else {
+				$this->User->Setting->deleteAll(array(
+					'Setting.key' => 'auto_select',
+					'Setting.user_id' => Authsome::get('id')
+				),false,false);
+			}
 		}
 		$this->set('url', $this->referer());
     }

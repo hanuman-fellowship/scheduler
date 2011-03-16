@@ -170,6 +170,10 @@ class AppController extends Controller {
 		);
 		$this->Session->write('Schedule.Group.alternate',($num_cur_schedules > 1));
 
+		if (in_array('operations',Set::combine(Authsome::get('Role'),'{n}.id','{n}.name'))) {
+			$this->saveSetting('auto_select',$id);
+		}
+
 		deleteCache();
 	}
 	

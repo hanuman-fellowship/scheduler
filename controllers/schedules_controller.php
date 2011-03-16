@@ -80,11 +80,8 @@ class SchedulesController extends AppController {
 		$this->set('schedule_id',scheduleId());			
 	}
 
-	function select($id = null, $autoSelect = 0) {
+	function select($id = null) {
 		if ($id) {
-			if ($autoSelect) {
-				$this->saveSetting('auto_select',$id);
-			}
 			$this->setSchedule($id);
 			$this->redirect($this->referer());
 		}

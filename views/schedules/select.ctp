@@ -1,14 +1,13 @@
 <fieldset>
 	<legend><?php __('Select Schedule');?></legend>
+	<div class='tall'>
+	<div style='clear:both'>
 <?
-foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
-	echo "<div id='autoSelect_{$autoSelect}' class='tall'  style='display:{$disp}'>";
-	echo "<div style='clear:both'>";
 	$latest_selected = $session->read('Schedule.latest') ? 
 		'selected' :
 		'';
 	echo $html->link('Latest Published',
-		array('latest',$autoSelect),
+		array('latest'),
 		array(
 			'onClick'=>'wait()',
 			'class'=> $latest_selected
@@ -24,7 +23,7 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 			'selected' :
 			'';
 		echo $html->link($schedule['Schedule']['name'],
-			array($schedule['Schedule']['id'],$autoSelect),
+			array($schedule['Schedule']['id']),
 			array(
 				'onClick'=>'wait()',
 				'class'=> $mine_selected
@@ -47,7 +46,7 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 			'';
 		echo $html->link(
 			"{$schedule['Schedule']['name']} ({$schedule['User']['username']})",
-			array($schedule['Schedule']['id'],$autoSelect),
+			array($schedule['Schedule']['id']),
 			array(
 				'onClick'=>'wait()',
 				'class'=> $other_selected
@@ -58,12 +57,5 @@ foreach(array('1'=>'none','0'=>'') as $autoSelect => $disp) {
 	?>
 	</div>
 	</div>
-	<?
-}
-?>
-<div style='clear:both;position:relative;top:3px'>
-<input id="autoSelect" type="checkbox" onclick="swap('autoSelect_1','autoSelect_0')" />
-<label for='autoSelect'>Load this schedule when I login</label>
-</div>
 </fieldset>
 <?=$this->element('message');?>
