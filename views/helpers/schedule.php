@@ -65,37 +65,7 @@ class ScheduleHelper extends AppHelper {
 					);
 					$ajax = '';
 				}
-				$output = $this->html->tag('span', null, array(
-					'style'=>"position:relative",
-					'onmouseover' => "assignHover('{$assignment_id}','over')",
-					'onmouseout' => "assignHover('{$assignment_id}','out')",
-					'class' => 'assignment'
-				));
-				$output .= $this->role->link('*',
-					array(
-						'' => array(
-							'url' => null,
-							'attributes' => array(
-								'class' => 'star_p',
-								'style' => $star ? '' : 'display:none',
-							)
-						),
-						'operations' => array(
-							'url' => array(
-								'controller' => 'assignments',
-								'action' => 'star',
-								$assignment_id
-							),
-							'attributes' => array(
-								'class' => 'star_p',
-								'style' => $star ? '' : 'display:none;color:#CCC',
-								'onclick' => 'saveScroll()',
-								'id' => "star_{$assignment_id}"
-							)
-						)
-					),
-					$this->session->read('Schedule.editable') ? 'operations' : '' 
-				);
+				$output = $star? $this->html->tag('span','*',array('class'=>'star_p')) : '';
 				$output .= "<b>" . $this->html->link($area_title, $area_url,
 					array('title'=>"View {$shift['Area']['name']} Schedule")) . "</b> ";
 				$output .= $this->role->link(
@@ -109,7 +79,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					!$this->session->read('Schedule.editable') || $board
 				) . "<br/>";
-				return "<span class='shift'>{$output}</span></span>";
+				return "<span class='shift'>{$output}</span>";
 			}
 		}
 		if (isset($assignment['ConstantShift'])) {
