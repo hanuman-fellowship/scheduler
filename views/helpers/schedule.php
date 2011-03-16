@@ -10,6 +10,7 @@ class ScheduleHelper extends AppHelper {
 	function displayPersonShift($assignment,$bound,$day,$board = false) {
 		if (isset($assignment['Shift'])) {
 			$assignment_id = isset($assignment['assignment_id']) ? $assignment['assignment_id'] : 0;
+			$star = $assignment['star'];
 			$gaps = ($assignment_id == 0) ? true : false;
 			$shift = $assignment['Shift'];	
 			// if the shift is within the bounds for this day and time
@@ -64,7 +65,32 @@ class ScheduleHelper extends AppHelper {
 					);
 					$ajax = '';
 				}
-				$output = "<b>" . $this->html->link($area_title, $area_url,
+				$output = $this->role->link('*',
+					array(
+						'' => array(
+							'url' => null,
+							'attributes' => array(
+								'class' => 'star_p',
+								'style' => $star ? '' : 'display:none',
+							)
+						),
+						'operations' => array(
+							'url' => array(
+								'controller' => 'assignments',
+								'action' => 'star',
+								$assignment_id
+							),
+							'attributes' => array(
+								'class' => 'star_p',
+								'style' => $star ? '' : 'display:none;color:#CCC',
+								'onclick' => 'saveScroll()',
+								'id' => "star_{$assignment['assignment_id']}"
+							)
+						)
+					),
+					$this->session->read('Schedule.editable') ? 'operations' : '' 
+				);
+				$output .= "<b>" . $this->html->link($area_title, $area_url,
 					array('title'=>"View {$shift['Area']['name']} Schedule")) . "</b> ";
 				$output .= $this->role->link(
 					$time_title,
@@ -132,6 +158,11 @@ class ScheduleHelper extends AppHelper {
 						'style'=>"position:relative",
 						'onmouseover' => "assignHover('{$assignment['Assignment']['id']}','over')",
 						'onmouseout' => "assignHover('{$assignment['Assignment']['id']}','out')",
+						'class' => 'assignment'
+					));
+				} else {
+					$people .= $this->html->tag('span', null, array(
+						'style'=>"position:relative",
 						'class' => 'assignment'
 					));
 				}

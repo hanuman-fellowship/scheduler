@@ -7,11 +7,11 @@ function assignHover(id, action) {
 	var star = $('star_'+id);
 	var view = $('view_'+id);
 	if (action == 'over') {
-		view.show();
+		if (view) view.show();
 		star.show();
 	}
 	if (action == 'out') {
-		view.hide();
+		if (view) view.hide();
 		if (star.style.color) star.hide();
 	}
 }

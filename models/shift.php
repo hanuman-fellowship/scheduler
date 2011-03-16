@@ -205,8 +205,10 @@ class Shift extends AppModel {
 			return;
 		}
 		$shift_ids = array();
+		$stars = array();
 		foreach($data['Assignment'] as &$assignment) {
 			$shift_ids[$assignment['id']] = $assignment['shift_id'];
+			$stars[$assignment['id']] = $assignment['star'];
 		}
 		$this->sContain('Area');
 		$shifts = $this->sFind('all',array(
@@ -215,6 +217,7 @@ class Shift extends AppModel {
 		));
 		foreach($shifts as &$assignment) {
 			$assignment['assignment_id'] = array_search($assignment['Shift']['id'],$shift_ids);
+			$assignment['star'] = $stars[$assignment['assignment_id']];
 			$assignment['Shift']['Area'] = $assignment['Area'];
 			unset($assignment['Area']);
 		}

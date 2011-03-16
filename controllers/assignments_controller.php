@@ -55,5 +55,17 @@ class AssignmentsController extends AppController {
 		$this->stop($this->Assignment->description($changes));
 		$this->redirect($this->referer());
 	}
+
+	function star($id) {
+		$star = $this->Assignment->field('star',array(
+			'Assignment.id' => $id,
+			'Assignment.schedule_id' => scheduleId()
+		));
+		$this->Assignment->sSave(array('Assignment' => array(
+			'id' => $id,
+			'star' => $star xor 1
+		)));
+		$this->redirect($this->referer());
+	}
 }
 ?>
