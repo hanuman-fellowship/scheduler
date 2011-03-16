@@ -1,7 +1,5 @@
 TODO:
 	
-	- always save schedule id in setting for user instead of check box in dialog
-
 	- if there is more than one request, ask which one... then default to that.
 
 	- rename resident_categories to category
