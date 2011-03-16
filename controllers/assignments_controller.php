@@ -57,14 +57,21 @@ class AssignmentsController extends AppController {
 	}
 
 	function star($id) {
-		$star = $this->Assignment->field('star',array(
+		$this->Assignment->sContain('Shift');
+		$assign = $this->Assignment->sFind('first',array(
 			'Assignment.id' => $id,
-			'Assignment.schedule_id' => scheduleId()
 		));
+		$this->record();
 		$this->Assignment->sSave(array('Assignment' => array(
 			'id' => $id,
-			'star' => $star xor 1
+			'star' => $assign['Assignment']['star'] xor 1
 		)));
+		$personName = ($assign['Assignment']['person_id'] == 0) ? 
+			$assign['Assignment']['name'] :
+			$this->Assignment->Person->getName($assign['Assignment']['person_id']);
+		$shift = $this->Assignment->Shift->format($assign['Shift']);
+		$action = $assign['Assignment']['star'] ? 'unstarred' : 'starred';
+		$this->stop("{$personName} {$action} on {$shift['name']}");
 		$this->redirect($this->referer());
 	}
 }
