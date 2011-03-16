@@ -54,6 +54,7 @@ CREATE TABLE `assignments` (
   `person_id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `shift_id` int(11) NOT NULL,
+	`star` int(1) NOT NULL,
   `schedule_id` int(11) NOT NULL,
   UNIQUE KEY `schedule_id` (`schedule_id`,`id`),
   KEY `person_id` (`person_id`),
