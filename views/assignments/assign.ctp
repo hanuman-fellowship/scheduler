@@ -1,9 +1,12 @@
+<? $request = $session->read('Schedule.request') ?>
 <fieldset>
 	<legend><?php __('Assign Person');?></legend>
+<? if (!$request) { ?>
 	<div style="float:left;">
 		<input type="checkbox" id="conflictsBox" value="0" onclick="toggleConflicts()" />
 		<label for='conflictsBox'>Ignore Conflicts</label>
 	</div>
+<? } ?>
 <div style="float:right">
 	<?=$form->create('Assignment',array('type'=>'post','onSubmit'=>'wait()'));?>
 	Other: <?=$form->text('other',array('id' => 'other','tabindex'=>1));?>
@@ -28,7 +31,7 @@ foreach($people as $category) {
 <?	
 	foreach($category as $person) {
 		if ($person['available'] === -1) {continue;} // already on this shift so don't ever show.
-		if ($person['available'] || $list == 'all') {
+		if ($person['available'] || $list == 'all' || $request) {
 			echo $html->link($person['Person']['name'],array($shift,$person['Person']['id']),array(
 				'style' => 'color:' . $person['ResidentCategory']['color'],
 				'onclick'=>'wait();saveScroll()',
