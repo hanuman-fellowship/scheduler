@@ -10,7 +10,7 @@ class ScheduleHelper extends AppHelper {
 	function displayPersonShift($assignment,$bound,$day,$board = false) {
 		if (isset($assignment['Shift'])) {
 			$assignment_id = isset($assignment['assignment_id']) ? $assignment['assignment_id'] : 0;
-			$star = $assignment['star'];
+			$star = isset($assignment['star']) ? $assignment['star'] : 0;
 			$gaps = ($assignment_id == 0) ? true : false;
 			$shift = $assignment['Shift'];	
 			// if the shift is within the bounds for this day and time
