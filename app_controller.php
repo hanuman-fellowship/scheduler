@@ -34,6 +34,15 @@ class AppController extends Controller {
 
 		$this->loadModel('Schedule');
 
+		// if the schedule has changed without our knowing (i.e. in another browser) redirect
+		$real = $this->Schedule->field('updated',array('Schedule.id'=>$this->Session->read('Schedule.id')));
+		$memory = $this->Session->read('Schedule.updated');
+		if ($memory != $real) {
+			$this->Session->write('User',array());
+			$this->Session->delete('Schedule');
+			$this->redirect('/');
+		}
+
 		if (isset($this->params['url']['url'])) {
 			if ($this->params['url']['url'] == '/' && $this->Session->read('Schedule.request')) {
 				$area = $this->Schedule->Area->sFind('first');
