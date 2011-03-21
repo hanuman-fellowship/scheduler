@@ -320,7 +320,7 @@ class SchedulesController extends AppController {
 	function viewRequest($id = null) {
 		if ($id) {
 			$current_schedule = $this->Session->read('Schedule.id');
-			if ($this->Session->read('Schedule.editable'))
+			if ($this->Session->read('Schedule.editable') && !$this->Session->read('Schedule.request'))
 				$this->set('accept',true);
 			$this->setSchedule($id);
 			$area = $this->Schedule->Area->sFind('first',array(
