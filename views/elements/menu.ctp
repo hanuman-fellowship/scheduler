@@ -95,7 +95,7 @@ $request = $this->Session->read('Schedule.request');
 	'Manager' => array(
 		'role' => array('manager'),
 		'url' => '',
-		'sub' => $managerMenu
+		'sub' => $managerMenu // from app_controller
 	),
 	array(
 		'role' => array('manager','operations','personnel'),

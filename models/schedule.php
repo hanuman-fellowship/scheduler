@@ -780,9 +780,16 @@ class Schedule extends AppModel {
 	}
 
 	function getRequests($forDelete = false) {
+		$managerOf = Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id');
+		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
+		$isOperations = in_array('operations',$userRoles);
 		$requests = $this->find('all',array(
 			'conditions' => array(	
 				'Schedule.request' => 1,
+				'or' => array(
+					'Area.id' => $managerOf,
+					'1' => $isOperations
+				)
 			),
 			'order' => 'Area.name asc, Schedule.updated desc',
 			'link' => array('Area')

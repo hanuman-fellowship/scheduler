@@ -23,7 +23,7 @@
 			'onmouseover' => "$('s{$area_id}list').down('a').style.backgroundColor='#FFF8BA'",
 			'onmouseout' => "$('s{$area_id}list').down('a').style.backgroundColor=''",
 			'update' => 'dialog_content',
-			'complete' => "openDialog('menu_Operations',true,'bottom',true)"
+			'complete' => "openDialog('1_1',true,'bottom',true)"
 		)
 	)?>
 	<? $num = count($schedules) ?>
@@ -38,7 +38,7 @@
 					array(
 						'before' => 'wait()',
 						'update' => 'dialog_content',
-						'complete' => "openDialog('menu_Operations',true,'bottom',true)"
+						'complete' => "openDialog('1_1',true,'bottom',true)"
 					)
 				)?>
 				</td>

@@ -60,11 +60,11 @@ class AppController extends Controller {
 		));
 		if (count(Authsome::get('Manager')) > 0) {
 			$managerMenu = array(
-				'Edit Existing Request...' => array(
+				'Requests In Progress...' => array(
 					'url' => array('controller' => 'schedules', 'action' => 'editRequest'),
 					'ajax'
 				),
-				'Delete Request...' => array(
+				'Delete Unfinished Request...' => array(
 					'url' => array('controller' => 'schedules', 'action' => 'deleteRequest'),
 					'ajax'
 				),
@@ -78,8 +78,13 @@ class AppController extends Controller {
 			}
 			$managerMenu[] = '<hr/>';
 		}
+		$managerMenu['View Submitted Request...'] = array(
+			'url' => array('controller' => 'schedules', 'action' => 'viewRequest'),
+			'ajax'
+		);
+		$managerMenu[] = '<hr/>';
 		$managerMenu['Change Password...'] = array(
-			'url' => array('controller' => 'users', 'action' => 'changePassword'),
+			'url' => array('controller' => 'users', 'action' => 'changepassword'),
 			'ajax'
 		);
 		$managerMenu['Logout'] = array(
