@@ -779,8 +779,10 @@ class Schedule extends AppModel {
 		return $request ? $request['Schedule']['id'] : false;
 	}
 
-	function getRequests($forDelete = false) {
-		$managerOf = Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id');
+	function getRequests($forDelete = false, $area_id = null) {
+		$managerOf = $area_id ? 
+			array($area_id) :
+			Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id');
 		$userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 		$isOperations = in_array('operations',$userRoles);
 		$requests = $this->find('all',array(
@@ -788,7 +790,7 @@ class Schedule extends AppModel {
 				'Schedule.request' => 1,
 				'or' => array(
 					'Area.id' => $managerOf,
-					'1' => $isOperations
+					'1' => $isOperations && !$area_id
 				)
 			),
 			'order' => 'Area.name asc, Schedule.updated desc',

@@ -215,6 +215,9 @@ class SchedulesController extends AppController {
 					case 'published' :
 						$this->set('schedules',$this->Schedule->ScheduleGroup->getPublished());
 						break;
+					case 'submitted' :
+						$this->set('requests',$this->Schedule->getRequests(false,$area_id));
+						break;
 					case 'blank' :
 						$this->redirect(array($area_id,$this->data['Schedule']['name']));
 						break;

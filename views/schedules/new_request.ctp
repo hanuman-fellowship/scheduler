@@ -20,6 +20,7 @@
 			array(
 				'published' => 'Published Schedule',
 				'template' => 'Template',
+				'submitted' => 'Previously Submitted Request',
 				'blank' => 'Blank'
 			),
 			array(
@@ -48,7 +49,7 @@
 			<? } ?>
 			</div>
 		<? } else { ?>
-			<?=$this->element('published',array(
+			<?=$this->element($this->data['Schedule']['based_on'],array(
 				'newRequest'=>array(
 					'area_id' => $this->data['Schedule']['area_id'],
 					'name' => $this->data['Schedule']['name']
