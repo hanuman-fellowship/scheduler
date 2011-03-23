@@ -3,16 +3,20 @@
 $schedule = $session->read('Schedule');
 $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 $now = date('Y-m-d H:i:s');
-$current = (
-	$schedule['Group']['start'] < $now &&
-	$schedule['Group']['end'] > $now
-);
 ?>
 <? if (!$simple) { ?>
-<div class='schedule_message no_print'>
-<span id='group_name'>
-<?= ($schedule['request']) ? 'AREA REQUEST FORM' : $schedule['Group']['name']?>
-</span>
+	<div class='schedule_message no_print'>
+	<span id='group_name'>
+	<?= ($schedule['request']) ? 'AREA REQUEST FORM' : $schedule['Group']['name']?>
+	<? if ($schedule['Group']['start'] > $now) { ?>
+		<?= "<span class='alert'>".$this->html->image('small_alert_icon.gif')?>
+		<?= "<span>This schedule is not yet in effect</span></span>" ?>
+	<? } ?>
+	<? if ($schedule['Group']['end'] < $now) { ?>
+		<?= "<span class='alert'>".$this->html->image('small_alert_icon.gif')?>
+		<?= "<span>This schedule is no longer in effect</span></span>" ?>
+	<? } ?>
+	</span>
 <? } ?>
 <? if ($session->read('Schedule.Group.alternate') && Authsome::get('id') == '') { ?>
 	<?= $this->ajax->link(
@@ -47,7 +51,7 @@ if ($schedule['request']) {
 		}
 	}
 } else {
-	$message = $current && $schedule['latest_in_group'] ? "" : ($simple? '' : "<span style='color:blue'>Viewing an old schedule: </span>");
+	$message = $schedule['latest_in_group'] ? "" : ($simple? '' : "<span style='color:blue'>Viewing an old version: </span>");
 	$message = $schedule['username'] != '' ? ($simple? '' : "Viewing: ") : $message;
 	$message = $schedule['editable'] ? ($simple? '' : "<span style='color:green'>Editing: </span>") : $message; 
 	if (in_array('operations',$userRoles)) {

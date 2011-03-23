@@ -188,3 +188,14 @@ a#accept:hover {
 span.star {
 	left:-11px;
 }
+
+.alert img {
+	position:relative;
+	padding-left:5px;
+}
+
+.alert span {
+	position:relative;
+	top:-3px;
+	color:#8A5C19;
+}
