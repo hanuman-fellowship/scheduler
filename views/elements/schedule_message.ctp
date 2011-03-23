@@ -3,19 +3,24 @@
 $schedule = $session->read('Schedule');
 $userRoles = Set::combine(Authsome::get('Role'),'{n}.id','{n}.name');
 $now = date('Y-m-d H:i:s');
+$published = ($schedule['name'] == 'Published');
 ?>
 <? if (!$simple) { ?>
-	<div class='schedule_message no_print'>
+	<div class='schedule_message <?= $published ? '' : 'no_print'?>'>
 	<span id='group_name'>
+	<?= $published ? '' : '<i>Based on: ' ?>
 	<?= ($schedule['request']) ? 'AREA REQUEST FORM' : $schedule['Group']['name']?>
-	<? if ($schedule['Group']['start'] > $now) { ?>
-		<?= "<span class='alert'>".$this->html->image('small_alert_icon.gif')?>
-		<?= "<span>This schedule is not yet in effect</span></span>" ?>
+	<?= $published ? '' : '</i>' ?>
+	<? if ($published) { ?>
+		<? if ($schedule['Group']['start'] > $now) { ?>
+			<?= "<span class='alert no_print'>".$this->html->image('small_alert_icon.gif')?>
+			<?= "<span>This schedule is not yet in effect</span></span>" ?>
+		<? } ?>
+		<? if ($schedule['Group']['end'] < $now) { ?>
+			<?= "<span class='alert no_print'>".$this->html->image('small_alert_icon.gif')?>
+			<?= "<span>This schedule is no longer in effect</span></span>" ?>
 	<? } ?>
-	<? if ($schedule['Group']['end'] < $now) { ?>
-		<?= "<span class='alert'>".$this->html->image('small_alert_icon.gif')?>
-		<?= "<span>This schedule is no longer in effect</span></span>" ?>
-	<? } ?>
+<? } ?>
 	</span>
 <? } ?>
 <? if ($session->read('Schedule.Group.alternate') && Authsome::get('id') == '') { ?>
