@@ -6,8 +6,12 @@ $now = date('Y-m-d H:i:s');
 $published = ($schedule['name'] == 'Published');
 ?>
 <? if (!$simple) { ?>
-	<div class='schedule_message <?= $published ? '' : 'no_print'?>'>
-	<span id='group_name'>
+	<?=$html->tag('div',null,array(
+		'class' => 'schedule_message ' . ($published ? '' : 'no_print'),
+	))?>
+	<?=$html->tag('span',null,array(
+		'id' => 'group_name',
+	))?>
 	<?= $published ? '' : '<i>Based on: ' ?>
 	<?= ($schedule['request']) ? 'AREA REQUEST FORM' : $schedule['Group']['name']?>
 	<?= $published ? '' : '</i>' ?>
