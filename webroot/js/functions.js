@@ -2,6 +2,17 @@ var highlighted = '';
 var stopClick = false;
 var stringWindow = '';
 var lastTime;
+var myTimeout = null;
+
+
+function showPublishedLink() {
+	$('published_link').show();
+	clearTimeout(myTimeout);
+}
+
+function hidePublishedLink() {
+	myTimeout = window.setTimeout("$('published_link').hide()",800);
+}
 
 function assignHover(id, action) {
 	var star = $('star_'+id);

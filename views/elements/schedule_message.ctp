@@ -38,7 +38,11 @@ $published = ($schedule['name'] == 'Published');
 		)
 	) ?>
 <? } ?>
-<?= $simple? '' : "<span id='published'>"?>
+<?= $simple? '' : $html->tag('span',null,array(
+	'id' => 'published',
+	'onmouseover' => 'showPublishedLink()',
+	'onmouseout' => 'hidePublishedLink()'
+))?>
 <?
 if ($schedule['request']) {
 	if ($schedule['request'] == 2) {
@@ -89,5 +93,22 @@ echo $schedule['editable'] ?
 ?>
 <? if (!$simple) { ?>
 </span>
+</div>
+<div style="position:relative">
+<?=$ajax->link(
+	'Published Schedules',
+	array(
+		'controller' => 'schedules',
+		'action' => 'published'
+	),
+	array(
+		'id' => 'published_link',
+		'style' => 'display:none',
+		'complete' => "openDialog('published',true,'bottom')",
+		'update' => 'dialog_content',
+		'onmouseover' => 'showPublishedLink()',
+		'onmouseout' => 'hidePublishedLink()'
+	)
+)?>
 </div>
 <? } ?>

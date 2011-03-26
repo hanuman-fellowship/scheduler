@@ -209,3 +209,12 @@ span.star {
 	top:-3px;
 	color:#8A5C19;
 }
+
+#published_link {
+	position:absolute;
+	text-decoration:underline;
+	top:8px;
+	left:8px;
+	color:blue;
+	font-size:14px;
+}
