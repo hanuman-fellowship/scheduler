@@ -7,7 +7,7 @@
 	<? $desc = $change['Change']['description'] ?>
 	<tr>
 		<td class='undone<?=$change['Change']['undone']?>' style='padding-right:10px;<?= $change['Change']['undone'] ? 'text-decoration:line-through' : ''?>'>
-	<?= (strlen($desc) > 100)? substr($desc,0,97) . '...' : $desc?>
+	<?= (strlen($desc) > 100)? $html->tag('span',substr($desc,0,97) . '...',array('title'=>$desc)) : $desc?>
 		</td>
 		<td style='color:#888'>
 	<?=$time->timeAgoInWords($change['Change']['created'])?>
