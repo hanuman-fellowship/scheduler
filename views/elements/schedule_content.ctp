@@ -8,7 +8,8 @@ $isOperations = in_array(
 	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
 );
 $editable = $this->Session->read('Schedule.editable');
-$groupName = $this->session->read('Schedule.Group.name');
+$published = $this->Session->read('Schedule.name') == 'Published';
+$groupName = $published ? $this->session->read('Schedule.Group.name') : '<i>In Progress</i>';
 $request = isset($request) ? 1 : 0;
 $request = $request ? $request : $this->Session->read('Schedule.request');
 $gaps = isset($gaps);
