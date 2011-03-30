@@ -302,7 +302,6 @@ $request = $this->Session->read('Schedule.request');
 					(isset($area)) ? $area : null 
 				),
 				'ajax',
-				'shortcut' => 'ctrl+c'
 			),
 			'Delete Area...' => array(
 				'hidden' => !$editable,
