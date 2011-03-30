@@ -229,7 +229,7 @@ class Person extends AppModel {
 				'Person.id' => $currentPeople
 			)
 		));
-
+		$this->categorySort($people);
 		$list = array();
 		foreach($people as $person_num => $person) {
 			$this->addDisplayName($person['Person']);
