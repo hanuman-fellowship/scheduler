@@ -1,5 +1,7 @@
 TODO:
 	
+	- view all personnel notes (last updated?)
+
 	- if there is more than one request, ask which one... then default to that.
 
 	- rename resident_categories to category
