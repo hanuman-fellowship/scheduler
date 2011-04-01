@@ -8,6 +8,13 @@
 	"
 ));?>
 <?= $this->element('shortcut',array(
+	'shortcut' => 'r',
+	'disable_in_dialog' => true,
+	'codeBlock' =>"
+		clickLink($('view_request'));
+	"
+));?>
+<?= $this->element('shortcut',array(
 	'shortcut' => 'ctrl+h',
 	'codeBlock' =>"
 		showHoursBy();

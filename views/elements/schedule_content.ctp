@@ -129,7 +129,9 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 						'escape'=>false,
 						'style'=>'color:green',
 						'update' => 'dialog_content',
-						'complete' => "openDialog('menu_Operations',true,'bottom',true)"
+						'complete' => "openDialog('menu_Operations',true,'bottom',true)",
+						'id' => 'view_request',
+						'title' => 'View Request (r)'
 					)
 				); ?>
 			<? } ?>
@@ -273,7 +275,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 						'attributes'=>array(
 							'update'=>'dialog_content',
 							'complete'=>"openDialog('notes',false,'top')",
-							'title' => 'Edit Notes...',
+							'title' => 'Edit Notes... (n)',
 							'class' => !$notes? 'no_print' : ''
 						),
 						'ajax'
