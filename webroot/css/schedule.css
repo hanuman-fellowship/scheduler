@@ -14,7 +14,7 @@
 	}
 
 	.dayoff_x {
-		font-family:Arial, Helvetica, sans-serif;
+		font-family:Comic Sans MS, cursive;
 		font-size:18px;
 	}
 
@@ -29,15 +29,17 @@
 
 }
 
+body {
+	font-family: Comic Sans MS, cursive;
+}
+
 div.shift {
 	font-size: 12px;
-	font-family: Arial, Helvetica, sans-serif;
 	padding-top:10px;
 }
 
 .select_shift {
 	font-size: 12px;
-	font-family: Arial, Helvetica, sans-serif;
 }
 
 .const, span.const a {

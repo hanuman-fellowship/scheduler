@@ -10,7 +10,6 @@ margin-top: 1px;
 margin-bottom: 0;
 font-size:14px;
 font-weight:bold;
-font-family:arial, verdana, sans-serif;
 list-style-type: none;
 text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
@@ -93,7 +92,6 @@ background-color: #CCC;
 	margin-top: 8px;
 	font-size:13px;
 	font-weight:bold;
-	font-family:arial, verdana, sans-serif;
 	color:white;
 }
 
