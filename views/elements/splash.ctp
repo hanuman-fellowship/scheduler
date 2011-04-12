@@ -1,5 +1,6 @@
 <style>
 .style1 {
+	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 36px;
 	color: #2F2818;
 	padding: 30px;
@@ -13,6 +14,7 @@
 .style3 {
 	font-size: 10px;
 	color: #000033;
+	font-family: "Times New Roman", Times, serif;
 }
 a {
 	text-decoration:none;
