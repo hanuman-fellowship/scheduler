@@ -170,7 +170,7 @@ class AppController extends Controller {
 				'Schedule.name' => 'Published',
 				'Schedule.schedule_group_id' => $schedule['ScheduleGroup']['id']
 			),
-			'Schedule.id desc'
+			'Schedule.updated desc'
 		);
 		$this->Session->write(
 			'Schedule.latest_in_group', 

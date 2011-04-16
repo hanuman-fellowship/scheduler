@@ -29,7 +29,7 @@ class ScheduleGroup extends AppModel {
 				'Schedule.schedule_group_id' => $id,
 				'Schedule.name' => 'Published'
 			),
-			array('Schedule.id desc')
+			array('Schedule.updated desc')
 		);
 	}
 
