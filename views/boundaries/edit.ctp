@@ -54,6 +54,11 @@
 		</tr>
 	<? } ?>
 <? } ?>
+<? foreach ($bounds['days'] as $day => $d) { ?>
+	<?=$form->hidden("bound_4_{$day}", array(
+		'value' => '11:59pm'
+	)) ?>
+<? } ?>
 </table> 
 <?= $form->end('Submit');?>
 	</fieldset>
