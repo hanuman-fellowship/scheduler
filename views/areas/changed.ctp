@@ -57,7 +57,8 @@
 	))?>
 	<?=$form->label('show','Show Reasons')?>
 	<br>
-<?= $form->submit('Print Selected',array('class'=>'choose'));?>
+<?= $form->submit('Print Selected',array('class'=>'choose','name'=>'print'));?>
+<?= $form->submit('Email Selected Managers',array('class'=>'choose','name'=>'email'));?>
 <?php echo $form->end();?>
 <?=$this->element('message',array('default_field'=>''));?>
 

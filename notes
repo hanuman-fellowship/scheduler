@@ -2,6 +2,8 @@ TODO:
 	
 	- check for conflicts after they are assigned
 
+	- add 'hours by' to viewed requests
+
 	- view all personnel notes (last updated?)
 
 	- if there is more than one request, ask which one... then default to that.
