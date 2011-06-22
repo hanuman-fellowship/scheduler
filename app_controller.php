@@ -13,6 +13,9 @@ class AppController extends Controller {
         
 	function beforeFilter() {
 
+		// temporarily uncomment this line to ge out of a redirect loop
+		//$this->setSchedule('latest');
+
 		// if the session has timed out, redirect 
 		if (!$this->Session->check('User')) {
 			$this->Session->write('User',array());

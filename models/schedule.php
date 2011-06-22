@@ -91,21 +91,28 @@ class Schedule extends AppModel {
 
 	function addRequest($area_id,$name,$schedule_id) {
 		if (!$schedule_id) {
-			$schedule_id = $this->field('id',
-				array(
-					'Schedule.id' => scheduleId()
-				)
-			);
+			$schedule_id = scheduleId();
 			$blank = true;
 		} else {
 			$blank = false;
 		}
 		$original = $this->findById($schedule_id);
-		$area = $this->Area->sFind('first',array(
-			'conditions' => array(
+		if (!$existing_area = $this->Area->find('first', array('conditions' => array(
+			'Area.id' => $area_id,
+			'Area.schedule_id' => $schedule_id
+		)))) {
+			$this->Area->order = 'schedule_id desc';
+			$area = $this->Area->find('first', array('conditions' => array(
 				'Area.id' => $area_id
-			)
-		));
+			)));
+			$blank = true;
+		} else {
+			$area = $this->Area->sFind('first',array(
+				'conditions' => array(
+					'Area.id' => $area_id
+				)
+			));
+		}
 		$branch_data = array(
 			'user_id'           => Authsome::get('id'),
 			'name'              => $name,
@@ -114,6 +121,10 @@ class Schedule extends AppModel {
 		$this->create();
 		$this->save($branch_data);
 		$branch_id = $this->id;
+		if (!$existing_area) {
+			$area['Area']['schedule_id'] = $branch_id;
+			$this->Area->qInsert($area);
+		}
 		foreach($original as $model => $record) {
 			switch ($model) {
 				case 'Assignment':
