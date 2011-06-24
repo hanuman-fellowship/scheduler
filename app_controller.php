@@ -87,7 +87,7 @@ class AppController extends Controller {
 		);
 		$managerMenu[] = '<hr/>';
 		$managerMenu['Change Password...'] = array(
-			'url' => array('controller' => 'users', 'action' => 'changepassword'),
+			'url' => array('controller' => 'users', 'action' => 'changePassword'),
 			'ajax'
 		);
 		$managerMenu['Logout'] = array(
