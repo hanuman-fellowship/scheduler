@@ -30,7 +30,10 @@ class Schedule extends AppModel {
 	var $bypass = false;
 
 	function valid($data) {
-		$nameExists = $this->field('id',array('name' => $data['Schedule']['name']));
+		$nameExists = $this->field('id',array(
+			'name' => $data['Schedule']['name'],
+			'user_id' => Authsome::get('id')
+		));
 		if (isset($data['Schedule']['based_on'])) {
 			if ($data['Schedule']['name'] == '') {
 				$this->errorField = 'ScheduleName';
