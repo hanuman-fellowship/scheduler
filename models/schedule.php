@@ -148,12 +148,13 @@ class Schedule extends AppModel {
 						if ($data['area_id'] != $area_id || $blank) unset($record[$index]);
 					}
 					break;
+				case 'ResidentCategory' :
 				case 'PeopleSchedules' :
 					if ($schedule_id != scheduleId()) { // we are copying a template
-						// add the current people to the copy
-						$this->contain('PeopleSchedules');
+						// add the current people/categories to the copy
+						$this->contain($model);
 						$currentPeople = $this->findById(scheduleId());
-						$record = $currentPeople['PeopleSchedules'];
+						$record = $currentPeople[$model];
 					}
 					break;
 			}
