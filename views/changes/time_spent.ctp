@@ -1,6 +1,6 @@
 <fieldset>
-	<div class='tall left'>
 	<legend><?php __('Time Spent');?></legend>
+	<div class='tall left'>
 	<table width='400px' style='text-align:left'>
 		<tr>
 			<td><b>Date</b></td>
