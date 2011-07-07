@@ -215,6 +215,7 @@ class Schedule extends AppModel {
 		$this->create();
 		$this->save($branch_data);
 		$branch_id = $this->id;
+		$this->log($original['ChangeField']);
 		foreach($original as $model => $record) {
 			switch ($model) {
 				case 'Schedule':
@@ -243,6 +244,8 @@ class Schedule extends AppModel {
 						$currentPeople = $this->findById(scheduleId());
 						$record = $currentPeople[$model];
 					}
+				case 'Change':
+					if ($original['Schedule']['name'] == 'Published') continue;
 				default:
 					foreach($record as $data) {
 						$data['schedule_id'] = $branch_id;
@@ -724,8 +727,8 @@ class Schedule extends AppModel {
 				'Setting.val' => scheduleId()
 			),false,false
 		);
-		// delete changes for this schedule
-		$models = array('Change','ChangeModel','ChangeField');
+		// delete changes for this schedule, but not the change messages
+		$models = array('ChangeModel','ChangeField');
 		foreach($models as $model) {
 			$this->{$model}->deleteAll(
 				array(
