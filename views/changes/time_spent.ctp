@@ -1,5 +1,5 @@
-<? $this->log($times) ?>
 <fieldset>
+	<div class='tall left'>
 	<legend><?php __('Time Spent');?></legend>
 	<table width='400px' style='text-align:left'>
 		<tr>
@@ -27,5 +27,6 @@
 			<? } ?>
 		</tr>
 	</table>
+	</div>
 </fieldset>
 <?=$this->element('message');?>
