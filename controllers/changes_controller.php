@@ -29,6 +29,10 @@ class ChangesController extends AppController {
 		$this->Change->jumpTo($id);
 		$this->redirect($this->referer());
 	}
+
+	function timeSpent() {
+		$this->set('times', $this->Change->timeSpent());
+	}
 				
 } 
 ?>

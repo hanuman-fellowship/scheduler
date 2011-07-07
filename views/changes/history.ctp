@@ -15,9 +15,16 @@
 	</tr>
 <? } ?>
 <?=$this->javascript->codeBlock("
-	$$('.undone1').last().up('tr').previous('tr',7).scrollIntoView(true);
-	setScroll();
+	if($$('.undone1').last()) {
+		$$('.undone1').last().up('tr').previous('tr',7).scrollIntoView(true);
+		setScroll();
+	}
 ");?>
 </table>
+</div>
 </fieldset>
+<?=$ajax->link('Time Spent',array('action'=>'timeSpent'),array(
+	'before'=>'wait()',
+	'update' => 'dialog_content',
+))?>
 <?=$this->element('message');?>

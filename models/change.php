@@ -5,6 +5,40 @@ class Change extends AppModel {
 	var $name = 'Change'; 
 	var $hasMany = array('ChangeField','ChangeModel');
 
+
+	function timeSpent() {
+		$this->recursive = -1;
+		$this->order = 'created asc';
+		$changes = $this->sFind('all');
+		$time = array();
+		$start = $changes[0]['Change']['created'];
+		$last = $start;
+		$seconds = 0;
+		$total = 0;
+		foreach($changes as $num => $change) {
+			$difference = strtotime($change['Change']['created']) - strtotime($last);
+			$is_idle = ($difference > 60 * 15); // has been 15 minutes
+			$is_last = ($num + 1 == count($changes));
+			if (!$is_idle) {
+				$seconds += $difference;
+				$total += $difference;
+			}
+			if ($is_idle or $is_last) {
+				$time[] = array(
+					'start' => $start,
+					'end' => $is_last? $change['Change']['created'] : $last,
+					'time' => sec2hms($seconds)
+				);
+				$start = $change['Change']['created'];
+				$seconds = 0;
+				$difference = 0;
+			}
+			$last = $change['Change']['created'];
+		}
+		$time['total'] = sec2hms($total);
+		return $time;
+	}
+
 	function doUndo() { 
 		if ($undo = $this->firstUndo()) {
 			$this->applyChange($undo);
@@ -204,6 +238,7 @@ class Change extends AppModel {
 			)
 		);
 	}
+
 
 } 
 ?>
