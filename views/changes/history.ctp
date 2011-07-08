@@ -23,8 +23,10 @@
 </table>
 </div>
 </fieldset>
+<? if ($changes) { ?>
 <?=$ajax->link('Time Spent',array('action'=>'timeSpent'),array(
 	'before'=>'wait()',
 	'update' => 'dialog_content',
 ))?>
+<? } ?>
 <?=$this->element('message');?>
