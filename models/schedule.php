@@ -736,6 +736,13 @@ class Schedule extends AppModel {
 				),false,false
 			); 
 		}
+		// delete undone changes
+		$this->Change->deleteAll(
+			array(
+				"Change.schedule_id" => scheduleId(),
+				'Change.undone' => true
+			),false,false
+		); 
 		return scheduleId();
 	}
 
