@@ -24,9 +24,11 @@
 </div>
 </fieldset>
 <? if ($changes) { ?>
-<?=$ajax->link('Time Spent',array('action'=>'timeSpent'),array(
-	'before'=>'wait()',
-	'update' => 'dialog_content',
-))?>
+	<? if (!$change[0]['Change']['undone']) { ?>
+		<?=$ajax->link('Time Spent',array('action'=>'timeSpent'),array(
+			'before'=>'wait()',
+			'update' => 'dialog_content',
+		))?>
+	<? } ?>
 <? } ?>
 <?=$this->element('message');?>
