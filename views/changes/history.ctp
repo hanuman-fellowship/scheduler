@@ -24,7 +24,7 @@
 </div>
 </fieldset>
 <? if ($changes) { ?>
-	<? if (!$change[0]['Change']['undone']) { ?>
+	<? if (!$changes[0]['Change']['undone']) { ?>
 		<?=$ajax->link('Time Spent',array('action'=>'timeSpent'),array(
 			'before'=>'wait()',
 			'update' => 'dialog_content',
