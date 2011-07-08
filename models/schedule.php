@@ -218,6 +218,8 @@ class Schedule extends AppModel {
 		$this->log($original['ChangeField']);
 		foreach($original as $model => $record) {
 			switch ($model) {
+				case 'Change':
+					if ($original['Schedule']['name'] == 'Published') continue;
 				case 'Schedule':
 				case 'User':
 				case 'ScheduleGroup':
@@ -244,8 +246,6 @@ class Schedule extends AppModel {
 						$currentPeople = $this->findById(scheduleId());
 						$record = $currentPeople[$model];
 					}
-				case 'Change':
-					if ($original['Schedule']['name'] == 'Published') continue;
 				default:
 					foreach($record as $data) {
 						$data['schedule_id'] = $branch_id;
