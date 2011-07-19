@@ -107,7 +107,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		</td> 
 	</tr> 
 	<tr> 
-		<td width='200px' colspan='3'> 
+		<td width='200px' colspan='3' style='padding:4px'> 
 			<div align="center">
 		<?= isset($groupName) && !$request ? $groupName : ''?>
 			</div>
