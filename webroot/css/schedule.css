@@ -218,3 +218,8 @@ span.star {
 	color:blue;
 	font-size:14px;
 }
+
+#full_name {
+	font-size:12px;
+	font-style:italic;
+}
