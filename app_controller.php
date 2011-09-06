@@ -96,6 +96,8 @@ class AppController extends Controller {
 		);
 		$this->set('managerMenu', $managerMenu);
 
+		$this->set('showDates', $this->loadSetting('show_dates'));
+
 	}	
 		
 	function saveSetting($key, $val) {

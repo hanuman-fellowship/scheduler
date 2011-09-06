@@ -180,6 +180,16 @@ $request = $this->Session->read('Schedule.request');
 				'ajax',
 				'hidden' => $request
 			),
+			array(
+				'title' => "<hr/>",
+				'role' => array('operations'),
+				'hidden' => $request
+			),
+			$showDates? 'Hide Dates' : 'Show Dates' => array(
+				'url' => array('controller' => 'settings', 'action' => 'toggleDates'),
+				'role' => array('operations'),
+				'hidden' => $request
+			),
 		)
 	),
 	array(
