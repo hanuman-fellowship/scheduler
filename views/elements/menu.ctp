@@ -185,7 +185,7 @@ $request = $this->Session->read('Schedule.request');
 				'role' => array('operations'),
 				'hidden' => $request
 			),
-			$showDates? 'Hide Dates' : 'Show Dates' => array(
+			$show_dates? 'Hide Dates' : 'Show Dates' => array(
 				'url' => array('controller' => 'settings', 'action' => 'toggleDates'),
 				'role' => array('operations'),
 				'hidden' => $request

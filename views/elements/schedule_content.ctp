@@ -139,8 +139,10 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 		<? } ?>
 		</div>
 		</td> 
+<? $today = date('l') ?>
+<? $week = 'last ' ?>
 <? foreach ($bounds['days'] as $day_id => $day) { ?>
-		<td width="75" bordercolor="#000000"> 
+		<td width="75" bordercolor="#000000" <?=$today == $day? "style='background-color:#FFFADC'" : ''?>> 
 			<div align="center"> 
 				<p>
 				<? if ($isOperations && $editable && isset($person) && !$gaps) { ?>
@@ -152,6 +154,17 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 					),array('title' => 'Toggle Day Off')); ?>
 				<? } else { ?>
 					<?=$day;?>
+				<? } ?>
+				<? if ($show_dates) { ?>
+					<br>
+					<small>
+					<? if ($today == $day) { ?>
+						<? $week = '' ?>
+						<?= date('m/d/y', strtotime('today')) ?>
+					<? } else { ?>
+						<?= date('m/d/y', strtotime($week.$day))?>
+					<? } ?>
+					</small>
 				<? } ?>
 				</p> 
 			</div> 

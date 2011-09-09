@@ -96,7 +96,7 @@ class AppController extends Controller {
 		);
 		$this->set('managerMenu', $managerMenu);
 
-		$this->set('showDates', $this->loadSetting('show_dates'));
+		$this->set('show_dates', $this->loadSetting('show_dates'));
 
 	}	
 		
