@@ -508,6 +508,15 @@ class Person extends AppModel {
 						}
 						break;
 					case 'Shift' :
+						$skip = true;
+						foreach($changeModel['ChangeField'] as $changeField) {
+							if ($changeField['field_key'] != 'num_people') {
+								if ($changeField['field_old_val'] != $changeField['field_new_val']) {
+									$skip = false;
+								}
+							}
+						}
+						if ($skip) break;
 						$this->Assignment->id = '';
 						if ($assignments = $this->Assignment->sFind('all',array(
 							'recursive' => -1,
