@@ -142,7 +142,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 <? $today = date('l') ?>
 <? $week = 'last ' ?>
 <? foreach ($bounds['days'] as $day_id => $day) { ?>
-		<td width="75" bordercolor="#000000" <?=$today == $day? "style='background-color:#FFFADC'" : ''?>> 
+		<td width="75" bordercolor="#000000" <?= ($today == $day && !$request)? "style='background-color:#FFFADC'" : ''?>> 
 			<div align="center"> 
 				<p>
 				<? if ($isOperations && $editable && isset($person) && !$gaps) { ?>
