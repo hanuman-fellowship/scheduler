@@ -259,6 +259,7 @@ class Schedule extends AppModel {
 	function delete($id) {
 		$this->id = $id;
 		$parent_id = $this->field('parent_id');
+		$group_id = $this->field('schedule_group_id');
 		parent::delete();
 		$models = array_keys($this->hasMany);
 		foreach($models as $model) {
@@ -269,6 +270,9 @@ class Schedule extends AppModel {
 			'Setting.key' => 'auto_select',
 			'Setting.val' => $id
 		),false,false);
+		if (!$this->findByScheduleGroupId($group_id)) {
+			$this->ScheduleGroup->delete($group_id);
+		}
 		return $parent_id;
 	}
 	
