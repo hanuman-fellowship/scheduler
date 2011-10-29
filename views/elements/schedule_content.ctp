@@ -151,7 +151,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 						'action'=>'toggle',
 						$person['Person']['id'],
 						$day_id
-					),array('title' => 'Toggle Day Off')); ?>
+					),array('title' => 'Toggle Day Off', 'escape' => false)); ?>
 				<? } else { ?>
 					<?=$day;?>
 				<? } ?>
