@@ -29,6 +29,7 @@
 	Router::connect('/', array('controller' => 'areas', 'action' => 'schedule'));
 
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+	Router::connect('/happy_birthday', array('controller' => 'pages', 'action' => 'display', 'happy_birthday'));
 	
 	Router::connect('/notes/*', array('controller' => 'users', 'action' => 'notes'));
 ?>

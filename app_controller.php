@@ -286,12 +286,6 @@ class AppController extends Controller {
 		parent::redirect($url);
 	}
 		
-	function beforeRender() {
-		if ($this->modelClass != 'CakeError') {
-			$this->{$this->modelClass}->doQueue();
-		}
-	}
-
 	function _sendEmail($to, $subject, $template, $viewVars, $from = null, $username = null,$password = null) {
 		$this->loadModel('EmailAuth');
 		if (!$this->EmailAuth->field('email',array('id' => 2))) {
@@ -330,6 +324,29 @@ class AppController extends Controller {
 			return $this->Email->send($viewVars);
 		}
 	}
+
+	function beforeRender() {
+		if ($this->modelClass != 'CakeError') {
+			if ($this->modelClass != 'Page') {
+				$this->{$this->modelClass}->doQueue();
+			}
+		}
+
+		// happy birthday message for stephanie
+		if ($this->Session->read('birthday')) {
+			$this->Session->write('birthday', false);
+			$this->redirect('/happy_birthday');
+		}
+		if ($this->action == 'login') {
+			if ($this->Session->read('User.User.username') == 'stephanie') {
+				if (date('m') == 12 && date('d') >= 23) {
+					$this->Session->write('birthday', true);
+				}
+			}
+		}
+
+	}
+
 
 }
 ?>
