@@ -4,6 +4,7 @@ class AppController extends Controller {
 	var $helpers = array('Html','Session','Form','Ajax','Javascript','Role', 'Time','Dialog');
 	
     public $components = array(
+			'Email',
     	'Session',
     	'RequestHandler',
         'Authsome.Authsome' => array(
@@ -335,6 +336,15 @@ class AppController extends Controller {
 		// happy birthday message for stephanie
 		if ($this->Session->read('birthday')) {
 			$this->Session->write('birthday', false);
+			$this->_sendEmail(
+				'jason.galuten@gmail.com', 
+				'She saw it!!', 
+				'birthday_conf',
+				array(),
+				'Birthday Message <shantam@mountmadonna.org>',
+				'shantam@mountmadonna.org',
+				'0mAingHr33n'
+			);
 			$this->redirect('/happy_birthday');
 		}
 		if ($this->action == 'login') {
