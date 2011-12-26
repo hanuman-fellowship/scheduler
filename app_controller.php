@@ -334,6 +334,7 @@ class AppController extends Controller {
 		}
 
 		// happy birthday message for stephanie
+		/*
 		if ($this->Session->read('birthday')) {
 			$this->Session->write('birthday', false);
 			$this->_sendEmail(
@@ -349,11 +350,12 @@ class AppController extends Controller {
 		}
 		if ($this->action == 'login') {
 			if ($this->Session->read('User.User.username') == 'stephanie') {
-				if (date('m') == 12 && date('d') >= 23) {
+				if (date('m') == 12 && date('d') >= 23 ) {
 					$this->Session->write('birthday', true);
 				}
 			}
 		}
+		*/
 
 	}
 
