@@ -18,10 +18,31 @@
 		<td><b>Name</b><hr/></td>
 		<td style='text-align:right'><b>Effective</b><hr/></td>
 	</tr>
+<? $year = date('Y')?>
+<? $thisYear = $year?>
 <?  foreach($schedules as $id => $sched) { ?>
-	<tr>
+	<tr class='year<?=$year?>' <?= $thisYear != $year ? "style='display:none'" : ''?>>
 		<td>
+	<? $schedYear = date('Y', strtotime($sched['ScheduleGroup']['start']))?>
+	<? if ($schedYear < $year) { ?>
+		<? $year = $schedYear ?>
+		<big><b>
+			<br/>
+			<?=$this->html->link($year,
+				'toggle_year',
+				array(
+					'onclick' => "$$('.year{$year}').each(function(e) {e.toggle()});return false",
+				)
+			)?>
+		</b></big>
+		</td>
+		<td></td>
+	</tr>
+	<tr class='year<?=$year?>' <?= $thisYear != $year ? "style='display:none'" : ''?>>
+		<td>
+	<? } ?>
 	<? foreach(array('right'=>'','down'=>'none') as $direction => $display) { ?>
+
 		<?=$this->html->image("arrow_{$direction}.png",array(
 			'style'=>"cursor:pointer;width:9px;height:9px;display:{$display}",
 			'onclick'=>"swap('s{$id}right','s{$id}down');$('s{$id}list').toggle()",
@@ -50,6 +71,9 @@
 				)?><br>
 			<? } ?>
 		</div>
+		<? if ($id + 1 == count($schedules) && $thisYear != $year) { ?>
+			</div>
+		<? } ?>
 		</td>
 		<td valign='top' style='text-align:right'>
 		<?=$schedule->displayEffective($sched['ScheduleGroup']);?>
