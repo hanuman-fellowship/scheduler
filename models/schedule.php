@@ -78,11 +78,13 @@ class Schedule extends AppModel {
 				$this->errorMessage = "Invalid end date";
 				return false;
 			}	
+			/*
 			if (time() >= strtotime($data['Schedule']['end'])) {
 				$this->errorField = 'end';
 				$this->errorMessage = "Must not end in the past";
 				return false;
 			}
+			*/
 			if (strtotime($data['Schedule']['end']) <= strtotime($data['Schedule']['start'])) {
 				$this->errorField = 'end';
 				$this->errorMessage = "Start before end, please";
