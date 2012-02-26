@@ -283,7 +283,9 @@ class AppController extends Controller {
 	}
 
 	function redirect($url) {
-		$this->{$this->modelClass}->doQueue();
+		if ($this->modelClass != 'Page') {
+			$this->{$this->modelClass}->doQueue();
+		}
 		parent::redirect($url);
 	}
 		
