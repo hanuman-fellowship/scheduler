@@ -79,9 +79,12 @@ class PagesController extends AppController {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
 		$this->set(compact('page', 'subpage', 'title'));
-		$this->render(implode('/', $path));
 
+		$this->set('people', $this->requestAction('/people/selectSchedule', array('return')));
+		$this->set('areas', $this->requestAction('/areas/select', array('return')));
 		$this->set('change_messages',$this->getChangeMessages());
+
+		$this->render(implode('/', $path));
 
 
 	}

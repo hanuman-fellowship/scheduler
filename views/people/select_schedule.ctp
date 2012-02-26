@@ -37,4 +37,4 @@ foreach($people as $category) {
 </table>
 </div>
 </fieldset>
-<?=$this->element('message');?>
+<?= isset($this->params['requested'])? '' : $this->element('message')?>

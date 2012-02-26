@@ -16,4 +16,4 @@ foreach($areas as $id => $name) {
 echo "</div>";
 ?>
 </fieldset>
-<?=$this->element('message');?>
+<?= isset($this->params['requested'])? '' : $this->element('message')?>
