@@ -223,3 +223,19 @@ span.star {
 	font-size:12px;
 	font-style:italic;
 }
+
+.home_link {
+	position:absolute;
+	margin-right:auto;
+	margin-left:auto;
+	top:8px;
+	left:0;
+	right:0;
+	width:100px;
+	font-weight:bold;
+}
+
+.home_link a {
+
+	color:#999;
+}

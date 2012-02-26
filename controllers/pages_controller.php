@@ -80,6 +80,10 @@ class PagesController extends AppController {
 		}
 		$this->set(compact('page', 'subpage', 'title'));
 		$this->render(implode('/', $path));
+
+		$this->set('change_messages',$this->getChangeMessages());
+
+
 	}
 }
 

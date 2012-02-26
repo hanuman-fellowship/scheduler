@@ -6,13 +6,8 @@
 <? } ?>
 <?= !isset($print) ? $this->element('schedule_message') : '';?>
 <? 
-if($area['Area']['id'] == 0) {
-	echo $this->element('splash');
-	$this->set('title_for_layout', "Scheduler");
-} else {
 	echo $this->element('schedule_content');
 	$this->set('title_for_layout', $area['Area']['name']." Schedule");
-}
 ?>
 </div>
 <?= !isset($print) ? $this->element('dialog') : '';?>

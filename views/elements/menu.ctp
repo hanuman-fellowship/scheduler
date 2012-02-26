@@ -394,6 +394,7 @@ $request = $this->Session->read('Schedule.request');
 		'shortcut' => 'ctrl+l',
 		'codeBlock' => "clickLink($('login'))"
 	));?>
+	<div class='home_link'><?=$this->html->link('SCHEDULER', '/')?></div>
 <? } ?>
 <? if ($isOperations || $request == 2) { ?>
 <?= $this->element('shortcut',array(
