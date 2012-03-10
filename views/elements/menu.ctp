@@ -15,7 +15,8 @@ $request = $this->Session->read('Schedule.request');
 <nobr>
 <?=$role->menu(array(
 	'SCHEDULER!' => array(
-		'url' => '/'
+		'url' => '/',
+		'role' => array('')
 	),
 	"Hello, {$userName}" => array(
 		'role' => array('operations','manager','personnel')
