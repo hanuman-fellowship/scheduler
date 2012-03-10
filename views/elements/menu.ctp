@@ -14,6 +14,9 @@ $request = $this->Session->read('Schedule.request');
 <? $gaps = isset($person['Person']) ? false : true;?>
 <nobr>
 <?=$role->menu(array(
+	'SCHEDULER!' => array(
+		'url' => '/'
+	),
 	"Hello, {$userName}" => array(
 		'role' => array('operations','manager','personnel')
 	),	
@@ -200,8 +203,8 @@ $request = $this->Session->read('Schedule.request');
 		'shortcut' => 'ctrl+p',
 		'ajax',
 		'hidden' => $request,
+		'role' => array('operations'),
 		'sub' => array(
-			'role' => array('operations'),
 			'View Schedule...' => array(
 				'hidden' => !$editable,
 				'url' => array('controller' => 'people', 'action' => 'schedule'),
@@ -289,8 +292,8 @@ $request = $this->Session->read('Schedule.request');
 		'shortcut' => 'ctrl+a',
 		'ajax',
 		'hidden' => $request,
+		'role' => array('operations'),
 		'sub' => array(
-			'role' => array('operations'),
 			'View Schedule...' => array(
 				'hidden' => !$editable,
 				'url' => array('controller' => 'areas', 'action' => 'select'),
@@ -394,7 +397,6 @@ $request = $this->Session->read('Schedule.request');
 		'shortcut' => 'ctrl+l',
 		'codeBlock' => "clickLink($('login'))"
 	));?>
-	<div class='home_link'><?=$this->html->link('SCHEDULER', '/')?></div>
 <? } ?>
 <? if ($isOperations || $request == 2) { ?>
 <?= $this->element('shortcut',array(
