@@ -105,7 +105,9 @@ class Person extends AppModel {
 	}
 
 	function getNameFromPeopleSchedulesId($id) {
-		$peopleSchedules = $this->PeopleSchedules->findById($id);
+		$peopleSchedules = $this->PeopleSchedules->sFind('first', array('conditions' => array(
+			'PeopleSchedules.id' => $id
+		)));
 		return $this->getName($peopleSchedules['PeopleSchedules']['person_id']);
 	}
 
