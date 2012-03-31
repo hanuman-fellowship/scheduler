@@ -2,6 +2,7 @@
 class ResidentCategory extends AppModel {
 
 	var $name = 'ResidentCategory';
+	var $order = 'sort_order asc';
 
 	var $hasMany = array(
 		'ConstantShift',
