@@ -76,7 +76,8 @@
 		<? } ?>
 		</td>
 		<td valign='top' style='text-align:right'>
-		<?=$schedule->displayEffective($sched['ScheduleGroup']);?>
+		<span title='<?=$schedule->displayEffective($sched['ScheduleGroup'], 'withTimes')?>'><?=$schedule->displayEffective($sched['ScheduleGroup']);?></span>
+		<br>
 		</td>
 	</tr>
 <? } ?>
