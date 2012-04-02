@@ -7,7 +7,7 @@
 		<?=$ajax->link("From: {$operationsName} <{$operationsEmail}>",
 			array(
 				'controller' => 'EmailAuths',
-				'action' => 'edit'
+				'action' => 'operations'
 			),
 			array(
 				'update' => 'dialog_content',
