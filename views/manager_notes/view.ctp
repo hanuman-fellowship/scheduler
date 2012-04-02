@@ -1,8 +1,10 @@
 <fieldset>
 	<legend><?php __('Notes From Operations');?></legend>
 <? foreach($notes as $area => $note) { ?>
-	<span class='note-heading'>For <?=$area?></span><hr>
-	<?=$note?><hr>
+	<fieldset style='text-align:left'>
+		<legend>For <?=$area?></legend>
+		<?=$note?>
+	</fieldset>
 <? } ?>
 </fieldset>
 <?=$this->element('message');?>
