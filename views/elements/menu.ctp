@@ -89,7 +89,6 @@ $request = $this->Session->read('Schedule.request');
 	'Personnel' => array(
 		'role' => array('personnel'),
 		'url' => '',
-		'ajax',
 		'sub' => array(
 			'Change Password...' => array(
 				'url' => array('controller' => 'users', 'action' => 'changePassword'),
