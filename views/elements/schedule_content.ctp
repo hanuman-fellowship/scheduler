@@ -118,23 +118,38 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 	<tr> 
 		<td width="75" bordercolor="#000000"> 
 		<div align='center' class='no_print'>
-		<? if (isset($area) && !$request && !$print) { ?>
-			<? if ($request_id && $isOperations) { ?>
-				<?=$ajax->link('View<br/>Request',
+		<? if (isset($area) && !$print) { ?>
+			<? if ($request) { ?>
+				<?=$ajax->link('Notes<br/>From Ops',
 					array(
-						'controller'=>'schedules',
-						'action'=>'viewRequest',
-						$request_id
+						'controller'=>'manager_notes',
+						'action'=>'view'
 					),
 					array(
 						'escape'=>false,
 						'style'=>'color:green',
 						'update' => 'dialog_content',
 						'complete' => "openDialog('menu_Operations',true,'bottom',true)",
-						'id' => 'view_request',
-						'title' => 'View Request (r)'
 					)
 				); ?>
+			<? } else { ?>
+				<? if ($request_id && $isOperations) { ?>
+					<?=$ajax->link('View<br/>Request',
+						array(
+							'controller'=>'schedules',
+							'action'=>'viewRequest',
+							$request_id
+						),
+						array(
+							'escape'=>false,
+							'style'=>'color:green',
+							'update' => 'dialog_content',
+							'complete' => "openDialog('menu_Operations',true,'bottom',true)",
+							'id' => 'view_request',
+							'title' => 'View Request (r)'
+						)
+					); ?>
+				<? } ?>
 			<? } ?>
 		<? } ?>
 		</div>
