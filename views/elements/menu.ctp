@@ -42,6 +42,10 @@ $request = $this->Session->read('Schedule.request');
 				'url' => array('controller' => 'users', 'action' => 'notes'),
 				'shortcut' => 'ctrl+n'
 			),
+			'Notes for Managers...' => array(
+				'url' => array('controller' => 'manager_notes', 'action' => 'edit', -1),
+				'ajax',
+			),
 			'Email Users...' => array(
 				'url' => array('controller' => 'users', 'action' => 'emailUsers'),
 				'ajax',

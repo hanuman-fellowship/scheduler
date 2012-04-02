@@ -55,13 +55,7 @@ class AppController extends Controller {
 		}
 
 		// request areas for manager menu
-		$managerAreas = $this->Schedule->Area->find('list', array(
-			'conditions' => array(
-				'Area.id' => Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id'),
-				'Area.schedule_id' => $this->Schedule->getLatestId()
-			),
-			'order' => 'Area.name'
-		));
+		$managerAreas = $this->_managerAreas();
 		if (count(Authsome::get('Manager')) > 0) {
 			$managerMenu = array(
 				'Requests In Progress...' => array(
@@ -84,6 +78,10 @@ class AppController extends Controller {
 		}
 		$managerMenu['View Submitted Request...'] = array(
 			'url' => array('controller' => 'schedules', 'action' => 'viewRequest'),
+			'ajax'
+		);
+		$managerMenu['View Notes from Operations...'] = array(
+			'url' => array('controller' => 'manager_notes', 'action' => 'view'),
 			'ajax'
 		);
 		$managerMenu[] = '<hr/>';
@@ -361,6 +359,15 @@ class AppController extends Controller {
 
 	}
 
+	function _managerAreas() {
+		return $this->Schedule->Area->find('list', array(
+			'conditions' => array(
+				'Area.id' => Set::combine(Authsome::get('Manager'),'{n}.id','{n}.area_id'),
+				'Area.schedule_id' => $this->Schedule->getLatestId()
+			),
+			'order' => 'Area.name'
+		));
+	}
 
 }
 ?>
