@@ -58,7 +58,11 @@
 	<?=$form->label('show','Show Reasons')?>
 	<br>
 <?= $form->submit('Print Selected',array('class'=>'choose','name'=>'print'));?>
-<?= $form->submit('Email Selected Managers',array('class'=>'choose','name'=>'email'));?>
+<?= $ajax->submit('Email Selected Managers',array(
+	'url' => array('controller' => 'users', 'action' => 'emailUsers'),
+	'update' => 'dialog_content',
+	'before' => 'wait()',
+	'class'=>'choose','name'=>'email'));?>
 <?php echo $form->end();?>
 <?=$this->element('message',array('default_field'=>''));?>
 

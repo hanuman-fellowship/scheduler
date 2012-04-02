@@ -12,6 +12,18 @@ class User extends AppModel {
 		'Schedule'
 	);
 
+	function getIdsFromAreaIds($areaIds) {
+		$managers = $this->Manager->find('all', array('conditions' => array(
+			'Manager.area_id' => $areaIds
+		)));
+		$userIds = array();
+		foreach($managers as $manager) {
+			$userId = $manager['Manager']['user_id'];
+			$userIds[$userId] = $userId;
+		}
+		return $userIds;
+	}
+
 	function valid($data) {
 		if (!isset($data['User']['id']) && 
 		$this->field('id',array('username'=>$data['User']['username']))) {

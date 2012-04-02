@@ -176,26 +176,34 @@ class UsersController extends AppController {
 		}
 		$auth = $this->EmailAuth->findById(1);
 		if (!empty($this->data)) {
-			$E = $this->data['User'];
-			if (!$E['to']) {
-				$this->set('errorMessage','This is not a journal entry. Who are we sending this to?');
-			} elseif (!$this->_sendEmail(
-				$E['to'],
-				$E['subject'],
-				null,
-				$E['message'],
-				"{$auth['EmailAuth']['name']} <{$auth['EmailAuth']['email']}>",
-				$auth['EmailAuth']['email'],
-				$auth['EmailAuth']['password']
-			)) {
-				if (substr($this->Email->smtpError,0,3) == '535') {
-					$error = "SMTP Error: Bad Username/Password";
-				} else {
-					$error = $this->Email->smtpError;
+			if (isset($this->data['Area'])) {
+				$userIds = $this->User->getIdsFromAreaIds($this->data['Area']['area_id']);
+				$users = $this->User->find('all', array('conditions' => array('User.id' => $userIds)));
+				foreach($users as $user) {
+					$this->data['User']['to'][] = $user['User']['email'];
 				}
-				$this->set('errorMessage',$error);
 			} else {
-				$this->render('sent');
+				$E = $this->data['User'];
+				if (!$E['to']) {
+					$this->set('errorMessage','This is not a journal entry. Who are we sending this to?');
+				} elseif (!$this->_sendEmail(
+					$E['to'],
+					$E['subject'],
+					null,
+					$E['message'],
+					"{$auth['EmailAuth']['name']} <{$auth['EmailAuth']['email']}>",
+					$auth['EmailAuth']['email'],
+					$auth['EmailAuth']['password']
+				)) {
+					if (substr($this->Email->smtpError,0,3) == '535') {
+						$error = "SMTP Error: Bad Username/Password";
+					} else {
+						$error = $this->Email->smtpError;
+					}
+					$this->set('errorMessage',$error);
+				} else {
+					$this->render('sent');
+				}
 			}
 		}
 		$this->User->order = 'username';
