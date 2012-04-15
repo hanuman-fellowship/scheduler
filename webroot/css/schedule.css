@@ -228,3 +228,9 @@ a.home_link {
 
 	color:#999;
 }
+
+a.boxy_button {
+	text-align:center;
+	border:1px solid #ccc;
+	padding:.5em;
+}

@@ -1,17 +1,11 @@
 <?= $ajax->form($this->action,'post',array('model'=>'User','update'=>'dialog_content','before'=>'wait();saveScroll()'));?>
+	<span id='no_close'></span>
 	<fieldset>
  		<legend><?php __('Email Other Users');?></legend>
 	<table>
 	<tr>
 		<td colspan='2' class='left'>
-		<?=$ajax->link("From: {$operationsName} <{$operationsEmail}>",
-			array(
-				'controller' => 'EmailAuths',
-				'action' => 'operations'
-			),
-			array(
-				'update' => 'dialog_content',
-			))?>
+		<?="From: {$operationsName} &lt;{$operationsEmail}&gt;"?>
 		</td>
 	</tr>
 	<tr>
@@ -54,6 +48,10 @@
 	</td>
 	</tr>
 	</table>
+		<?= $form->button('Cancel',array(
+			'type' => 'button',
+			'onclick' => "force = true; hideDialog();"
+		));?>
 	</fieldset>
 <?= $form->end();?>
 <?= $this->element('message',array('default_field'=>'subject'));?>

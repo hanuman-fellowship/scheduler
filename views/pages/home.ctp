@@ -5,7 +5,16 @@
 <div style='text-align:center;margin-right:auto;margin-left:auto;'>
 	<?=$this->Html->link('View Big Board',
 		array('controller' => 'people', 'action' => 'board'),
-		array('style' => 'text-align:center;border:1px solid #ccc;padding:.5em;')
+		array('class' => 'boxy_button')
+	)?>
+	<?=$this->Ajax->link('Published Schedules',
+		array('controller' => 'schedules', 'action' => 'published'),
+		array(
+			'id' => 'published_button',
+			'class' => 'boxy_button',
+			'complete' => "openDialog('published_button',true,'bottom')",
+			'update' => 'dialog_content',
+		)
 	)?>
 </div>
 <br>

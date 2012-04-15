@@ -3,6 +3,7 @@ var stopClick = false;
 var stringWindow = '';
 var lastTime;
 var myTimeout = null;
+var force = false;
 
 
 function showPublishedLink() {
@@ -150,6 +151,7 @@ function clickLink(link) {
 }
 
 function hideDialog() {
+	if ($('no_close') && !force) return;
 	if ($('reload_on_close')) {
 		wait();
 		window.location.reload();
