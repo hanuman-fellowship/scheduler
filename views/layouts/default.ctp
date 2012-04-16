@@ -4,7 +4,8 @@
 	<title>
 		<?=$title_for_layout?>
 	</title>	
-	<?=$html->css("schedule") ?>
+	<? $t = filemtime(CSS . 'schedule.css'); // to force refresh if file has been changed ?>
+	<?=$html->css("schedule.css?t={$t}") ?>
 	<?=$html->meta("smiley_favicon.ico",'smiley_favicon.ico',array('type'=>'icon')) ?>
 	<?=$javascript->link('shortcut');?>
 	<?=$javascript->link('prototype');?>
