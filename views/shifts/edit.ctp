@@ -9,7 +9,7 @@
 	<?php
 		echo $form->hidden('id');
 		echo $form->input('area_id',array('id'=>'area_id'));
-		echo $form->input('day_id');
+		echo $form->input('day_id', array('escape' => false));
 		echo $form->input('start', array(
 			'interval' => 15,
 		));

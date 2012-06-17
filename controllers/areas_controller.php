@@ -4,6 +4,10 @@ class AreasController extends AppController {
 	var $name = 'Areas';
 	var $helpers = array('Schedule');
 
+  function dups() {
+    $this->Area->Shift->Assignment->dups(); die;
+  }
+
 	function schedule($id = null) {
 		if ($id) {
 			$this->redirectIfNotValid($id);

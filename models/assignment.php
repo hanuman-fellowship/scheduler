@@ -8,6 +8,14 @@ class Assignment extends AppModel {
 		'Shift'
 	);
 	
+
+  function dups() {
+    $this->recursive = -1;
+    $ass = $this->sFind('all');
+    $this->log($ass, 'assignments');
+  }
+
+
 	function valid($data) {
 		if (trim($data['Assignment']['other']) == '') return false;
 		return true;
