@@ -30,10 +30,23 @@
 
 }
 
+span.shift {
+  display: block;
+  padding-top: 20px;
+}
+
+span.person.shift {
+  padding: 0px;
+}
+
+span.shift:first-child {
+  padding-top: 0px;
+}
+
 div.shift {
   font-size: 14px;
 	font-family: Arial, Helvetica, sans-serif;
-	padding-top:10px;
+  padding: 5px;
 }
 
 .select_shift {

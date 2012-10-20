@@ -79,7 +79,7 @@ class ScheduleHelper extends AppHelper {
 					),
 					!$this->session->read('Schedule.editable') || $board
 				) . "<br/>";
-				return "<span class='shift'>{$output}</span>";
+				return "<span class='person shift'>{$output}</span>";
 			}
 		}
 		if (isset($assignment['ConstantShift'])) {
@@ -272,8 +272,8 @@ class ScheduleHelper extends AppHelper {
 					array('style' => 'display:none')
 				);
 			}
-			return "<span id='{$shift['id']}'><b>" .
-				$time . "</b><br/>" . $people . "</span><br/><br/>";
+			return "<span class='shift' id='{$shift['id']}'><b>" .
+				$time . "</b><br/>" . $people . "</span>";
 		}
 	}
 	
