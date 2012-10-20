@@ -4,7 +4,7 @@
 <?
 if (!isset($id)) {
 	foreach($people as $person) {
-		echo $ajax->link("{$person['Person']['last']}, {$person['Person']['first']}",
+		echo $ajax->link("{$person['Person']['first']} {$person['Person']['last']}",
 			array($person['Person']['id']),
 			array(
 				'before' => 'wait()',

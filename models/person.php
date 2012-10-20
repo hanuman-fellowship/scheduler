@@ -427,7 +427,7 @@ class Person extends AppModel {
 		return $this->find('all',array(
 			'conditions' => array('NOT' => array('Person.id' => $currentPeople)),
 			'recursive' => -1,
-			'order' => array('Person.last', 'Person.first')
+			'order' => array('Person.first', 'Person.last')
 		));
 	}
 
