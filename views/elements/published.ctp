@@ -21,9 +21,9 @@
 <? $year = date('Y')?>
 <? $thisYear = $year?>
 <?  foreach($schedules as $id => $sched) { ?>
-	<tr class='year<?=$year?>' <?= $thisYear != $year ? "style='display:none'" : ''?>>
-		<td>
 	<? $schedYear = date('Y', strtotime($sched['ScheduleGroup']['start']))?>
+  <tr class='<?=$schedYear < $year? '' : "year{$year}"?>' <?= $thisYear != $year && !($schedYear < $year) ? "style='display:none'" : ''?>>
+		<td>
 	<? if ($schedYear < $year) { ?>
 		<? $year = $schedYear ?>
 		<big><b>
