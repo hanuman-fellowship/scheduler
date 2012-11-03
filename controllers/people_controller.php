@@ -57,6 +57,11 @@ class PeopleController extends AppController {
 		$this->set('people',$this->Person->getPeople());
 	}
 
+  function profile($id) {
+    $this->set('person', $this->Person->getPerson($id));
+    $this->set('change_messages',$this->getChangeMessages());
+  }
+
 	function add() {
 		$this->redirectIfNotEditable();
 		if (!empty($this->data)) {
@@ -220,10 +225,10 @@ class PeopleController extends AppController {
 	}
 
 	function upload() {
+    CakeLog::write('error', 'hello');
 		$image = $this->Uploadify->upload();
-    $this->Image->resize("img/people/{$image}","img/people/{$person_id}", 150);
+    $this->Image->resize("img/people/{$image}","img/people/{$image}_150", 150);
     unlink("img/people/{$image}");
-		}
 		echo $image;
 		$this->autoRender = false;
 	}
