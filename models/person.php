@@ -15,6 +15,8 @@ class Person extends AppModel {
 		'PeopleSchedules'
 	);
 
+  var $actsAs = array('Linkable');
+
 	function valid($data) {
 		if (trim($data['Person']['first']) == '') {
 			$this->errorField = 'first';
@@ -541,6 +543,44 @@ class Person extends AppModel {
 			$people = Set::sort($people,'{n}.PeopleSchedules.ResidentCategory.sort_order','asc');
 		}
 	}
+
+  function timesHere($id) {
+    $this->Schedule = ClassRegistry::init('Schedule');
+    $schedules = $this->Schedule->find('all', array(
+      'link' => array('PeopleSchedules', 'ScheduleGroup'),
+      'conditions' => array(
+        'PeopleSchedules.person_id' => $id,
+        'Schedule.schedule_group_id <>' => '0'
+      ),
+      'order' => 'ScheduleGroup.start asc'
+    ));
+    $times = array();
+    $i = 0;
+    foreach($schedules as $schedule) {
+      $scheduleStart = $schedule['ScheduleGroup']['start'];
+      $scheduleEnd   = $schedule['ScheduleGroup']['end'];
+      if (!isset($times[$i])) {
+        $times[$i]['start'] = $scheduleStart;
+        $times[$i]['end']   = $scheduleEnd;
+      } else {
+        $date1 = new DateTime($scheduleStart);
+        $date2 = new DateTime($times[$i]['end']);
+        $interval = $date1->diff($date2, true);
+        if (strtotime($scheduleEnd) <= strtotime($times[$i]['end'])) {
+          continue;
+        } else {
+          if ($interval->days < 14) {
+            $times[$i]['end'] = $scheduleEnd;
+          } else {
+            $i++;
+            $times[$i]['start'] = $scheduleStart;
+            $times[$i]['end']   = $scheduleEnd;
+          }
+        }
+      }
+    }
+    return $times;
+  }
 
 }
 ?>

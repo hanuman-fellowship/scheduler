@@ -23,14 +23,14 @@
 </div>
 
 </div>
-<? if (Authsome::get('role') == 'operations') { ?>
-<div class='upload_image'>
-	<?= $ajax->link('Upload Image',array('action'=>'uploadImage',$P['id']),array(
-		'update' => 'dialog_content',
-		'complete' => "openDialog('upload','true')",
-		'id' => 'upload',
-	)); ?>
+<div>
+  In Residence:<br/>
+  <? foreach($times_here as $time_here) { ?>
+    <?=date('m/d/Y', strtotime($time_here['start']))?> - <?=date('m/d/Y', strtotime($time_here['end']))?><br/>
+  <? } ?>
 </div>
+
+<? if (Authsome::get('role') == 'operations') { ?>
 <? } ?>
 </div>
 <?=$this->element('dialog');?>

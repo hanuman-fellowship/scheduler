@@ -59,6 +59,7 @@ class PeopleController extends AppController {
 
   function profile($id) {
     $this->set('person', $this->Person->getPerson($id));
+    $this->set('times_here', $this->Person->timesHere($id));
     $this->set('change_messages',$this->getChangeMessages());
   }
 
