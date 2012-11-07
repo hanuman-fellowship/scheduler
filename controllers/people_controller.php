@@ -225,10 +225,10 @@ class PeopleController extends AppController {
 		}	
 	}
 
-	function upload() {
+	function upload($id) {
     CakeLog::write('error', 'hello');
 		$image = $this->Uploadify->upload();
-    $this->Image->resize("img/people/{$image}","img/people/{$image}_150", 150);
+    $this->Image->resize("img/people/{$image}","img/people/{$id}", 150);
     unlink("img/people/{$image}");
 		echo $image;
 		$this->autoRender = false;

@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
 	$('#image_upload').uploadify({
 		'uploader'   : '/app/webroot/files/uploadify/uploadify.swf',
 		'cancelImg'  : '/app/webroot/files/uploadify/cancel.png',
-		'script'     : '/people/upload',
+    'script'     : '/people/upload/<?=$id?>',
 		'multi'      : false,
 		'auto'       : true,
 		'buttonText' : 'Upload Picture',

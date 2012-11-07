@@ -550,7 +550,8 @@ class Person extends AppModel {
       'link' => array('PeopleSchedules', 'ScheduleGroup'),
       'conditions' => array(
         'PeopleSchedules.person_id' => $id,
-        'Schedule.schedule_group_id <>' => '0'
+        'Schedule.schedule_group_id <>' => '0',
+        'Schedule.name' => 'Published'
       ),
       'order' => 'ScheduleGroup.start asc'
     ));
