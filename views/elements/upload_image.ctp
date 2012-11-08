@@ -1,22 +1,22 @@
-<link href="/app/webroot/css/uploadify.css" type="text/css" rel="stylesheet" /> 
-<script type="text/javascript" src="/app/webroot/js/jquery.js"></script> 
-<script type="text/javascript" src="/app/webroot/files/uploadify/swfobject.js"></script> 
+<?=$html->css('uploadify')?>
+<?=$html->script('jquery')?>
+<?=$html->script('../files/uploadify/swfobject')?>
 <script type="text/javascript"> 
     jQuery.noConflict();
 </script>
-<script type="text/javascript" src="/app/webroot/js/jquery.uploadify.v2.1.4.min.js"></script> 
+<?=$html->script('jquery.uploadify.v2.1.4.min')?>
 <script type="text/javascript"> 
 jQuery(document).ready(function($) {
 	$('#image_upload').uploadify({
-		'uploader'   : '/app/webroot/files/uploadify/uploadify.swf',
-		'cancelImg'  : '/app/webroot/files/uploadify/cancel.png',
-    'script'     : '/people/upload/<?=$id?>',
+    'uploader'   : '<?=$html->url('/')?>files/uploadify/uploadify.swf',
+    'cancelImg'  : '<?=$html->url('/')?>files/uploadify/cancel.png',
+    'script'     : '<?=$html->url('/')?>people/upload/<?=$id?>',
 		'multi'      : false,
 		'auto'       : true,
 		'buttonText' : 'Upload Picture',
 		'fileExt'    : '*.jpg;*.png;*.gif',
 		'fileDesc'   : 'Image Files',
-		'folder'     : '/app/webroot/img/people',
+    'folder'     : '<?=$html->url('/')?>img/people',
 		'onSWFReady' : function() {
 			if ($('#uploaded_img').is(':visible')) {
 				$('#remove_image').show();
@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 			}
 		},
 		'onComplete' : function(event,queueID,fileObj,response,data) {
-			$('#uploaded_img').attr('src', '/app/webroot/img/people/'+response).show();
+      $('#uploaded_img').attr('src', '<?=$html->url('/')?>img/people/'+response).show();
 			$('#no_image').hide();
 			$('#image_uploadUploader').hide();
 			$('#remove_image').show();
