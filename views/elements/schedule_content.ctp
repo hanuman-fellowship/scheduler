@@ -96,7 +96,13 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 								'title' => 'Edit Person...'
 							),
 							'ajax'
-						)
+            ),
+            '' => array(
+              'url' => array('action'=>'profile',$person['Person']['id']),
+              'attributes'=>array(
+                'title' => 'View Profile'
+              )
+            )
 					),
 					($this->params['isAjax'])
 				);?>
