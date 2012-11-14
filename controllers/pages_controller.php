@@ -83,6 +83,8 @@ class PagesController extends AppController {
 		$this->set('people', $this->requestAction('/people/selectSchedule', array('return')));
 		$this->set('areas', $this->requestAction('/areas/select', array('return')));
 		$this->set('change_messages',$this->getChangeMessages());
+    $Area = ClassRegistry::init('Area');
+    $this->set('area_hours', $Area->getHours());
 
 		$this->render(implode('/', $path));
 

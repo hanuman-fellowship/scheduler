@@ -155,5 +155,24 @@ class Area extends AppModel {
 		return $changed;
 	}
 
+  function getHours() {
+    $area_hours = array();
+    $this->sContain('Shift.Assignment', 'FloatingShift');
+    $areas = $this->sFind('all');
+    foreach($areas as $num => $area) {
+      $area_hours[$num]['name'] = $area['Area']['name'];
+      $area_hours[$num]['hours'] = 0;
+      foreach($area['Shift'] as $shift) {
+        $seconds = strtotime($shift['end']) - strtotime($shift['start']);
+        $hours   = $seconds / 60 / 60 * $shift['num_people'];
+        $area_hours[$num]['hours'] = $area_hours[$num]['hours'] + $hours;
+      }
+      foreach($area['FloatingShift'] as $floating) {
+        $area_hours[$num]['hours'] = $area_hours[$num]['hours'] + $floating['hours'];
+      }
+    }
+    return $area_hours;
+  }
+
 }
 ?>
