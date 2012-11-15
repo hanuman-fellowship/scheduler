@@ -166,24 +166,45 @@ class PeopleController extends AppController {
 
 	function previous($id) {
 		$people = $this->Person->listByResidentCategory(true);
-		while(list($key, $val) = each($people)) {
-			if ($key == $id) {
-				prev($people);
-				prev($people);
-				$goto = each($people);
-				$this->redirect(array('action'=>'schedule',$goto['key']));
-			}
-		}
+    end($people);
+    if(key($people) == $id) {
+      prev($people);
+      $goto = key($people);
+    } else {
+      reset($people);
+      if(key($people) == $id) {
+        end($people);
+        $goto = key($people);
+      } else {
+        while(list($key, $val) = each($people)) {
+          if ($key == $id) {
+            prev($people);
+            prev($people);
+            $goto = key($people);
+            break;
+          }
+        }
+      }
+    }
+    $this->redirect(array('action'=>'schedule',$goto));
 	}
 
 	function next($id) {
 		$people = $this->Person->listByResidentCategory(true);
-		while(list($key, $val) = each($people)) {
-			if ($key == $id) {
-				$goto = each($people);
-				$this->redirect(array('action'=>'schedule',$goto['key']));
-			}
-		}
+    end($people);
+    if(key($people) == $id) {
+      reset($people);
+      $goto = key($people);
+    } else {
+      reset($people);
+      while(list($key, $val) = each($people)) {
+        if ($key == $id) {
+          $goto = key($people);
+          break;
+        }
+      }
+    }
+    $this->redirect(array('action'=>'schedule',$goto));
 	}
 
 	function printm($id = null) {
