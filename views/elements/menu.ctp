@@ -19,6 +19,7 @@ $request = $this->Session->read('Schedule.request');
 		'role' => array('')
 	),
 	"Hello, {$userName}" => array(
+    'url' => '/',
 		'role' => array('operations','manager','personnel')
 	),	
 	'Operations' => array(
