@@ -85,6 +85,8 @@ class PagesController extends AppController {
 		$this->set('change_messages',$this->getChangeMessages());
     $Area = ClassRegistry::init('Area');
     $this->set('area_hours', $Area->getHours());
+    $Person = ClassRegistry::init('Person');
+    $this->set('person_hours', $Person->getHours());
 
 		$this->render(implode('/', $path));
 

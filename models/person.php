@@ -124,7 +124,7 @@ class Person extends AppModel {
 		return $person['Person']['name'];
 	}
 
-	function getPerson($id, $simple = false) {
+	function getPerson($id, $simple = false, $order = false) {
 		if ($simple) {
 			$this->sContain(
 				'PeopleSchedules.ResidentCategory'
@@ -137,7 +137,7 @@ class Person extends AppModel {
 				'FloatingShift.Area'
 			);
 		}
-		$this->order = array('PeopleSchedules.resident_category_id','Person.first','Person.last');
+		$this->order = $order? $order : array('PeopleSchedules.resident_category_id','Person.first','Person.last');
 		$people = $this->find( is_array($id)? 'all' : 'first',array(
 			'conditions' => array('Person.id' => $id)
 		));
@@ -581,6 +581,40 @@ class Person extends AppModel {
       }
     }
     return $times;
+  }
+
+  function getHours() {
+    $person_hours = array();
+    $people = $this->getPerson(
+      $this->getCurrent(), false,
+      array( 'Person.last', 'Person.first' )
+    );
+    foreach($people as $num => $person) {
+      $person_hours[$num]['name'] = $person['Person']['last'].', '.$person['Person']['first'];
+      $person_hours[$num]['hours'] = 0;
+      foreach($person['FloatingShift'] as $floating) {
+        $person_hours[$num]['hours'] = $person_hours[$num]['hours'] + $floating['hours'];
+      }
+      foreach($person['Assignment'] as $assignment) {
+        if (isset($assignment['Shift'])) {
+          $shift = $assignment['Shift'];
+          $seconds = strtotime($shift['end']) - strtotime($shift['start']);
+          $hours   = $seconds / 60 / 60;
+          $person_hours[$num]['hours'] = $person_hours[$num]['hours'] + $hours;
+        }
+        if (isset($assignment['ConstantShift'])) {
+          $const = $assignment['ConstantShift'];
+          if ($const['specify_hours']) {
+            $person_hours[$num]['hours'] = $person_hours[$num]['hours'] + $const['hours'];
+          } else {
+            $seconds = strtotime($const['end']) - strtotime($const['start']);
+            $hours   = $seconds / 60 / 60;
+            $person_hours[$num]['hours'] = $person_hours[$num]['hours'] + $hours;
+          }
+        }
+      }
+    }
+    return $person_hours;
   }
 
 }
