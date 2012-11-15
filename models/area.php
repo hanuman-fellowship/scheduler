@@ -161,6 +161,7 @@ class Area extends AppModel {
     $areas = $this->sFind('all');
     foreach($areas as $num => $area) {
       $area_hours[$num]['name'] = $area['Area']['name'];
+      $area_hours[$num]['id'] = $area['Area']['id'];
       $area_hours[$num]['hours'] = 0;
       foreach($area['Shift'] as $shift) {
         $seconds = strtotime($shift['end']) - strtotime($shift['start']);

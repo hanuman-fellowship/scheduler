@@ -45,7 +45,17 @@
     <? foreach($person_hours as $num => $person_hour) { ?>
       <? $total_hours = $total_hours + $person_hour['hours'] ?>
       <tr <?=$num&1? "style='background-color:#ddd'" : ""?>>
-        <td style='padding-right:20px'><?=$person_hour['name']?></td>
+        <td style='padding-right:20px'>
+          <?=$this->html->link($person_hour['name'],
+            array(
+              'controller'=>'people',
+              'action'=>'schedule',
+              $person_hour['id']
+            ),
+            array(
+              'style' => "color:".$person_hour['color'],
+          )) ?>
+        </td>
         <td><?=$person_hour['hours']?></td>
       </tr>
     <? } ?>
@@ -73,7 +83,15 @@
   <? foreach($area_hours as $num => $area_hour) { ?>
     <? $total_hours = $total_hours + $area_hour['hours'] ?>
     <tr <?=$num&1? "style='background-color:#ddd'" : ""?>>
-      <td style='padding-right:20px'><?=$area_hour['name']?></td>
+      <td style='padding-right:20px'>
+        <?=$this->html->link($area_hour['name'],
+          array(
+            'controller'=>'areas',
+            'action'=>'schedule',
+            $area_hour['id']
+          )
+        ) ?>
+      </td>
       <td><?=$area_hour['hours']?></td>
     </tr>
   <? } ?>

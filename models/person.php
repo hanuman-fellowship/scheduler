@@ -591,6 +591,8 @@ class Person extends AppModel {
     );
     foreach($people as $num => $person) {
       $person_hours[$num]['name'] = $person['Person']['last'].', '.$person['Person']['first'];
+      $person_hours[$num]['id'] = $person['Person']['id'];
+      $person_hours[$num]['color'] = $person['PeopleSchedules']['ResidentCategory']['color'];
       $person_hours[$num]['hours'] = 0;
       foreach($person['FloatingShift'] as $floating) {
         $person_hours[$num]['hours'] = $person_hours[$num]['hours'] + $floating['hours'];
