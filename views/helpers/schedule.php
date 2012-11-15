@@ -210,13 +210,8 @@ class ScheduleHelper extends AppHelper {
 					$people .= $this->html->link('(view)',
 						array('controller'=>'people','action'=>'schedule',$assignment['Person']['id']),
 						array(
-							'style'=>
-								'display:none;
-								position:absolute;
-								top:0;
-								right:-3.0em;
-								background-color:#DDDDDD;
-								padding:5px',
+              'class' => 'view_hover',
+							'style'=> 'display:none',
 							'id'=>"view_{$assignment['Assignment']['id']}"
 						)
 					);

@@ -248,3 +248,11 @@ a.boxy_button {
 	border:1px solid #ccc;
 	padding:.5em;
 }
+
+.view_hover {
+  position:absolute;
+  top:0;
+  right:-3.0em;
+  background-color:#DDDDDD;
+  padding:5px;
+}

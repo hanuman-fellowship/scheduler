@@ -7,14 +7,6 @@ class SchedulesController extends AppController {
 
 	var $components = array('Email');
 
-	// just a test
-	function export() {
-		$file = fopen('hello.html', 'w');
-		$content = $this->requestAction('/people/schedule/12',array('return'));
-		fwrite($file, $content);
-		fclose($file);
-	}
-
 	function copy($id = null) {
 		$this->redirectIfNot('operations');
 		$groupName = $this->Session->read('Schedule.Group.name');
