@@ -345,8 +345,8 @@ class Person extends AppModel {
 		}
 		if ($simple) {
 			$simplePeople = array();
-			foreach ($people as $category) {
-				$simplePeople += $category;
+			foreach ($people as $cat) {
+				$simplePeople += $cat;
 			}
 			return $simplePeople;
 		}
