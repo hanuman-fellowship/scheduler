@@ -107,7 +107,7 @@ $notes = $gaps ? false : (isset($area) ? $area["Area"]['notes'] : $person['Peopl
 					($this->params['isAjax'])
 				);?>
 				</span><br>
-				<span id='full_name'><?=$person['Person']['first'].' '.$person['Person']['last']?></span>
+				<span id='full_name'><?=$person['Person']['last'].', '.$person['Person']['first']?></span>
 			<? } ?>
 			</span>
 		</td> 
