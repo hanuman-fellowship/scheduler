@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
 		'buttonText' : 'Upload Picture',
 		'fileExt'    : '*.jpg;*.png;*.gif',
 		'fileDesc'   : 'Image Files',
-    'folder'     : '<?=$html->url('/')?>img/people',
+    'folder'     : '/app/webroot/img/people',
 		'onSWFReady' : function() {
 			if ($('#uploaded_img').is(':visible')) {
 				$('#remove_image').show();

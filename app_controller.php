@@ -18,7 +18,7 @@ class AppController extends Controller {
 		//$this->setSchedule('latest');
 
 		// if the session has timed out, redirect 
-		if (!$this->Session->check('User')) {
+		if (!$this->Session->check('User') && $this->action != 'upload') {
 			$this->Session->write('User',array());
 			$this->redirect('/');
 		}

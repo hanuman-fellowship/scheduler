@@ -247,11 +247,10 @@ class PeopleController extends AppController {
 	}
 
 	function upload($id) {
-    $this->log('hello');
 		$image = $this->Uploadify->upload();
     $this->Image->resize("img/people/{$image}","img/people/{$id}", 150);
     unlink("img/people/{$image}");
-		echo $image;
+		echo $id;
 		$this->autoRender = false;
 	}
 

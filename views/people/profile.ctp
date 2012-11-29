@@ -5,7 +5,7 @@
 <div class='profile_content'>
 <div class='info'>
 <?
-//  echo $this->element('upload_image', array('id' => $P['id']));
+  echo $this->element('upload_image', array('id' => $P['id']));
   $image = $P['img'] ? $P['img'] : 0;
   echo "<div id='remove_image' style='display:none'>" . $this->Html->link('Remove Image', '') . "</div>";
   echo $this->Html->image('people/'.$image, array(
