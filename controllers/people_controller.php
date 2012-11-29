@@ -248,9 +248,15 @@ class PeopleController extends AppController {
 
 	function upload($id) {
 		$image = $this->Uploadify->upload();
-    $this->Image->resize("img/people/{$image}","img/people/{$id}", 150);
+    $ext = pathinfo($image, PATHINFO_EXTENSION);
+    $new_image = "$id.$ext";
+    $this->Image->resize("img/people/{$image}","img/people/{$new_image}", 200);
     unlink("img/people/{$image}");
-		echo $id;
+    $this->Person->save(array(
+      'id' => $id,
+      'img' => $new_image
+    ));
+		echo $new_image;
 		$this->autoRender = false;
 	}
 

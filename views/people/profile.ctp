@@ -1,3 +1,13 @@
+<?
+$isPersonnel = in_array(
+	'personnel',
+	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
+);
+$isOperations = in_array(
+	'operations',
+	Set::combine(Authsome::get('Role'),'{n}.id','{n}.name')
+);
+?>
 <? $P = $person['Person']; ?>
 <? $this->set('title_for_layout', $P['first']."'s Profile"); ?>
 <?=$html->css("profile") ?>
@@ -5,9 +15,11 @@
 <div class='profile_content'>
 <div class='info'>
 <?
-  echo $this->element('upload_image', array('id' => $P['id']));
   $image = $P['img'] ? $P['img'] : 0;
+if ($isOperations) {
+  echo $this->element('upload_image', array('id' => $P['id']));
   echo "<div id='remove_image' style='display:none'>" . $this->Html->link('Remove Image', '') . "</div>";
+}
   echo $this->Html->image('people/'.$image, array(
     'id' => 'uploaded_img',
     'style' => !$image? 'display:none' : ''

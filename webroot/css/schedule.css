@@ -256,3 +256,14 @@ a.boxy_button {
   background-color:#DDDDDD;
   padding:5px;
 }
+
+#uploaded_img {
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+#remove_image {
+  font-size: 14px;
+  padding: 8px;
+}
