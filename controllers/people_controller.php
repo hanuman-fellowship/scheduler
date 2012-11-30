@@ -249,12 +249,13 @@ class PeopleController extends AppController {
   function upload($id) {
     $image = $this->Uploadify->upload();
     $ext = pathinfo($image, PATHINFO_EXTENSION);
+    $file = pathinfo($image, PATHINFO_FILENAME);
     $new_image = "$id.$ext";
     $desired_size = 200;
     if (extension_loaded('gd')) {
-			$this->Image->resize("img/people/{$image}","img/people/{$new_image}", $desired_size);
+      $this->Image->resize("img/people/{$image}","img/people/{$new_image}", $desired_size);
     } else {
-      system('convert img/people/'.$image.' -scale '.$desired_size.' img/people/'.$new_image);
+      system("convert 'img/people/$file.$ext' -scale $desired_size img/people/$new_image");                                       
     }
     unlink("img/people/{$image}");
     $this->Person->save(array(
@@ -264,6 +265,7 @@ class PeopleController extends AppController {
     echo $new_image;
     $this->autoRender = false;
   }
+
 
   function remove_photo($id) {
     $img = $this->Person->field('img', array('id' => $id));
