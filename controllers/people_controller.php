@@ -254,9 +254,7 @@ class PeopleController extends AppController {
     if (extension_loaded('gd')) {
 			$this->Image->resize("img/people/{$image}","img/people/{$new_image}", $desired_size);
     } else {
-      $size = getimagesize("img/people/{$image}");
-      $percent = round($desired_size * 100 / $size[0]);
-      system('convert img/people/'.$image.' -resize '.$percent.'% img/people/'.$new_image);
+      system('convert img/people/'.$image.' -scale '.$desired_size.' img/people/'.$new_image);
     }
     unlink("img/people/{$image}");
     $this->Person->save(array(
