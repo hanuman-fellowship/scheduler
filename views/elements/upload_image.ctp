@@ -1,3 +1,5 @@
+<? preg_match('/^.*app/', $_SERVER['SCRIPT_NAME'], $matches)?>
+<? $path = $matches[0] ?>
 <?=$html->css('uploadify')?>
 <?=$html->script('jquery')?>
 <?=$html->script('../files/uploadify/swfobject')?>
@@ -16,7 +18,7 @@ jQuery(document).ready(function($) {
 		'buttonText' : 'Upload Picture',
 		'fileExt'    : '*.jpg;*.png;*.gif',
 		'fileDesc'   : 'Image Files',
-    'folder'     : '/app/webroot/img/people',
+    'folder'     : '<?=$path?>/webroot/img/people',
 		'onSWFReady' : function() {
 			if ($('#uploaded_img').is(':visible')) {
 				$('#remove_image').show();
