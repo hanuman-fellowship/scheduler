@@ -15,7 +15,7 @@ jQuery(document).ready(function($) {
     'script'     : '<?=$html->url('/')?>people/upload/<?=$id?>',
 		'multi'      : false,
 		'auto'       : true,
-		'buttonText' : 'Upload Picture',
+		'buttonText' : 'Upload Photo',
 		'fileExt'    : '*.jpg;*.png;*.gif',
 		'fileDesc'   : 'Image Files',
     'folder'     : '<?=$path?>/webroot/img/people',
@@ -29,7 +29,7 @@ jQuery(document).ready(function($) {
       $('#uploaded_img').attr('src', '<?=$html->url('/')?>img/people/'+response).show();
 			$('#no_image').hide();
 			$('#image_uploadUploader').hide();
-			$('#remove_image').show();
+			$('#remove_photo').show();
 		}
 	});
 });

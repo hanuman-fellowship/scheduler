@@ -15,4 +15,5 @@
 	<i>(leave blank to auto-generate)</i>
 <?php echo $form->end('Submit');?>
 	</fieldset>
+  <?=$html->link('View Profile', array('action'=>'profile', $this->data['Person']['id']))?>
 <?=$this->element('message',array('default_field'=>'first'));?>

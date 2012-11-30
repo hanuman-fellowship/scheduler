@@ -267,6 +267,16 @@ class PeopleController extends AppController {
     $this->autoRender = false;
   }
 
+  function remove_photo($id) {
+    $img = $this->Person->field('img', array('id' => $id));
+    unlink("img/people/{$img}");
+    $this->Person->save(array(
+      'id' => $id,
+      'img' => ''
+    ));
+    $this->redirect($this->referer());
+  }
+
 
 }
 	

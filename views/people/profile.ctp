@@ -17,8 +17,13 @@ $isOperations = in_array(
 <?
   $image = $P['img'] ? $P['img'] : 0;
 if ($isOperations) {
-  echo $this->element('upload_image', array('id' => $P['id']));
-  echo "<div id='remove_image' style='display:none'>" . $this->Html->link('Remove Image', '') . "</div>";
+  echo $this->element('upload_photo', array('id' => $P['id']));
+  echo "<div id='remove_photo' style='"?><?=$image? '':'display:none'?><?="'>";
+  echo $this->Html->link('Remove Photo',
+    array('action'=>'remove_photo',$P['id']),
+    array('confirm' => 'Are you sure you want to remove the photo?')
+  );
+  echo "</div>";
 }
   echo $this->Html->image('people/'.$image, array(
     'id' => 'uploaded_img',
