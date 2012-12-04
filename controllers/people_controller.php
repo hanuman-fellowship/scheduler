@@ -269,7 +269,7 @@ class PeopleController extends AppController {
 
   function remove_photo($id) {
     $img = $this->Person->field('img', array('id' => $id));
-    unlink("img/people/{$img}");
+    if (file_exists("img/people/{$img}")) unlink("img/people/{$img}");
     $this->Person->save(array(
       'id' => $id,
       'img' => ''
