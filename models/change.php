@@ -17,7 +17,7 @@ class Change extends AppModel {
 		$total = 0;
 		foreach($changes as $num => $change) {
 			$difference = strtotime($change['Change']['created']) - strtotime($last);
-			$is_idle = ($difference > 60 * 15); // has been 15 minutes
+			$is_idle = ($difference > 60 * 30); // has been 15 minutes
 			$is_last = ($num + 1 == count($changes));
 			if (!$is_idle) {
 				$seconds += $difference;
