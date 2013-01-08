@@ -9,7 +9,7 @@
 		$categoryId = $categoryData['PeopleSchedules']['ResidentCategory']['id'];
 		$categoryColor = $categoryData['PeopleSchedules']['ResidentCategory']['color'];
 ?>	
-		<div class='left' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
+		<div class='left' id='r_people<?=$categoryId; ?>' style='float:left;padding:10px'>
 			<span style='position:relative;left:10px;'>
 			<strong><?=$categoryName?></strong></span><br/>
 <?	
@@ -24,7 +24,7 @@
 	<hr/>
 	<div class='left'>
 	<?=$form->checkbox("all{$categoryId}",array(
-		'onclick' => "checkAll('people{$categoryId}',this)"
+		'onclick' => "checkAll('r_people{$categoryId}',this)"
 	));?>
 	<label for='PersonAll<?=$categoryId;?>'>All</label>
 	</div>

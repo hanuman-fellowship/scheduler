@@ -51,7 +51,7 @@
 			</div>
 		<? } ?>
 		</div>
-		<div class='left choose' id='people<?=$categoryId; ?>' style='float:left;padding:10px'>
+		<div class='left choose' id='a_people<?=$categoryId; ?>' style='float:left;padding:10px'>
 			<span style='position:relative;left:10px;'>
 			<strong><?=$categoryName?></strong></span><br/>
 <?	
@@ -66,7 +66,7 @@
 	<hr/>
 	<div class='left'>
 	<?=$form->checkbox("all{$categoryId}",array(
-		'onclick' => "checkAll('people{$categoryId}',this)"
+		'onclick' => "checkAll('a_people{$categoryId}',this)"
 	));?>
 	<label for='PersonAll<?=$categoryId;?>'>All</label>
 	</div>
