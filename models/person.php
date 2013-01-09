@@ -28,14 +28,14 @@ class Person extends AppModel {
 			$this->errorMessage = "Last name must not be blank";
 			return false;
 		}	
-		if (!ctype_alpha(str_replace(' ','',$data['Person']['first']))) {
+		if (!preg_match('/^[A-Za-z\s\-]*$/', $data['Person']['first'])) {
 			$this->errorField = 'first';
-			$this->errorMessage = "First name must be letters only";
+			$this->errorMessage = "Names can have letters or hyphens only";
 			return false;
 		}	
-		if (!ctype_alpha(str_replace(' ','',$data['Person']['last']))) {
+		if (!preg_match('/^[A-Za-z\s\-]*$/', $data['Person']['last'])) {
 			$this->errorField = 'last';
-			$this->errorMessage = "Last name must be letters only";
+			$this->errorMessage = "Names can have letters or hyphens only";
 			return false;
 		}	
 		if (!isset($data['Person']['id']) &&
