@@ -162,11 +162,6 @@ $request = $this->Session->read('Schedule.request');
 				'shortcut' => 'shift+ctrl+d',
 				'hidden' => $request
 			),
-			'Merge...' => array(
-				'url' => array('controller' => 'schedules', 'action' => 'merge'),
-				'ajax',
-				'hidden' => !$editable || $request,
-			),
 			array(
 				'title' => "<hr/>",
 				'hidden' => $request
