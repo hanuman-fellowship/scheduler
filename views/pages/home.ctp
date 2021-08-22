@@ -3,6 +3,13 @@
 <?=$this->element('schedule_message')?>
 <br>
 <div style='text-align:center;margin-right:auto;margin-left:auto;'>
+  <div style="background-color: #F8D793; display: inline-block; border-radius: 20px; padding: 2em; margin: 0 0 3em;">
+    <h2 style="text-transform: uppercase">You are viewing the old scheduler</h2>
+    <p>Please use the new scheduler (and update your bookmarks):</p>
+    <p><a style="padding: 0.5em; background-color: #72a243; border-radius: 5px; color: white;" href="https://scheduler.mountmadonna.org">https://scheduler.mountmadonna.org</a></p>
+  </div>
+</div>
+<div style='text-align:center;margin-right:auto;margin-left:auto;'>
 	<?=$this->Html->link('View Big Board',
 		array('controller' => 'people', 'action' => 'board'),
 		array('class' => 'boxy_button')
