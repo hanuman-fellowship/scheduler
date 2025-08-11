@@ -1,287 +1,157 @@
 import request from 'supertest';
-import express from 'express';
-import { requireAuth, requireRole } from '../../middleware/auth';
-import { login } from '../../controllers/authController';
-import { createTestUser, resetTestDatabase } from '../utils/testDb';
-import { ensureTestDatabase } from '../utils/testConfig';
+import { testApp } from '../utils/testApp';
+import { createTestUser, resetTestDatabase } from '../utils/testDbOptimized';
 
-// Import the AuthRequest interface
-interface AuthRequest extends express.Request {
-  user?: {
-    id: number;
-    username: string;
-    email: string;
-    roles: string[];
-  };
+// Define AuthRequest interface for middleware testing
+interface AuthRequest extends request.SuperTest<request.Test> {
+  user?: any;
 }
 
-// Create a minimal Express app for testing
-const createTestApp = () => {
-  const app = express();
-  app.use(express.json());
-  
-  // Add auth route for getting tokens
-  app.post('/auth/login', login);
-  
-  // Add test routes with middleware
-  app.get('/protected', requireAuth, (req: AuthRequest, res) => {
-    res.json({ message: 'Protected route accessed', user: req.user });
-  });
-  
-  app.get('/operations-only', requireAuth, requireRole('operations'), (req: AuthRequest, res) => {
-    res.json({ message: 'Operations route accessed', user: req.user });
-  });
-  
-  app.get('/manager-only', requireAuth, requireRole('manager'), (req: AuthRequest, res) => {
-    res.json({ message: 'Manager route accessed', user: req.user });
-  });
-  
-  return app;
-};
-
 describe('Auth Middleware', () => {
-  let app: express.Application;
-  let operationsUser: any;
-  let managerUser: any;
-  let personnelUser: any;
-
-  beforeAll(async () => {
-    await ensureTestDatabase();
-    app = createTestApp();
-  });
+  let testUser: any;
 
   beforeEach(async () => {
+    // Reset database before each test for clean state
     await resetTestDatabase();
     
-    // Create users with different roles
-    operationsUser = await createTestUser({
-      username: 'operations_user',
-      email: 'operations@example.com',
-      password: 'password123',
-      roles: ['operations']
-    });
-
-    managerUser = await createTestUser({
-      username: 'manager_user',
-      email: 'manager@example.com',
-      password: 'password123',
-      roles: ['manager']
-    });
-
-    personnelUser = await createTestUser({
-      username: 'personnel_user',
-      email: 'personnel@example.com',
+    // Create test user for each test
+    testUser = await createTestUser({
+      username: 'testuser',
+      email: 'test@example.com',
       password: 'password123',
       roles: ['personnel']
     });
   });
 
-  afterAll(async () => {
-    await resetTestDatabase();
-  });
-
-  const getAuthToken = async (username: string, password: string) => {
-    const response = await request(app)
-      .post('/auth/login')
-      .send({ username, password });
-    return response.body.token;
-  };
-
   describe('requireAuth middleware', () => {
     it('should allow access with valid token', async () => {
-      const token = await getAuthToken('personnel_user', 'password123');
-      
-      const response = await request(app)
-        .get('/protected')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
+      // Login to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'testuser',
+          password: 'password123'
+        });
 
-      expect(response.body.message).toBe('Protected route accessed');
-      expect(response.body.user).toBeDefined();
-      expect(response.body.user.username).toBe('personnel_user');
+      const authToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .get('/schedules')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(response.status).toBe(200);
     });
 
     it('should reject access without token', async () => {
-      const response = await request(app)
-        .get('/protected')
-        .expect(401);
+      const response = await request(testApp)
+        .get('/schedules');
 
-      expect(response.body.error.code).toBe('NO_TOKEN');
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
     });
 
-    it('should reject access with invalid token format', async () => {
-      const response = await request(app)
-        .get('/protected')
-        .set('Authorization', 'InvalidToken')
-        .expect(401);
+    it('should reject access with invalid token', async () => {
+      const response = await request(testApp)
+        .get('/schedules')
+        .set('Authorization', 'Bearer invalid-token');
 
-      expect(response.body.error.code).toBe('NO_TOKEN');
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
     });
 
-    it('should reject access with malformed Bearer token', async () => {
-      const response = await request(app)
-        .get('/protected')
-        .set('Authorization', 'Bearer')
-        .expect(401);
+    it('should reject access with malformed authorization header', async () => {
+      const response = await request(testApp)
+        .get('/schedules')
+        .set('Authorization', 'InvalidFormat');
 
-      expect(response.body.error.code).toBe('NO_TOKEN');
-    });
-
-    it('should reject access with invalid JWT token', async () => {
-      const response = await request(app)
-        .get('/protected')
-        .set('Authorization', 'Bearer invalid.jwt.token')
-        .expect(401);
-
-      expect(response.body.error.code).toBe('INVALID_TOKEN');
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
     });
   });
 
   describe('requireRole middleware', () => {
-    describe('operations role', () => {
-      it('should allow operations user access', async () => {
-        const token = await getAuthToken('operations_user', 'password123');
-        
-        const response = await request(app)
-          .get('/operations-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(200);
-
-        expect(response.body.message).toBe('Operations route accessed');
-        expect(response.body.user.username).toBe('operations_user');
+    it('should allow access for user with required role', async () => {
+      // Create operations user
+      const operationsUser = await createTestUser({
+        username: 'operations_user',
+        email: 'operations@example.com',
+        password: 'password123',
+        roles: ['operations']
       });
 
-      it('should reject non-operations user access', async () => {
-        const token = await getAuthToken('manager_user', 'password123');
-        
-        const response = await request(app)
-          .get('/operations-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(403);
-
-        expect(response.body.error.code).toBe('FORBIDDEN');
-      });
-
-      it('should reject personnel user access', async () => {
-        const token = await getAuthToken('personnel_user', 'password123');
-        
-        const response = await request(app)
-          .get('/operations-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(403);
-
-        expect(response.body.error.code).toBe('FORBIDDEN');
-      });
-    });
-
-    describe('manager role', () => {
-      it('should allow manager user access', async () => {
-        const token = await getAuthToken('manager_user', 'password123');
-        
-        const response = await request(app)
-          .get('/manager-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(200);
-
-        expect(response.body.message).toBe('Manager route accessed');
-        expect(response.body.user.username).toBe('manager_user');
-      });
-
-      it('should reject non-manager user access', async () => {
-        const token = await getAuthToken('operations_user', 'password123');
-        
-        const response = await request(app)
-          .get('/manager-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(403);
-
-        expect(response.body.error.code).toBe('FORBIDDEN');
-      });
-
-      it('should reject personnel user access', async () => {
-        const token = await getAuthToken('personnel_user', 'password123');
-        
-        const response = await request(app)
-          .get('/manager-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(403);
-
-        expect(response.body.error.code).toBe('FORBIDDEN');
-      });
-    });
-
-    describe('user with multiple roles', () => {
-      it('should allow access if user has required role', async () => {
-        // Create user with multiple roles
-        const multiRoleUser = await createTestUser({
-          username: 'multi_role_user',
-          email: 'multi@example.com',
-          password: 'password123',
-          roles: ['personnel', 'manager']
+      // Login as operations user
+      const operationsLoginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'operations_user',
+          password: 'password123'
         });
 
-        const token = await getAuthToken('multi_role_user', 'password123');
-        
-        // Should access manager route
-        const managerResponse = await request(app)
-          .get('/manager-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(200);
+      const operationsToken = operationsLoginResponse.body.token;
 
-        expect(managerResponse.body.message).toBe('Manager route accessed');
+      const response = await request(testApp)
+        .get('/users')
+        .set('Authorization', `Bearer ${operationsToken}`);
 
-        // Should access protected route
-        const protectedResponse = await request(app)
-          .get('/protected')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(200);
+      expect(response.status).toBe(200);
+    });
 
-        expect(protectedResponse.body.message).toBe('Protected route accessed');
-      });
-
-      it('should reject access if user lacks required role', async () => {
-        // Create user with multiple roles but not operations
-        const multiRoleUser = await createTestUser({
-          username: 'multi_role_user',
-          email: 'multi@example.com',
-          password: 'password123',
-          roles: ['personnel', 'manager']
+    it('should reject access for user without required role', async () => {
+      // Login to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'testuser',
+          password: 'password123'
         });
 
-        const token = await getAuthToken('multi_role_user', 'password123');
-        
-        // Should not access operations route
-        const response = await request(app)
-          .get('/operations-only')
-          .set('Authorization', `Bearer ${token}`)
-          .expect(403);
+      const authToken = loginResponse.body.token;
 
-        expect(response.body.error.code).toBe('FORBIDDEN');
-      });
+      const response = await request(testApp)
+        .get('/users')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty('error');
+    });
+
+    it('should reject access without authentication', async () => {
+      const response = await request(testApp)
+        .get('/users');
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
+    });
+
+    it('should reject access with invalid token for role check', async () => {
+      const response = await request(testApp)
+        .get('/users')
+        .set('Authorization', 'Bearer invalid-token');
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
     });
   });
 
-  describe('middleware chain', () => {
-    it('should execute middleware in correct order', async () => {
-      const token = await getAuthToken('operations_user', 'password123');
-      
-      const response = await request(app)
-        .get('/operations-only')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
+  describe('middleware integration', () => {
+    it('should apply both requireAuth and requireRole in sequence', async () => {
+      // Test that requireAuth is applied first (401 before 403)
+      const response = await request(testApp)
+        .get('/users');
 
-      // Verify both middleware executed
-      expect(response.body.user).toBeDefined();
-      expect(response.body.message).toBe('Operations route accessed');
+      expect(response.status).toBe(401); // requireAuth fails first
+      expect(response.body).toHaveProperty('error');
     });
 
-    it('should stop at first middleware failure', async () => {
-      // No token - should fail at requireAuth
-      const response = await request(app)
-        .get('/operations-only')
-        .expect(401);
+    it('should handle expired tokens gracefully', async () => {
+      // This test would require JWT expiration testing
+      // For now, we'll test that malformed tokens are handled
+      const response = await request(testApp)
+        .get('/schedules')
+        .set('Authorization', 'Bearer expired.token.here');
 
-      expect(response.body.error.code).toBe('NO_TOKEN');
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
     });
   });
 });

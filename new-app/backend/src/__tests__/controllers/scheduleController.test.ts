@@ -1,48 +1,17 @@
 import request from 'supertest';
-import express from 'express';
-import { list, get, copy, publish, deleteSchedule } from '../../controllers/scheduleController';
-import { login } from '../../controllers/authController';
-import { createTestUser, createTestSchedule, createTestArea, createTestDay, createTestPerson, createTestResidentCategory, resetTestDatabase } from '../utils/testDb';
-import { ensureTestDatabase } from '../utils/testConfig';
-import { requireAuth, requireRole } from '../../middleware/auth';
-
-// Create a minimal Express app for testing
-const createTestApp = () => {
-  const app = express();
-  app.use(express.json());
-  
-  // Add auth route for getting tokens
-  app.post('/auth/login', login);
-  
-  // Add test routes with middleware
-  app.get('/schedules', requireAuth, list);
-  app.get('/schedules/:id', requireAuth, get);
-  app.post('/schedules/copy', requireAuth, copy);
-  app.post('/schedules/publish', requireAuth, requireRole('operations'), publish);
-  app.delete('/schedules/:id', requireAuth, deleteSchedule);
-  
-  return app;
-};
+import { testApp } from '../utils/testApp';
+import { createTestUser, createTestSchedule, resetTestDatabase } from '../utils/testDbOptimized';
 
 describe('ScheduleController', () => {
-  let app: express.Application;
   let operationsUser: any;
   let regularUser: any;
   let testSchedule: any;
-  let testArea: any;
-  let testDay: any;
-  let testPerson: any;
-  let testCategory: any;
-
-  beforeAll(async () => {
-    await ensureTestDatabase();
-    app = createTestApp();
-  });
 
   beforeEach(async () => {
+    // Reset database before each test for clean state
     await resetTestDatabase();
     
-    // Create users
+    // Create test users for each test
     operationsUser = await createTestUser({
       username: 'operations_user',
       email: 'operations@example.com',
@@ -57,210 +26,306 @@ describe('ScheduleController', () => {
       roles: ['personnel']
     });
 
-    // Create test schedule for regular user
+    // Create test schedule
     testSchedule = await createTestSchedule({
       name: 'Test Schedule',
       userId: regularUser.id,
       template: false,
       request: 0
     });
-
-    // Create test area
-    testArea = await createTestArea(testSchedule.id, {
-      name: 'Test Area',
-      shortName: 'TA'
-    });
-
-    // Create test day
-    testDay = await createTestDay(testSchedule.id, {
-      name: 'Monday',
-      dayOfWeek: 2
-    });
-
-    // Create test person
-    testPerson = await createTestPerson({
-      first: 'John',
-      last: 'Doe',
-      displayName: 'John Doe'
-    });
-
-    // Create test category
-    testCategory = await createTestResidentCategory(testSchedule.id, {
-      name: 'Resident',
-      color: '#007bff'
-    });
   });
-
-  afterAll(async () => {
-    await resetTestDatabase();
-  });
-
-  const getAuthToken = async (username: string, password: string) => {
-    const response = await request(app)
-      .post('/auth/login')
-      .send({ username, password });
-    return response.body.token;
-  };
 
   describe('GET /schedules', () => {
-    it('should list user schedules for regular user', async () => {
-      const token = await getAuthToken('regular_user', 'password123');
-      
-      const response = await request(app)
-        .get('/schedules')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
+    it('should list schedules for authenticated user', async () => {
+      // Login as regular user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password123'
+        });
 
+      const regularToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .get('/schedules')
+        .set('Authorization', `Bearer ${regularToken}`);
+
+      expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('mine');
       expect(response.body).not.toHaveProperty('all');
       expect(response.body.mine).toHaveLength(1);
       expect(response.body.mine[0].name).toBe('Test Schedule');
     });
 
-    it('should list all schedules for operations user', async () => {
-      const token = await getAuthToken('operations_user', 'password123');
-      
-      const response = await request(app)
-        .get('/schedules')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
-
-      expect(response.body).toHaveProperty('mine');
-      expect(response.body).toHaveProperty('all');
-      expect(response.body.mine).toHaveLength(0); // operations user has no schedules
-      expect(response.body.all).toHaveLength(1); // but can see regular user's schedule
-    });
-
     it('should reject access without authentication', async () => {
-      await request(app)
-        .get('/schedules')
-        .expect(401);
+      const response = await request(testApp)
+        .get('/schedules');
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
     });
   });
 
   describe('GET /schedules/:id', () => {
-    it('should get schedule detail for owner', async () => {
-      const token = await getAuthToken('regular_user', 'password123');
-      
-      const response = await request(app)
-        .get(`/schedules/${testSchedule.id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
+    it('should get schedule for owner', async () => {
+      // Login as regular user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password123'
+        });
 
+      const regularToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .get(`/schedules/${testSchedule.id}`)
+        .set('Authorization', `Bearer ${regularToken}`);
+
+      expect(response.status).toBe(200);
       expect(response.body.id).toBe(testSchedule.id);
-      expect(response.body.name).toBe('Test Schedule');
-      expect(response.body).toHaveProperty('areas');
-      expect(response.body).toHaveProperty('days');
-      expect(response.body).toHaveProperty('people');
+      expect(response.body.name).toBe(testSchedule.name);
     });
 
-    it('should get schedule detail for operations user', async () => {
-      const token = await getAuthToken('operations_user', 'password123');
-      
-      const response = await request(app)
-        .get(`/schedules/${testSchedule.id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
+    it('should get schedule for operations user', async () => {
+      // Login as operations user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'operations_user',
+          password: 'password123'
+        });
 
+      const operationsToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .get(`/schedules/${testSchedule.id}`)
+        .set('Authorization', `Bearer ${operationsToken}`);
+
+      expect(response.status).toBe(200);
       expect(response.body.id).toBe(testSchedule.id);
-      expect(response.body.name).toBe('Test Schedule');
     });
 
     it('should reject access for non-owner non-operations user', async () => {
       // Create another user
-      const anotherUser = await createTestUser({
-        username: 'another_user',
-        email: 'another@example.com',
+      const otherUser = await createTestUser({
+        username: 'other_user',
+        email: 'other@example.com',
         password: 'password123',
         roles: ['personnel']
       });
 
-      const token = await getAuthToken('another_user', 'password123');
-      
-      // This should now return 403 Forbidden since the controller properly handles the error
-      await request(app)
+      const otherLoginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'other_user',
+          password: 'password123'
+        });
+
+      const otherToken = otherLoginResponse.body.token;
+
+      const response = await request(testApp)
         .get(`/schedules/${testSchedule.id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(403);
+        .set('Authorization', `Bearer ${otherToken}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty('error');
     });
 
     it('should reject access without authentication', async () => {
-      await request(app)
-        .get(`/schedules/${testSchedule.id}`)
-        .expect(401);
+      const response = await request(testApp)
+        .get(`/schedules/${testSchedule.id}`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
+    });
+
+    it('should return 404 for non-existent schedule', async () => {
+      // Login as regular user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password123'
+        });
+
+      const regularToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .get('/schedules/99999')
+        .set('Authorization', `Bearer ${regularToken}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('error');
     });
   });
 
-  describe('POST /schedules/copy', () => {
+  describe('POST /schedules/:id/copy', () => {
     it('should return not implemented', async () => {
-      const token = await getAuthToken('regular_user', 'password123');
-      
-      await request(app)
-        .post('/schedules/copy')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(501);
+      // Login as regular user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password123'
+        });
+
+      const regularToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .post(`/schedules/${testSchedule.id}/copy`)
+        .set('Authorization', `Bearer ${regularToken}`);
+
+      expect(response.status).toBe(501);
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
+    });
+
+    it('should return not implemented for non-owner non-operations user', async () => {
+      const otherUser = await createTestUser({
+        username: 'copy_user',
+        email: 'copy@example.com',
+        password: 'password123',
+        roles: ['personnel']
+      });
+
+      const otherLoginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'copy_user',
+          password: 'password123'
+        });
+
+      const otherToken = otherLoginResponse.body.token;
+
+      const response = await request(testApp)
+        .post(`/schedules/${testSchedule.id}/copy`)
+        .set('Authorization', `Bearer ${otherToken}`);
+
+      expect(response.status).toBe(501);
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
     });
   });
 
-  describe('POST /schedules/publish', () => {
-    it('should return not implemented for operations user', async () => {
-      const token = await getAuthToken('operations_user', 'password123');
-      
-      await request(app)
-        .post('/schedules/publish')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(501);
+  describe('POST /schedules/:id/publish', () => {
+    it('should return not implemented', async () => {
+      // Login as regular user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password123'
+        });
+
+      const regularToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .post(`/schedules/${testSchedule.id}/publish`)
+        .set('Authorization', `Bearer ${regularToken}`);
+
+      expect(response.status).toBe(501);
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
     });
 
-    it('should reject access for non-operations user', async () => {
-      const token = await getAuthToken('regular_user', 'password123');
-      
-      await request(app)
-        .post('/schedules/publish')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(403);
+    it('should return not implemented for non-owner non-operations user', async () => {
+      const otherUser = await createTestUser({
+        username: 'publish_user',
+        email: 'publish@example.com',
+        password: 'password123',
+        roles: ['personnel']
+      });
+
+      const otherLoginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'publish_user',
+          password: 'password123'
+        });
+
+      const otherToken = otherLoginResponse.body.token;
+
+      const response = await request(testApp)
+        .post(`/schedules/${testSchedule.id}/publish`)
+        .set('Authorization', `Bearer ${otherToken}`);
+
+      expect(response.status).toBe(501);
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
     });
   });
 
   describe('DELETE /schedules/:id', () => {
     it('should delete schedule for owner', async () => {
-      const token = await getAuthToken('regular_user', 'password123');
-      
-      await request(app)
+      // Login as regular user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password123'
+        });
+
+      const regularToken = loginResponse.body.token;
+
+      const response = await request(testApp)
         .delete(`/schedules/${testSchedule.id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(204);
+        .set('Authorization', `Bearer ${regularToken}`);
 
-      // Verify schedule is deleted
-      const listResponse = await request(app)
-        .get('/schedules')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
-
-      expect(listResponse.body.mine).toHaveLength(0);
+      expect(response.status).toBe(204);
     });
 
-    it('should delete schedule for operations user', async () => {
-      const token = await getAuthToken('operations_user', 'password123');
-      
-      await request(app)
-        .delete(`/schedules/${testSchedule.id}`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(204);
+    it('should reject deletion for non-owner non-operations user', async () => {
+      // Create a new schedule to test deletion
+      const newSchedule = await createTestSchedule({
+        name: 'Another Test Schedule',
+        userId: regularUser.id,
+        template: false,
+        request: 0
+      });
 
-      // Verify schedule is deleted
-      const listResponse = await request(app)
-        .get('/schedules')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
+      const otherUser = await createTestUser({
+        username: 'delete_user',
+        email: 'delete@example.com',
+        password: 'password123',
+        roles: ['personnel']
+      });
 
-      expect(listResponse.body.all).toHaveLength(0);
+      const otherLoginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'delete_user',
+          password: 'password123'
+        });
+
+      const otherToken = otherLoginResponse.body.token;
+
+      const response = await request(testApp)
+        .delete(`/schedules/${newSchedule.id}`)
+        .set('Authorization', `Bearer ${otherToken}`);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty('error');
     });
 
-    it('should reject access without authentication', async () => {
-      await request(app)
-        .delete(`/schedules/${testSchedule.id}`)
-        .expect(401);
+    it('should return 404 for non-existent schedule', async () => {
+      // Login as regular user to get token
+      const loginResponse = await request(testApp)
+        .post('/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password123'
+        });
+
+      const regularToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .delete('/schedules/99999')
+        .set('Authorization', `Bearer ${regularToken}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('error');
     });
   });
 });

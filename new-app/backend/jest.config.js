@@ -7,24 +7,40 @@ module.exports = {
     "^.+\\.ts$": "ts-jest",
   },
   moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
     "^@shared/(.*)$": "<rootDir>/../shared/src/$1",
   },
   setupFilesAfterEnv: ["<rootDir>/src/__tests__/setup.ts"],
-  collectCoverageFrom: [
-    "src/**/*.ts",
-    "!src/**/*.d.ts",
-    "!src/__tests__/**",
-    "!src/server.ts",
-    "!src/seed.ts",
-  ],
-  // Set test environment variables
   setupFiles: ["<rootDir>/src/__tests__/env.ts"],
-  // Global test timeout
-  testTimeout: 30000,
-  // Run tests in sequence to avoid database conflicts
-  maxWorkers: 1,
+
+  // Simple configuration for reliability
+  testTimeout: 15000, // 15 seconds per test
+  maxWorkers: 1, // Run tests sequentially to avoid database conflicts
+
   // Module resolution
   moduleDirectories: ["node_modules", "src"],
-  // Extensions
   moduleFileExtensions: ["ts", "js", "json"],
+
+  // Coverage
+  collectCoverageFrom: [
+    "src/**/*.{ts,tsx}",
+    "!src/**/*.d.ts",
+    "!src/**/__tests__/**",
+    "!src/**/index.ts",
+  ],
+
+  // Test isolation
+  clearMocks: true,
+  restoreMocks: true,
+  resetModules: false,
+
+  // Global test setup
+  globals: {
+    "ts-jest": {
+      tsconfig: "tsconfig.json",
+      diagnostics: {
+        ignoreCodes: [151001], // Ignore "esModuleInterop" warnings
+      },
+    },
+  },
 };
