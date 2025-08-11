@@ -6,7 +6,7 @@
     {"name":"email","type":"varchar(50)","nullable":false,"default":null,"notes":[]},
     {"name":"password","type":"varchar(30)","nullable":false,"default":null,"notes":[]}
   ],
-  "primary_key": ["UNKNOWN"],
+  "primary_key": ["id"],
   "unique_constraints": [],
   "indexes": [],
   "foreign_keys": [],

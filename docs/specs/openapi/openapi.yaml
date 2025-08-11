@@ -74,7 +74,7 @@ paths:
       description: |
         Clears the session. Legacy behavior redirects to referer.
 
-        Allowed roles: user
+        Allowed roles: logged_in
       security:
         - sessionCookieAuth: []
         - bearerAuth: []
@@ -126,7 +126,7 @@ paths:
         - sessionCookieAuth: []
         - bearerAuth: []
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       requestBody:
         required: true
         content:
@@ -328,6 +328,9 @@ paths:
       description: |
         Allowed roles: operations with conditions: schedule_owner and request_mode (legacy 'editable').
         Evidence: app_controller.php:263-267; controllers/people_controller.php:66-71
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -341,6 +344,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Person"
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /people/{id}:
     patch:
@@ -350,6 +365,9 @@ paths:
       description: |
         Allowed roles: operations.
         Evidence: controllers/people_controller.php:108-111
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -363,6 +381,18 @@ paths:
               $ref: "#/components/schemas/Person"
       responses:
         "200": { description: Updated }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /people/{id}/category:
     patch:
@@ -370,7 +400,10 @@ paths:
       operationId: people_updateCategory
       summary: Update PeopleSchedules entry for a person
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -387,6 +420,18 @@ paths:
                 notes: { type: string }
       responses:
         "200": { description: Updated }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /people/{id}/notes:
     patch:
@@ -394,7 +439,10 @@ paths:
       operationId: people_updateNotes
       summary: Update PeopleSchedules notes for a person
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -410,6 +458,18 @@ paths:
                 notes: { type: string }
       responses:
         "200": { description: Updated }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /people/{id}/retire:
     post:
@@ -417,7 +477,10 @@ paths:
       operationId: people_retire
       summary: Retire a person
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -425,6 +488,18 @@ paths:
           schema: { type: integer }
       responses:
         "200": { description: Retired }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /people/{id}/restore:
     post:
@@ -432,7 +507,10 @@ paths:
       operationId: people_restore
       summary: Restore a retired person with category
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -448,6 +526,18 @@ paths:
                 resident_category_id: { type: integer }
       responses:
         "200": { description: Restored }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /people/{id}/photo:
     post:
@@ -478,7 +568,10 @@ paths:
       operationId: areas_create
       summary: Create area
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -486,6 +579,18 @@ paths:
             schema: { $ref: "#/components/schemas/Area" }
       responses:
         "201": { description: Created }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /areas/{id}:
     patch:
@@ -493,7 +598,10 @@ paths:
       operationId: areas_update
       summary: Update area
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -506,12 +614,27 @@ paths:
             schema: { $ref: "#/components/schemas/Area" }
       responses:
         "200": { description: Updated }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       tags: [Areas]
       operationId: areas_delete
       summary: Delete area
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -519,6 +642,18 @@ paths:
           schema: { type: integer }
       responses:
         "204": { description: Deleted }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /areas/{id}/notes:
     patch:
@@ -526,7 +661,10 @@ paths:
       operationId: areas_updateNotes
       summary: Update area notes
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -542,6 +680,18 @@ paths:
                 notes: { type: string }
       responses:
         "200": { description: Updated }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /areas/clear:
     post:
@@ -549,7 +699,10 @@ paths:
       operationId: areas_clear
       summary: Clear area shifts
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -561,6 +714,18 @@ paths:
                 keep_shifts: { type: boolean }
       responses:
         "200": { description: Cleared }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /shifts:
     post:
@@ -568,7 +733,10 @@ paths:
       operationId: shifts_create
       summary: Create shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -608,7 +776,10 @@ paths:
       operationId: shifts_listBySlot
       summary: List shifts matching person/day/slot
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
         Filters are optional; when present they constrain the result.
       parameters:
         - in: query
@@ -656,7 +827,10 @@ paths:
       operationId: shifts_update
       summary: Update shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -701,7 +875,10 @@ paths:
       operationId: shifts_delete
       summary: Delete shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -734,7 +911,10 @@ paths:
       operationId: assignments_assign
       summary: Assign a person (or free-text) to a shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -795,7 +975,10 @@ paths:
       operationId: assignments_unassign
       summary: Remove an assignment
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -828,7 +1011,10 @@ paths:
       operationId: assignments_swap
       summary: Swap the person on an assignment
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -875,7 +1061,10 @@ paths:
       operationId: assignments_toggleStar
       summary: Toggle star flag
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -908,7 +1097,10 @@ paths:
       operationId: floatingShifts_create
       summary: Create floating shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -950,7 +1142,10 @@ paths:
       operationId: floatingShifts_update
       summary: Update floating shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -995,7 +1190,10 @@ paths:
       operationId: floatingShifts_delete
       summary: Delete floating shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -1028,7 +1226,10 @@ paths:
       operationId: constantShifts_create
       summary: Create constant shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1070,7 +1271,10 @@ paths:
       operationId: constantShifts_update
       summary: Update constant shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -1115,7 +1319,10 @@ paths:
       operationId: constantShifts_delete
       summary: Delete constant shift
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -1148,7 +1355,10 @@ paths:
       operationId: residentCategories_create
       summary: Create resident category
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1189,7 +1399,10 @@ paths:
       operationId: residentCategories_update
       summary: Update resident category
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
       requestBody:
@@ -1231,7 +1444,10 @@ paths:
       operationId: residentCategories_delete
       summary: Delete resident categories
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
@@ -1260,7 +1476,10 @@ paths:
       operationId: residentCategories_reorder
       summary: Reorder resident categories
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1305,7 +1524,10 @@ paths:
       operationId: boundaries_update
       summary: Update boundary times for schedule
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1360,7 +1582,10 @@ paths:
       operationId: offDays_toggle
       summary: Toggle an off-day for a person
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1407,7 +1632,10 @@ paths:
       operationId: changes_undo
       summary: Undo last change
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: Undone }
         "401":
@@ -1434,7 +1662,10 @@ paths:
       operationId: changes_redo
       summary: Redo change
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: Redone }
         "401":
@@ -1461,7 +1692,10 @@ paths:
       operationId: changes_jump
       summary: Jump to change id
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1508,6 +1742,9 @@ paths:
       description: |
         Allowed roles: operations; additionally allowed when request_mode is true.
         Evidence: controllers/changes_controller.php:18-21; app_controller.php:263-267
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: OK }
         "401":
@@ -1534,7 +1771,10 @@ paths:
       operationId: changes_timeSpent
       summary: Show time spent per user on changes
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: OK }
         "401":
@@ -1563,6 +1803,9 @@ paths:
       summary: List manager notes for areas
       description: |
         Allowed roles: manager
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: OK }
         "401":
@@ -1591,6 +1834,9 @@ paths:
       description: |
         Allowed roles: operations.
         Evidence: controllers/manager_notes_controller.php:6-9
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - { in: path, name: area_id, required: true, schema: { type: integer } }
       requestBody:
@@ -1637,7 +1883,10 @@ paths:
       operationId: personnelNotes_reorder
       summary: Reorder personnel notes (AJAX)
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1681,7 +1930,10 @@ paths:
       operationId: operationsNotes_reorder
       summary: Reorder operations notes (AJAX)
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1728,6 +1980,9 @@ paths:
       description: |
         Allowed roles: operations.
         Evidence: controllers/email_auths_controller.php:6-9; controllers/email_auths_controller.php:21-24
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
       requestBody:
@@ -1771,7 +2026,10 @@ paths:
       operationId: schedules_published
       summary: List published schedules
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: OK }
         "401":
@@ -1801,6 +2059,9 @@ paths:
       description: |
         Allowed roles: operations.
         Evidence: controllers/schedules_controller.php:10-13
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1846,7 +2107,10 @@ paths:
       operationId: schedules_merge
       summary: Merge another schedule into current
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1891,7 +2155,10 @@ paths:
       operationId: schedules_change
       summary: Change schedule effective date range
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1937,7 +2204,10 @@ paths:
       operationId: schedules_publish
       summary: Publish a schedule
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1983,6 +2253,9 @@ paths:
       description: |
         Allowed roles: operations.
         Evidence: controllers/schedules_controller.php:175-178
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2027,6 +2300,9 @@ paths:
       summary: Start a new request schedule for an area
       description: |
         Allowed roles: manager (manager_of_area condition)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2073,6 +2349,9 @@ paths:
       summary: Submit current request schedule
       description: |
         Allowed roles: manager (for last_area)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: Submitted }
         "401":
@@ -2099,11 +2378,14 @@ paths:
       operationId: schedules_viewRequest
       summary: View a request schedule
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       parameters:
         - in: query
           name: id
           schema: { type: integer }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: OK }
         "401":
@@ -2130,7 +2412,10 @@ paths:
       operationId: schedules_acceptRequest
       summary: Accept a request schedule (merge its area)
       description: |
-        Allowed roles: editable (legacy)
+        Allowed roles: operations AND (schedule_owner OR request_mode)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2176,9 +2461,12 @@ paths:
       operationId: scheduleGroups_select
       summary: Switch to first schedule in a group
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: Selected }
         "401":
@@ -2208,6 +2496,9 @@ paths:
         Allowed roles: manager (manager_of_area)
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2256,6 +2547,9 @@ paths:
       description: |
         Allowed roles: operations.
         Evidence: controllers/request_areas_controller.php:73-76
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: OK }
         "401":
@@ -2282,6 +2576,9 @@ paths:
       summary: Create or update request area
       description: |
         Allowed roles: manager (manager_of_area)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2325,6 +2622,9 @@ paths:
         Allowed roles: manager (manager_of_area)
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2368,6 +2668,9 @@ paths:
         Evidence: controllers/request_areas_controller.php:84-86
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "204": { description: Deleted }
         "401":
@@ -2397,6 +2700,9 @@ paths:
         Allowed roles: manager (manager_of_area)
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "200": { description: Submitted }
         "401":
@@ -2424,7 +2730,10 @@ paths:
       operationId: requestShifts_create
       summary: Create a requested shift
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2465,9 +2774,12 @@ paths:
       operationId: requestShifts_update
       summary: Update requested shift
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2507,9 +2819,12 @@ paths:
       operationId: requestShifts_delete
       summary: Delete requested shift
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "204": { description: Deleted }
         "401":
@@ -2537,7 +2852,10 @@ paths:
       operationId: requestAssignments_assign
       summary: Assign a person or name to a requested shift
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2584,9 +2902,12 @@ paths:
       operationId: requestAssignments_unassign
       summary: Remove a request assignment
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "204": { description: Deleted }
         "401":
@@ -2614,7 +2935,10 @@ paths:
       operationId: requestFloatingShifts_create
       summary: Create a requested floating shift
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2655,9 +2979,12 @@ paths:
       operationId: requestFloatingShifts_update
       summary: Update a requested floating shift
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -2697,9 +3024,12 @@ paths:
       operationId: requestFloatingShifts_delete
       summary: Delete a requested floating shift
       description: |
-        Allowed roles: user
+        Allowed roles: logged_in
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "204": { description: Deleted }
         "401":

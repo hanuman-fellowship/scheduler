@@ -11,7 +11,7 @@
     {"name":"hours","type":"double","nullable":true,"default":null,"notes":[]},
     {"name":"schedule_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
   ],
-  "primary_key": ["UNKNOWN"],
+  "primary_key": ["id"],
   "unique_constraints": [["schedule_id","id"]],
   "indexes": [["resident_category_id"],["day_id"]],
   "foreign_keys": [

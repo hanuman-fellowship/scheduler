@@ -7,7 +7,7 @@
     {"name":"undone","type":"tinyint(1)","nullable":false,"default":null,"notes":[]},
     {"name":"schedule_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
   ],
-  "primary_key": ["UNKNOWN"],
+  "primary_key": ["id"],
   "unique_constraints": [],
   "indexes": [["id"],["schedule_id"]],
   "foreign_keys": [

@@ -1,3 +1,4 @@
 {
-  "note": "already created"
+  "note": "already created",
+  "primary_key": ["id"]
 }
