@@ -14,9 +14,6 @@ servers:
   - url: /
     description: Default relative server (legacy app root)
 
-security:
-  - cookieAuth: []
-
 tags:
   - name: Auth
   - name: Users
@@ -73,8 +70,13 @@ paths:
         Clears the session. Legacy behavior redirects to referer.
 
         Allowed roles: user
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       responses:
         "204": { description: Logged out }
+        "401": { description: Unauthorized (not logged in) }
+        "403": { description: Forbidden (role disallowed) }
       x-legacy-note: Legacy UsersController::logout redirects (302).
 
   /auth/password/reset:
@@ -128,6 +130,9 @@ paths:
       summary: Create user
       description: |
         Allowed roles: UNKNOWN (operations in legacy)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -141,6 +146,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+        "401": { description: Unauthorized (not logged in) }
+        "403": { description: Forbidden (role disallowed) }
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       x-legacy-note: Legacy UsersController::add renders HTML and sends email.
 
   /users/{id}:
@@ -150,6 +163,9 @@ paths:
       summary: Update user and roles/areas
       description: |
         Allowed roles: UNKNOWN (operations in legacy)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -163,12 +179,23 @@ paths:
               $ref: "#/components/schemas/User"
       responses:
         "200": { description: Updated }
+        "401": { description: Unauthorized (not logged in) }
+        "403": { description: Forbidden (role disallowed) }
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       tags: [Users]
       operationId: users_delete
       summary: Delete user
       description: |
         Allowed roles: UNKNOWN (operations in legacy)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -176,6 +203,8 @@ paths:
           schema: { type: integer }
       responses:
         "204": { description: Deleted }
+        "401": { description: Unauthorized (not logged in) }
+        "403": { description: Forbidden (role disallowed) }
 
   /users/email:
     post:
@@ -184,6 +213,9 @@ paths:
       summary: Send email to selected users or areas
       description: |
         Allowed roles: UNKNOWN (operations in legacy)
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -197,6 +229,15 @@ paths:
                 message: { type: string }
       responses:
         "200": { description: Sent }
+        "401": { description: Unauthorized (not logged in) }
+        "403": { description: Forbidden (role disallowed) }
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      x-legacy-note: Legacy UsersController::email renders HTML form and sends emails.
 
   /people:
     post:
@@ -1304,12 +1345,26 @@ paths:
 
 components:
   securitySchemes:
-    cookieAuth:
+    sessionCookieAuth:
       type: apiKey
       in: cookie
       name: CAKEPHP
-      description: Legacy session cookie; name may differ in deployment (UNKNOWN).
+      description: Legacy session cookie; name may differ in deployment. Prefer this for compatibility with the legacy app.
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Optional JWT-based auth for the new build. If enabled, operations also accept a Bearer token.
   schemas:
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+        code: { type: string, nullable: true }
+        details:
+          type: object
+          additionalProperties: true
+      required: [message]
     Id:
       type: integer
       minimum: 1

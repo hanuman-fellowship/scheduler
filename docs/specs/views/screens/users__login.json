@@ -14,21 +14,42 @@
         },
         {
           "name": "password",
-          "type": "text",
+          "type": "password",
           "required": false,
           "default": null,
           "validation": []
         }
       ],
-      "submit_to": "UNKNOWN"
+      "submit_to": "POST /users/login"
     }
   ],
   "conditionals": [],
-  "messages": [],
+  "messages": [
+    {
+      "type": "error",
+      "text": "Unknown user or wrong password",
+      "displayed_in": "#error",
+      "when": "on failed login"
+    }
+  ],
   "navigation": {
-    "links": []
+    "links": [
+      {
+        "text": "Forgot Password",
+        "url": "/users/resetPassword",
+        "ajax": true,
+        "update": "dialog_content"
+      }
+    ]
   },
-  "ajax_calls": [],
+  "ajax_calls": [
+    {
+      "type": "form",
+      "target": "#dialog_content",
+      "method": "POST",
+      "url": "/users/login"
+    }
+  ],
   "partials_used": [
     "elements/message.ctp"
   ],
@@ -36,6 +57,14 @@
     {
       "file": "users/login.ctp",
       "lines": "1-21"
+    },
+    {
+      "file": "controllers/users_controller.php",
+      "lines": "7-17,30-31"
+    },
+    {
+      "file": "elements/message.ctp",
+      "lines": "6-11"
     }
   ]
 }

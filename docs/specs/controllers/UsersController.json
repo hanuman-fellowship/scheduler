@@ -33,25 +33,45 @@
       "purpose": "Operations create a new user and email credentials",
       "auth": ["operations"],
       "inputs": {"query": [], "form": ["User.*", "Area.area_id[]?", "Role.*?"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "validation": [
+        {"field": "User.username", "rule": "unique (model-level User::valid)", "message": "That username is taken"},
+        {"field": "User.area_id", "rule": "required if User.manager is truthy (model-level User::valid)", "message": "Please choose an area"},
+        {"field": "User.*", "rule": "must not be blank except 'operations' and 'manager' (model-level User::valid)"}
+      ],
       "queries": [
         {"model": "EmailAuth", "operation": "read id=1", "where": []},
         {"model": "User", "operation": "create/insert via sSave", "where": []}
       ],
-      "side_effects": ["sendEmail:new_user"],
+      "side_effects": [
+        "sendEmail:new_user (uses AppController::_sendEmail; SMTP defaults to EmailAuth id=2)",
+        "User roles/manager relations created via User::sSave"
+      ],
       "response": {"type": "html", "view": "views/users/add.ctp|added.ctp", "redirect": null, "status_codes": [200]},
-      "files_cited": [{"file": "controllers/users_controller.php", "lines": "41-69"}]
+      "files_cited": [
+        {"file": "controllers/users_controller.php", "lines": "41-69"},
+        {"file": "models/user.php", "lines": "27-52"},
+        {"file": "models/user.php", "lines": "54-91"},
+        {"file": "app_controller.php", "lines": "290-327"}
+      ]
     },
     {
       "name": "changePassword",
       "purpose": "Change the current user's password",
       "auth": ["login"],
-      "inputs": {"query": [], "form": ["User.old_password", "User.password", "User.password_confirm"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "User::changePassword"}],
+      "inputs": {"query": [], "form": ["User.old_password", "User.new_password", "User.retype"], "files": []},
+      "validation": [
+        {"field": "User.old_password", "rule": "must match current password (Authsome::get('password'))"},
+        {"field": "User.new_password/User.retype", "rule": "must match each other"},
+        {"field": "User.new_password", "rule": "must not be blank"}
+      ],
       "queries": [{"model": "User", "operation": "custom:changePassword", "where": []}],
-      "side_effects": [],
+      "side_effects": ["Password saved hashed via Authsome::hash"],
       "response": {"type": "html", "view": "views/users/change_password.ctp", "redirect": null, "status_codes": [200]},
-      "files_cited": [{"file": "controllers/users_controller.php", "lines": "71-80"}]
+      "files_cited": [
+        {"file": "controllers/users_controller.php", "lines": "71-80"},
+        {"file": "models/user.php", "lines": "157-179"},
+        {"file": "controllers/components/authsome.php", "lines": "228-230"}
+      ]
     },
     {
       "name": "resetPassword",
@@ -62,11 +82,15 @@
       "queries": [
         {"model": "User", "operation": "findByEmail", "where": ["email"]},
         {"model": "EmailAuth", "operation": "read id=1", "where": []},
-        {"model": "User", "operation": "update password hashed", "where": ["id"]}
+        {"model": "User", "operation": "update password hashed (Authsome::hash)", "where": ["id"]}
       ],
       "side_effects": ["sendEmail:reset_password"],
       "response": {"type": "html", "view": "views/users/reset_password.ctp", "redirect": null, "status_codes": [200]},
-      "files_cited": [{"file": "controllers/users_controller.php", "lines": "96-126"}]
+      "files_cited": [
+        {"file": "controllers/users_controller.php", "lines": "96-126"},
+        {"file": "controllers/components/authsome.php", "lines": "228-230"},
+        {"file": "app_controller.php", "lines": "290-327"}
+      ]
     },
     {
       "name": "delete",
@@ -74,25 +98,40 @@
       "auth": ["operations"],
       "inputs": {"query": ["id?"], "form": [], "files": []},
       "validation": [],
-      "queries": [{"model": "User", "operation": "delete via sDelete or list", "where": ["id?", "exclude current user"]}],
+      "queries": [{"model": "User", "operation": "delete via sDelete (also removes related Settings, Roles, Managers, Schedules)", "where": ["id?", "exclude current user"]}],
       "side_effects": ["redirect to referer"],
       "response": {"type": "html", "view": "views/users/delete.ctp", "redirect": null, "status_codes": [200,302]},
-      "files_cited": [{"file": "controllers/users_controller.php", "lines": "129-142"}]
+      "files_cited": [
+        {"file": "controllers/users_controller.php", "lines": "129-142"},
+        {"file": "models/user.php", "lines": "107-127"}
+      ]
     },
     {
       "name": "edit",
       "purpose": "Operations edit a user and roles/areas",
       "auth": ["operations"],
       "inputs": {"query": ["id?"], "form": ["User.*", "Role.*?", "Area.area_id[]?"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "validation": [
+        {"field": "User.username", "rule": "unique (model-level User::valid) when changing username"},
+        {"field": "User.area_id", "rule": "required if User.manager is truthy (model-level User::valid)"},
+        {"field": "User.*", "rule": "must not be blank except 'operations' and 'manager' (model-level User::valid)"}
+      ],
       "queries": [
         {"model": "User", "operation": "read/edit method or list", "where": ["id?"]},
         {"model": "User", "operation": "update via sSave", "where": ["id"]},
         {"model": "Area", "operation": "list", "where": []}
       ],
-      "side_effects": ["Authsome::login('update') if editing self"],
+      "side_effects": [
+        "Authsome::login('update') if editing self",
+        "If editing self, controller forces User.operations=true before save",
+        "User roles/manager relations updated via User::sSave"
+      ],
       "response": {"type": "html", "view": "views/users/edit.ctp|select_edit.ctp", "redirect": null, "status_codes": [200]},
-      "files_cited": [{"file": "controllers/users_controller.php", "lines": "144-169"}]
+      "files_cited": [
+        {"file": "controllers/users_controller.php", "lines": "144-169"},
+        {"file": "models/user.php", "lines": "27-52"},
+        {"file": "models/user.php", "lines": "54-91"}
+      ]
     },
     {
       "name": "emailUsers",
