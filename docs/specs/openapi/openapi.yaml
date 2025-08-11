@@ -1,0 +1,1463 @@
+openapi: 3.1.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+info:
+  title: Scheduler API (Synthesis)
+  version: 0.1.0-synth
+  description: |
+    Synthethic OpenAPI 3.1 document derived from the project's specs (controllers, ERD, routes, roles matrix, and screens).
+
+    Notes:
+    - This describes a JSON API representation of legacy CakePHP actions. Where the legacy app returns HTML pages or redirects, those are noted via x-legacy-note and in descriptions.
+    - Roles are annotated from docs/specs/auth/roles-matrix.json. Where roles/conditions were unclear they are marked UNKNOWN.
+    - Schemas were inferred from docs/specs/data-model/erd.json and may omit fields not evidenced; such fields are marked UNKNOWN in descriptions.
+servers:
+  - url: /
+    description: Default relative server (legacy app root)
+
+security:
+  - cookieAuth: []
+
+tags:
+  - name: Auth
+  - name: Users
+  - name: People
+  - name: Areas
+  - name: Shifts
+  - name: Assignments
+  - name: Schedules
+  - name: ScheduleGroups
+  - name: Requests
+  - name: Categories
+  - name: Notes
+  - name: Boundaries
+  - name: OffDays
+  - name: Changes
+  - name: EmailAuths
+
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      operationId: auth_login
+      summary: Login with username/password
+      description: |
+        Authenticate a user. Legacy behavior renders HTML and sets session; this JSON API returns the authenticated user.
+
+        Allowed roles: public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: { type: string }
+                password: { type: string, format: password }
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401": { description: Invalid credentials }
+      x-legacy-note: Legacy UsersController::login returns HTML view and sets session.
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      operationId: auth_logout
+      summary: Logout current user
+      description: |
+        Clears the session. Legacy behavior redirects to referer.
+
+        Allowed roles: user
+      responses:
+        "204": { description: Logged out }
+      x-legacy-note: Legacy UsersController::logout redirects (302).
+
+  /auth/password/reset:
+    post:
+      tags: [Auth]
+      operationId: auth_resetPassword
+      summary: Reset password via email
+      description: |
+        Sends a reset email and sets a new password.
+
+        Allowed roles: public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        "200": { description: Reset initiated }
+      x-legacy-note: Legacy UsersController::resetPassword renders HTML.
+
+  /auth/password/change:
+    post:
+      tags: [Auth]
+      operationId: auth_changePassword
+      summary: Change password for current user
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [old_password, password]
+              properties:
+                old_password: { type: string }
+                password: { type: string }
+                password_confirm: { type: string }
+      responses:
+        "200": { description: Password changed }
+      x-legacy-note: Legacy UsersController::changePassword renders HTML.
+
+  /users:
+    post:
+      tags: [Users]
+      operationId: users_create
+      summary: Create user
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+      x-legacy-note: Legacy UsersController::add renders HTML and sends email.
+
+  /users/{id}:
+    patch:
+      tags: [Users]
+      operationId: users_update
+      summary: Update user and roles/areas
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Users]
+      operationId: users_delete
+      summary: Delete user
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: Deleted }
+
+  /users/email:
+    post:
+      tags: [Users]
+      operationId: users_email
+      summary: Send email to selected users or areas
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toUserIds: { type: array, items: { type: integer } }
+                toAreaIds: { type: array, items: { type: integer } }
+                subject: { type: string }
+                message: { type: string }
+      responses:
+        "200": { description: Sent }
+
+  /people:
+    post:
+      tags: [People]
+      operationId: people_create
+      summary: Create person
+      description: |
+        Allowed roles: editable (schedule_owner AND request_mode) in legacy; treated as UNKNOWN here.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Person"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Person"
+
+  /people/{id}:
+    patch:
+      tags: [People]
+      operationId: people_update
+      summary: Update person
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Person"
+      responses:
+        "200": { description: Updated }
+
+  /people/{id}/category:
+    patch:
+      tags: [People]
+      operationId: people_updateCategory
+      summary: Update PeopleSchedules entry for a person
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resident_category_id: { type: integer }
+                notes: { type: string }
+      responses:
+        "200": { description: Updated }
+
+  /people/{id}/notes:
+    patch:
+      tags: [People]
+      operationId: people_updateNotes
+      summary: Update PeopleSchedules notes for a person
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes: { type: string }
+      responses:
+        "200": { description: Updated }
+
+  /people/{id}/retire:
+    post:
+      tags: [People]
+      operationId: people_retire
+      summary: Retire a person
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Retired }
+
+  /people/{id}/restore:
+    post:
+      tags: [People]
+      operationId: people_restore
+      summary: Restore a retired person with category
+      description: |
+        Allowed roles: user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resident_category_id: { type: integer }
+      responses:
+        "200": { description: Restored }
+
+  /people/{id}/photo:
+    post:
+      tags: [People]
+      operationId: people_uploadPhoto
+      summary: Upload/replace profile photo
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200": { description: Uploaded }
+      x-legacy-note: Legacy PeopleController::upload expects field name "Filedata" and returns text.
+
+  /areas:
+    post:
+      tags: [Areas]
+      operationId: areas_create
+      summary: Create area
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Area" }
+      responses:
+        "201": { description: Created }
+
+  /areas/{id}:
+    patch:
+      tags: [Areas]
+      operationId: areas_update
+      summary: Update area
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Area" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Areas]
+      operationId: areas_delete
+      summary: Delete area
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: Deleted }
+
+  /areas/{id}/notes:
+    patch:
+      tags: [Areas]
+      operationId: areas_updateNotes
+      summary: Update area notes
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes: { type: string }
+      responses:
+        "200": { description: Updated }
+
+  /areas/clear:
+    post:
+      tags: [Areas]
+      operationId: areas_clear
+      summary: Clear area shifts
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                area_ids: { type: array, items: { type: integer } }
+                keep_shifts: { type: boolean }
+      responses:
+        "200": { description: Cleared }
+
+  /shifts:
+    post:
+      tags: [Shifts]
+      operationId: shifts_create
+      summary: Create shift
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Shift" }
+      responses:
+        "201": { description: Created }
+    get:
+      tags: [Shifts]
+      operationId: shifts_listBySlot
+      summary: List shifts matching person/day/slot
+      description: |
+        Allowed roles: user
+        Filters are optional; when present they constrain the result.
+      parameters:
+        - in: query
+          name: person_id
+          schema: { type: integer }
+        - in: query
+          name: day_id
+          schema: { type: integer }
+        - in: query
+          name: start
+          schema: { type: string, pattern: "^[0-2][0-9]:[0-5][0-9]$" }
+        - in: query
+          name: end
+          schema: { type: string, pattern: "^[0-2][0-9]:[0-5][0-9]$" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Shift" }
+
+  /shifts/{id}:
+    patch:
+      tags: [Shifts]
+      operationId: shifts_update
+      summary: Update shift
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Shift" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Shifts]
+      operationId: shifts_delete
+      summary: Delete shift
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: Deleted }
+
+  /assignments:
+    post:
+      tags: [Assignments]
+      operationId: assignments_assign
+      summary: Assign a person (or free-text) to a shift
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [shift_id]
+              properties:
+                shift_id: { type: integer }
+                person_id: { type: integer, nullable: true }
+                name:
+                  {
+                    type: string,
+                    nullable: true,
+                    description: "Free-text name when not a person",
+                  }
+      responses:
+        "201":
+          {
+            description: Created,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Assignment" } },
+              },
+          }
+
+  /assignments/{id}:
+    delete:
+      tags: [Assignments]
+      operationId: assignments_unassign
+      summary: Remove an assignment
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: Deleted }
+
+  /assignments/swap:
+    post:
+      tags: [Assignments]
+      operationId: assignments_swap
+      summary: Swap the person on an assignment
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [assignment_id, person_id]
+              properties:
+                assignment_id: { type: integer }
+                person_id: { type: integer }
+      responses:
+        "200": { description: Swapped }
+
+  /assignments/{id}/star:
+    post:
+      tags: [Assignments]
+      operationId: assignments_toggleStar
+      summary: Toggle star flag
+      description: |
+        Allowed roles: user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Toggled }
+
+  /floating-shifts:
+    post:
+      tags: [Shifts]
+      operationId: floatingShifts_create
+      summary: Create floating shift
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestFloatingShift" }
+      responses:
+        "201": { description: Created }
+
+  /floating-shifts/{id}:
+    patch:
+      tags: [Shifts]
+      operationId: floatingShifts_update
+      summary: Update floating shift
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestFloatingShift" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Shifts]
+      operationId: floatingShifts_delete
+      summary: Delete floating shift
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: Deleted }
+
+  /constant-shifts:
+    post:
+      tags: [Shifts]
+      operationId: constantShifts_create
+      summary: Create constant shift
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConstantShift" }
+      responses:
+        "201": { description: Created }
+
+  /constant-shifts/{id}:
+    patch:
+      tags: [Shifts]
+      operationId: constantShifts_update
+      summary: Update constant shift
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConstantShift" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Shifts]
+      operationId: constantShifts_delete
+      summary: Delete constant shift
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: Deleted }
+
+  /resident-categories:
+    post:
+      tags: [Categories]
+      operationId: residentCategories_create
+      summary: Create resident category
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ResidentCategory" }
+      responses:
+        "201": { description: Created }
+  /resident-categories/{id}:
+    patch:
+      tags: [Categories]
+      operationId: residentCategories_update
+      summary: Update resident category
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ResidentCategory" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Categories]
+      operationId: residentCategories_delete
+      summary: Delete resident categories
+      description: |
+        Allowed roles: editable (legacy)
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      responses:
+        "204": { description: Deleted }
+  /resident-categories/reorder:
+    post:
+      tags: [Categories]
+      operationId: residentCategories_reorder
+      summary: Reorder resident categories
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category_ids_order: { type: array, items: { type: integer } }
+      responses:
+        "200": { description: Reordered }
+
+  /boundaries:
+    patch:
+      tags: [Boundaries]
+      operationId: boundaries_update
+      summary: Update boundary times for schedule
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: UNKNOWN. Provide schedule_id and an array of boundary entries.
+              properties:
+                schedule_id: { type: integer }
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day_id: { type: integer }
+                      slot_id: { type: integer }
+                      start: { type: string }
+                      end: { type: string }
+      responses:
+        "200": { description: Updated }
+
+  /off-days/toggle:
+    post:
+      tags: [OffDays]
+      operationId: offDays_toggle
+      summary: Toggle an off-day for a person
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [person_id, day_id]
+              properties:
+                person_id: { type: integer }
+                day_id: { type: integer }
+      responses:
+        "200": { description: Toggled }
+
+  /changes/undo:
+    post:
+      tags: [Changes]
+      operationId: changes_undo
+      summary: Undo last change
+      description: |
+        Allowed roles: editable (legacy)
+      responses:
+        "200": { description: Undone }
+  /changes/redo:
+    post:
+      tags: [Changes]
+      operationId: changes_redo
+      summary: Redo change
+      description: |
+        Allowed roles: editable (legacy)
+      responses:
+        "200": { description: Redone }
+  /changes/jump:
+    post:
+      tags: [Changes]
+      operationId: changes_jump
+      summary: Jump to change id
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id: { type: integer }
+      responses:
+        "200": { description: Jumped }
+  /changes/history:
+    get:
+      tags: [Changes]
+      operationId: changes_history
+      summary: List change history
+      description: |
+        Allowed roles: UNKNOWN (operations or request==2)
+      responses:
+        "200": { description: OK }
+  /changes/time-spent:
+    get:
+      tags: [Changes]
+      operationId: changes_timeSpent
+      summary: Show time spent per user on changes
+      description: |
+        Allowed roles: user
+      responses:
+        "200": { description: OK }
+
+  /manager-notes:
+    get:
+      tags: [Notes]
+      operationId: managerNotes_list
+      summary: List manager notes for areas
+      description: |
+        Allowed roles: manager
+      responses:
+        "200": { description: OK }
+  /manager-notes/{area_id}:
+    patch:
+      tags: [Notes]
+      operationId: managerNotes_update
+      summary: Update manager notes for area
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      parameters:
+        - { in: path, name: area_id, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note: { type: string }
+      responses:
+        "200": { description: Updated }
+
+  /personnel-notes/reorder:
+    post:
+      tags: [Notes]
+      operationId: personnelNotes_reorder
+      summary: Reorder personnel notes (AJAX)
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note_ids_order: { type: array, items: { type: integer } }
+      responses:
+        "200": { description: OK }
+  /operations-notes/reorder:
+    post:
+      tags: [Notes]
+      operationId: operationsNotes_reorder
+      summary: Reorder operations notes (AJAX)
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note_ids_order: { type: array, items: { type: integer } }
+      responses:
+        "200": { description: OK }
+
+  /email-auths/{id}:
+    patch:
+      tags: [EmailAuths]
+      operationId: emailAuths_update
+      summary: Update SMTP credentials
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/EmailAuth" }
+      responses:
+        "200": { description: Updated }
+
+  /schedules/published:
+    get:
+      tags: [Schedules]
+      operationId: schedules_published
+      summary: List published schedules
+      description: |
+        Allowed roles: user
+      responses:
+        "200": { description: OK }
+
+  /schedules/actions/copy:
+    post:
+      tags: [Schedules]
+      operationId: schedules_copy
+      summary: Copy a schedule
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_id: { type: integer }
+                name: { type: string }
+                target_schedule_id: { type: integer, nullable: true }
+      responses:
+        "200": { description: Copied }
+  /schedules/actions/merge:
+    post:
+      tags: [Schedules]
+      operationId: schedules_merge
+      summary: Merge another schedule into current
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_id: { type: integer }
+                choices: { type: object, additionalProperties: true }
+      responses:
+        "200": { description: Merged }
+  /schedules/actions/change:
+    post:
+      tags: [Schedules]
+      operationId: schedules_change
+      summary: Change schedule effective date range
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schedule_id: { type: integer }
+                start: { type: string, format: date-time }
+                end: { type: string, format: date-time }
+      responses:
+        "200": { description: Changed }
+  /schedules/actions/publish:
+    post:
+      tags: [Schedules]
+      operationId: schedules_publish
+      summary: Publish a schedule
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schedule_id: { type: integer }
+      responses:
+        "200": { description: Published }
+  /schedules/actions/template:
+    post:
+      tags: [Schedules]
+      operationId: schedules_template
+      summary: Create a schedule template from current
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+      responses:
+        "200": { description: Templated }
+  /schedules/requests/new:
+    post:
+      tags: [Schedules]
+      operationId: schedules_newRequest
+      summary: Start a new request schedule for an area
+      description: |
+        Allowed roles: manager (manager_of_area condition)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                area_id: { type: integer }
+                name: { type: string }
+                based_on_schedule_id: { type: integer, nullable: true }
+      responses:
+        "201": { description: Created }
+  /schedules/requests/submit:
+    post:
+      tags: [Schedules]
+      operationId: schedules_submitRequest
+      summary: Submit current request schedule
+      description: |
+        Allowed roles: manager (for last_area)
+      responses:
+        "200": { description: Submitted }
+  /schedules/requests/view:
+    get:
+      tags: [Schedules]
+      operationId: schedules_viewRequest
+      summary: View a request schedule
+      description: |
+        Allowed roles: user
+      parameters:
+        - in: query
+          name: id
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+  /schedules/requests/accept:
+    post:
+      tags: [Schedules]
+      operationId: schedules_acceptRequest
+      summary: Accept a request schedule (merge its area)
+      description: |
+        Allowed roles: editable (legacy)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id: { type: integer }
+      responses:
+        "200": { description: Accepted }
+
+  /schedule-groups/{id}/select:
+    post:
+      tags: [ScheduleGroups]
+      operationId: scheduleGroups_select
+      summary: Switch to first schedule in a group
+      description: |
+        Allowed roles: user
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      responses:
+        "200": { description: Selected }
+  /schedule-groups/{id}/requests/new:
+    post:
+      tags: [ScheduleGroups]
+      operationId: scheduleGroups_newRequest
+      summary: Create a new request schedule in group
+      description: |
+        Allowed roles: manager (manager_of_area)
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [area_id, name]
+              properties:
+                area_id: { type: integer }
+                name: { type: string }
+      responses:
+        "201": { description: Created }
+
+  /request-areas:
+    get:
+      tags: [Requests]
+      operationId: requestAreas_list
+      summary: List request areas (filterable)
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy for viewing via select)
+      responses:
+        "200": { description: OK }
+    post:
+      tags: [Requests]
+      operationId: requestAreas_create
+      summary: Create or update request area
+      description: |
+        Allowed roles: manager (manager_of_area)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestArea" }
+      responses:
+        "201": { description: Created }
+  /request-areas/{id}:
+    patch:
+      tags: [Requests]
+      operationId: requestAreas_update
+      summary: Update request area
+      description: |
+        Allowed roles: manager (manager_of_area)
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestArea" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Requests]
+      operationId: requestAreas_delete
+      summary: Delete request areas
+      description: |
+        Allowed roles: UNKNOWN (operations in legacy)
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      responses:
+        "204": { description: Deleted }
+  /request-areas/{id}/submit:
+    post:
+      tags: [Requests]
+      operationId: requestAreas_submit
+      summary: Submit a request area
+      description: |
+        Allowed roles: manager (manager_of_area)
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      responses:
+        "200": { description: Submitted }
+
+  /request-shifts:
+    post:
+      tags: [Requests]
+      operationId: requestShifts_create
+      summary: Create a requested shift
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestShift" }
+      responses:
+        "201": { description: Created }
+  /request-shifts/{id}:
+    patch:
+      tags: [Requests]
+      operationId: requestShifts_update
+      summary: Update requested shift
+      description: |
+        Allowed roles: user
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestShift" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Requests]
+      operationId: requestShifts_delete
+      summary: Delete requested shift
+      description: |
+        Allowed roles: user
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      responses:
+        "204": { description: Deleted }
+
+  /request-assignments:
+    post:
+      tags: [Requests]
+      operationId: requestAssignments_assign
+      summary: Assign a person or name to a requested shift
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [request_shift_id]
+              properties:
+                request_shift_id: { type: integer }
+                person_id: { type: integer, nullable: true }
+                name: { type: string, nullable: true }
+      responses:
+        "201": { description: Created }
+  /request-assignments/{id}:
+    delete:
+      tags: [Requests]
+      operationId: requestAssignments_unassign
+      summary: Remove a request assignment
+      description: |
+        Allowed roles: user
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      responses:
+        "204": { description: Deleted }
+
+  /request-floating-shifts:
+    post:
+      tags: [Requests]
+      operationId: requestFloatingShifts_create
+      summary: Create a requested floating shift
+      description: |
+        Allowed roles: user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestFloatingShift" }
+      responses:
+        "201": { description: Created }
+  /request-floating-shifts/{id}:
+    patch:
+      tags: [Requests]
+      operationId: requestFloatingShifts_update
+      summary: Update a requested floating shift
+      description: |
+        Allowed roles: user
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RequestFloatingShift" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      tags: [Requests]
+      operationId: requestFloatingShifts_delete
+      summary: Delete a requested floating shift
+      description: |
+        Allowed roles: user
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: integer } }
+      responses:
+        "204": { description: Deleted }
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: CAKEPHP
+      description: Legacy session cookie; name may differ in deployment (UNKNOWN).
+  schemas:
+    Id:
+      type: integer
+      minimum: 1
+    Person:
+      type: object
+      description: Person record; non-evidenced fields are UNKNOWN.
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        first: { type: string }
+        last: { type: string }
+        display_name: { type: string }
+        resident_category_id: { type: integer, nullable: true }
+        notes: { type: string, nullable: true }
+      required: [first, last]
+    User:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        username: { type: string, nullable: true }
+        email: { type: string, nullable: true }
+        roles:
+          type: array
+          items: { $ref: "#/components/schemas/Role" }
+        notes: { type: string, nullable: true }
+      required: []
+    Role:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        user_id: { type: integer }
+        name:
+          {
+            type: string,
+            description: "Known: operations, manager, personnel; others UNKNOWN",
+          }
+    Area:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        name: { type: string }
+        short_name: { type: string, nullable: true }
+        manager: { type: string, nullable: true }
+        notes: { type: string, nullable: true }
+        schedule_id: { type: integer }
+      required: [name, schedule_id]
+    Shift:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        area_id: { type: integer }
+        day_id: { type: integer }
+        start: { type: string, pattern: "^[0-2][0-9]:[0-5][0-9]$" }
+        end: { type: string, pattern: "^[0-2][0-9]:[0-5][0-9]$" }
+        num_people: { type: integer }
+        schedule_id: { type: integer }
+      required: [area_id, day_id, start, end, num_people, schedule_id]
+    Assignment:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        person_id: { type: integer, nullable: true }
+        name: { type: string, nullable: true }
+        shift_id: { type: integer }
+        star: { type: integer, minimum: 0, maximum: 9, nullable: true }
+        schedule_id: { type: integer }
+      required: [shift_id]
+    Schedule:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        name: { type: string }
+        user_id: { type: integer, nullable: true }
+        updated: { type: string, format: date-time, nullable: true }
+        parent_id: { type: integer, nullable: true }
+        schedule_group_id: { type: integer }
+        request:
+          {
+            type: integer,
+            enum: [0, 1, 2],
+            description: "UNKNOWN semantics inferred: 0=normal, 1=submitted, 2=in-progress",
+          }
+        template: { type: integer, nullable: true }
+      required: [name, schedule_group_id]
+    RequestArea:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        name: { type: string }
+        manager: { type: string }
+        notes: { type: string }
+      required: [name]
+    RequestShift:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        request_area_id: { type: integer }
+        day_id: { type: integer }
+        start: { type: string }
+        end: { type: string }
+        num_people: { type: integer }
+      required: [request_area_id, day_id, start, end, num_people]
+    RequestAssignment:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        person_id: { type: integer, nullable: true }
+        request_shift_id: { type: integer }
+        name: { type: string, nullable: true }
+      required: [request_shift_id]
+    RequestFloatingShift:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        person_id: { type: integer }
+        request_area_id: { type: integer }
+        hours: { type: number }
+        note: { type: string }
+      required: [person_id, request_area_id, hours]
+    ConstantShift:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        resident_category_id: { type: integer }
+        day_id: { type: integer }
+        name: { type: string }
+        start: { type: string }
+        end: { type: string }
+        specify_hours: { type: integer }
+        hours: { type: number, nullable: true }
+        schedule_id: { type: integer }
+      required: [resident_category_id, day_id, name, start, end, schedule_id]
+    ResidentCategory:
+      type: object
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        name: { type: string }
+        color: { type: string }
+        sort_order: { type: integer }
+        schedule_id: { type: integer }
+      required: [name, color, sort_order, schedule_id]
+    EmailAuth:
+      type: object
+      description: SMTP credentials; exposure here is only for administrative update flows.
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        name: { type: string, nullable: true }
+        email: { type: string }
+        password: { type: string }
+      required: [email, password]
+
+x-legacy-note: This specification was synthesized; unknowns are explicitly labeled and should be validated against runtime behavior.
