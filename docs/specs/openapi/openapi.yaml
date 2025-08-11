@@ -31,12 +31,17 @@ tags:
   - name: Changes
   - name: EmailAuths
 
+security:
+  - sessionCookieAuth: []
+  - bearerAuth: []
+
 paths:
   /auth/login:
     post:
       tags: [Auth]
       operationId: auth_login
       summary: Login with username/password
+      security: []
       description: |
         Authenticate a user. Legacy behavior renders HTML and sets session; this JSON API returns the authenticated user.
 
@@ -75,8 +80,18 @@ paths:
         - bearerAuth: []
       responses:
         "204": { description: Logged out }
-        "401": { description: Unauthorized (not logged in) }
-        "403": { description: Forbidden (role disallowed) }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       x-legacy-note: Legacy UsersController::logout redirects (302).
 
   /auth/password/reset:
@@ -84,6 +99,7 @@ paths:
       tags: [Auth]
       operationId: auth_resetPassword
       summary: Reset password via email
+      security: []
       description: |
         Sends a reset email and sets a new password.
 
@@ -106,6 +122,9 @@ paths:
       tags: [Auth]
       operationId: auth_changePassword
       summary: Change password for current user
+      security:
+        - sessionCookieAuth: []
+        - bearerAuth: []
       description: |
         Allowed roles: user
       requestBody:
@@ -121,6 +140,24 @@ paths:
                 password_confirm: { type: string }
       responses:
         "200": { description: Password changed }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       x-legacy-note: Legacy UsersController::changePassword renders HTML.
 
   /users:
@@ -129,7 +166,8 @@ paths:
       operationId: users_create
       summary: Create user
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/users_controller.php:41-49
       security:
         - sessionCookieAuth: []
         - bearerAuth: []
@@ -146,8 +184,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-        "401": { description: Unauthorized (not logged in) }
-        "403": { description: Forbidden (role disallowed) }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "422":
           description: Validation error
           content:
@@ -162,7 +210,8 @@ paths:
       operationId: users_update
       summary: Update user and roles/areas
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/users_controller.php:144-149
       security:
         - sessionCookieAuth: []
         - bearerAuth: []
@@ -179,8 +228,18 @@ paths:
               $ref: "#/components/schemas/User"
       responses:
         "200": { description: Updated }
-        "401": { description: Unauthorized (not logged in) }
-        "403": { description: Forbidden (role disallowed) }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "422":
           description: Validation error
           content:
@@ -192,7 +251,8 @@ paths:
       operationId: users_delete
       summary: Delete user
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/users_controller.php:129-134
       security:
         - sessionCookieAuth: []
         - bearerAuth: []
@@ -203,8 +263,18 @@ paths:
           schema: { type: integer }
       responses:
         "204": { description: Deleted }
-        "401": { description: Unauthorized (not logged in) }
-        "403": { description: Forbidden (role disallowed) }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /users/email:
     post:
@@ -212,7 +282,8 @@ paths:
       operationId: users_email
       summary: Send email to selected users or areas
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/users_controller.php:171-176
       security:
         - sessionCookieAuth: []
         - bearerAuth: []
@@ -229,8 +300,18 @@ paths:
                 message: { type: string }
       responses:
         "200": { description: Sent }
-        "401": { description: Unauthorized (not logged in) }
-        "403": { description: Forbidden (role disallowed) }
+        "401":
+          description: Unauthorized (not logged in)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden (role disallowed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "422":
           description: Validation error
           content:
@@ -245,7 +326,8 @@ paths:
       operationId: people_create
       summary: Create person
       description: |
-        Allowed roles: editable (schedule_owner AND request_mode) in legacy; treated as UNKNOWN here.
+        Allowed roles: operations with conditions: schedule_owner and request_mode (legacy 'editable').
+        Evidence: app_controller.php:263-267; controllers/people_controller.php:66-71
       requestBody:
         required: true
         content:
@@ -266,7 +348,8 @@ paths:
       operationId: people_update
       summary: Update person
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/people_controller.php:108-111
       parameters:
         - in: path
           name: id
@@ -371,8 +454,9 @@ paths:
       tags: [People]
       operationId: people_uploadPhoto
       summary: Upload/replace profile photo
+      security: []
       description: |
-        Allowed roles: user
+        Allowed roles: guest (legacy People.upload)
       requestBody:
         required: true
         content:
@@ -492,6 +576,33 @@ paths:
             schema: { $ref: "#/components/schemas/Shift" }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     get:
       tags: [Shifts]
       operationId: shifts_listBySlot
@@ -520,6 +631,24 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/Shift" }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /shifts/{id}:
     patch:
@@ -540,6 +669,33 @@ paths:
             schema: { $ref: "#/components/schemas/Shift" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     delete:
       tags: [Shifts]
       operationId: shifts_delete
@@ -553,6 +709,24 @@ paths:
           schema: { type: integer }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /assignments:
     post:
@@ -587,6 +761,33 @@ paths:
                   { schema: { $ref: "#/components/schemas/Assignment" } },
               },
           }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /assignments/{id}:
     delete:
@@ -602,6 +803,24 @@ paths:
           schema: { type: integer }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /assignments/swap:
     post:
@@ -622,6 +841,33 @@ paths:
                 person_id: { type: integer }
       responses:
         "200": { description: Swapped }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /assignments/{id}/star:
     post:
@@ -637,6 +883,24 @@ paths:
           schema: { type: integer }
       responses:
         "200": { description: Toggled }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /floating-shifts:
     post:
@@ -652,6 +916,33 @@ paths:
             schema: { $ref: "#/components/schemas/RequestFloatingShift" }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /floating-shifts/{id}:
     patch:
@@ -672,6 +963,33 @@ paths:
             schema: { $ref: "#/components/schemas/RequestFloatingShift" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     delete:
       tags: [Shifts]
       operationId: floatingShifts_delete
@@ -685,6 +1003,24 @@ paths:
           schema: { type: integer }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /constant-shifts:
     post:
@@ -700,6 +1036,33 @@ paths:
             schema: { $ref: "#/components/schemas/ConstantShift" }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /constant-shifts/{id}:
     patch:
@@ -720,6 +1083,33 @@ paths:
             schema: { $ref: "#/components/schemas/ConstantShift" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     delete:
       tags: [Shifts]
       operationId: constantShifts_delete
@@ -733,6 +1123,24 @@ paths:
           schema: { type: integer }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /resident-categories:
     post:
@@ -748,6 +1156,33 @@ paths:
             schema: { $ref: "#/components/schemas/ResidentCategory" }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /resident-categories/{id}:
     patch:
       tags: [Categories]
@@ -764,6 +1199,33 @@ paths:
             schema: { $ref: "#/components/schemas/ResidentCategory" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     delete:
       tags: [Categories]
       operationId: residentCategories_delete
@@ -774,6 +1236,24 @@ paths:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /resident-categories/reorder:
     post:
       tags: [Categories]
@@ -791,6 +1271,33 @@ paths:
                 category_ids_order: { type: array, items: { type: integer } }
       responses:
         "200": { description: Reordered }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /boundaries:
     patch:
@@ -819,6 +1326,33 @@ paths:
                       end: { type: string }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /off-days/toggle:
     post:
@@ -839,6 +1373,33 @@ paths:
                 day_id: { type: integer }
       responses:
         "200": { description: Toggled }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /changes/undo:
     post:
@@ -849,6 +1410,24 @@ paths:
         Allowed roles: editable (legacy)
       responses:
         "200": { description: Undone }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /changes/redo:
     post:
       tags: [Changes]
@@ -858,6 +1437,24 @@ paths:
         Allowed roles: editable (legacy)
       responses:
         "200": { description: Redone }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /changes/jump:
     post:
       tags: [Changes]
@@ -876,15 +1473,61 @@ paths:
                 id: { type: integer }
       responses:
         "200": { description: Jumped }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /changes/history:
     get:
       tags: [Changes]
       operationId: changes_history
       summary: List change history
       description: |
-        Allowed roles: UNKNOWN (operations or request==2)
+        Allowed roles: operations; additionally allowed when request_mode is true.
+        Evidence: controllers/changes_controller.php:18-21; app_controller.php:263-267
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /changes/time-spent:
     get:
       tags: [Changes]
@@ -894,6 +1537,24 @@ paths:
         Allowed roles: user
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /manager-notes:
     get:
@@ -904,13 +1565,32 @@ paths:
         Allowed roles: manager
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /manager-notes/{area_id}:
     patch:
       tags: [Notes]
       operationId: managerNotes_update
       summary: Update manager notes for area
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/manager_notes_controller.php:6-9
       parameters:
         - { in: path, name: area_id, required: true, schema: { type: integer } }
       requestBody:
@@ -923,6 +1603,33 @@ paths:
                 note: { type: string }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /personnel-notes/reorder:
     post:
@@ -941,6 +1648,33 @@ paths:
                 note_ids_order: { type: array, items: { type: integer } }
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /operations-notes/reorder:
     post:
       tags: [Notes]
@@ -958,6 +1692,33 @@ paths:
                 note_ids_order: { type: array, items: { type: integer } }
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /email-auths/{id}:
     patch:
@@ -965,7 +1726,8 @@ paths:
       operationId: emailAuths_update
       summary: Update SMTP credentials
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/email_auths_controller.php:6-9; controllers/email_auths_controller.php:21-24
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
       requestBody:
@@ -975,6 +1737,33 @@ paths:
             schema: { $ref: "#/components/schemas/EmailAuth" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /schedules/published:
     get:
@@ -985,6 +1774,24 @@ paths:
         Allowed roles: user
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /schedules/actions/copy:
     post:
@@ -992,7 +1799,8 @@ paths:
       operationId: schedules_copy
       summary: Copy a schedule
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/schedules_controller.php:10-13
       requestBody:
         required: true
         content:
@@ -1005,6 +1813,33 @@ paths:
                 target_schedule_id: { type: integer, nullable: true }
       responses:
         "200": { description: Copied }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/actions/merge:
     post:
       tags: [Schedules]
@@ -1023,6 +1858,33 @@ paths:
                 choices: { type: object, additionalProperties: true }
       responses:
         "200": { description: Merged }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/actions/change:
     post:
       tags: [Schedules]
@@ -1042,6 +1904,33 @@ paths:
                 end: { type: string, format: date-time }
       responses:
         "200": { description: Changed }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/actions/publish:
     post:
       tags: [Schedules]
@@ -1059,13 +1948,41 @@ paths:
                 schedule_id: { type: integer }
       responses:
         "200": { description: Published }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/actions/template:
     post:
       tags: [Schedules]
       operationId: schedules_template
       summary: Create a schedule template from current
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/schedules_controller.php:175-178
       requestBody:
         required: true
         content:
@@ -1076,6 +1993,33 @@ paths:
                 name: { type: string }
       responses:
         "200": { description: Templated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/requests/new:
     post:
       tags: [Schedules]
@@ -1095,6 +2039,33 @@ paths:
                 based_on_schedule_id: { type: integer, nullable: true }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/requests/submit:
     post:
       tags: [Schedules]
@@ -1104,6 +2075,24 @@ paths:
         Allowed roles: manager (for last_area)
       responses:
         "200": { description: Submitted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/requests/view:
     get:
       tags: [Schedules]
@@ -1117,6 +2106,24 @@ paths:
           schema: { type: integer }
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedules/requests/accept:
     post:
       tags: [Schedules]
@@ -1135,6 +2142,33 @@ paths:
                 id: { type: integer }
       responses:
         "200": { description: Accepted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /schedule-groups/{id}/select:
     post:
@@ -1147,6 +2181,24 @@ paths:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
         "200": { description: Selected }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /schedule-groups/{id}/requests/new:
     post:
       tags: [ScheduleGroups]
@@ -1168,6 +2220,33 @@ paths:
                 name: { type: string }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /request-areas:
     get:
@@ -1175,9 +2254,28 @@ paths:
       operationId: requestAreas_list
       summary: List request areas (filterable)
       description: |
-        Allowed roles: UNKNOWN (operations in legacy for viewing via select)
+        Allowed roles: operations.
+        Evidence: controllers/request_areas_controller.php:73-76
       responses:
         "200": { description: OK }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     post:
       tags: [Requests]
       operationId: requestAreas_create
@@ -1191,6 +2289,33 @@ paths:
             schema: { $ref: "#/components/schemas/RequestArea" }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /request-areas/{id}:
     patch:
       tags: [Requests]
@@ -1207,16 +2332,62 @@ paths:
             schema: { $ref: "#/components/schemas/RequestArea" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     delete:
       tags: [Requests]
       operationId: requestAreas_delete
       summary: Delete request areas
       description: |
-        Allowed roles: UNKNOWN (operations in legacy)
+        Allowed roles: operations.
+        Evidence: controllers/request_areas_controller.php:84-86
       parameters:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /request-areas/{id}/submit:
     post:
       tags: [Requests]
@@ -1228,6 +2399,24 @@ paths:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
         "200": { description: Submitted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /request-shifts:
     post:
@@ -1243,6 +2432,33 @@ paths:
             schema: { $ref: "#/components/schemas/RequestShift" }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /request-shifts/{id}:
     patch:
       tags: [Requests]
@@ -1259,6 +2475,33 @@ paths:
             schema: { $ref: "#/components/schemas/RequestShift" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     delete:
       tags: [Requests]
       operationId: requestShifts_delete
@@ -1269,6 +2512,24 @@ paths:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /request-assignments:
     post:
@@ -1290,6 +2551,33 @@ paths:
                 name: { type: string, nullable: true }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /request-assignments/{id}:
     delete:
       tags: [Requests]
@@ -1301,6 +2589,24 @@ paths:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
   /request-floating-shifts:
     post:
@@ -1316,6 +2622,33 @@ paths:
             schema: { $ref: "#/components/schemas/RequestFloatingShift" }
       responses:
         "201": { description: Created }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
   /request-floating-shifts/{id}:
     patch:
       tags: [Requests]
@@ -1332,6 +2665,33 @@ paths:
             schema: { $ref: "#/components/schemas/RequestFloatingShift" }
       responses:
         "200": { description: Updated }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "422":
+          {
+            description: Validation error,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
     delete:
       tags: [Requests]
       operationId: requestFloatingShifts_delete
@@ -1342,6 +2702,24 @@ paths:
         - { in: path, name: id, required: true, schema: { type: integer } }
       responses:
         "204": { description: Deleted }
+        "401":
+          {
+            description: Unauthorized (not logged in),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
+        "403":
+          {
+            description: Forbidden (role disallowed),
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Error" } },
+              },
+          }
 
 components:
   securitySchemes:

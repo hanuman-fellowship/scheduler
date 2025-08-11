@@ -13,12 +13,19 @@
           "validation": []
         }
       ],
-      "submit_to": "UNKNOWN",
+      "submit_to": "PATCH /manager_notes/edit",
       "lines": "16:16"
     }
   ],
   "conditionals": [],
-  "messages": [],
+  "messages": [
+    {
+      "type": "error",
+      "text": "There was a problem saving your changes.",
+      "displayed_in": "#error",
+      "when": "on failed submit"
+    }
+  ],
   "navigation": {
     "links": []
   },
@@ -32,6 +39,10 @@
     {
       "file": "manager_notes/edit.ctp",
       "lines": "1-24"
+    },
+    {
+      "file": "elements/message.ctp",
+      "lines": "6-11"
     }
   ]
 }

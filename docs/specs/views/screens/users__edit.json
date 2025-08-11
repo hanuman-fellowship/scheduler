@@ -27,11 +27,18 @@
           "validation": []
         }
       ],
-      "submit_to": "UNKNOWN"
+      "submit_to": "PATCH /users/edit"
     }
   ],
   "conditionals": [],
-  "messages": [],
+  "messages": [
+    {
+      "type": "error",
+      "text": "There was a problem saving your changes.",
+      "displayed_in": "#error",
+      "when": "on failed submit"
+    }
+  ],
   "navigation": {
     "links": []
   },
@@ -43,6 +50,10 @@
     {
       "file": "users/edit.ctp",
       "lines": "1-39"
+    },
+    {
+      "file": "elements/message.ctp",
+      "lines": "6-11"
     }
   ]
 }

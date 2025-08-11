@@ -13,11 +13,18 @@
           "validation": []
         }
       ],
-      "submit_to": "UNKNOWN"
+      "submit_to": "PATCH /request_shifts/edit"
     }
   ],
   "conditionals": [],
-  "messages": [],
+  "messages": [
+    {
+      "type": "error",
+      "text": "There was a problem saving your changes.",
+      "displayed_in": "#error",
+      "when": "on failed submit"
+    }
+  ],
   "navigation": {
     "links": [
       {
@@ -34,6 +41,10 @@
     {
       "file": "request_shifts/edit.ctp",
       "lines": "1-34"
+    },
+    {
+      "file": "elements/message.ctp",
+      "lines": "6-11"
     }
   ]
 }

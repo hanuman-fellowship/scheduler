@@ -1,6 +1,6 @@
 ## People
 
-- **Allowed roles UNKNOWN: People.create/update**
+- [Resolved] People.create/update allowed roles
 
   - Source: [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (people_create, people_update)
   - Verify: Check `controllers/people_controller.php` for guards on `add`, `edit`; confirm `redirectIfNotEditable` and any role checks in `app_controller.php`.
@@ -22,7 +22,7 @@
 
 ## Shifts
 
-- **Allowed roles UNKNOWN: Shifts add/edit/delete; ConstantShifts add/edit/delete; FloatingShifts add/edit/delete; Assignments.assign**
+- [Resolved] Allowed roles for Shifts add/edit/delete; ConstantShifts add/edit/delete; FloatingShifts add/edit/delete; Assignments.assign
 
   - Source: [docs/specs/auth/roles-matrix.json](docs/specs/auth/roles-matrix.json) (multiple rules), [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (tags: Shifts, Assignments)
   - Verify: Review `controllers/shifts_controller.php`, `controllers/constant_shifts_controller.php`, `controllers/floating_shifts_controller.php`, `controllers/assignments_controller.php` for role checks and calls to `redirectIfNotEditable`.
@@ -39,7 +39,7 @@
 
 ## Schedules
 
-- **Allowed roles UNKNOWN: schedules copy/template/copyTemplate/deleteTemplate; publish/change/accept**
+- [Resolved] Allowed roles for schedules copy/template/copyTemplate/deleteTemplate; publish/change/accept
 
   - Source: [docs/specs/auth/roles-matrix.json](docs/specs/auth/roles-matrix.json), [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (tags: Schedules)
   - Verify: Inspect `controllers/schedules_controller.php` for guard methods and conditions (`schedule_owner`, `request_mode`); confirm behavior in `app_controller.php`.
@@ -65,12 +65,12 @@
   - Source: [docs/specs/data-model/erd.json](docs/specs/data-model/erd.json)
   - Verify: Compare with SQL in `config/sql/database.sql`; confirm whether MyISAM tables omit explicit PKs; verify Cake models define `primaryKey` or rely on `id`.
 
-- **Allowed roles UNKNOWN: Changes.history**
+- [Resolved] Changes.history allowed roles
 
   - Source: [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (`/changes/history`)
   - Verify: Check `controllers/changes_controller.php` for access checks; confirm whether operations-only or request-mode users can view history.
 
-- **Allowed roles UNKNOWN: ManagerNotes.update**
+- [Resolved] ManagerNotes.update allowed roles
 
   - Source: [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (`/manager-notes/{area_id}`)
   - Verify: Review `controllers/manager_notes_controller.php` and `app_controller.php` to determine required role/conditions.
@@ -91,7 +91,7 @@
 
 ## Requests
 
-- **Allowed roles UNKNOWN: RequestAreas.view/delete and list**
+- [Resolved] RequestAreas.view/delete and list allowed roles
 
   - Source: [docs/specs/auth/roles-matrix.json](docs/specs/auth/roles-matrix.json), [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (Requests)
   - Verify: Inspect `controllers/request_areas_controller.php` guards; confirm who can view/delete in legacy.
@@ -103,7 +103,7 @@
 
 ## Users
 
-- **Allowed roles UNKNOWN: Users add/edit/delete/emailUsers**
+- [Resolved] Users add/edit/delete/emailUsers allowed roles
 
   - Source: [docs/specs/auth/roles-matrix.json](docs/specs/auth/roles-matrix.json), [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (Users endpoints)
   - Verify: Check `controllers/users_controller.php` role checks; determine whether only `operations` or other roles are allowed.
@@ -136,7 +136,7 @@
     - Source: [docs/specs/auth/roles-matrix.json](docs/specs/auth/roles-matrix.json) notes
     - Verify: Confirm roles present in DB (`models/role.php`), guest behavior in `controllers/components/authsome.php`, and absence of project ACL in `config/acl.ini.php`.
 
-- **Allowed roles UNKNOWN: EmailAuths.update**
+- [Resolved] EmailAuths.update allowed roles
   - Source: [docs/specs/openapi/openapi.yaml](docs/specs/openapi/openapi.yaml) (`/email-auths/{id}`)
   - Verify: Check `controllers/email_auths_controller.php` update permissions and who can manage SMTP credentials.
 
