@@ -26,19 +26,28 @@
         user = "scheduler_user";
         pass = "scheduler_password";
       }
+      {
+        name = "scheduler_test";
+        user = "scheduler_user";
+        pass = "scheduler_password";
+      }
     ];
     initialScript = ''
       ALTER USER scheduler_user CREATEDB;
     '';
   };
 
+  # Environment variables for both main and test databases
   env.DATABASE_URL = "postgresql://scheduler_user:scheduler_password@localhost:5432/scheduler";
+  env.DATABASE_URL_TEST = "postgresql://scheduler_user:scheduler_password@localhost:5432/scheduler_test";
 
   scripts.setup.exec = ''
     echo "📦 Installing deps and generating Prisma client..."
     npm install
     npm run prisma -- generate
     npm run migrate
+    echo "🧪 Setting up test database..."
+    npm run test:setup
   '';
 
   enterShell = ''
@@ -52,6 +61,11 @@
     echo "  📥 Database operations:"
     echo "     $ npm run prisma -- migrate dev"
     echo "     $ npm run prisma -- studio"
+    echo ""
+    echo "  🧪 Testing:"
+    echo "     $ npm test              # run all tests"
+    echo "     $ npm run test:coverage # run tests with coverage"
+    echo "     $ npm run test:watch    # run tests in watch mode"
     echo ""
   '';
 }
