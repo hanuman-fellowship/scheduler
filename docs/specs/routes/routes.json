@@ -2417,6 +2417,652 @@
         }
       ],
       "notes": []
+    },
+    {
+      "path": "/users/login",
+      "methods": [
+        "GET"
+      ],
+      "controller": "UsersController",
+      "action": "login",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "7-31" }
+      ],
+      "notes": [
+        "renders a view template (inferred)",
+        "GET renders login form; POST submits credentials (inferred)"
+      ]
+    },
+    {
+      "path": "/users/login",
+      "methods": [
+        "POST"
+      ],
+      "controller": "UsersController",
+      "action": "login",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "7-31" }
+      ],
+      "notes": [
+        "submits login and renders or redirects (inferred)"
+      ]
+    },
+    {
+      "path": "/users/logout",
+      "methods": [
+        "GET"
+      ],
+      "controller": "UsersController",
+      "action": "logout",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "33-39" }
+      ],
+      "notes": [
+        "logs out and redirects (inferred)"
+      ]
+    },
+    {
+      "path": "/users/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "UsersController",
+      "action": "add",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "41-41" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/users/changePassword",
+      "methods": [
+        "GET"
+      ],
+      "controller": "UsersController",
+      "action": "changePassword",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "71-71" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/users/resetPassword",
+      "methods": [
+        "GET"
+      ],
+      "controller": "UsersController",
+      "action": "resetPassword",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "96-96" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/users/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "UsersController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "144-144" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/users/emailUsers",
+      "methods": [
+        "GET"
+      ],
+      "controller": "UsersController",
+      "action": "emailUsers",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/users_controller.php", "lines": "171-171" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/schedules/editRequest",
+      "methods": [
+        "GET"
+      ],
+      "controller": "SchedulesController",
+      "action": "editRequest",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/schedules_controller.php", "lines": "230-230" }
+      ],
+      "notes": [
+        "renders a view template (inferred)",
+        "GET=form/select, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/shifts/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "ShiftsController",
+      "action": "add",
+      "params": ["area_id", "day_id", "start", "end"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/shifts_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/shifts/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "ShiftsController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/shifts_controller.php", "lines": "46-46" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/resident_categories/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "ResidentCategoriesController",
+      "action": "add",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/resident_categories_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/resident_categories/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "ResidentCategoriesController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/resident_categories_controller.php", "lines": "22-22" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/request_floating_shifts/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "RequestFloatingShiftsController",
+      "action": "add",
+      "params": ["area_id", "person_id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/request_floating_shifts_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/request_floating_shifts/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "RequestFloatingShiftsController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/request_floating_shifts_controller.php", "lines": "25-25" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/request_shifts/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "RequestShiftsController",
+      "action": "add",
+      "params": ["area_id", "day_id", "start", "end"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/request_shifts_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/request_shifts/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "RequestShiftsController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/request_shifts_controller.php", "lines": "33-33" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/personnel_notes/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "PersonnelNotesController",
+      "action": "add",
+      "params": ["person_id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/personnel_notes_controller.php", "lines": "20-20" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/personnel_notes/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "PersonnelNotesController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/personnel_notes_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/operations_notes/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "OperationsNotesController",
+      "action": "add",
+      "params": ["person_id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/operations_notes_controller.php", "lines": "20-20" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/operations_notes/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "OperationsNotesController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/operations_notes_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/manager_notes/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "ManagerNotesController",
+      "action": "edit",
+      "params": ["area_id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/manager_notes_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/boundaries/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "BoundariesController",
+      "action": "edit",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/boundaries_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/days/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "DaysController",
+      "action": "edit",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/days_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/request_areas/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "RequestAreasController",
+      "action": "edit",
+      "params": ["id", "force"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/request_areas_controller.php", "lines": "8-8" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/request_areas/editNotes",
+      "methods": [
+        "GET"
+      ],
+      "controller": "RequestAreasController",
+      "action": "editNotes",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/request_areas_controller.php", "lines": "14-14" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/areas/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "AreasController",
+      "action": "add",
+      "params": ["area_id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/areas_controller.php", "lines": "33-33" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/areas/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "AreasController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/areas_controller.php", "lines": "49-49" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/areas/editNotes",
+      "methods": [
+        "GET"
+      ],
+      "controller": "AreasController",
+      "action": "editNotes",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/areas_controller.php", "lines": "67-67" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/people/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "PeopleController",
+      "action": "add",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/people_controller.php", "lines": "66-66" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/people/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "PeopleController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/people_controller.php", "lines": "108-108" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/people/editNotes",
+      "methods": [
+        "GET"
+      ],
+      "controller": "PeopleController",
+      "action": "editNotes",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/people_controller.php", "lines": "125-125" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/floating_shifts/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "FloatingShiftsController",
+      "action": "add",
+      "params": ["area_id", "person_id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/floating_shifts_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/floating_shifts/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "FloatingShiftsController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/floating_shifts_controller.php", "lines": "35-35" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
+    },
+    {
+      "path": "/constant_shifts/add",
+      "methods": [
+        "GET"
+      ],
+      "controller": "ConstantShiftsController",
+      "action": "add",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/constant_shifts_controller.php", "lines": "6-6" }
+      ],
+      "notes": [
+        "renders a form (inferred)",
+        "GET=form, POST=create (inferred)"
+      ]
+    },
+    {
+      "path": "/constant_shifts/edit",
+      "methods": [
+        "GET"
+      ],
+      "controller": "ConstantShiftsController",
+      "action": "edit",
+      "params": ["id"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        { "file": "controllers/constant_shifts_controller.php", "lines": "38-38" }
+      ],
+      "notes": [
+        "renders an edit form (inferred)",
+        "GET=form, PUT/PATCH=submit (inferred)"
+      ]
     }
   ],
   "notes": [
