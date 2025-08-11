@@ -4,7 +4,15 @@ module.exports = {
   roots: ["<rootDir>/src"],
   testMatch: ["**/__tests__/**/*.test.ts"],
   transform: {
-    "^.+\\.ts$": "ts-jest",
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.json",
+        diagnostics: {
+          ignoreCodes: [151001], // Ignore "esModuleInterop" warnings
+        },
+      },
+    ],
   },
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
@@ -34,13 +42,6 @@ module.exports = {
   restoreMocks: true,
   resetModules: false,
 
-  // Global test setup
-  globals: {
-    "ts-jest": {
-      tsconfig: "tsconfig.json",
-      diagnostics: {
-        ignoreCodes: [151001], // Ignore "esModuleInterop" warnings
-      },
-    },
-  },
+  // Add detectOpenHandles for debugging hanging connections
+  detectOpenHandles: true,
 };

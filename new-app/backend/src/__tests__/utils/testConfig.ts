@@ -11,13 +11,8 @@ export const ensureTestDatabase = async () => {
   }
   
   try {
-    // Test connection with timeout
-    await Promise.race([
-      prisma.$connect(),
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Connection timeout')), 5000)
-      )
-    ]);
+    // Test connection
+    await prisma.$connect();
     
     // Verify we can query the database
     await prisma.$queryRaw`SELECT 1`;

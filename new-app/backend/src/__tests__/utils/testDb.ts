@@ -13,15 +13,20 @@ export interface TestUser {
 export interface TestSchedule {
   id: number;
   name: string;
-  userId: number;
+  userId: number | null;
   template: boolean;
   request: number;
 }
 
+// Counter for generating unique test data
+let userCounter = 0;
+let scheduleCounter = 0;
+
 export const createTestUser = async (userData: Partial<Omit<TestUser, 'id'>> = {}): Promise<TestUser> => {
+  userCounter++;
   const defaultUser: Omit<TestUser, 'id'> = {
-    username: 'testuser',
-    email: 'test@example.com',
+    username: `testuser${userCounter}`,
+    email: `test${userCounter}@example.com`,
     password: 'password123',
     roles: ['personnel'],
     ...userData
@@ -53,9 +58,10 @@ export const createTestUser = async (userData: Partial<Omit<TestUser, 'id'>> = {
 };
 
 export const createTestSchedule = async (scheduleData: Partial<Omit<TestSchedule, 'id'>> = {}): Promise<TestSchedule> => {
+  scheduleCounter++;
   const defaultSchedule: Omit<TestSchedule, 'id'> = {
-    name: 'Test Schedule',
-    userId: 1,
+    name: `Test Schedule ${scheduleCounter}`,
+    userId: null, // Make userId optional since schedules can exist without users
     template: false,
     request: 0,
     ...scheduleData
@@ -73,7 +79,7 @@ export const createTestSchedule = async (scheduleData: Partial<Omit<TestSchedule
   return {
     id: schedule.id,
     name: schedule.name,
-    userId: schedule.userId!,
+    userId: schedule.userId || 0, // Return 0 if no user
     template: schedule.template,
     request: schedule.request
   };
@@ -168,6 +174,12 @@ export const cleanupTestData = async () => {
 
 export const resetTestDatabase = async () => {
   await cleanupTestData();
+};
+
+// Reset counters for clean test runs
+export const resetTestCounters = () => {
+  userCounter = 0;
+  scheduleCounter = 0;
 };
 
 export { prisma };

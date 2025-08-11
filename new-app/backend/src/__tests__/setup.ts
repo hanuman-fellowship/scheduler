@@ -1,9 +1,14 @@
 import { ensureTestDatabase, closeTestDatabase, resetTestDatabase } from './utils/testConfig';
+import { resetTestCounters } from './utils/testDb';
+import prisma from '../services/prisma';
 
 // Global test setup
 beforeAll(async () => {
   // Set global test timeout
   jest.setTimeout(15000);
+  
+  // Reset test counters for clean runs
+  resetTestCounters();
   
   // Ensure we're connected to test database
   await ensureTestDatabase();
@@ -26,6 +31,9 @@ afterAll(async () => {
   
   // Close database connection
   await closeTestDatabase();
+  
+  // Ensure prisma client is properly disconnected
+  await prisma.$disconnect();
 }, 30000);
 
 // Optimize Jest for reliability
