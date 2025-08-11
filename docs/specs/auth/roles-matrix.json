@@ -1,0 +1,81 @@
+{
+  "roles": ["manager", "personnel", "user", "guest"],
+  "rules": [
+    {"controller": "Users", "action": "add", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/users_controller.php"]},
+    {"controller": "Users", "action": "edit", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/users_controller.php"]},
+    {"controller": "Users", "action": "delete", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/users_controller.php"]},
+    {"controller": "Users", "action": "emailUsers", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/users_controller.php"]},
+    {"controller": "Users", "action": "notes", "allowed_roles": ["user", "manager", "personnel"], "conditions": ["logged_in"], "files_cited": ["controllers/users_controller.php"]},
+
+    {"controller": "Settings", "action": "toggleDates", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/settings_controller.php"]},
+
+    {"controller": "Schedules", "action": "copy", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "copyTemplate", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "deleteTemplate", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "template", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "deletePublishedRequest", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "publish", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "change", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "merge", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "accept", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "newRequest", "allowed_roles": ["manager"], "conditions": ["manager_of_area"], "files_cited": ["controllers/schedules_controller.php"]},
+    {"controller": "Schedules", "action": "submitRequest", "allowed_roles": ["manager"], "conditions": ["manager_of_area"], "files_cited": ["controllers/schedules_controller.php"]},
+
+    {"controller": "ScheduleGroups", "action": "newRequest", "allowed_roles": ["manager"], "conditions": ["manager_of_area"], "files_cited": ["controllers/schedule_groups_controller.php"]},
+
+    {"controller": "RequestAreas", "action": "edit", "allowed_roles": ["manager"], "conditions": ["manager_of_area"], "files_cited": ["controllers/request_areas_controller.php"]},
+    {"controller": "RequestAreas", "action": "submit", "allowed_roles": ["manager"], "conditions": ["manager_of_area"], "files_cited": ["controllers/request_areas_controller.php"]},
+    {"controller": "RequestAreas", "action": "view", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/request_areas_controller.php"]},
+    {"controller": "RequestAreas", "action": "delete", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/request_areas_controller.php"]},
+
+    {"controller": "PersonnelNotes", "action": "edit", "allowed_roles": ["personnel"], "conditions": [], "files_cited": ["controllers/personnel_notes_controller.php"]},
+    {"controller": "PersonnelNotes", "action": "add", "allowed_roles": ["personnel"], "conditions": [], "files_cited": ["controllers/personnel_notes_controller.php"]},
+
+    {"controller": "ManagerNotes", "action": "edit", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/manager_notes_controller.php"]},
+    {"controller": "ManagerNotes", "action": "view", "allowed_roles": ["manager"], "conditions": [], "files_cited": ["controllers/manager_notes_controller.php"]},
+
+    {"controller": "People", "action": "upload", "allowed_roles": ["guest"], "conditions": [], "files_cited": ["app_controller.php", "controllers/people_controller.php"]},
+    {"controller": "People", "action": "edit", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/people_controller.php"]},
+    {"controller": "People", "action": "add", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/people_controller.php"]},
+    {"controller": "People", "action": "category", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/people_controller.php"]},
+    {"controller": "People", "action": "editNotes", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/people_controller.php"]},
+    {"controller": "People", "action": "retire", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/people_controller.php"]},
+    {"controller": "People", "action": "changed", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/people_controller.php"]},
+
+    {"controller": "Shifts", "action": "add", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/shifts_controller.php"]},
+    {"controller": "Shifts", "action": "edit", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/shifts_controller.php"]},
+    {"controller": "Shifts", "action": "delete", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/shifts_controller.php"]},
+
+    {"controller": "FloatingShifts", "action": "add", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/floating_shifts_controller.php"]},
+    {"controller": "FloatingShifts", "action": "edit", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/floating_shifts_controller.php"]},
+    {"controller": "FloatingShifts", "action": "delete", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/floating_shifts_controller.php"]},
+
+    {"controller": "ConstantShifts", "action": "add", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/constant_shifts_controller.php"]},
+    {"controller": "ConstantShifts", "action": "edit", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/constant_shifts_controller.php"]},
+    {"controller": "ConstantShifts", "action": "delete", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/constant_shifts_controller.php"]},
+
+    {"controller": "OffDays", "action": "toggle", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/off_days_controller.php"]},
+
+    {"controller": "Assignments", "action": "assign", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/assignments_controller.php"]},
+
+    {"controller": "OperationsNotes", "action": "edit", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/operations_notes_controller.php"]},
+    {"controller": "OperationsNotes", "action": "add", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/operations_notes_controller.php"]},
+
+    {"controller": "EmailAuths", "action": "operations", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/email_auths_controller.php"]},
+    {"controller": "EmailAuths", "action": "scheduler", "allowed_roles": ["UNKNOWN"], "conditions": [], "files_cited": ["controllers/email_auths_controller.php"]},
+
+    {"controller": "Changes", "action": "undo", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/changes_controller.php"]},
+    {"controller": "Changes", "action": "redo", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/changes_controller.php"]},
+    {"controller": "Changes", "action": "jump", "allowed_roles": ["UNKNOWN"], "conditions": ["schedule_owner", "request_mode"], "files_cited": ["app_controller.php", "controllers/changes_controller.php"]},
+    {"controller": "Changes", "action": "history", "allowed_roles": ["UNKNOWN"], "conditions": ["request_mode"], "files_cited": ["controllers/changes_controller.php"]}
+  ],
+  "notes": [
+    "Role names present in code: operations, manager, personnel. No explicit 'user' role is defined in DB; here 'user' denotes any logged-in user without a specific role.",
+    "Guest accounts are represented by an empty user via Authsome::login('guest'), but AppController.beforeFilter enforces a session redirect for most actions (except People.upload).",
+    "'schedule_owner' condition derives from AppController.beforeFilter: Schedule.editable is true when current user (Authsome::get('id')) equals Session('Schedule.user_id') AND user has 'operations' role.",
+    "'request_mode' condition derives from AppController.redirectIfNotEditable: access allowed when Session('Schedule.request') == 2 regardless of role.",
+    "'manager_of_area' condition derives from AppController.redirectIfNotManager: user must manage the area id passed in to the action.",
+    "config/acl.ini.php contains CakePHP example placeholders only and no active per-controller ACL rules.",
+    "Operations-only checks are marked as allowed_roles: ['UNKNOWN'] because 'operations' is not one of the requested roles [manager, personnel, user, guest]."
+  ]
+}
