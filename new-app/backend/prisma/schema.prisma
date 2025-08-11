@@ -1,0 +1,352 @@
+// Prisma schema for Scheduler application
+// Simple integer PKs, straightforward relationships
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String   // bcrypt hashed
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  roles     Role[]
+  managers  Manager[]
+  schedules Schedule[]
+  settings  Setting[]
+
+  @@map("users")
+}
+
+model Role {
+  id     Int    @id @default(autoincrement())
+  userId Int    @map("user_id")
+  name   String // operations, personnel, manager
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("roles")
+}
+
+model Manager {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  areaId Int @map("area_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  area Area @relation(fields: [areaId], references: [id], onDelete: Cascade)
+
+  @@map("managers")
+}
+
+model Schedule {
+  id              Int      @id @default(autoincrement())
+  name            String
+  userId          Int?     @map("user_id") // null for published
+  parentId        Int?     @map("parent_id") // for branching
+  scheduleGroupId Int?     @map("schedule_group_id")
+  template        Boolean  @default(false)
+  request         Int      @default(0) // 0=normal, 1=submitted, 2=draft
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  user          User?          @relation(fields: [userId], references: [id])
+  parent        Schedule?      @relation("ScheduleBranches", fields: [parentId], references: [id])
+  branches      Schedule[]     @relation("ScheduleBranches")
+  scheduleGroup ScheduleGroup? @relation(fields: [scheduleGroupId], references: [id])
+
+  areas              Area[]
+  days               Day[]
+  shifts             Shift[]
+  floatingShifts     FloatingShift[]
+  constantShifts     ConstantShift[]
+  assignments        Assignment[]
+  offDays            OffDay[]
+  peopleSchedules    PeopleSchedule[]
+  residentCategories ResidentCategory[]
+  changes            Change[]
+  changeModels       ChangeModel[]
+  changeFields       ChangeField[]
+  personnelNotes     PersonnelNote[]
+  operationsNotes    OperationsNote[]
+  managerNotes       ManagerNote[]
+
+  @@map("schedules")
+}
+
+model ScheduleGroup {
+  id    Int      @id @default(autoincrement())
+  name  String
+  start DateTime
+  end   DateTime
+
+  schedules Schedule[]
+
+  @@map("schedule_groups")
+}
+
+model Area {
+  id         Int     @id @default(autoincrement())
+  scheduleId Int     @map("schedule_id")
+  name       String
+  shortName  String  @map("short_name")
+  notes      String?
+
+  schedule       Schedule        @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  shifts         Shift[]
+  floatingShifts FloatingShift[]
+  managers       Manager[]
+  managerNotes   ManagerNote[]
+
+  @@map("areas")
+}
+
+model Day {
+  id         Int       @id @default(autoincrement())
+  scheduleId Int       @map("schedule_id")
+  name       String
+  date       DateTime?
+  dayOfWeek  Int       @map("day_of_week") // 1=Sunday
+
+  schedule       Schedule        @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  shifts         Shift[]
+  constantShifts ConstantShift[]
+  offDays        OffDay[]
+
+  @@map("days")
+}
+
+model Person {
+  id          Int     @id @default(autoincrement())
+  first       String
+  last        String
+  displayName String? @map("display_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  peopleSchedules PeopleSchedule[]
+  assignments     Assignment[]
+  floatingShifts  FloatingShift[]
+  offDays         OffDay[]
+  personnelNotes  PersonnelNote[]
+  operationsNotes OperationsNote[]
+
+  @@map("people")
+}
+
+model PeopleSchedule {
+  id                 Int @id @default(autoincrement())
+  scheduleId         Int @map("schedule_id")
+  personId           Int @map("person_id")
+  residentCategoryId Int @map("resident_category_id")
+
+  schedule         Schedule         @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  person           Person           @relation(fields: [personId], references: [id], onDelete: Cascade)
+  residentCategory ResidentCategory @relation(fields: [residentCategoryId], references: [id])
+
+  @@map("people_schedules")
+}
+
+model ResidentCategory {
+  id         Int     @id @default(autoincrement())
+  scheduleId Int     @map("schedule_id")
+  name       String
+  color      String?
+  sortOrder  Int?    @map("sort_order")
+
+  schedule        Schedule         @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  peopleSchedules PeopleSchedule[]
+  constantShifts  ConstantShift[]
+
+  @@map("resident_categories")
+}
+
+model Shift {
+  id         Int  @id @default(autoincrement())
+  scheduleId Int  @map("schedule_id")
+  areaId     Int  @map("area_id")
+  dayId      Int  @map("day_id")
+  start      String // Store as "HH:MM:SS" string for simplicity
+  end        String // Store as "HH:MM:SS" string for simplicity
+  numPeople  Int  @default(1) @map("num_people")
+
+  schedule    Schedule     @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  area        Area         @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  day         Day          @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  assignments Assignment[]
+
+  @@map("shifts")
+}
+
+model FloatingShift {
+  id         Int     @id @default(autoincrement())
+  scheduleId Int     @map("schedule_id")
+  areaId     Int     @map("area_id")
+  personId   Int     @map("person_id")
+  hours      Decimal
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  area     Area     @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@map("floating_shifts")
+}
+
+model ConstantShift {
+  id                 Int     @id @default(autoincrement())
+  scheduleId         Int     @map("schedule_id")
+  residentCategoryId Int     @map("resident_category_id")
+  dayId              Int     @map("day_id")
+  start              String  // Store as "HH:MM:SS" string
+  end                String  // Store as "HH:MM:SS" string
+  specifyHours       Boolean @default(false) @map("specify_hours")
+  hours              Decimal?
+
+  schedule         Schedule         @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  residentCategory ResidentCategory @relation(fields: [residentCategoryId], references: [id], onDelete: Cascade)
+  day              Day              @relation(fields: [dayId], references: [id], onDelete: Cascade)
+
+  @@map("constant_shifts")
+}
+
+model Assignment {
+  id         Int     @id @default(autoincrement())
+  scheduleId Int     @map("schedule_id")
+  shiftId    Int     @map("shift_id")
+  personId   Int     @map("person_id") // 0 for "other"
+  name       String? // for personId = 0
+  star       Boolean @default(false)
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  shift    Shift    @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@map("assignments")
+}
+
+model OffDay {
+  id         Int @id @default(autoincrement())
+  scheduleId Int @map("schedule_id")
+  personId   Int @map("person_id")
+  dayId      Int @map("day_id")
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  day      Day      @relation(fields: [dayId], references: [id], onDelete: Cascade)
+
+  @@map("off_days")
+}
+
+model Change {
+  id          Int      @id @default(autoincrement())
+  scheduleId  Int      @map("schedule_id")
+  description String
+  undone      Boolean  @default(false)
+  created     DateTime @default(now())
+
+  schedule     Schedule      @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  changeModels ChangeModel[]
+  changeFields ChangeField[]
+
+  @@map("changes")
+}
+
+model ChangeModel {
+  id         Int    @id @default(autoincrement())
+  changeId   Int    @map("change_id")
+  scheduleId Int    @map("schedule_id")
+  name       String
+  recordId   Int    @map("record_id")
+  action     Int    // 0=delete, 1=create, 2=update
+
+  change       Change        @relation(fields: [changeId], references: [id], onDelete: Cascade)
+  schedule     Schedule      @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  changeFields ChangeField[]
+
+  @@map("change_models")
+}
+
+model ChangeField {
+  id            Int     @id @default(autoincrement())
+  changeId      Int     @map("change_id")
+  changeModelId Int     @map("change_model_id")
+  scheduleId    Int     @map("schedule_id")
+  fieldKey      String  @map("field_key")
+  fieldOldVal   String? @map("field_old_val")
+  fieldNewVal   String? @map("field_new_val")
+
+  change      Change      @relation(fields: [changeId], references: [id], onDelete: Cascade)
+  changeModel ChangeModel @relation(fields: [changeModelId], references: [id], onDelete: Cascade)
+  schedule    Schedule    @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@map("change_fields")
+}
+
+model Setting {
+  id     Int    @id @default(autoincrement())
+  userId Int    @map("user_id")
+  key    String
+  val    String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("settings")
+}
+
+model PersonnelNote {
+  id         Int     @id @default(autoincrement())
+  scheduleId Int     @map("schedule_id")
+  personId   Int     @map("person_id")
+  content    String
+  sortOrder  Int?    @map("sort_order")
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@map("personnel_notes")
+}
+
+model OperationsNote {
+  id         Int     @id @default(autoincrement())
+  scheduleId Int     @map("schedule_id")
+  personId   Int     @map("person_id")
+  content    String
+  sortOrder  Int?    @map("sort_order")
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@map("operations_notes")
+}
+
+model ManagerNote {
+  id         Int    @id @default(autoincrement())
+  scheduleId Int    @map("schedule_id")
+  areaId     Int    @map("area_id")
+  content    String
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  area     Area     @relation(fields: [areaId], references: [id], onDelete: Cascade)
+
+  @@map("manager_notes")
+}
+
+model EmailAuth {
+  id       Int    @id @default(1) // singleton
+  name     String
+  email    String
+  password String // encrypted SMTP password
+
+  @@map("email_auths")
+}

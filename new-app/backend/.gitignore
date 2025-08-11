@@ -1,0 +1,9 @@
+# Build output
+dist/
+
+# Prisma
+prisma/migrations/migration_lock.toml
+
+# Logs
+*.log
+logs/

@@ -1,0 +1,12 @@
+# Build output
+dist/
+build/
+
+# Vite
+.vite/
+
+# Local env files
+.env.local
+
+# Logs
+*.log
