@@ -1,0 +1,23 @@
+{
+  "name": "settings",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"key","type":"text","nullable":false,"default":null,"notes":[]},
+    {"name":"val","type":"text","nullable":false,"default":null,"notes":[]},
+    {"name":"user_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [["user_id"]],
+  "foreign_keys": [
+    {"column":"user_id","references":"users(id)"}
+  ],
+  "associations": [
+    {"from_model":"Setting","to_model":"User","type":"belongsTo","foreign_key":"user_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/setting.php","lines":"6-8"}]}
+  ],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"569-576"},
+    {"file":"models/setting.php","lines":"1-10"}
+  ]
+}

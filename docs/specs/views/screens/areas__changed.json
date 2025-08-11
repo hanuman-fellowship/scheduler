@@ -1,0 +1,35 @@
+{
+  "screen": "areas/changed",
+  "controller_action": "AreasController#changed",
+  "forms": [
+    {
+      "name": "Area",
+      "fields": [
+        {
+          "name": "area_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN",
+      "lines": "24:24"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "areas/changed.ctp",
+      "lines": "1-70"
+    }
+  ]
+}

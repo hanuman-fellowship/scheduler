@@ -1,0 +1,55 @@
+{
+  "controller": "ResidentCategoriesController",
+  "actions": [
+    {
+      "name": "add",
+      "purpose": "Create a resident category",
+      "auth": ["editable"],
+      "inputs": {"query": [], "form": ["ResidentCategory.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [{"model": "ResidentCategory", "operation": "create/insert via sSave", "where": []}],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/resident_categories/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/resident_categories_controller.php", "lines": "6-20"}]
+    },
+    {
+      "name": "edit",
+      "purpose": "Edit a resident category or select to edit",
+      "auth": ["editable"],
+      "inputs": {"query": ["id?"], "form": ["ResidentCategory.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "ResidentCategory", "operation": "read/update via sSave", "where": ["id"]},
+        {"model": "ResidentCategory", "operation": "list:select", "where": []}
+      ],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/resident_categories/edit.ctp|select_edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/resident_categories_controller.php", "lines": "22-45"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Delete resident categories",
+      "auth": ["editable"],
+      "inputs": {"query": ["id?"], "form": ["ResidentCategory.category_id[]"], "files": []},
+      "validation": [],
+      "queries": [{"model": "ResidentCategory", "operation": "delete via sDelete", "where": ["category_id[]"]}],
+      "side_effects": ["recordChange", "stopChange", "deleteCache:people"],
+      "response": {"type": "html", "view": "views/resident_categories/delete.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/resident_categories_controller.php", "lines": "47-62"}]
+    },
+    {
+      "name": "reorder",
+      "purpose": "Reorder resident categories",
+      "auth": ["editable"],
+      "inputs": {"query": [], "form": ["ResidentCategory.lcategories_order"], "files": []},
+      "validation": [],
+      "queries": [{"model": "ResidentCategory", "operation": "multiple updates via sSave", "where": ["ids in submitted order"]}],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/resident_categories/reorder.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/resident_categories_controller.php", "lines": "64-84"}]
+    }
+  ],
+  "notes": []
+}
+
+

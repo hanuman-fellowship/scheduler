@@ -1,0 +1,27 @@
+{
+  "screen": "people/select_print",
+  "controller_action": "PeopleController#select_print",
+  "forms": [
+    {
+      "name": "Person",
+      "fields": [],
+      "submit_to": "UNKNOWN",
+      "lines": "1:1"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/select_print.ctp",
+      "lines": "1-40"
+    }
+  ]
+}

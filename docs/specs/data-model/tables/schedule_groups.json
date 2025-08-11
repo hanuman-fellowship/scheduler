@@ -1,0 +1,21 @@
+{
+  "name": "schedule_groups",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"start","type":"datetime","nullable":false,"default":null,"notes":[]},
+    {"name":"end","type":"datetime","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [],
+  "foreign_keys": [],
+  "associations": [
+    {"from_model":"ScheduleGroup","to_model":"Schedule","type":"hasMany","foreign_key":"schedule_group_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/schedule_group.php","lines":"6-8"}]}
+  ],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"512-518"},
+    {"file":"models/schedule_group.php","lines":"1-37"}
+  ]
+}

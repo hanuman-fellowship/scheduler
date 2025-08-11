@@ -1,0 +1,22 @@
+{
+  "screen": "schedules/view_request",
+  "controller_action": "SchedulesController#view_request",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/submitted.ctp",
+    "elements/schedule_content.ctp",
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/view_request.ctp",
+      "lines": "1-10"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "managers",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"user_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"area_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [],
+  "foreign_keys": [
+    {"column":"user_id","references":"users(id)"},
+    {"column":"area_id","references":"areas(id)"}
+  ],
+  "associations": [],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"307-312"}
+  ]
+}

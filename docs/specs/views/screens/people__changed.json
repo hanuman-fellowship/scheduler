@@ -1,0 +1,34 @@
+{
+  "screen": "people/changed",
+  "controller_action": "PeopleController#changed",
+  "forms": [
+    {
+      "name": "Person",
+      "fields": [],
+      "submit_to": "UNKNOWN",
+      "lines": "24:24"
+    }
+  ],
+  "conditionals": [
+    {
+      "when": "$options",
+      "shows": [
+        "UNKNOWN"
+      ]
+    }
+  ],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/changed.ctp",
+      "lines": "1-97"
+    }
+  ]
+}

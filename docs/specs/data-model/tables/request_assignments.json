@@ -1,0 +1,21 @@
+{
+  "name": "request_assignments",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"person_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"request_shift_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [["person_id"],["request_shift_id"]],
+  "foreign_keys": [
+    {"column":"person_id","references":"people(id)"},
+    {"column":"request_shift_id","references":"request_shifts(id)"}
+  ],
+  "associations": [],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/ready_for_import.sql","lines":"516-524"}
+  ]
+}

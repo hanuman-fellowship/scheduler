@@ -1,0 +1,25 @@
+{
+  "screen": "schedules/delete_template",
+  "controller_action": "SchedulesController#delete_template",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "$schedule['Schedule']['name']",
+        "to": "Schedule"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/delete_template.ctp",
+      "lines": "1-19"
+    }
+  ]
+}

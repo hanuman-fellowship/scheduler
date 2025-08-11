@@ -1,0 +1,34 @@
+{
+  "screen": "schedules/delete_published_request",
+  "controller_action": "SchedulesController#delete_published_request",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "$areaName",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/delete_published_request.ctp",
+      "lines": "1-27"
+    }
+  ]
+}

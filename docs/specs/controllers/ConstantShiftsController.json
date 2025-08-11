@@ -1,0 +1,51 @@
+{
+  "controller": "ConstantShiftsController",
+  "actions": [
+    {
+      "name": "add",
+      "purpose": "Create a constant shift",
+      "auth": ["editable"],
+      "inputs": {"query": [], "form": ["ConstantShift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "ConstantShift", "operation": "create", "where": []},
+        {"model": "ConstantShift", "operation": "insert via sSave", "where": []},
+        {"model": "ResidentCategory", "operation": "list", "where": []},
+        {"model": "Day", "operation": "list", "where": ["name <> ''"]}
+      ],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/constant_shifts/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/constant_shifts_controller.php", "lines": "6-36"}]
+    },
+    {
+      "name": "edit",
+      "purpose": "Update a constant shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": ["ConstantShift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "ConstantShift", "operation": "read", "where": ["id"]},
+        {"model": "ConstantShift", "operation": "update via sSave", "where": ["id"]},
+        {"model": "ResidentCategory", "operation": "list", "where": []},
+        {"model": "Day", "operation": "list", "where": ["name <> ''"]}
+      ],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/constant_shifts/edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/constant_shifts_controller.php", "lines": "38-68"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Delete a constant shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "ConstantShift", "operation": "delete via sDelete", "where": ["id"]}],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/constant_shifts_controller.php", "lines": "70-76"}]
+    }
+  ],
+  "notes": []
+}
+
+

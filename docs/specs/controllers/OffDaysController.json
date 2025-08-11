@@ -1,0 +1,22 @@
+{
+  "controller": "OffDaysController",
+  "actions": [
+    {
+      "name": "toggle",
+      "purpose": "Toggle an off-day for a person on a day",
+      "auth": ["editable"],
+      "inputs": {"query": ["person_id", "day_id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "OffDay", "operation": "read existing", "where": ["person_id", "day_id"]},
+        {"model": "OffDay", "operation": "delete or insert via sDelete/sSave", "where": ["id or person_id,day_id"]}
+      ],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/off_days_controller.php", "lines": "6-29"}]
+    }
+  ],
+  "notes": []
+}
+
+

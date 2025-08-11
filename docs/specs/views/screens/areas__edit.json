@@ -1,0 +1,48 @@
+{
+  "screen": "areas/edit",
+  "controller_action": "AreasController#edit",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "short_name",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "manager",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "areas/edit.ctp",
+      "lines": "1-18"
+    }
+  ]
+}

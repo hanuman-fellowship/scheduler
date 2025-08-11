@@ -1,0 +1,25 @@
+{
+  "screen": "people/restore",
+  "controller_action": "PeopleController#restore",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "$name",
+        "to": "UNKNOWN"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/restore.ctp",
+      "lines": "1-30"
+    }
+  ]
+}

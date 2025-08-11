@@ -1,0 +1,20 @@
+{
+  "screen": "schedules/effective",
+  "controller_action": "SchedulesController#effective",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/effective.ctp",
+      "lines": "1-19"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "screen": "operations_notes/edit",
+  "controller_action": "OperationsNotesController#edit",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/shortcut.ctp",
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "operations_notes/edit.ctp",
+      "lines": "1-24"
+    }
+  ]
+}

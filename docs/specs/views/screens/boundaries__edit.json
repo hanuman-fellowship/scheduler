@@ -1,0 +1,20 @@
+{
+  "screen": "boundaries/edit",
+  "controller_action": "BoundariesController#edit",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "boundaries/edit.ctp",
+      "lines": "1-66"
+    }
+  ]
+}

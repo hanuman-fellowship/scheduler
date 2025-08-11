@@ -1,0 +1,30 @@
+{
+  "controller": "ScheduleGroupsController",
+  "actions": [
+    {
+      "name": "select",
+      "purpose": "Switch to first schedule in the specified group",
+      "auth": ["login"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "ScheduleGroup", "operation": "custom:firstInGroup", "where": ["id"]}],
+      "side_effects": ["Session: setSchedule", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/schedule_groups_controller.php", "lines": "6-9"}]
+    },
+    {
+      "name": "newRequest",
+      "purpose": "Operations create a new request schedule for an area within selected group",
+      "auth": ["manager for area"],
+      "inputs": {"query": ["area_id", "name", "id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "Schedule", "operation": "custom:addRequest", "where": ["area_id", "name", "firstInGroup(id)"]}],
+      "side_effects": ["Session: setSchedule", "redirect to areas/schedule/:area_id"],
+      "response": {"type": "redirect", "view": null, "redirect": "areas/schedule/:area_id", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/schedule_groups_controller.php", "lines": "11-16"}]
+    }
+  ],
+  "notes": []
+}
+
+

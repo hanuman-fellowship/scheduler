@@ -1,0 +1,41 @@
+{
+  "screen": "users/email_users",
+  "controller_action": "UsersController#email_users",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "subject",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "message",
+          "type": "textarea",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "users/email_users.ctp",
+      "lines": "1-67"
+    }
+  ]
+}

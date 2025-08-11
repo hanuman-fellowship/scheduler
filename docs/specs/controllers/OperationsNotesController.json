@@ -1,0 +1,44 @@
+{
+  "controller": "OperationsNotesController",
+  "actions": [
+    {
+      "name": "edit",
+      "purpose": "Operations edit a specific operations note",
+      "auth": ["operations"],
+      "inputs": {"query": ["id"], "form": ["OperationsNote.*"], "files": []},
+      "validation": [],
+      "queries": [{"model": "OperationsNote", "operation": "read/save", "where": ["id"]}],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/operations_notes/edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/operations_notes_controller.php", "lines": "6-18"}]
+    },
+    {
+      "name": "add",
+      "purpose": "Operations add a note for a person",
+      "auth": ["operations"],
+      "inputs": {"query": ["person_id?"], "form": ["OperationsNote.*"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "OperationsNote", "operation": "create/save", "where": []},
+        {"model": "Person", "operation": "list:listByResidentCategory", "where": []}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/operations_notes/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/operations_notes_controller.php", "lines": "20-34"}]
+    },
+    {
+      "name": "reorder",
+      "purpose": "Reorder operations notes for a person (AJAX)",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": ["OperationsNote.lonotes_order"], "files": []},
+      "validation": [],
+      "queries": [{"model": "OperationsNote", "operation": "multiple updates:order", "where": ["ids in submitted order"]}],
+      "side_effects": [],
+      "response": {"type": "text", "view": null, "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/operations_notes_controller.php", "lines": "36-46"}]
+    }
+  ],
+  "notes": []
+}
+
+

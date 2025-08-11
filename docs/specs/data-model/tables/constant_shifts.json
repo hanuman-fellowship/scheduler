@@ -1,0 +1,35 @@
+{
+  "name": "constant_shifts",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"resident_category_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"day_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"start","type":"time","nullable":false,"default":null,"notes":[]},
+    {"name":"end","type":"time","nullable":false,"default":null,"notes":[]},
+    {"name":"specify_hours","type":"tinyint(1)","nullable":false,"default":null,"notes":[]},
+    {"name":"hours","type":"double","nullable":true,"default":null,"notes":[]},
+    {"name":"schedule_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["UNKNOWN"],
+  "unique_constraints": [["schedule_id","id"]],
+  "indexes": [["resident_category_id"],["day_id"]],
+  "foreign_keys": [
+    {"column":"resident_category_id","references":"resident_categories(id)"},
+    {"column":"day_id","references":"days(id)"},
+    {"column":"schedule_id","references":"schedules(id)"}
+  ],
+  "associations": [
+    {"from_model":"ConstantShift","to_model":"ResidentCategory","type":"belongsTo","foreign_key":"resident_category_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/constant_shift.php","lines":"6-9"}]},
+    {"from_model":"ConstantShift","to_model":"Day","type":"belongsTo","foreign_key":"day_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/constant_shift.php","lines":"6-9"}]}
+  ],
+  "validations": [
+    {"field":"name","rule":"notBlank","presence":"required","allowEmpty":false,"messages":["Name must not be blank"],"files_cited":[{"file":"models/constant_shift.php","lines":"17-21"}]},
+    {"field":"start/end","rule":"start_before_end","presence":"required","allowEmpty":false,"messages":["Start must be before end"],"files_cited":[{"file":"models/constant_shift.php","lines":"22-26"}]},
+    {"field":"hours","rule":"numeric_or_empty","presence":"optional","allowEmpty":true,"messages":["Hours must be a number"],"files_cited":[{"file":"models/constant_shift.php","lines":"27-31"}]}
+  ],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"197-210"},
+    {"file":"models/constant_shift.php","lines":"1-133"}
+  ]
+}

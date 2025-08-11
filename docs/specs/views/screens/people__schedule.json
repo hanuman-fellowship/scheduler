@@ -1,0 +1,23 @@
+{
+  "screen": "people/schedule",
+  "controller_action": "PeopleController#schedule",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/menu.ctp",
+    "elements/schedule_message.ctp",
+    "elements/schedule_content.ctp",
+    "elements/dialog.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/schedule.ctp",
+      "lines": "1-12"
+    }
+  ]
+}

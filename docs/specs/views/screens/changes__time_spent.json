@@ -1,0 +1,27 @@
+{
+  "screen": "changes/time_spent",
+  "controller_action": "ChangesController#time_spent",
+  "forms": [],
+  "conditionals": [
+    {
+      "when": "$key === 'total'",
+      "shows": [
+        "UNKNOWN"
+      ]
+    }
+  ],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "changes/time_spent.ctp",
+      "lines": "1-33"
+    }
+  ]
+}

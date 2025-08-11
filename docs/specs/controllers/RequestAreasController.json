@@ -1,0 +1,74 @@
+{
+  "controller": "RequestAreasController",
+  "actions": [
+    {
+      "name": "edit",
+      "purpose": "Manager edits a request area (draft or in-progress)",
+      "auth": ["manager for area"],
+      "inputs": {"query": ["id", "force?"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "RequestArea", "operation": "custom:edit", "where": ["id", "force"]}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/request_areas/edit.ctp", "redirect": null, "status_codes": [200]},
+      "components": ["Email"],
+      "files_cited": [{"file": "controllers/request_areas_controller.php", "lines": "8-12"}]
+    },
+    {
+      "name": "editNotes",
+      "purpose": "Edit notes for a request area",
+      "auth": ["login"],
+      "inputs": {"query": ["id"], "form": ["RequestArea.*"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "RequestArea", "operation": "read by id", "where": ["id"]},
+        {"model": "RequestArea", "operation": "save", "where": []}
+      ],
+      "side_effects": ["recordChange"],
+      "response": {"type": "html", "view": "views/request_areas/edit_notes.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/request_areas_controller.php", "lines": "14-27"}]
+    },
+    {
+      "name": "submit",
+      "purpose": "Manager submits a request area; send emails to manager and operations",
+      "auth": ["manager for area"],
+      "inputs": {"query": ["id(negative)"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "RequestArea", "operation": "custom:submit", "where": ["id"]},
+        {"model": "EmailAuth", "operation": "read by id=1", "where": []}
+      ],
+      "side_effects": ["sendEmail(request_submit_mgr)", "sendEmail(request_submit_prsnl)"],
+      "response": {"type": "redirect", "view": null, "redirect": "requestAreas/edit/:id", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/request_areas_controller.php", "lines": "29-71"}]
+    },
+    {
+      "name": "view",
+      "purpose": "Operations view a submitted request area",
+      "auth": ["operations"],
+      "inputs": {"query": ["id?"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "RequestArea", "operation": "custom:getList or view", "where": ["id?"]}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/request_areas/view.ctp|select.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/request_areas_controller.php", "lines": "73-82"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Operations delete request areas",
+      "auth": ["operations"],
+      "inputs": {"query": ["id?"], "form": ["RequestArea.area_id[]"], "files": []},
+      "validation": [],
+      "queries": [{"model": "RequestArea", "operation": "delete", "where": ["area_id[]"]}],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/request_areas/delete.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/request_areas_controller.php", "lines": "84-99"}]
+    }
+  ],
+  "notes": []
+}
+
+

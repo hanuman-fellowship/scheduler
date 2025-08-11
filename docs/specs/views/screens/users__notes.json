@@ -1,0 +1,44 @@
+{
+  "screen": "users/notes",
+  "controller_action": "UsersController#notes",
+  "forms": [
+    {
+      "name": "User",
+      "fields": [
+        {
+          "name": "id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN",
+      "lines": "16:16"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/menu.ctp",
+    "elements/schedule_message.ctp",
+    "elements/dialog.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "users/notes.ctp",
+      "lines": "1-24"
+    }
+  ]
+}

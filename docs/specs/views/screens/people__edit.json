@@ -1,0 +1,53 @@
+{
+  "screen": "people/edit",
+  "controller_action": "PeopleController#edit",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "first",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "last",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "display_name",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "View Profile",
+        "to": "action"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/edit.ctp",
+      "lines": "1-20"
+    }
+  ]
+}

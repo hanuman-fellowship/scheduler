@@ -1,0 +1,29 @@
+{
+  "name": "users",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"username","type":"char(50)","nullable":true,"default":null,"notes":[]},
+    {"name":"password","type":"char(40)","nullable":true,"default":null,"notes":[]},
+    {"name":"email","type":"varchar(50)","nullable":true,"default":null,"notes":[]},
+    {"name":"notes","type":"longtext","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [],
+  "foreign_keys": [],
+  "associations": [
+    {"from_model":"User","to_model":"Setting","type":"hasMany","foreign_key":"user_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/user.php","lines":"8-13"}]},
+    {"from_model":"User","to_model":"Role","type":"hasMany","foreign_key":"user_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/user.php","lines":"8-13"}]},
+    {"from_model":"User","to_model":"Manager","type":"hasMany","foreign_key":"user_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/user.php","lines":"8-13"}]},
+    {"from_model":"User","to_model":"Schedule","type":"hasMany","foreign_key":"user_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/user.php","lines":"8-13"}]}
+  ],
+  "validations": [
+    {"field":"username","rule":"unique","presence":"required","allowEmpty":false,"messages":["That username is taken"],"files_cited":[{"file":"models/user.php","lines":"27-33"}]},
+    {"field":"generic_non_empty","rule":"notBlank","presence":"required","allowEmpty":false,"messages":["<field> must not be blank."],"files_cited":[{"file":"models/user.php","lines":"34-49"}]},
+    {"field":"area_id_when_manager","rule":"required_if(manager)","presence":"conditional","allowEmpty":false,"messages":["Please choose an area"],"files_cited":[{"file":"models/user.php","lines":"35-41"}]}
+  ],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"650-657"},
+    {"file":"models/user.php","lines":"1-184"}
+  ]
+}

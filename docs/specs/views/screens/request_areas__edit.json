@@ -1,0 +1,23 @@
+{
+  "screen": "request_areas/edit",
+  "controller_action": "RequestAreasController#edit",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/menu.ctp",
+    "elements/schedule_message.ctp",
+    "elements/schedule_content.ctp",
+    "elements/dialog.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "request_areas/edit.ctp",
+      "lines": "1-6"
+    }
+  ]
+}

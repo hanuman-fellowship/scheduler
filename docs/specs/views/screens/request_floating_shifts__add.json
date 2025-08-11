@@ -1,0 +1,41 @@
+{
+  "screen": "request_floating_shifts/add",
+  "controller_action": "RequestFloatingShiftsController#add",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "person_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "note",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "request_floating_shifts/add.ctp",
+      "lines": "1-22"
+    }
+  ]
+}

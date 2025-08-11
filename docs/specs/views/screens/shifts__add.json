@@ -1,0 +1,20 @@
+{
+  "screen": "shifts/add",
+  "controller_action": "ShiftsController#add",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "shifts/add.ctp",
+      "lines": "1-35"
+    }
+  ]
+}

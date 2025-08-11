@@ -1,0 +1,20 @@
+{
+  "name": "i18n",
+  "columns": [
+    {"name":"id","type":"int(10)","nullable":false,"default":null,"notes":[]},
+    {"name":"locale","type":"varchar(6)","nullable":false,"default":null,"notes":[]},
+    {"name":"model","type":"varchar(255)","nullable":false,"default":null,"notes":[]},
+    {"name":"foreign_key","type":"int(10)","nullable":false,"default":null,"notes":[]},
+    {"name":"field","type":"varchar(255)","nullable":false,"default":null,"notes":[]},
+    {"name":"content","type":"mediumtext","nullable":true,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [["locale"],["model"],["row_id"],["field"]],
+  "foreign_keys": [],
+  "associations": [],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/i18n.sql","lines":"9-26"}
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "controller": "RequestShiftsController",
+  "actions": [
+    {
+      "name": "add",
+      "purpose": "Create a requested shift",
+      "auth": ["login"],
+      "inputs": {"query": ["area_id?", "day_id?", "start?", "end?"], "form": ["RequestShift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "RequestShift", "operation": "create/save", "where": []},
+        {"model": "Day", "operation": "list", "where": []}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/request_shifts/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/request_shifts_controller.php", "lines": "6-31"}]
+    },
+    {
+      "name": "edit",
+      "purpose": "Edit a requested shift",
+      "auth": ["login"],
+      "inputs": {"query": ["id"], "form": ["RequestShift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "RequestShift", "operation": "read/save", "where": ["id"]},
+        {"model": "Day", "operation": "list", "where": []}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/request_shifts/edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/request_shifts_controller.php", "lines": "33-52"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Delete a requested shift",
+      "auth": ["login"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "RequestShift", "operation": "delete", "where": ["id"]}],
+      "side_effects": ["redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/request_shifts_controller.php", "lines": "54-57"}]
+    }
+  ],
+  "notes": []
+}
+
+

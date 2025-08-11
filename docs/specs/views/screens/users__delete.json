@@ -1,0 +1,25 @@
+{
+  "screen": "users/delete",
+  "controller_action": "UsersController#delete",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "Inflector::humanize($user['User']['username']",
+        "to": "UNKNOWN"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "users/delete.ctp",
+      "lines": "1-19"
+    }
+  ]
+}

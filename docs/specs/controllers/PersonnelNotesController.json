@@ -1,0 +1,44 @@
+{
+  "controller": "PersonnelNotesController",
+  "actions": [
+    {
+      "name": "edit",
+      "purpose": "Personnel edit a specific note",
+      "auth": ["personnel"],
+      "inputs": {"query": ["id"], "form": ["PersonnelNote.*"], "files": []},
+      "validation": [],
+      "queries": [{"model": "PersonnelNote", "operation": "read/save", "where": ["id"]}],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/personnel_notes/edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/personnel_notes_controller.php", "lines": "6-18"}]
+    },
+    {
+      "name": "add",
+      "purpose": "Personnel add a note for a person",
+      "auth": ["personnel"],
+      "inputs": {"query": ["person_id?"], "form": ["PersonnelNote.*"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "PersonnelNote", "operation": "create/save", "where": []},
+        {"model": "Person", "operation": "list:listByResidentCategory", "where": []}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/personnel_notes/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/personnel_notes_controller.php", "lines": "20-34"}]
+    },
+    {
+      "name": "reorder",
+      "purpose": "Reorder personnel notes for a person (AJAX)",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": ["PersonnelNote.lpnotes_order"], "files": []},
+      "validation": [],
+      "queries": [{"model": "PersonnelNote", "operation": "multiple updates:order", "where": ["ids in submitted order"]}],
+      "side_effects": [],
+      "response": {"type": "text", "view": null, "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/personnel_notes_controller.php", "lines": "36-46"}]
+    }
+  ],
+  "notes": []
+}
+
+

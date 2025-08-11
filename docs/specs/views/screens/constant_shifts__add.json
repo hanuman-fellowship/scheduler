@@ -1,0 +1,48 @@
+{
+  "screen": "constant_shifts/add",
+  "controller_action": "ConstantShiftsController#add",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "resident_category_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "day_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "constant_shifts/add.ctp",
+      "lines": "1-42"
+    }
+  ]
+}

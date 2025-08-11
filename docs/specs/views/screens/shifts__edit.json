@@ -1,0 +1,46 @@
+{
+  "screen": "shifts/edit",
+  "controller_action": "ShiftsController#edit",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "area_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "day_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "Delete Shift",
+        "to": "action"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "shifts/edit.ctp",
+      "lines": "1-34"
+    }
+  ]
+}

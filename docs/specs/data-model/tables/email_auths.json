@@ -1,0 +1,22 @@
+{
+  "name": "email_auths",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"email","type":"varchar(50)","nullable":false,"default":null,"notes":[]},
+    {"name":"password","type":"varchar(30)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["UNKNOWN"],
+  "unique_constraints": [],
+  "indexes": [],
+  "foreign_keys": [],
+  "associations": [],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"254-259"},
+    {"file":"models/email_auth.php","lines":"1-8"}
+  ],
+  "notes": [
+    "ready_for_import.sql shows a variant of email_auths without 'name'; schema differences exist across SQL files."
+  ]
+}

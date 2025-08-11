@@ -1,0 +1,126 @@
+{
+  "controller": "UsersController",
+  "actions": [
+    {
+      "name": "login",
+      "purpose": "Authenticate a user and optionally auto-select a schedule",
+      "auth": ["public"],
+      "inputs": {"query": [], "form": ["User.username", "User.password"], "files": []},
+      "validation": [{"field": "User.username/password", "rule": "Authsome::login"}],
+      "queries": [
+        {"model": "User", "operation": "authsomeLogin", "where": ["username", "password"]},
+        {"model": "Setting", "operation": "read: auto_select", "where": ["key='auto_select'", "user_id"]},
+        {"model": "Schedule", "operation": "read by id", "where": ["id=auto_select"]}
+      ],
+      "side_effects": ["Session: setSchedule if non-published", "User->Setting delete auto_select if published"],
+      "response": {"type": "html", "view": "views/users/login.ctp", "redirect": null, "status_codes": [200]},
+      "components": ["Email"],
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "7-31"}, {"file": "app_controller.php", "lines": "6-13"}]
+    },
+    {
+      "name": "logout",
+      "purpose": "Log out current user and reset schedule",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": [], "files": []},
+      "validation": [],
+      "queries": [],
+      "side_effects": ["Authsome::logout", "Session: setSchedule('latest')", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "33-39"}]
+    },
+    {
+      "name": "add",
+      "purpose": "Operations create a new user and email credentials",
+      "auth": ["operations"],
+      "inputs": {"query": [], "form": ["User.*", "Area.area_id[]?", "Role.*?"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "EmailAuth", "operation": "read id=1", "where": []},
+        {"model": "User", "operation": "create/insert via sSave", "where": []}
+      ],
+      "side_effects": ["sendEmail:new_user"],
+      "response": {"type": "html", "view": "views/users/add.ctp|added.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "41-69"}]
+    },
+    {
+      "name": "changePassword",
+      "purpose": "Change the current user's password",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": ["User.old_password", "User.password", "User.password_confirm"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "User::changePassword"}],
+      "queries": [{"model": "User", "operation": "custom:changePassword", "where": []}],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/users/change_password.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "71-80"}]
+    },
+    {
+      "name": "resetPassword",
+      "purpose": "Reset a user's password by email and send it",
+      "auth": ["public"],
+      "inputs": {"query": [], "form": ["User.email"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "User", "operation": "findByEmail", "where": ["email"]},
+        {"model": "EmailAuth", "operation": "read id=1", "where": []},
+        {"model": "User", "operation": "update password hashed", "where": ["id"]}
+      ],
+      "side_effects": ["sendEmail:reset_password"],
+      "response": {"type": "html", "view": "views/users/reset_password.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "96-126"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Operations delete another user",
+      "auth": ["operations"],
+      "inputs": {"query": ["id?"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "User", "operation": "delete via sDelete or list", "where": ["id?", "exclude current user"]}],
+      "side_effects": ["redirect to referer"],
+      "response": {"type": "html", "view": "views/users/delete.ctp", "redirect": null, "status_codes": [200,302]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "129-142"}]
+    },
+    {
+      "name": "edit",
+      "purpose": "Operations edit a user and roles/areas",
+      "auth": ["operations"],
+      "inputs": {"query": ["id?"], "form": ["User.*", "Role.*?", "Area.area_id[]?"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "User", "operation": "read/edit method or list", "where": ["id?"]},
+        {"model": "User", "operation": "update via sSave", "where": ["id"]},
+        {"model": "Area", "operation": "list", "where": []}
+      ],
+      "side_effects": ["Authsome::login('update') if editing self"],
+      "response": {"type": "html", "view": "views/users/edit.ctp|select_edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "144-169"}]
+    },
+    {
+      "name": "emailUsers",
+      "purpose": "Operations send an email to selected users or all in areas",
+      "auth": ["operations"],
+      "inputs": {"query": [], "form": ["User.to[]?", "User.subject", "User.message", "Area.area_id[]?"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "EmailAuth", "operation": "read id=1", "where": []},
+        {"model": "User", "operation": "getIdsFromAreaIds + find", "where": []}
+      ],
+      "side_effects": ["sendEmail (smtp)", "render sent on success"],
+      "response": {"type": "html", "view": "views/users/email_users.ctp|sent.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "171-219"}]
+    },
+    {
+      "name": "notes",
+      "purpose": "User saves personal notes",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": ["User.notes"], "files": []},
+      "validation": [],
+      "queries": [{"model": "User", "operation": "read/save", "where": ["id=current user"]}],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/users/notes.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/users_controller.php", "lines": "221-230"}]
+    }
+  ],
+  "notes": ["Controller declares components Email (controllers/users_controller.php:5)"]
+}
+
+

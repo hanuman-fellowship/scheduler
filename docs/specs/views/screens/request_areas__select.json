@@ -1,0 +1,25 @@
+{
+  "screen": "request_areas/select",
+  "controller_action": "RequestAreasController#select",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "$name",
+        "to": "action"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "request_areas/select.ctp",
+      "lines": "1-12"
+    }
+  ]
+}

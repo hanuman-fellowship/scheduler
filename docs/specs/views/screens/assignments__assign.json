@@ -1,0 +1,72 @@
+{
+  "screen": "assignments/assign",
+  "controller_action": "AssignmentsController#assign",
+  "forms": [
+    {
+      "name": "Assignment",
+      "fields": [
+        {
+          "name": "other",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "UNKNOWN",
+          "type": "checkbox",
+          "required": false,
+          "default": "0",
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN",
+      "lines": "11:11"
+    }
+  ],
+  "conditionals": [
+    {
+      "when": "!$request",
+      "shows": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "when": "$list == 'all'",
+      "shows": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "when": "$person['available'] === -1",
+      "shows": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "when": "$person['available'] || $list == 'all' || $request",
+      "shows": [
+        "UNKNOWN"
+      ]
+    }
+  ],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "$person['Person']['name']",
+        "to": "Person"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "assignments/assign.ctp",
+      "lines": "1-50"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "screen": "users/login",
+  "controller_action": "UsersController#login",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "username",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "password",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "users/login.ctp",
+      "lines": "1-21"
+    }
+  ]
+}

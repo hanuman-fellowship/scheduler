@@ -1,0 +1,25 @@
+{
+  "screen": "profiles/select",
+  "controller_action": "ProfilesController#select",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "$name",
+        "to": "action"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "profiles/select.ctp",
+      "lines": "1-10"
+    }
+  ]
+}

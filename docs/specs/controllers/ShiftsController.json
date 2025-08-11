@@ -1,0 +1,63 @@
+{
+  "controller": "ShiftsController",
+  "actions": [
+    {
+      "name": "add",
+      "purpose": "Create a shift in an area/day/time range",
+      "auth": ["editable"],
+      "inputs": {"query": ["area_id?", "day_id?", "start?", "end?"], "form": ["Shift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "Shift", "operation": "create/insert via sSave", "where": []},
+        {"model": "Area", "operation": "list", "where": []},
+        {"model": "Day", "operation": "list where name<>''", "where": []}
+      ],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/shifts/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/shifts_controller.php", "lines": "6-44"}]
+    },
+    {
+      "name": "edit",
+      "purpose": "Edit an existing shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": ["Shift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "Shift", "operation": "read/update via sSave", "where": ["id"]},
+        {"model": "Area", "operation": "list", "where": []},
+        {"model": "Day", "operation": "list where name<>''", "where": []}
+      ],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/shifts/edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/shifts_controller.php", "lines": "46-79"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Delete a shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "Shift", "operation": "delete via sDelete", "where": ["id"]}],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/shifts_controller.php", "lines": "81-90"}]
+    },
+    {
+      "name": "listBySlot",
+      "purpose": "List shifts that match a person, day, and time slot",
+      "auth": ["login"],
+      "inputs": {"query": ["person_id", "day_id", "start", "end"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Shift", "operation": "custom:listBySlot", "where": ["person_id", "day_id", "start", "end"]},
+        {"model": "Day", "operation": "read name by id", "where": ["day_id"]}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/shifts/list_by_slot.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/shifts_controller.php", "lines": "92-103"}]
+    }
+  ],
+  "notes": []
+}
+
+

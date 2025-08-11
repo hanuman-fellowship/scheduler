@@ -1,0 +1,33 @@
+{
+  "screen": "schedules/select",
+  "controller_action": "SchedulesController#select",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "Latest Published",
+        "to": "latest"
+      },
+      {
+        "text": "$schedule['Schedule']['name']",
+        "to": "Schedule"
+      },
+      {
+        "text": "{$schedule['Schedule']['name']} ({$schedule['User']['username']}",
+        "to": "UNKNOWN"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/select.ctp",
+      "lines": "1-62"
+    }
+  ]
+}

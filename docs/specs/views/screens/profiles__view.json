@@ -1,0 +1,21 @@
+{
+  "screen": "profiles/view",
+  "controller_action": "ProfilesController#view",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/menu.ctp",
+    "elements/dialog.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "profiles/view.ctp",
+      "lines": "1-13"
+    }
+  ]
+}

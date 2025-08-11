@@ -1,0 +1,160 @@
+{
+  "controller": "AreasController",
+  "actions": [
+    {
+      "name": "dups",
+      "purpose": "Trigger duplicate assignment detection (debug utility)",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "Assignment", "operation": "custom:dups", "where": []}],
+      "side_effects": [],
+      "response": {"type": "text", "view": null, "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "7-9"}]
+    },
+    {
+      "name": "schedule",
+      "purpose": "Render schedule for an area or print view",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Area", "operation": "read", "where": ["id"]},
+        {"model": "Schedule", "operation": "read:requestByArea", "where": ["area_id"]}
+      ],
+      "side_effects": ["Session.write:last_area"],
+      "response": {"type": "html", "view": "views/areas/schedule.ctp", "redirect": "/" , "status_codes": [200,302]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "11-31"}]
+    },
+    {
+      "name": "add",
+      "purpose": "Create a new area",
+      "auth": ["editable"],
+      "inputs": {"query": [], "form": ["Area.name", "Area.notes?"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [{"model": "Area", "operation": "create", "where": []}],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/areas/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "33-47"}]
+    },
+    {
+      "name": "edit",
+      "purpose": "Update an area",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": ["Area.id", "Area.name", "Area.notes?"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "Area", "operation": "read", "where": ["id"]},
+        {"model": "Area", "operation": "update", "where": ["id"]}
+      ],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/areas/edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "49-65"}]
+    },
+    {
+      "name": "editNotes",
+      "purpose": "Update area notes",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": ["Area.id", "Area.notes"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Area", "operation": "read", "where": ["id"]},
+        {"model": "Area", "operation": "update", "where": ["id"]}
+      ],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/areas/edit_notes.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "67-78"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Delete one or more areas",
+      "auth": ["editable"],
+      "inputs": {"query": ["id?"], "form": ["Area.area_id[]"], "files": []},
+      "validation": [],
+      "queries": [{"model": "Area", "operation": "delete", "where": ["area_id[]"]}],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/areas/delete.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "80-95"}]
+    },
+    {
+      "name": "clear",
+      "purpose": "Clear an area’s shifts (optionally keeping shifts)",
+      "auth": ["editable"],
+      "inputs": {"query": ["id?"], "form": ["Area.area_id[]", "Area.keep_shifts"], "files": []},
+      "validation": [],
+      "queries": [{"model": "Area", "operation": "custom:clear", "where": ["area_id[]", "keep_shifts"]}],
+      "side_effects": ["recordChange", "stopChange"],
+      "response": {"type": "html", "view": "views/areas/clear.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "97-113"}]
+    },
+    {
+      "name": "select",
+      "purpose": "Render selection of areas",
+      "auth": ["login"],
+      "inputs": {"query": [], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "Area", "operation": "list", "where": []}],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/areas/select.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "115-119"}]
+    },
+    {
+      "name": "previous",
+      "purpose": "Navigate to previous area schedule",
+      "auth": ["login"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "Area", "operation": "list", "where": []}],
+      "side_effects": [],
+      "response": {"type": "redirect", "view": null, "redirect": "areas/schedule/:id", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "121-133"}]
+    },
+    {
+      "name": "next",
+      "purpose": "Navigate to next area schedule",
+      "auth": ["login"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "Area", "operation": "list", "where": []}],
+      "side_effects": [],
+      "response": {"type": "redirect", "view": null, "redirect": "areas/schedule/:id", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "135-145"}]
+    },
+    {
+      "name": "printm",
+      "purpose": "Print multiple areas’ schedules",
+      "auth": ["login"],
+      "inputs": {"query": ["id?"], "form": ["Area.area_id[]"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Area", "operation": "list", "where": []},
+        {"model": "Area", "operation": "read via requestAction", "where": ["id"]}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/areas/printm.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "147-165"}]
+    },
+    {
+      "name": "changed",
+      "purpose": "Show areas with changes since a given time",
+      "auth": ["editable"],
+      "inputs": {"query": [], "form": ["Area.since"], "files": []},
+      "validation": [{"field": "Area.since", "rule": "strtotime"}],
+      "queries": [
+        {"model": "Area", "operation": "custom:getChanged", "where": ["since"]},
+        {"model": "Area", "operation": "list", "where": []}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/areas/changed.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/areas_controller.php", "lines": "167-187"}]
+    }
+  ],
+  "notes": [
+    "Global auth: session required for all actions per AppController.beforeFilter except 'upload' in PeopleController (app_controller.php:21-24).",
+    "'editable' means user must have Schedule.editable or be in request edit state; enforced by redirectIfNotEditable (app_controller.php:263-267).",
+    "Components implicitly available: Email, Session, RequestHandler, Authsome (app_controller.php:6-13).",
+    "Helpers: Schedule helper declared at controller level (controllers/areas_controller.php:5)."
+  ]
+}
+
+

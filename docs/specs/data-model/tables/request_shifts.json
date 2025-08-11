@@ -1,0 +1,23 @@
+{
+  "name": "request_shifts",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"request_area_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"day_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"start","type":"time","nullable":false,"default":null,"notes":[]},
+    {"name":"end","type":"time","nullable":false,"default":null,"notes":[]},
+    {"name":"num_people","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [["request_area_id"],["day_id"]],
+  "foreign_keys": [
+    {"column":"request_area_id","references":"request_areas(id)"},
+    {"column":"day_id","references":"days(id)"}
+  ],
+  "associations": [],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/ready_for_import.sql","lines":"533-543"}
+  ]
+}

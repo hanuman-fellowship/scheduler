@@ -1,0 +1,22 @@
+{
+  "controller": "PagesController",
+  "actions": [
+    {
+      "name": "display",
+      "purpose": "Render static page from views/pages/* and populate common sidebar data",
+      "auth": ["login"],
+      "inputs": {"query": ["path segments"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Person", "operation": "custom:getHours", "where": []},
+        {"model": "Area", "operation": "custom:getHours", "where": []}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/pages/<path>.ctp", "redirect": "/" , "status_codes": [200,302]},
+      "files_cited": [{"file": "controllers/pages_controller.php", "lines": "63-91"}]
+    }
+  ],
+  "notes": ["Sets 'people' and 'areas' via internal requestAction calls to PeopleController.selectSchedule and AreasController.select (controllers/pages_controller.php:83-85)"]
+}
+
+

@@ -1,0 +1,34 @@
+{
+  "name": "schedules",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"user_id","type":"int(11)","nullable":true,"default":null,"notes":[]},
+    {"name":"updated","type":"datetime","nullable":false,"default":null,"notes":[]},
+    {"name":"parent_id","type":"int(11)","nullable":true,"default":null,"notes":[]},
+    {"name":"schedule_group_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"request","type":"int(1)","nullable":false,"default":"0","notes":[]},
+    {"name":"template","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [["user_id"]],
+  "foreign_keys": [
+    {"column":"user_id","references":"users(id)"},
+    {"column":"schedule_group_id","references":"schedule_groups(id)"}
+  ],
+  "associations": [
+    {"from_model":"Schedule","to_model":"User","type":"belongsTo","foreign_key":"user_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/schedule.php","lines":"24-27"}]},
+    {"from_model":"Schedule","to_model":"ScheduleGroup","type":"belongsTo","foreign_key":"schedule_group_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/schedule.php","lines":"24-27"}]},
+    {"from_model":"Schedule","to_model":"Area","type":"hasMany","foreign_key":"schedule_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/schedule.php","lines":"7-22"}]}
+  ],
+  "validations": [
+    {"field":"name","rule":"notBlank_and_unique","presence":"required","allowEmpty":false,"messages":["Name must not be blank","That name already exists"],"files_cited":[{"file":"models/schedule.php","lines":"52-68"}]},
+    {"field":"start","rule":"valid_date","presence":"conditional","allowEmpty":false,"messages":["Invalid start date"],"files_cited":[{"file":"models/schedule.php","lines":"70-75"}]},
+    {"field":"end","rule":"valid_date_after_start","presence":"conditional","allowEmpty":false,"messages":["Invalid end date","Start before end, please"],"files_cited":[{"file":"models/schedule.php","lines":"76-93"}]}
+  ],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"538-549"},
+    {"file":"models/schedule.php","lines":"1-848"}
+  ]
+}

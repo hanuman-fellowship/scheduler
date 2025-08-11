@@ -1,0 +1,27 @@
+{
+  "screen": "pages/home",
+  "controller_action": "PagesController#home",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "https://scheduler.mountmadonna.org",
+        "to": "https://scheduler.mountmadonna.org"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/menu.ctp",
+    "elements/schedule_message.ctp",
+    "elements/dialog.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "pages/home.ctp",
+      "lines": "1-116"
+    }
+  ]
+}

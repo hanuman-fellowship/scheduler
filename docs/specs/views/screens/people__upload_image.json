@@ -1,0 +1,27 @@
+{
+  "screen": "people/upload_image",
+  "controller_action": "PeopleController#upload_image",
+  "forms": [
+    {
+      "name": "Person",
+      "fields": [],
+      "submit_to": "UNKNOWN",
+      "lines": "4:4"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/upload_image.ctp",
+      "lines": "1-13"
+    }
+  ]
+}

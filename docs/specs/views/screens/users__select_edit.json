@@ -1,0 +1,20 @@
+{
+  "screen": "users/select_edit",
+  "controller_action": "UsersController#select_edit",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "users/select_edit.ctp",
+      "lines": "1-18"
+    }
+  ]
+}

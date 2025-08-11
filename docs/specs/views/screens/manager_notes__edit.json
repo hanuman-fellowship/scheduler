@@ -1,0 +1,37 @@
+{
+  "screen": "manager_notes/edit",
+  "controller_action": "ManagerNotesController#edit",
+  "forms": [
+    {
+      "name": "ManagerNote",
+      "fields": [
+        {
+          "name": "note",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN",
+      "lines": "16:16"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/menu.ctp",
+    "elements/schedule_message.ctp",
+    "elements/dialog.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "manager_notes/edit.ctp",
+      "lines": "1-24"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "screen": "personnel_notes/edit",
+  "controller_action": "PersonnelNotesController#edit",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/shortcut.ctp",
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "personnel_notes/edit.ctp",
+      "lines": "1-24"
+    }
+  ]
+}

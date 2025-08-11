@@ -1,0 +1,28 @@
+{
+  "name": "resident_categories",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"color","type":"varchar(7)","nullable":false,"default":null,"notes":[]},
+    {"name":"sort_order","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"schedule_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["UNKNOWN"],
+  "unique_constraints": [["schedule_id","id"]],
+  "indexes": [],
+  "foreign_keys": [
+    {"column":"schedule_id","references":"schedules(id)"}
+  ],
+  "associations": [
+    {"from_model":"ResidentCategory","to_model":"ConstantShift","type":"hasMany","foreign_key":"resident_category_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/resident_category.php","lines":"7-10"}]},
+    {"from_model":"ResidentCategory","to_model":"Person","type":"hasMany","foreign_key":"UNKNOWN","through_table":null,"conditions":null,"files_cited":[{"file":"models/resident_category.php","lines":"7-10"}]}
+  ],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"460-467"},
+    {"file":"models/resident_category.php","lines":"1-67"}
+  ],
+  "notes": [
+    "hasMany Person is declared in the model but Person table has no resident_category_id field; relationship appears indirect via people_schedules."
+  ]
+}

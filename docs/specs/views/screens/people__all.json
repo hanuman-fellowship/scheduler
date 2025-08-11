@@ -1,0 +1,20 @@
+{
+  "screen": "people/all",
+  "controller_action": "PeopleController#all",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/sql_dump.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/all.ctp",
+      "lines": "1-2"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "request_areas",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"manager","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"notes","type":"text","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["id"],
+  "unique_constraints": [],
+  "indexes": [],
+  "foreign_keys": [],
+  "associations": [],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/ready_for_import.sql","lines":"501-507"}
+  ]
+}

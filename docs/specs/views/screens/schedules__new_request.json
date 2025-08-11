@@ -1,0 +1,46 @@
+{
+  "screen": "schedules/new_request",
+  "controller_action": "SchedulesController#new_request",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [
+    {
+      "when": "$this->data['Schedule']['based_on'] == 'template'",
+      "shows": [
+        "UNKNOWN"
+      ]
+    }
+  ],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "$name",
+        "to": "schedules/newRequest"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/new_request.ctp",
+      "lines": "1-61"
+    }
+  ]
+}

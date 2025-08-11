@@ -1,0 +1,21 @@
+{
+  "controller": "SettingsController",
+  "actions": [
+    {
+      "name": "toggleDates",
+      "purpose": "Operations toggle the show_dates user setting",
+      "auth": ["operations"],
+      "inputs": {"query": [], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Setting", "operation": "read/write by key=user_id", "where": ["key=show_dates", "user_id=current"]}
+      ],
+      "side_effects": ["redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/settings_controller.php", "lines": "6-12"}, {"file": "app_controller.php", "lines": "102-129"}]
+    }
+  ],
+  "notes": []
+}
+
+

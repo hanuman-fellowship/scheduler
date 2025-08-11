@@ -1,0 +1,67 @@
+{
+  "controller": "AssignmentsController",
+  "actions": [
+    {
+      "name": "assign",
+      "purpose": "Assign a person (or name) to a shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["shift_id", "person_id?"], "form": ["Assignment.shift", "Assignment.other"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "Assignment", "operation": "create", "where": []},
+        {"model": "Assignment", "operation": "update via sSave", "where": ["shift_id", "person_id"]},
+        {"model": "Person", "operation": "custom:getAvailable", "where": ["shift_id"]}
+      ],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "html", "view": "views/assignments/assign.ctp", "redirect": null, "status_codes": [200,302]},
+      "components": [],
+      "helpers": ["schedule"],
+      "files_cited": [{"file": "controllers/assignments_controller.php", "lines": "7-32"}]
+    },
+    {
+      "name": "unassign",
+      "purpose": "Remove an assignment from a shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "Assignment", "operation": "delete via sDelete", "where": ["id"]}],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/assignments_controller.php", "lines": "34-43"}]
+    },
+    {
+      "name": "swap",
+      "purpose": "Swap the person on an assignment",
+      "auth": ["editable"],
+      "inputs": {"query": ["assignment_id", "person_id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Assignment", "operation": "read", "where": ["id"]},
+        {"model": "Assignment", "operation": "update via sSave", "where": ["id"]}
+      ],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/assignments_controller.php", "lines": "45-57"}]
+    },
+    {
+      "name": "star",
+      "purpose": "Toggle the star flag on an assignment",
+      "auth": ["login"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Assignment", "operation": "read with contain:Shift", "where": ["id"]},
+        {"model": "Assignment", "operation": "update via sSave", "where": ["id"]}
+      ],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/assignments_controller.php", "lines": "59-76"}]
+    }
+  ],
+  "notes": [
+    "Actions redirect to RequestAssignments controller when IDs are negative (assign/unassign) (controllers/assignments_controller.php:8-10,35-37)",
+    "Global components/helpers inherited from AppController; additional helper 'schedule' declared (controllers/assignments_controller.php:5)."
+  ]
+}
+
+

@@ -1,0 +1,18 @@
+{
+  "screen": "pages/happy_birthday",
+  "controller_action": "PagesController#happy_birthday",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [],
+  "files_cited": [
+    {
+      "file": "pages/happy_birthday.ctp",
+      "lines": "1-5"
+    }
+  ]
+}

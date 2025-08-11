@@ -1,0 +1,29 @@
+{
+  "screen": "people/profile",
+  "controller_action": "PeopleController#profile",
+  "forms": [],
+  "conditionals": [
+    {
+      "when": "$isOperations",
+      "shows": [
+        "UNKNOWN"
+      ]
+    }
+  ],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/menu.ctp",
+    "elements/upload_photo.ctp",
+    "elements/dialog.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "people/profile.ctp",
+      "lines": "1-56"
+    }
+  ]
+}

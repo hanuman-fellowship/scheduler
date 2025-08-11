@@ -1,0 +1,46 @@
+{
+  "screen": "resident_categories/edit",
+  "controller_action": "ResidentCategoriesController#edit",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "UNKNOWN",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "&nbsp;&nbsp;&nbsp;",
+        "to": "javascript:pickColor('pick1299802156');"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "resident_categories/edit.ctp",
+      "lines": "1-19"
+    }
+  ]
+}

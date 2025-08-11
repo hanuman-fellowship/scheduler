@@ -1,0 +1,25 @@
+{
+  "screen": "schedules/alternate",
+  "controller_action": "SchedulesController#alternate",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "$alternate['ScheduleGroup']['name']",
+        "to": "ScheduleGroups/select"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/alternate.ctp",
+      "lines": "1-16"
+    }
+  ]
+}

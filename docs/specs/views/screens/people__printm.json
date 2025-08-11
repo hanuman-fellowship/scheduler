@@ -1,0 +1,23 @@
+{
+  "screen": "people/printm",
+  "controller_action": "PeopleController#printm",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "&larr; Go Back",
+        "to": "escape"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [],
+  "files_cited": [
+    {
+      "file": "people/printm.ctp",
+      "lines": "1-10"
+    }
+  ]
+}

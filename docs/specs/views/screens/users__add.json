@@ -1,0 +1,48 @@
+{
+  "screen": "users/add",
+  "controller_action": "UsersController#add",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "username",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "area_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "users/add.ctp",
+      "lines": "1-34"
+    }
+  ]
+}

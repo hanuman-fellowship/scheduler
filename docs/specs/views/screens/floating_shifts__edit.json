@@ -1,0 +1,53 @@
+{
+  "screen": "floating_shifts/edit",
+  "controller_action": "FloatingShiftsController#edit",
+  "forms": [
+    {
+      "name": "form",
+      "fields": [
+        {
+          "name": "area_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "person_id",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        },
+        {
+          "name": "note",
+          "type": "text",
+          "required": false,
+          "default": null,
+          "validation": []
+        }
+      ],
+      "submit_to": "UNKNOWN"
+    }
+  ],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "Delete Floating Shift",
+        "to": "action"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "floating_shifts/edit.ctp",
+      "lines": "1-28"
+    }
+  ]
+}

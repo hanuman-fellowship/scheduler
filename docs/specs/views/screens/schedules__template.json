@@ -1,0 +1,21 @@
+{
+  "screen": "schedules/template",
+  "controller_action": "SchedulesController#template",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/schedule_message.ctp",
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/template.ctp",
+      "lines": "1-24"
+    }
+  ]
+}

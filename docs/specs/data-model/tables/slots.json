@@ -1,0 +1,22 @@
+{
+  "name": "slots",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"schedule_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["UNKNOWN"],
+  "unique_constraints": [["schedule_id","id"]],
+  "indexes": [],
+  "foreign_keys": [
+    {"column":"schedule_id","references":"schedules(id)"}
+  ],
+  "associations": [
+    {"from_model":"Slot","to_model":"Boundary","type":"hasMany","foreign_key":"slot_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/slot.php","lines":"6-8"}]}
+  ],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"625-630"},
+    {"file":"models/slot.php","lines":"1-11"}
+  ]
+}

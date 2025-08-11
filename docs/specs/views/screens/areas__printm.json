@@ -1,0 +1,23 @@
+{
+  "screen": "areas/printm",
+  "controller_action": "AreasController#printm",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": [
+      {
+        "text": "&larr; Go Back",
+        "to": "escape"
+      }
+    ]
+  },
+  "ajax_calls": [],
+  "partials_used": [],
+  "files_cited": [
+    {
+      "file": "areas/printm.ctp",
+      "lines": "1-10"
+    }
+  ]
+}

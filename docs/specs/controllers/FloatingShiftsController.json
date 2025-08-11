@@ -1,0 +1,51 @@
+{
+  "controller": "FloatingShiftsController",
+  "actions": [
+    {
+      "name": "add",
+      "purpose": "Create a floating shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["area_id?", "person_id?"], "form": ["FloatingShift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "FloatingShift", "operation": "create", "where": []},
+        {"model": "FloatingShift", "operation": "insert via sSave", "where": []},
+        {"model": "Area", "operation": "list", "where": []},
+        {"model": "Person", "operation": "list:getList", "where": []}
+      ],
+      "side_effects": ["recordChange", "stopChange", "Session.save referer via savePage"],
+      "response": {"type": "html", "view": "views/floating_shifts/add.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/floating_shifts_controller.php", "lines": "6-33"}]
+    },
+    {
+      "name": "edit",
+      "purpose": "Update a floating shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": ["FloatingShift.*"], "files": []},
+      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "queries": [
+        {"model": "FloatingShift", "operation": "read", "where": ["id"]},
+        {"model": "FloatingShift", "operation": "update via sSave", "where": ["id"]},
+        {"model": "Area", "operation": "list", "where": []},
+        {"model": "Person", "operation": "list:getList", "where": []}
+      ],
+      "side_effects": ["recordChange", "stopChange", "Session.save referer via savePage"],
+      "response": {"type": "html", "view": "views/floating_shifts/edit.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/floating_shifts_controller.php", "lines": "35-66"}]
+    },
+    {
+      "name": "delete",
+      "purpose": "Delete a floating shift",
+      "auth": ["editable"],
+      "inputs": {"query": ["id"], "form": [], "files": []},
+      "validation": [],
+      "queries": [{"model": "FloatingShift", "operation": "delete via sDelete", "where": ["id"]}],
+      "side_effects": ["recordChange", "stopChange", "redirect to referer"],
+      "response": {"type": "redirect", "view": null, "redirect": "referer", "status_codes": [302]},
+      "files_cited": [{"file": "controllers/floating_shifts_controller.php", "lines": "68-74"}]
+    }
+  ],
+  "notes": []
+}
+
+

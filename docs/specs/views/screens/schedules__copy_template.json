@@ -1,0 +1,20 @@
+{
+  "screen": "schedules/copy_template",
+  "controller_action": "SchedulesController#copy_template",
+  "forms": [],
+  "conditionals": [],
+  "messages": [],
+  "navigation": {
+    "links": []
+  },
+  "ajax_calls": [],
+  "partials_used": [
+    "elements/message.ctp"
+  ],
+  "files_cited": [
+    {
+      "file": "schedules/copy_template.ctp",
+      "lines": "1-16"
+    }
+  ]
+}

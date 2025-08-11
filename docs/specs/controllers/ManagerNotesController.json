@@ -1,0 +1,37 @@
+{
+  "controller": "ManagerNotesController",
+  "actions": [
+    {
+      "name": "edit",
+      "purpose": "Operations edit notes for a specific area or select area",
+      "auth": ["operations"],
+      "inputs": {"query": ["area_id"], "form": ["ManagerNote.*"], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "Area", "operation": "list", "where": []},
+        {"model": "Area", "operation": "read", "where": ["id"]},
+        {"model": "ManagerNote", "operation": "save/findByAreaId", "where": ["area_id"]}
+      ],
+      "side_effects": ["redirect to referer"],
+      "response": {"type": "html", "view": "views/manager_notes/edit.ctp", "redirect": null, "status_codes": [200,302]},
+      "files_cited": [{"file": "controllers/manager_notes_controller.php", "lines": "6-29"}]
+    },
+    {
+      "name": "view",
+      "purpose": "Managers view notes per their areas and 'All Managers'",
+      "auth": ["manager"],
+      "inputs": {"query": [], "form": [], "files": []},
+      "validation": [],
+      "queries": [
+        {"model": "ManagerNote", "operation": "field note for area_id=0", "where": ["area_id=0"]},
+        {"model": "ManagerNote", "operation": "field notes for manager areas", "where": ["area_id in managerAreas"]}
+      ],
+      "side_effects": [],
+      "response": {"type": "html", "view": "views/manager_notes/view.ctp", "redirect": null, "status_codes": [200]},
+      "files_cited": [{"file": "controllers/manager_notes_controller.php", "lines": "31-39"}]
+    }
+  ],
+  "notes": []
+}
+
+

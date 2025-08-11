@@ -1,0 +1,26 @@
+{
+  "name": "change_models",
+  "columns": [
+    {"name":"id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"change_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"name","type":"varchar(30)","nullable":false,"default":null,"notes":[]},
+    {"name":"action","type":"smallint(1)","nullable":false,"default":null,"notes":[]},
+    {"name":"record_id","type":"int(11)","nullable":false,"default":null,"notes":[]},
+    {"name":"schedule_id","type":"int(11)","nullable":false,"default":null,"notes":[]}
+  ],
+  "primary_key": ["UNKNOWN"],
+  "unique_constraints": [["schedule_id","id"]],
+  "indexes": [["record_id"],["change_id"]],
+  "foreign_keys": [
+    {"column":"change_id","references":"changes(id)"}
+  ],
+  "associations": [
+    {"from_model":"ChangeModel","to_model":"Change","type":"belongsTo","foreign_key":"change_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/change_model.php","lines":"12-12"}]},
+    {"from_model":"ChangeModel","to_model":"ChangeField","type":"hasMany","foreign_key":"change_model_id","through_table":null,"conditions":null,"files_cited":[{"file":"models/change_model.php","lines":"13-13"}]}
+  ],
+  "validations": [],
+  "files_cited": [
+    {"file":"config/sql/database.sql","lines":"141-151"},
+    {"file":"models/change_model.php","lines":"1-15"}
+  ]
+}
