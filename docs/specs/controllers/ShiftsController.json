@@ -5,8 +5,19 @@
       "name": "add",
       "purpose": "Create a shift in an area/day/time range",
       "auth": ["editable"],
-      "inputs": {"query": ["area_id?", "day_id?", "start?", "end?"], "form": ["Shift.*"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "inputs": {"query": ["area_id?", "day_id?", "start?", "end?"], "form": [
+        "Shift.area_id",
+        "Shift.day_id",
+        "Shift.start",
+        "Shift.end",
+        "Shift.num_people"
+      ], "files": []},
+      "validation": [
+        {"field": "Shift.start/Shift.end", "rule": "start_before_end", "presence": "required", "allowEmpty": false, "messages": ["Oops! Those hours don't make sense"], "files_cited": [{"file": "models/shift.php", "lines": "15-22"}]},
+        {"field": "Shift.num_people", "rule": "numeric_min_1", "presence": "required", "allowEmpty": false, "messages": ["Invalid # of people"], "files_cited": [{"file": "models/shift.php", "lines": "23-28"}]},
+        {"field": "Shift.area_id", "rule": "foreign key exists: areas(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "595-606"}]},
+        {"field": "Shift.day_id", "rule": "foreign key exists: days(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "595-606"}]}
+      ],
       "queries": [
         {"model": "Shift", "operation": "create/insert via sSave", "where": []},
         {"model": "Area", "operation": "list", "where": []},
@@ -20,8 +31,19 @@
       "name": "edit",
       "purpose": "Edit an existing shift",
       "auth": ["editable"],
-      "inputs": {"query": ["id"], "form": ["Shift.*"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "inputs": {"query": ["id"], "form": [
+        "Shift.area_id",
+        "Shift.day_id",
+        "Shift.start",
+        "Shift.end",
+        "Shift.num_people"
+      ], "files": []},
+      "validation": [
+        {"field": "Shift.start/Shift.end", "rule": "start_before_end", "presence": "required", "allowEmpty": false, "messages": ["Oops! Those hours don't make sense"], "files_cited": [{"file": "models/shift.php", "lines": "15-22"}]},
+        {"field": "Shift.num_people", "rule": "numeric_min_1", "presence": "required", "allowEmpty": false, "messages": ["Invalid # of people"], "files_cited": [{"file": "models/shift.php", "lines": "23-28"}]},
+        {"field": "Shift.area_id", "rule": "foreign key exists: areas(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "595-606"}]},
+        {"field": "Shift.day_id", "rule": "foreign key exists: days(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "595-606"}]}
+      ],
       "queries": [
         {"model": "Shift", "operation": "read/update via sSave", "where": ["id"]},
         {"model": "Area", "operation": "list", "where": []},

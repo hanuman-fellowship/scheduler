@@ -5,8 +5,17 @@
       "name": "add",
       "purpose": "Create a floating shift",
       "auth": ["editable"],
-      "inputs": {"query": ["area_id?", "person_id?"], "form": ["FloatingShift.*"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "inputs": {"query": ["area_id?", "person_id?"], "form": [
+        "FloatingShift.person_id",
+        "FloatingShift.area_id",
+        "FloatingShift.hours",
+        "FloatingShift.note"
+      ], "files": []},
+      "validation": [
+        {"field": "FloatingShift.hours", "rule": "numeric_gt_0", "presence": "required", "allowEmpty": false, "messages": ["Invalid # of hours"], "files_cited": [{"file": "models/floating_shift.php", "lines": "11-17"}]},
+        {"field": "FloatingShift.person_id", "rule": "foreign key exists: people(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "278-288"}]},
+        {"field": "FloatingShift.area_id", "rule": "foreign key exists: areas(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "278-288"}]}
+      ],
       "queries": [
         {"model": "FloatingShift", "operation": "create", "where": []},
         {"model": "FloatingShift", "operation": "insert via sSave", "where": []},
@@ -21,8 +30,17 @@
       "name": "edit",
       "purpose": "Update a floating shift",
       "auth": ["editable"],
-      "inputs": {"query": ["id"], "form": ["FloatingShift.*"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "inputs": {"query": ["id"], "form": [
+        "FloatingShift.person_id",
+        "FloatingShift.area_id",
+        "FloatingShift.hours",
+        "FloatingShift.note"
+      ], "files": []},
+      "validation": [
+        {"field": "FloatingShift.hours", "rule": "numeric_gt_0", "presence": "required", "allowEmpty": false, "messages": ["Invalid # of hours"], "files_cited": [{"file": "models/floating_shift.php", "lines": "11-17"}]},
+        {"field": "FloatingShift.person_id", "rule": "foreign key exists: people(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "278-288"}]},
+        {"field": "FloatingShift.area_id", "rule": "foreign key exists: areas(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "278-288"}]}
+      ],
       "queries": [
         {"model": "FloatingShift", "operation": "read", "where": ["id"]},
         {"model": "FloatingShift", "operation": "update via sSave", "where": ["id"]},

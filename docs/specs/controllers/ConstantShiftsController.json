@@ -5,8 +5,22 @@
       "name": "add",
       "purpose": "Create a constant shift",
       "auth": ["editable"],
-      "inputs": {"query": [], "form": ["ConstantShift.*"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "inputs": {"query": [], "form": [
+        "ConstantShift.resident_category_id",
+        "ConstantShift.name",
+        "ConstantShift.day_id",
+        "ConstantShift.start",
+        "ConstantShift.end",
+        "ConstantShift.specify_hours",
+        "ConstantShift.hours"
+      ], "files": []},
+      "validation": [
+        {"field": "ConstantShift.name", "rule": "notBlank", "presence": "required", "allowEmpty": false, "messages": ["Name must not be blank"], "files_cited": [{"file": "models/constant_shift.php", "lines": "17-21"}]},
+        {"field": "ConstantShift.start/ConstantShift.end", "rule": "start_before_end", "presence": "required", "allowEmpty": false, "messages": ["Start must be before end"], "files_cited": [{"file": "models/constant_shift.php", "lines": "22-26"}]},
+        {"field": "ConstantShift.hours", "rule": "numeric_or_empty", "presence": "optional", "allowEmpty": true, "messages": ["Hours must be a number"], "files_cited": [{"file": "models/constant_shift.php", "lines": "27-31"}]},
+        {"field": "ConstantShift.resident_category_id", "rule": "foreign key exists: resident_categories(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "197-210"}]},
+        {"field": "ConstantShift.day_id", "rule": "foreign key exists: days(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "197-210"}]}
+      ],
       "queries": [
         {"model": "ConstantShift", "operation": "create", "where": []},
         {"model": "ConstantShift", "operation": "insert via sSave", "where": []},
@@ -21,8 +35,22 @@
       "name": "edit",
       "purpose": "Update a constant shift",
       "auth": ["editable"],
-      "inputs": {"query": ["id"], "form": ["ConstantShift.*"], "files": []},
-      "validation": [{"field": "UNKNOWN", "rule": "Model::valid"}],
+      "inputs": {"query": ["id"], "form": [
+        "ConstantShift.resident_category_id",
+        "ConstantShift.name",
+        "ConstantShift.day_id",
+        "ConstantShift.start",
+        "ConstantShift.end",
+        "ConstantShift.specify_hours",
+        "ConstantShift.hours"
+      ], "files": []},
+      "validation": [
+        {"field": "ConstantShift.name", "rule": "notBlank", "presence": "required", "allowEmpty": false, "messages": ["Name must not be blank"], "files_cited": [{"file": "models/constant_shift.php", "lines": "17-21"}]},
+        {"field": "ConstantShift.start/ConstantShift.end", "rule": "start_before_end", "presence": "required", "allowEmpty": false, "messages": ["Start must be before end"], "files_cited": [{"file": "models/constant_shift.php", "lines": "22-26"}]},
+        {"field": "ConstantShift.hours", "rule": "numeric_or_empty", "presence": "optional", "allowEmpty": true, "messages": ["Hours must be a number"], "files_cited": [{"file": "models/constant_shift.php", "lines": "27-31"}]},
+        {"field": "ConstantShift.resident_category_id", "rule": "foreign key exists: resident_categories(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "197-210"}]},
+        {"field": "ConstantShift.day_id", "rule": "foreign key exists: days(id)", "presence": "required", "allowEmpty": false, "files_cited": [{"file": "config/sql/database.sql", "lines": "197-210"}]}
+      ],
       "queries": [
         {"model": "ConstantShift", "operation": "read", "where": ["id"]},
         {"model": "ConstantShift", "operation": "update via sSave", "where": ["id"]},
