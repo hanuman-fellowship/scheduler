@@ -1,0 +1,45 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "methods": ["GET"],
+      "controller": "PagesController",
+      "action": "display",
+      "params": [],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        {"file": "config/routes.php", "lines": "29-29"}
+      ]
+    },
+    {
+      "path": "/pages/*",
+      "methods": ["GET"],
+      "controller": "PagesController",
+      "action": "display",
+      "params": ["path*"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        {"file": "config/routes.php", "lines": "31-31"}
+      ]
+    },
+    {
+      "path": "/notes/*",
+      "methods": ["GET"],
+      "controller": "UsersController",
+      "action": "notes",
+      "params": ["wildcard*"],
+      "middleware_or_filters": [],
+      "inferred": true,
+      "files_cited": [
+        {"file": "config/routes.php", "lines": "34-34"}
+      ]
+    }
+  ],
+  "notes": [
+    "No HTTP methods are specified in routing; methods are inferred based on common conventions.",
+    "Admin/prefix routing is not enabled; 'Routing.admin' is commented out in config/core.php.",
+    "Routes using PagesController::display may pass a view name as a positional parameter (e.g., 'home')."
+  ]
+}
