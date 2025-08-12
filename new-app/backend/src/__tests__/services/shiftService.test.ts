@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import * as shiftService from '../../services/shiftService';
-import { resetTestDatabase, createTestUser, createTestSchedule, createTestArea, createTestDay } from '../utils/testDbOptimized';
+import { resetTestDatabase, createTestUser, createTestSchedule, createTestArea, createTestDay, createTestPerson } from '../utils/testDbOptimized';
 import prisma from '../../services/prisma';
 
 describe('shiftService', () => {
@@ -221,12 +221,16 @@ describe('shiftService', () => {
         scheduleId: schedule.id,
       });
 
+      // Create people first
+      const person1 = await createTestPerson({ first: 'John', last: 'Doe' });
+      const person2 = await createTestPerson({ first: 'Jane', last: 'Smith' });
+
       // Simulate existing assignments by creating them directly
       await prisma.assignment.create({
         data: {
           scheduleId: schedule.id,
           shiftId: shift.id,
-          personId: 1,
+          personId: person1.id,
           star: false,
         },
       });
@@ -235,7 +239,7 @@ describe('shiftService', () => {
         data: {
           scheduleId: schedule.id,
           shiftId: shift.id,
-          personId: 2,
+          personId: person2.id,
           star: false,
         },
       });

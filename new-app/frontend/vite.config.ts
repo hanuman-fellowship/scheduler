@@ -20,4 +20,21 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+    // Quiet things down:
+    reporters: ['dot'],     // compact output
+    silent: true,           // hide console.log in successful tests
+    logHeapUsage: false,    // keep memory noise down
+    // handy, optional:
+    css: true,              // let CSS imports just work
+    globals: true,
+    // Suppress console warnings
+    onConsoleLog: () => false,
+    // Disable browser console
+    browser: {
+      enabled: false
+    }
+  }
 })

@@ -30,12 +30,14 @@ describe('Area Controller', () => {
     operationsUser = await createTestUser({ 
       username: 'operations', 
       email: 'operations@test.com', 
+      password: 'password',
       roles: ['operations'] 
     });
     
     managerUser = await createTestUser({ 
       username: 'manager', 
       email: 'manager@test.com', 
+      password: 'password',
       roles: ['manager'] 
     });
 
@@ -53,10 +55,9 @@ describe('Area Controller', () => {
 
   describe('GET /api/areas', () => {
     it('should list areas for authenticated user', async () => {
-      await createTestArea({ 
+      await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       const response = await request(app)
@@ -95,10 +96,9 @@ describe('Area Controller', () => {
 
   describe('GET /api/areas/:id', () => {
     it('should get area by id', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id,
+        shortName: 'K',
         notes: 'Test notes'
       });
 
@@ -124,10 +124,9 @@ describe('Area Controller', () => {
     });
 
     it('should require authentication', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await request(app)
@@ -218,10 +217,9 @@ describe('Area Controller', () => {
 
   describe('PUT /api/areas/:id', () => {
     it('should update area with valid data', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       const updateData = {
@@ -246,10 +244,9 @@ describe('Area Controller', () => {
     });
 
     it('should update only provided fields', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id,
+        shortName: 'K',
         notes: 'Original notes'
       });
 
@@ -273,10 +270,9 @@ describe('Area Controller', () => {
     });
 
     it('should require operations role', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await request(app)
@@ -287,10 +283,9 @@ describe('Area Controller', () => {
     });
 
     it('should validate input data', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       const response = await request(app)
@@ -305,10 +300,9 @@ describe('Area Controller', () => {
 
   describe('DELETE /api/areas/:id', () => {
     it('should delete area', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await request(app)
@@ -331,10 +325,9 @@ describe('Area Controller', () => {
     });
 
     it('should require operations role', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await request(app)
@@ -344,10 +337,9 @@ describe('Area Controller', () => {
     });
 
     it('should require authentication', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await request(app)
@@ -358,10 +350,9 @@ describe('Area Controller', () => {
 
   describe('POST /api/areas/:id/clear', () => {
     it('should clear area shifts', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await request(app)
@@ -377,10 +368,9 @@ describe('Area Controller', () => {
     });
 
     it('should require operations role', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await request(app)

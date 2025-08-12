@@ -14,10 +14,10 @@
     "format": "prettier --write src/**/*.{ts,tsx}",
     "preview": "vite preview",
     "test": "vitest",
+    "test:run": "vitest run --reporter=dot --silent",
+    "test:watch": "vitest --reporter=dot --silent",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest --watch",
     "check": "tsc --noEmit"
   },
   "dependencies": {

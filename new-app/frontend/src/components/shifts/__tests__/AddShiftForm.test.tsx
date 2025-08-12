@@ -111,12 +111,16 @@ describe('AddShiftForm', () => {
   it('should populate areas dropdown', async () => {
     renderWithProviders()
 
+    // Wait for areas to load and check that Kitchen option exists
     await waitFor(() => {
-      expect(screen.getByDisplayValue('Kitchen')).toBeInTheDocument()
+      expect(screen.getByRole('option', { name: 'Kitchen' })).toBeInTheDocument()
     })
 
     const areaSelect = screen.getByLabelText('Area:')
     expect(areaSelect).toBeInTheDocument()
+    
+    // Should have default "Select an area..." option selected
+    expect(screen.getByDisplayValue('Select an area...')).toBeInTheDocument()
 
     // Check that areas are loaded
     const kitchenOption = screen.getByRole('option', { name: 'Kitchen' })
@@ -204,8 +208,8 @@ describe('AddShiftForm', () => {
     // Enter time that should be rounded
     fireEvent.change(startTimeInput, { target: { value: '10:37' } })
     
-    // Should be rounded to nearest 15-minute increment
-    expect(startTimeInput).toHaveValue('10:45')
+    // Should be rounded to nearest 15-minute increment (down to 10:30)
+    expect(startTimeInput).toHaveValue('10:30')
   })
 
   it('should set time step to 15 minutes', async () => {
@@ -256,9 +260,15 @@ describe('AddShiftForm', () => {
     const user = userEvent.setup()
 
     // Fill out form
+    const areaSelect = screen.getByLabelText('Area:')
+    const daySelect = screen.getByLabelText('Day:')
     const startTimeInput = screen.getByLabelText('Start Time:')
     const endTimeInput = screen.getByLabelText('End Time:')
     const numPeopleInput = screen.getByLabelText('Number of People:')
+
+    // Select area and day
+    await user.selectOptions(areaSelect, '1') // Kitchen
+    await user.selectOptions(daySelect, '1')  // Sunday
 
     await user.clear(startTimeInput)
     await user.type(startTimeInput, '09:00')

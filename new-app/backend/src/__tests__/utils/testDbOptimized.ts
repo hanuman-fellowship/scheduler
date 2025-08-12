@@ -53,6 +53,7 @@ export interface TestArea {
   id: number;
   name: string;
   shortName: string;
+  notes?: string;
 }
 
 export interface TestDay {
@@ -72,6 +73,21 @@ export interface TestResidentCategory {
   id: number;
   name: string;
   scheduleId: number;
+}
+
+export interface TestShift {
+  id: number;
+  startTime: string;
+  endTime: string;
+  numPeople: number;
+  areaId: number;
+  dayId: number;
+}
+
+export interface TestAssignment {
+  id: number;
+  personId: number;
+  shiftId: number;
 }
 
 // Simple test data creation
@@ -102,10 +118,21 @@ export const createTestUser = async (userData: Partial<Omit<TestUser, 'id'>>) =>
 };
 
 export const createTestSchedule = async (scheduleData: Partial<Omit<TestSchedule, 'id'>>) => {
+  // If userId is not provided, create a default user
+  let userId = scheduleData.userId;
+  if (!userId) {
+    const timestamp = Date.now();
+    const user = await createTestUser({ 
+      username: `testuser${timestamp}`, 
+      email: `test${timestamp}@example.com` 
+    });
+    userId = user.id;
+  }
+
   return await prisma.schedule.create({
     data: {
       name: scheduleData.name || 'Test Schedule',
-      userId: scheduleData.userId !== undefined ? scheduleData.userId : 1, // Default to user 1 if not specified
+      userId,
       template: scheduleData.template || false,
       request: scheduleData.request || 0,
     },
@@ -117,6 +144,7 @@ export const createTestArea = async (scheduleId: number, areaData: Partial<Omit<
     data: {
       name: areaData.name || 'Test Area',
       shortName: areaData.shortName || 'TA',
+      notes: areaData.notes || null,
       schedule: { connect: { id: scheduleId } }
     },
   });
@@ -147,6 +175,57 @@ export const createTestResidentCategory = async (scheduleId: number, categoryDat
     data: {
       name: categoryData.name || 'Test Category',
       schedule: { connect: { id: scheduleId } }
+    },
+  });
+};
+
+export const createTestShift = async (scheduleId: number, shiftData: Partial<Omit<TestShift, 'id'>>) => {
+  // Create required day if dayId not provided
+  let dayId = shiftData.dayId;
+  if (!dayId) {
+    const day = await createTestDay(scheduleId, { name: 'Test Day', dayOfWeek: 1 });
+    dayId = day.id;
+  }
+  
+  // Create required area if areaId not provided
+  let areaId = shiftData.areaId;
+  if (!areaId) {
+    const area = await createTestArea(scheduleId, { name: 'Test Area', shortName: 'TA' });
+    areaId = area.id;
+  }
+
+  return await prisma.shift.create({
+    data: {
+      scheduleId,
+      start: shiftData.startTime || '09:00:00',
+      end: shiftData.endTime || '17:00:00',
+      numPeople: shiftData.numPeople || 1,
+      areaId,
+      dayId,
+    },
+  });
+};
+
+export const createTestAssignment = async (scheduleId: number, assignmentData: Partial<Omit<TestAssignment, 'id'>>) => {
+  // Create required person if personId not provided
+  let personId = assignmentData.personId;
+  if (!personId) {
+    const person = await createTestPerson({ first: 'Test', last: 'Person' });
+    personId = person.id;
+  }
+  
+  // Create required shift if shiftId not provided  
+  let shiftId = assignmentData.shiftId;
+  if (!shiftId) {
+    const shift = await createTestShift(scheduleId, {});
+    shiftId = shift.id;
+  }
+
+  return await prisma.assignment.create({
+    data: {
+      scheduleId,
+      personId,
+      shiftId,
     },
   });
 };

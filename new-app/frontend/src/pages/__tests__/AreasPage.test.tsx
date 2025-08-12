@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, useLocation } from 'react-router-dom'
 import AreasPage from '../AreasPage'
 import { useScheduleStore } from '../../store/scheduleStore'
 
@@ -17,10 +17,20 @@ vi.mock('../../services/areas', () => ({
 // Mock the schedule store
 vi.mock('../../store/scheduleStore')
 
+// Mock react-router-dom with useLocation
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom')
+  return {
+    ...actual,
+    useLocation: vi.fn()
+  }
+})
+
 // Mock child components to isolate AreasPage testing
 vi.mock('../../components/areas/AddAreaForm', () => ({
   default: ({ onSuccess, onCancel }: any) => (
     <div data-testid="add-area-form">
+      <h2>Mock Add Area Form</h2>
       <button onClick={() => onSuccess()}>Submit</button>
       <button onClick={() => onCancel()}>Cancel</button>
     </div>
@@ -81,6 +91,15 @@ describe('AreasPage', () => {
       loadCurrentSchedule: vi.fn(),
       setCurrentSchedule: vi.fn()
     } as any)
+
+    // Reset location mock to default state  
+    vi.mocked(useLocation).mockReturnValue({
+      state: null,
+      pathname: '/areas',
+      search: '',
+      hash: '',
+      key: 'test'
+    })
   })
 
   const renderWithProviders = (component: React.ReactElement) => {
@@ -99,7 +118,11 @@ describe('AreasPage', () => {
 
     renderWithProviders(<AreasPage />)
 
-    expect(screen.getByText('Areas Management')).toBeInTheDocument()
+    // Wait for the areas to load before checking
+    await waitFor(() => {
+      expect(screen.getByText('Areas Management')).toBeInTheDocument()
+    })
+    
     expect(screen.getByRole('button', { name: 'New Area...' })).toBeInTheDocument()
   })
 
@@ -320,32 +343,36 @@ describe('AreasPage', () => {
     const { areasService } = await import('../../services/areas')
     vi.mocked(areasService.getAreas).mockResolvedValue(mockAreas)
 
-    // Mock location with state
-    const mockLocation = {
+    // Mock window.history.replaceState to track calls
+    const mockReplaceState = vi.fn()
+    Object.defineProperty(window, 'history', {
+      value: { replaceState: mockReplaceState },
+      writable: true
+    })
+
+    // Set location mock to have navigation state
+    vi.mocked(useLocation).mockReturnValue({
       state: { openAddAreaModal: true },
       pathname: '/areas',
       search: '',
       hash: '',
       key: 'test'
-    }
-
-    // Mock useLocation
-    vi.doMock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom')
-      return {
-        ...actual,
-        useLocation: () => mockLocation
-      }
     })
 
-    // Re-import the component with the mocked useLocation
-    const { default: AreasPageWithMockedLocation } = await import('../AreasPage')
-    
-    renderWithProviders(<AreasPageWithMockedLocation />)
+    renderWithProviders(<AreasPage />)
 
-    // Modal should open automatically
+    // Wait for areas to load first
+    await waitFor(() => {
+      expect(screen.getByText('Kitchen')).toBeInTheDocument()
+    })
+
+    // Modal should open automatically due to navigation state
     await waitFor(() => {
       expect(screen.getByText('Add Area')).toBeInTheDocument()
+      expect(screen.getByTestId('add-area-form')).toBeInTheDocument()
     })
+
+    // Verify that replaceState was called to clear the navigation state
+    expect(mockReplaceState).toHaveBeenCalledWith(null, '', '/areas')
   })
 })

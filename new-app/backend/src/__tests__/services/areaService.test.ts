@@ -4,6 +4,8 @@ import {
   createTestSchedule,
   createTestShift,
   createTestAssignment,
+  createTestDay,
+  createTestPerson,
   resetTestDatabase, 
   prisma 
 } from '../utils/testDbOptimized';
@@ -80,9 +82,9 @@ describe('areaService', () => {
     it('should return areas for specific schedule', async () => {
       const schedule2 = await createTestSchedule({ name: 'Schedule 2' });
       
-      await createTestArea({ name: 'Kitchen', shortName: 'K', scheduleId: testSchedule.id });
-      await createTestArea({ name: 'Dining', shortName: 'D', scheduleId: testSchedule.id });
-      await createTestArea({ name: 'Other Kitchen', shortName: 'OK', scheduleId: schedule2.id });
+      await createTestArea(testSchedule.id, { name: 'Kitchen', shortName: 'K' });
+      await createTestArea(testSchedule.id, { name: 'Dining', shortName: 'D' });
+      await createTestArea(schedule2.id, { name: 'Other Kitchen', shortName: 'OK' });
 
       const result = await areaService.getAllAreas(testSchedule.id);
 
@@ -100,10 +102,9 @@ describe('areaService', () => {
 
   describe('getAreaById', () => {
     it('should return area by id', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id,
+        shortName: 'K',
         notes: 'Test notes'
       });
 
@@ -126,10 +127,9 @@ describe('areaService', () => {
 
   describe('updateArea', () => {
     it('should update area with valid input', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       const updateData = {
@@ -150,10 +150,9 @@ describe('areaService', () => {
     });
 
     it('should update only provided fields', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id,
+        shortName: 'K',
         notes: 'Original notes'
       });
 
@@ -178,10 +177,9 @@ describe('areaService', () => {
     });
 
     it('should throw validation error for invalid update', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       await expect(
@@ -192,10 +190,9 @@ describe('areaService', () => {
 
   describe('deleteArea', () => {
     it('should delete area with no associated shifts', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       const result = await areaService.deleteArea(area.id);
@@ -206,26 +203,26 @@ describe('areaService', () => {
     });
 
     it('should delete area and clear all associated shifts and assignments', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
+      // Create a day for the shift
+      const day = await createTestDay(testSchedule.id, { name: 'Monday', dayOfWeek: 1 });
+
       // Create a shift in the area
-      const shift = await createTestShift({
+      const shift = await createTestShift(testSchedule.id, {
         areaId: area.id,
-        dayId: 1,
-        start: '09:00',
-        end: '17:00',
-        numPeople: 2,
-        scheduleId: testSchedule.id
+        dayId: day.id,
+        startTime: '09:00:00',
+        endTime: '17:00:00',
+        numPeople: 2
       });
 
       // Create an assignment for the shift
-      const assignment = await createTestAssignment({
-        shiftId: shift.id,
-        scheduleId: testSchedule.id
+      const assignment = await createTestAssignment(testSchedule.id, {
+        shiftId: shift.id
       });
 
       // Verify shift and assignment exist
@@ -250,40 +247,39 @@ describe('areaService', () => {
 
   describe('clearAreaShifts', () => {
     it('should clear all shifts and assignments from area', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
+
+      // Create days first
+      const day1 = await createTestDay(testSchedule.id, { name: 'Monday', dayOfWeek: 1 });
+      const day2 = await createTestDay(testSchedule.id, { name: 'Tuesday', dayOfWeek: 2 });
 
       // Create multiple shifts
-      const shift1 = await createTestShift({
+      const shift1 = await createTestShift(testSchedule.id, {
         areaId: area.id,
-        dayId: 1,
-        start: '09:00',
-        end: '17:00',
-        numPeople: 2,
-        scheduleId: testSchedule.id
+        dayId: day1.id,
+        startTime: '09:00:00',
+        endTime: '17:00:00',
+        numPeople: 2
       });
 
-      const shift2 = await createTestShift({
+      const shift2 = await createTestShift(testSchedule.id, {
         areaId: area.id,
-        dayId: 2,
-        start: '10:00',
-        end: '18:00',
-        numPeople: 1,
-        scheduleId: testSchedule.id
+        dayId: day2.id,
+        startTime: '10:00:00',
+        endTime: '18:00:00',
+        numPeople: 1
       });
 
       // Create assignments
-      const assignment1 = await createTestAssignment({
-        shiftId: shift1.id,
-        scheduleId: testSchedule.id
+      const assignment1 = await createTestAssignment(testSchedule.id, {
+        shiftId: shift1.id
       });
 
-      const assignment2 = await createTestAssignment({
-        shiftId: shift2.id,
-        scheduleId: testSchedule.id
+      const assignment2 = await createTestAssignment(testSchedule.id, {
+        shiftId: shift2.id
       });
 
       // Clear the area
@@ -300,10 +296,9 @@ describe('areaService', () => {
     });
 
     it('should handle area with no shifts', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       // Should not throw error
@@ -316,47 +311,47 @@ describe('areaService', () => {
 
   describe('getAreaShiftCount', () => {
     it('should return correct counts for area with shifts', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
+
+      // Create days first
+      const day1 = await createTestDay(testSchedule.id, { name: 'Monday', dayOfWeek: 1 });
+      const day2 = await createTestDay(testSchedule.id, { name: 'Tuesday', dayOfWeek: 2 });
 
       // Create regular shifts
-      await createTestShift({
+      await createTestShift(testSchedule.id, {
         areaId: area.id,
-        dayId: 1,
-        start: '09:00',
-        end: '17:00',
-        numPeople: 2,
-        scheduleId: testSchedule.id
+        dayId: day1.id,
+        startTime: '09:00:00',
+        endTime: '17:00:00',
+        numPeople: 2
       });
 
-      const shift2 = await createTestShift({
+      const shift2 = await createTestShift(testSchedule.id, {
         areaId: area.id,
-        dayId: 2,
-        start: '10:00',
-        end: '18:00',
-        numPeople: 1,
-        scheduleId: testSchedule.id
+        dayId: day2.id,
+        startTime: '10:00:00',
+        endTime: '18:00:00',
+        numPeople: 1
       });
 
       // Create assignment for one shift
-      await createTestAssignment({
-        shiftId: shift2.id,
-        scheduleId: testSchedule.id
+      await createTestAssignment(testSchedule.id, {
+        shiftId: shift2.id
       });
+
+      // Create person for floating shift
+      const person = await createTestPerson({ first: 'Test', last: 'Person' });
 
       // Create floating shift
       await prisma.floatingShift.create({
         data: {
           areaId: area.id,
           scheduleId: testSchedule.id,
-          dayId: 1,
-          start: '08:00',
-          end: '16:00',
-          numPeople: 1,
-          personId: 1
+          personId: person.id,
+          hours: 8.0
         }
       });
 
@@ -370,10 +365,9 @@ describe('areaService', () => {
     });
 
     it('should return zero counts for area with no shifts', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       const result = await areaService.getAreaShiftCount(area.id);
@@ -388,10 +382,9 @@ describe('areaService', () => {
 
   describe('getAffectedSchedules', () => {
     it('should return schedule ID for existing area', async () => {
-      const area = await createTestArea({ 
+      const area = await createTestArea(testSchedule.id, { 
         name: 'Kitchen', 
-        shortName: 'K', 
-        scheduleId: testSchedule.id 
+        shortName: 'K'
       });
 
       const result = await areaService.getAffectedSchedules(area.id);
