@@ -177,13 +177,26 @@ export const getPersonSchedule = async (personId: number, user: AuthUser): Promi
   // Calculate total hours by day
   const totalHours = calculateHoursByDay(peopleSchedule.person.assignments);
 
-  // Transform assignments
+  // Transform assignments to include shift details for grid display
   const assignments = peopleSchedule.person.assignments.map(assignment => ({
     id: assignment.id,
     shiftId: assignment.shiftId,
     personId: assignment.personId,
     name: assignment.name || undefined,
-    star: assignment.star
+    star: assignment.star,
+    shift: {
+      id: assignment.shift.id,
+      areaId: assignment.shift.areaId,
+      dayId: assignment.shift.dayId,
+      start: assignment.shift.start,
+      end: assignment.shift.end,
+      numPeople: assignment.shift.numPeople,
+      area: {
+        id: assignment.shift.area.id,
+        name: assignment.shift.area.name,
+        shortName: assignment.shift.area.shortName
+      }
+    }
   }));
 
   return {

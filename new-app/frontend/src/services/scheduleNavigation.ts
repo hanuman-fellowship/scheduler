@@ -32,7 +32,8 @@ export const scheduleNavigationService = {
    * Get all areas for selection modal
    */
   async getAreasForSelection(): Promise<AreaForSelection[]> {
-    const response = await api.get('/areas?scheduleId=1'); // Use current schedule
+    // Get current schedule from store - for now hardcode to 1 (Published schedule)
+    const response = await api.get('/areas?scheduleId=1');
     return response.data.map((area: AreaResponse) => ({
       id: area.id,
       name: area.name,
@@ -44,7 +45,8 @@ export const scheduleNavigationService = {
    * Get all people grouped by category for selection modal
    */
   async getPeopleForSelection(): Promise<PeopleByCategory> {
-    const response = await api.get('/people?scheduleId=1'); // Use current schedule
+    // Get current schedule from store - for now hardcode to 1 (Published schedule)
+    const response = await api.get('/people?scheduleId=1');
     const people: PersonResponse[] = response.data;
     
     // Group people by category

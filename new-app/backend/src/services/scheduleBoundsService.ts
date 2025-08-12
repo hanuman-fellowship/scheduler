@@ -37,6 +37,27 @@ export const getScheduleBounds = async (scheduleId: number): Promise<ScheduleBou
 };
 
 function calculateTimeSlots(shifts: any[]): TimeSlot[] {
+  // If no shifts, provide default time slots for basic schedule viewing
+  if (shifts.length === 0) {
+    const defaultTimes = [
+      '08:00', '09:00', '10:00', '11:00', '12:00',
+      '13:00', '14:00', '15:00', '16:00', '17:00'
+    ];
+    
+    const slots: TimeSlot[] = [];
+    for (let i = 0; i < defaultTimes.length - 1; i++) {
+      const start = defaultTimes[i];
+      const end = defaultTimes[i + 1];
+      slots.push({
+        id: `${start}-${end}`,
+        name: `${formatTime(start)} - ${formatTime(end)}`,
+        startTime: start,
+        endTime: end
+      });
+    }
+    return slots;
+  }
+
   const timeSet = new Set<string>();
   
   shifts.forEach(shift => {

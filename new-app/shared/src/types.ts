@@ -264,6 +264,22 @@ export interface AssignmentResponse {
   person?: PersonResponse;
 }
 
+export interface AssignmentWithShiftResponse extends AssignmentResponse {
+  shift: {
+    id: number;
+    areaId: number;
+    dayId: number;
+    start: string;
+    end: string;
+    numPeople: number;
+    area: {
+      id: number;
+      name: string;
+      shortName: string;
+    };
+  };
+}
+
 export interface ShiftWithAssignments extends ShiftResponse {
   assignments: AssignmentResponse[];
 }
@@ -284,7 +300,7 @@ export interface AreaScheduleResponse {
 
 export interface PersonScheduleResponse {
   person: PersonResponse & {
-    assignments: AssignmentResponse[];
+    assignments: AssignmentWithShiftResponse[];
   };
   bounds: ScheduleBounds;
   editable: boolean;

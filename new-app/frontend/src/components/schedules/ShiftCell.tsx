@@ -73,6 +73,7 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
 
       case 'person':
         // For person schedules, show area and time
+        const assignment = shift.assignments[0]; // Person schedules have one assignment per shift
         return (
           <div 
             key={shift.id}
@@ -80,9 +81,10 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
             onClick={() => onShiftClick?.(shift.id)}
           >
             <div className="font-semibold text-blue-600">
-              Area {/* TODO: Get area short name from shift data */}
+              {assignment?.area?.shortName || `Area ${shift.areaId}`}
             </div>
             <div>{formatTimeRange(shift.start, shift.end)}</div>
+            {assignment?.star && <span className="text-yellow-500">⭐</span>}
           </div>
         );
 

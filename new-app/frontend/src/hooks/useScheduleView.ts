@@ -20,5 +20,7 @@ export const useScheduleView = (viewMode: ScheduleViewMode) => {
     enabled: viewMode.id !== undefined,
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
+    retry: 3, // Retry failed requests 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
 };

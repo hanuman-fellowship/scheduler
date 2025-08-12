@@ -55,15 +55,30 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
 
       case 'person':
         const personData = data as PersonScheduleResponse;
-        // For person schedules, we need to get shifts from assignments
+        // For person schedules, get shifts from assignments that match the cell
         return personData.person.assignments
-          .map(assignment => {
-            // We need to find the shift details for each assignment
-            // This would normally come from the API, but for now we'll return empty
-            // TODO: Include shift details in person schedule API response
-            return null;
+          .filter(assignment => {
+            const shift = assignment.shift;
+            return shift.dayId === dayId &&
+              shift.start <= bounds.slots.find(s => s.id === slotId)?.startTime! &&
+              shift.end >= bounds.slots.find(s => s.id === slotId)?.endTime!;
           })
-          .filter(Boolean);
+          .map(assignment => ({
+            id: assignment.shift.id,
+            areaId: assignment.shift.areaId,
+            dayId: assignment.shift.dayId,
+            start: assignment.shift.start,
+            end: assignment.shift.end,
+            numPeople: assignment.shift.numPeople,
+            assignments: [{
+              id: assignment.id,
+              shiftId: assignment.shiftId,
+              personId: assignment.personId,
+              name: assignment.name,
+              star: assignment.star,
+              area: assignment.shift.area
+            }]
+          }));
 
       case 'gaps':
         const gapsData = data as GapsScheduleResponse;

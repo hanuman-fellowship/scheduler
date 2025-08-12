@@ -17,6 +17,8 @@ export const AreaSelectionContent: React.FC<AreaSelectionContentProps> = ({
     queryKey: ['areas-for-selection'],
     queryFn: scheduleNavigationService.getAreasForSelection,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    retry: 3, // Retry failed requests 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
 
   useEffect(() => {
