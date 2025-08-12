@@ -4,6 +4,14 @@ import { shiftService, type CreateShiftWithScheduleRequest } from '../../service
 import { areasService } from '../../services/areas'
 import { daysService } from '../../services/days'
 import { useScheduleStore } from '../../store/scheduleStore'
+// Time conversion utility (inline for now)
+const timeStringToSeconds = (timeString: string): number => {
+  const parts = timeString.split(':');
+  const hours = parseInt(parts[0], 10);
+  const minutes = parseInt(parts[1], 10);
+  const seconds = parts[2] ? parseInt(parts[2], 10) : 0;
+  return hours * 3600 + minutes * 60 + seconds;
+};
 
 interface AddShiftFormProps {
   onSuccess: () => void
@@ -23,7 +31,9 @@ export default function AddShiftForm({
   initialEnd = '14:00:00'
 }: AddShiftFormProps) {
   const { currentSchedule } = useScheduleStore()
-  const [formData, setFormData] = useState<CreateShiftWithScheduleRequest>({
+  
+  // Use a separate form state for time strings (for UI display)
+  const [formData, setFormData] = useState({
     areaId: initialAreaId || 0,
     dayId: initialDayId || 1,
     start: initialStart,
@@ -63,16 +73,20 @@ export default function AddShiftForm({
       return
     }
 
-    // Ensure schedule ID is set
+    // Convert time strings to seconds and ensure schedule ID is set
     const shiftData = {
-      ...formData,
+      areaId: formData.areaId,
+      dayId: formData.dayId,
+      startAtSeconds: timeStringToSeconds(formData.start),
+      endAtSeconds: timeStringToSeconds(formData.end),
+      numPeople: formData.numPeople,
       scheduleId: currentSchedule?.id || 1,
     }
     
     createShiftMutation.mutate(shiftData)
   }
 
-  const handleInputChange = (field: keyof CreateShiftWithScheduleRequest, value: string | number) => {
+  const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 

@@ -285,8 +285,8 @@ describe('AddShiftForm', () => {
       expect(shiftService.createShift).toHaveBeenCalledWith({
         areaId: 1, // First area should be selected by default
         dayId: 1,  // First day should be selected by default
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: 32400, // 09:00:00 in seconds (9 * 3600)
+        endAtSeconds: 61200,   // 17:00:00 in seconds (17 * 3600)
         numPeople: 2,
         scheduleId: 1
       })
