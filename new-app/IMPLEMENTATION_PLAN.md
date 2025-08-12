@@ -2,124 +2,123 @@
 
 ## Immediate Action Items (Fix Current Bug)
 
-### 1. Create Schedule Store (30 minutes)
+### 1. Create Schedule Store
 **File**: `frontend/src/store/scheduleStore.ts`
 - Basic Zustand store with current schedule
 - Load latest schedule on app init
 - Persist to localStorage
 
-### 2. Update Categories Service (15 minutes)  
+### 2. Update Categories Service  
 **File**: `frontend/src/services/categories.ts`
 - Inject scheduleId from schedule store
 - Handle missing schedule context error
 
-### 3. Add Current Schedule API (45 minutes)
+### 3. Add Current Schedule API
 **File**: `backend/src/controllers/scheduleController.ts`  
 - `GET /api/schedules/current` endpoint
 - Return latest published schedule
 - Include permission flags
 
-### 4. Initialize Schedule Context in App (15 minutes)
+### 4. Initialize Schedule Context in App
 **File**: `frontend/src/App.tsx`
 - Load current schedule on app start
 - Handle loading states
 
-**Total Time**: ~2 hours to fix immediate category creation bug
 
-## Phase 1: Core Schedule Context (1-2 days)
+## Phase 1: Core Schedule Context
 
-### Day 1: Backend Foundation
-1. **Schedule Context API** (2-3 hours)
+### Backend Foundation
+1. **Schedule Context API**
    - Current schedule endpoint
    - Schedule switching endpoint  
    - Schedule list endpoint
    - Permission validation
 
-2. **Update Categories Controller** (1 hour)
+2. **Update Categories Controller**
    - Require scheduleId in create/update
    - Validate schedule permissions
    - Return schedule-scoped categories
 
-3. **Database Seeding** (1 hour)
+3. **Database Seeding**
    - Create sample schedules
    - Create sample categories per schedule
    - Create sample people assignments
 
-### Day 2: Frontend Integration  
-1. **Schedule Context Provider** (2 hours)
+### Frontend Integration  
+1. **Schedule Context Provider**
    - React context for schedule state
    - Schedule switching logic
    - Error boundaries for missing context
 
-2. **Header Updates** (1-2 hours)
+2. **Header Updates**
    - Display current schedule name
    - Add schedule switcher (operations only)
    - Update styling and layout
 
-3. **Update All Forms** (2 hours)
+3. **Update All Forms**
    - Categories form (already identified)
    - People forms (add scheduleId context)
    - Other schedule-dependent operations
 
-## Phase 2: Schedule-Scoped Operations (3-5 days)
+## Phase 2: Schedule-Scoped Operations
 
 ### People Management Overhaul
-1. **Backend People Controller** (1 day)
+1. **Backend People Controller**
    - Schedule-scoped people listing
    - Retire/restore functionality  
    - People-schedule assignment logic
    - Cross-schedule person management
 
-2. **Frontend People Components** (1 day)
+2. **Frontend People Components**
    - Update people list to show by category
    - Add retire/restore buttons
    - Handle schedule context in all operations
 
-3. **People Selection Logic** (1 day)
+3. **People Selection Logic**
    - "View Schedule" shows current schedule people
    - Group by category display
    - Handle empty categories
 
 ### Category Management  
-1. **Schedule-Scoped Categories** (0.5 days)
+1. **Schedule-Scoped Categories**
    - Category CRUD within schedule context
    - Category reordering within schedule
    - Category deletion validation
 
-2. **Cross-Schedule Category Features** (0.5 days)
+2. **Cross-Schedule Category Features**
    - Copy categories between schedules
    - Category templates
    - Import/export categories
 
-## Phase 3: Advanced Schedule Features (1-2 weeks)
+## Phase 3: Advanced Schedule Features
 
 ### Schedule Management UI
-1. **Schedule Selection Page** (2-3 days)
+1. **Schedule Selection Page**
    - List all schedules (published/draft)
    - Schedule creation form
    - Schedule copying functionality
    - Schedule deletion (with validation)
 
-2. **Schedule Switcher Component** (1 day)
+2. **Schedule Switcher Component**
    - Dropdown in header
    - Recent schedules
    - Quick switching
    - Search/filter schedules
 
 ### Advanced Features
-1. **Schedule Templates** (2-3 days)
+1. **Schedule Templates**
    - Save schedule as template
    - Create from template
    - Template management UI
 
-2. **Cross-Schedule Operations** (2-3 days)
+2. **Cross-Schedule Operations**
    - Copy people between schedules
    - Compare schedules
    - Merge schedule features
 
 ## Implementation Approach
 
-### Immediate Fix (Today)
+### Immediate Fix
 ```bash
 # 1. Create schedule store
 touch frontend/src/store/scheduleStore.ts
@@ -147,7 +146,7 @@ touch frontend/src/store/scheduleStore.ts
 
 ## Rollout Plan
 
-### Week 1: Critical Fix
+### Critical Fix
 - [ ] Schedule context infrastructure
 - [ ] Fix category creation bug
 - [ ] Basic schedule display in UI

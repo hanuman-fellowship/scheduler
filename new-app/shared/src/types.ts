@@ -140,6 +140,34 @@ export interface UserListResponse {
   updatedAt: string;
 }
 
+// ============================================================================
+// Category Types
+// ============================================================================
+
+export interface CategoryResponse {
+  id: number;
+  name: string;
+  color: string;
+  scheduleId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCategoryRequest {
+  name: string;
+  color: string;
+}
+
+export interface UpdateCategoryRequest {
+  name?: string;
+  color?: string;
+}
+
+export const CreateCategoryFormSchema = z.object({
+  name: z.string().min(1, 'Category name is required'),
+  color: z.string().regex(/^#[0-9A-F]{6}$/i, 'Color must be a valid hex code'),
+});
+
 export interface CopyScheduleRequest {
   sourceId: number;
   name: string;
