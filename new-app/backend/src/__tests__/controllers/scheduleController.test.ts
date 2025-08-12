@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { testApp } from '../utils/testApp';
 import { createTestUser, createTestSchedule, resetTestDatabase } from '../utils/testDbOptimized';
+import { prisma } from '../utils/testConfig';
 
 describe('ScheduleController', () => {
   let operationsUser: any;
@@ -324,6 +325,83 @@ describe('ScheduleController', () => {
 
       expect(response.status).toBe(404);
       expect(response.body).toHaveProperty('error');
+    });
+  });
+
+  describe('GET /schedules/current', () => {
+    it('should return the Published schedule as current schedule', async () => {
+      // First test if the route exists at all
+      const testResponse = await request(testApp)
+        .get('/api/schedules/current');
+      
+      console.log('Test route response status:', testResponse.status);
+      console.log('Test route response body:', testResponse.body);
+      
+      // Should be 401 (unauthorized), not 404 (not found)
+      expect([401].includes(testResponse.status)).toBe(true);
+      
+      // Create the Published schedule
+      const publishedSchedule = await prisma.schedule.create({
+        data: {
+          name: 'Published',
+          userId: null,
+          template: false,
+          request: 0
+        }
+      });
+
+      // Login as operations user to get token
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'operations_user',
+          password: 'password123'
+        });
+
+      const operationsToken = loginResponse.body.token;
+
+      // Test the main route
+      const response = await request(testApp)
+        .get('/api/schedules/current')
+        .set('Authorization', `Bearer ${operationsToken}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.name).toBe('Published');
+      expect(response.body.userId).toBe(null);
+      
+      // Should have additional fields from getScheduleDetail
+      expect(response.body).toHaveProperty('areas');
+      expect(response.body).toHaveProperty('days');
+      expect(response.body).toHaveProperty('people');
+    });
+
+    it('should require authentication', async () => {
+      const response = await request(testApp)
+        .get('/api/schedules/current');
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('error');
+    });
+
+    it('should return 404 if Published schedule does not exist', async () => {
+      // Don't create the Published schedule - test the error case
+
+      // Login as operations user to get token
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'operations_user',
+          password: 'password123'
+        });
+
+      const operationsToken = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .get('/api/schedules/current')
+        .set('Authorization', `Bearer ${operationsToken}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body.error.code).toBe('CURRENT_SCHEDULE_NOT_FOUND');
     });
   });
 });

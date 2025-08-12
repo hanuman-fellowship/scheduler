@@ -17,8 +17,9 @@ export interface Category {
   sortOrder?: number | null;
 }
 
-export async function getAllCategories(): Promise<Category[]> {
+export async function getAllCategories(scheduleId?: number): Promise<Category[]> {
   const categories = await prisma.residentCategory.findMany({
+    where: scheduleId ? { scheduleId } : undefined,
     orderBy: { name: 'asc' },
   });
 
@@ -36,8 +37,8 @@ export async function getCategoryById(id: number): Promise<Category | null> {
 export async function createCategory(data: z.infer<typeof CreateCategorySchema>): Promise<Category> {
   const validatedData = CreateCategorySchema.parse(data);
 
-  // Check for duplicate name
-  await checkDuplicateName(validatedData.name);
+  // Check for duplicate name within the same schedule
+  await checkDuplicateName(validatedData.name, undefined, validatedData.scheduleId);
 
   const category = await prisma.residentCategory.create({
     data: validatedData,
@@ -54,7 +55,7 @@ export async function updateCategory(id: number, data: z.infer<typeof UpdateCate
 
   // Check for duplicate name if name is being changed
   if (validatedData.name && validatedData.name !== existing.name) {
-    await checkDuplicateName(validatedData.name, id);
+    await checkDuplicateName(validatedData.name, id, existing.scheduleId);
   }
 
   const category = await prisma.residentCategory.update({
@@ -84,13 +85,14 @@ export async function deleteCategory(id: number): Promise<{ success: boolean; er
 }
 
 // Helper functions
-async function checkDuplicateName(name: string, excludeId?: number): Promise<void> {
+async function checkDuplicateName(name: string, excludeId?: number, scheduleId?: number): Promise<void> {
   const existing = await prisma.residentCategory.findFirst({
     where: {
       name: {
         equals: name,
         mode: 'insensitive',
       },
+      ...(scheduleId && { scheduleId }),
       ...(excludeId && { id: { not: excludeId } }),
     },
   });

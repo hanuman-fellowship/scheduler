@@ -46,6 +46,7 @@ app.delete('/api/users/:id', requireAuth, requireRole('operations'), asyncHandle
 
 // Schedule routes
 app.get('/api/schedules', requireAuth, asyncHandler(scheduleController.list));
+app.get('/api/schedules/current', requireAuth, asyncHandler(scheduleController.getCurrentSchedule));
 app.get('/api/schedules/:id', requireAuth, asyncHandler(scheduleController.get));
 app.post('/api/schedules/copy', requireAuth, asyncHandler(scheduleController.copy));
 app.post('/api/schedules/publish', requireAuth, requireRole('operations'), asyncHandler(scheduleController.publish));

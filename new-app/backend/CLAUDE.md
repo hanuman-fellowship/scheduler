@@ -105,6 +105,19 @@ Based on the workspace setup:
 3. **Phase 3**: Schedule workflow (copy, publish, requests)
 4. **Phase 4**: Change tracking, email notifications
 
+## 🚨 CRITICAL: Testing Architecture Issue
+
+**When adding new API routes, you MUST update TWO files:**
+
+1. `src/routes.ts` (production routes)
+2. `src/__tests__/utils/testApp.ts` (test routes)
+
+**Forgetting the test routes will cause 404 test failures.**
+
+See `TESTING_ROUTES.md` for detailed explanation and examples.
+
+This architectural issue should be fixed to use the main routes file in tests.
+
 ## Environment Variables
 
 ```

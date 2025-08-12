@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
@@ -6,9 +7,18 @@ import SchedulePage from './pages/SchedulePage'
 import BigBoardPage from './pages/BigBoardPage'
 import PeoplePage from './pages/PeoplePage'
 import { useAuthStore } from './store/authStore'
+import { useScheduleStore } from './store/scheduleStore'
 
 function App() {
   const { token } = useAuthStore()
+  const { loadCurrentSchedule } = useScheduleStore()
+
+  // Load current schedule when user is authenticated
+  useEffect(() => {
+    if (token) {
+      loadCurrentSchedule()
+    }
+  }, [token, loadCurrentSchedule])
 
   if (!token) {
     return (

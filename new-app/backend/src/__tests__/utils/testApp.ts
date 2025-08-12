@@ -1,7 +1,7 @@
 import express from 'express';
 import { login, logout, changePassword } from '../../controllers/authController';
 import { list as listUsers, create, update, deleteUser } from '../../controllers/userController';
-import { list as listSchedules, get, copy, publish, deleteSchedule } from '../../controllers/scheduleController';
+import { list as listSchedules, get, copy, publish, deleteSchedule, getCurrentSchedule } from '../../controllers/scheduleController';
 import { list as listPeople, get as getPerson, create as createPerson, update as updatePerson, deletePerson } from '../../controllers/peopleController';
 import { list as listCategories, get as getCategory, create as createCategory, update as updateCategory, deleteCategory } from '../../controllers/categoriesController';
 import { requireAuth, requireRole } from '../../middleware/auth';
@@ -26,6 +26,7 @@ export const createTestApp = () => {
   
   // Schedule routes (require auth, role checks handled in controllers)
   app.get('/api/schedules', requireAuth, listSchedules);
+  app.get('/api/schedules/current', requireAuth, getCurrentSchedule);
   app.get('/api/schedules/:id', requireAuth, get);
   app.post('/api/schedules/:id/copy', requireAuth, copy);
   app.post('/api/schedules/:id/publish', requireAuth, requireRole('operations'), publish);

@@ -44,7 +44,7 @@ export interface TestUser {
 export interface TestSchedule {
   id: number;
   name: string;
-  userId: number;
+  userId: number | null;
   template: boolean;
   request: number;
 }
@@ -105,7 +105,7 @@ export const createTestSchedule = async (scheduleData: Partial<Omit<TestSchedule
   return await prisma.schedule.create({
     data: {
       name: scheduleData.name || 'Test Schedule',
-      userId: scheduleData.userId!,
+      userId: scheduleData.userId !== undefined ? scheduleData.userId : 1, // Default to user 1 if not specified
       template: scheduleData.template || false,
       request: scheduleData.request || 0,
     },

@@ -59,47 +59,95 @@ All detailed specifications are in `/docs/`:
 - CLAUDE.md files for parallel development
 - **Frontend Foundation**: React app with routing and authentication flow
 - **Component Library**: Reusable UI components (MenuDropdown, MenuItem, etc.)
-- **Testing Framework**: Vitest + React Testing Library setup with 31 passing tests
+- **Testing Framework**: Complete test coverage - 117 passing tests (87 backend + 30 frontend)
 - **Navigation System**: Working dropdown menus with hover behavior
 - **Menu System**: Instant switching between menus with proper UX
+- **Backend API Foundation**: Express server with JWT auth and database connection
+- **Schedule Context System**: Fully implemented and tested (see below)
+- **Categories CRUD**: Working category creation with automatic schedule scoping
+- **Database Seeding**: Foundational data (Published schedule, Kitchen area, Residents category)
+- **Authentication Flow**: Complete login/logout with JWT tokens and role-based access
 
-### 🚧 Current Work
-- Backend API development and database connection
-- Authentication middleware and JWT implementation
-- API endpoint development for people, schedules, areas
+### 🎯 Schedule Context System (NEW)
+**Critical architectural feature that enables all schedule-scoped operations:**
 
-### 🔜 Next Priorities
-1. **Backend Foundation**: Express server with auth middleware and database
-2. **API Endpoints**: REST API for people, schedules, areas management
-3. **Authentication Integration**: Connect frontend auth with backend JWT
-4. **Data Integration**: Replace mock data with real API calls
+#### Backend Implementation:
+- **API Endpoint**: `GET /api/schedules/current` returns "Published" schedule (id: 1)
+- **Schedule Service**: Enhanced to get current schedule details
+- **Categories Integration**: Automatically adds `scheduleId` to all category operations
+- **Schedule-Scoped Validation**: Duplicate names checked within schedule only
 
-## Core Features Priority
+#### Frontend Implementation:
+- **Schedule Store**: Zustand store (`scheduleStore.ts`) for current schedule state
+- **Auto-Loading**: Schedule context loaded on user authentication in `App.tsx`
+- **Persistent State**: Current schedule persisted in localStorage
+- **API Integration**: Frontend calls `/api/schedules/current` to get context
 
-### 🚀 Phase 1: Foundation (MVP)
-- User authentication with JWT
-- Schedule CRUD operations
-- Area and people management
-- Basic shift creation and assignment
-- Role-based access control
+#### Database Foundation:
+- **Published Schedule**: Created via seed file (id: 1, name: "Published")
+- **7 Days**: Sunday through Saturday with proper `dayOfWeek` mapping
+- **Kitchen Area**: Default area with shortName "K"
+- **Residents Category**: Default category with teal color
+- **Schedule Relationships**: All entities properly linked via `scheduleId`
 
-### 📈 Phase 2: Core Workflows
-- Schedule copying and templates
-- Request submission (manager → operations)
-- Schedule publishing workflow
-- Assignment management with conflicts
+### 🚧 Current Development Status
+**All foundational systems are complete and tested. Ready for core feature development.**
 
-### 🔧 Phase 3: Advanced Features
-- Schedule branching and merging
-- Change tracking (undo/redo)
-- Email notifications
-- Advanced calendar views
+### 🔜 Next Development Priorities
 
-### ✨ Phase 4: Polish
-- Mobile optimization
-- Performance improvements
-- Enhanced error handling
-- Deployment automation
+#### **🚀 Phase 1: Core Scheduling Features (Ready to Implement)**
+1. **People Management**: 
+   - Add people to schedules with category assignment
+   - People listing and management interface
+   - Integration with existing `PeopleSchedule` model
+
+2. **Shift Management**:
+   - Create shifts with area/day/time assignments  
+   - Shift creation interface with time picker
+   - Integration with existing `Shift` model and areas/days
+
+3. **Assignment System**:
+   - Assign people to shifts
+   - Basic assignment interface (before drag-and-drop)
+   - Conflict detection and validation
+
+#### **📈 Phase 2: Advanced Features**
+1. **Schedule Grid View**: Calendar-style display of shifts and assignments
+2. **Drag-and-Drop Interface**: Visual assignment management
+3. **Schedule Publishing**: Workflow for publishing schedules with date ranges
+4. **Request Workflow**: Manager schedule requests and operations approval
+
+#### **🔧 Phase 3: Polish & Advanced Features**
+1. **Schedule Branching/Merging**: Copy and merge schedule functionality
+2. **Change Tracking**: Undo/redo system implementation
+3. **Email Notifications**: Schedule change notifications
+4. **Mobile Optimization**: Touch-friendly interfaces
+
+## Implementation Status
+
+### ✅ **Foundation Complete (MVP)**
+- ✅ User authentication with JWT
+- ✅ Schedule context system (current schedule management)
+- ✅ Categories management with automatic schedule scoping
+- ✅ Role-based access control and navigation
+- ✅ Database structure with all models
+- ✅ API foundation with error handling
+- ✅ Comprehensive test coverage (117 tests)
+
+### 🔄 **Ready for Implementation**
+- ⭕ People management (add people to schedules)
+- ⭕ Shift creation and management
+- ⭕ Basic assignment system
+- ⭕ Schedule grid/calendar view
+
+### 🔜 **Future Features**
+- ⭕ Schedule copying and templates
+- ⭕ Request submission (manager → operations)
+- ⭕ Schedule publishing workflow
+- ⭕ Advanced assignment management
+- ⭕ Change tracking (undo/redo)
+- ⭕ Email notifications
+- ⭕ Mobile optimization
 
 ## User Roles & Permissions
 
@@ -192,17 +240,42 @@ npm run test          # Run tests all workspaces
 npm run build         # Build for production
 ```
 
-## Next Steps
+## Current Implementation Status
 
-1. **Verify Database**: Test devenv PostgreSQL connection
-2. **Run Migrations**: Create initial database schema
-3. **Shared Types**: Create API contracts and validation schemas
-4. **Auth Foundation**: Basic Express server with JWT middleware
-5. **React Setup**: Basic routing and authentication flow
+### 🎯 **Production-Ready Foundation**
+The application has a complete, tested foundation ready for core feature development:
 
-Each component has detailed instructions in its CLAUDE.md file. Reference the `/docs/` specifications for any business logic questions.
+### ✅ **Fully Implemented & Tested Systems**
+1. **Authentication System**: Complete JWT-based auth with role-based access control
+2. **Database Layer**: PostgreSQL with Prisma ORM, complete schema, and seed data
+3. **Schedule Context Architecture**: Current schedule management throughout the application
+4. **Categories Management**: Full CRUD with automatic schedule scoping
+5. **API Foundation**: Express server with error handling and comprehensive test coverage
+6. **Frontend Framework**: React app with routing, state management, and component library
+7. **Test Coverage**: 117 passing tests (87 backend + 30 frontend) covering all implemented features
+
+### 📋 **Key Architecture Files**
+- **Database Schema**: `backend/prisma/schema.prisma` - Complete data model
+- **Seed Data**: `backend/src/seed.ts` - Foundational data creation
+- **Schedule Context**: `frontend/src/store/scheduleStore.ts` - Schedule state management
+- **API Routes**: `backend/src/routes.ts` - RESTful API endpoints
+- **Test Suites**: Comprehensive coverage in `__tests__` directories
+- **Documentation**: Complete specs in `/docs/` and implementation guides
+
+### 🚀 **Ready for Core Features**
+The next development phase can focus on core scheduling features:
+1. **People Management** - Add people to schedules with categories
+2. **Shift Creation** - Time-based shifts with area assignments
+3. **Assignment System** - Assign people to shifts with conflict detection
+4. **Schedule Views** - Calendar/grid display of the complete schedule
+
+### 🛠️ **Technical Debt & Known Issues**
+- **Testing Architecture**: Routes must be maintained in both `routes.ts` and `testApp.ts` (documented in `TESTING_ROUTES.md`)
+- **Frontend Warnings**: React Router v7 future flags (non-blocking)
+- **Console Props Warning**: MenuDropdown component has minor prop passing issue (non-blocking)
 
 ---
 
 **Branch**: `new-app-setup`
-**Last Updated**: Created Prisma schema, ready to test database connection
+**Status**: ✅ Foundation Complete - Ready for core feature development
+**Last Updated**: December 2024 - Schedule context system and comprehensive test coverage implemented

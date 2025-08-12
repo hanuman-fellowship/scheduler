@@ -72,15 +72,19 @@ export const getScheduleDetail = async (scheduleId: number, user: AuthUser) => {
     throw new Error('Schedule not found');
   }
 
-  if (schedule.userId !== user.id && !user.roles.includes('operations')) {
+  // Allow access if: user owns the schedule, user is operations, or it's a published schedule (userId: null)
+  if (schedule.userId !== null && schedule.userId !== user.id && !user.roles.includes('operations')) {
     throw new Error('Access denied');
   }
 
   return {
     id: schedule.id,
     name: schedule.name,
-    request: schedule.request,
+    userId: schedule.userId,
     template: schedule.template,
+    request: schedule.request,
+    createdAt: schedule.createdAt.toISOString(),
+    updatedAt: schedule.updatedAt.toISOString(),
     areas: schedule.areas,
     days: schedule.days,
     people: schedule.peopleSchedules.map(ps => ({
@@ -106,7 +110,8 @@ export const deleteSchedule = async (scheduleId: number, user: AuthUser) => {
     throw new Error('Schedule not found');
   }
 
-  if (schedule.userId !== user.id && !user.roles.includes('operations')) {
+  // Allow access if: user owns the schedule, user is operations, or it's a published schedule (userId: null)
+  if (schedule.userId !== null && schedule.userId !== user.id && !user.roles.includes('operations')) {
     throw new Error('Access denied');
   }
 

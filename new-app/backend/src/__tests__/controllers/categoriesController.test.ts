@@ -19,12 +19,15 @@ describe('CategoriesController', () => {
       roles: ['operations']
     });
 
-    // Create a test schedule first
-    testSchedule = await createTestSchedule({
-      name: 'Test Schedule',
-      userId: operationsUser.id,
-      template: false,
-      request: 0
+    // Create the "Published" schedule with id: 1 (what getCurrentSchedule expects)
+    testSchedule = await prisma.schedule.create({
+      data: {
+        id: 1,
+        name: 'Published',
+        userId: null, // Published schedules have no owner
+        template: false,
+        request: 0
+      }
     });
 
     // Login to get auth token
@@ -60,8 +63,7 @@ describe('CategoriesController', () => {
     it('should create a category with valid data', async () => {
       const categoryData = {
         name: 'Test Category',
-        color: '#FF0000',
-        scheduleId: testSchedule.id
+        color: '#FF0000'
       };
 
       const response = await request(testApp)
@@ -70,7 +72,10 @@ describe('CategoriesController', () => {
         .send(categoryData);
 
       expect(response.status).toBe(201);
-      expect(response.body).toMatchObject(categoryData);
+      expect(response.body).toMatchObject({
+        ...categoryData,
+        scheduleId: 1 // Auto-added current schedule ID
+      });
       expect(response.body.id).toBeDefined();
     });
 
@@ -94,8 +99,7 @@ describe('CategoriesController', () => {
         .set('Authorization', `Bearer ${loginResponse.body.token}`)
         .send({
           name: 'Test Category',
-          color: '#FF0000',
-          scheduleId: testSchedule.id
+          color: '#FF0000'
         });
 
       expect(response.status).toBe(403);
@@ -117,8 +121,7 @@ describe('CategoriesController', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           name: 'Test Category',
-          color: 'not-a-color',
-          scheduleId: testSchedule.id
+          color: 'not-a-color'
         });
 
       expect(response.status).toBe(400);
@@ -132,8 +135,7 @@ describe('CategoriesController', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           name: 'Duplicate Name',
-          color: '#FF0000',
-          scheduleId: testSchedule.id
+          color: '#FF0000'
         });
 
       // Try to create another with same name
@@ -142,8 +144,7 @@ describe('CategoriesController', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           name: 'Duplicate Name',
-          color: '#00FF00',
-          scheduleId: testSchedule.id
+          color: '#00FF00'
         });
 
       expect(response.status).toBe(400);
@@ -158,8 +159,7 @@ describe('CategoriesController', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           name: 'Test Category',
-          color: '#FF0000',
-          scheduleId: testSchedule.id
+          color: '#FF0000'
         });
 
       const response = await request(testApp)
@@ -186,8 +186,7 @@ describe('CategoriesController', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           name: 'Original Name',
-          color: '#FF0000',
-          scheduleId: testSchedule.id
+          color: '#FF0000'
         });
 
       const response = await request(testApp)
@@ -211,8 +210,7 @@ describe('CategoriesController', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           name: 'To Delete',
-          color: '#FF0000',
-          scheduleId: testSchedule.id
+          color: '#FF0000'
         });
 
       const response = await request(testApp)

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as categoriesService from '../services/categoriesService';
+import * as scheduleService from '../services/scheduleService';
 import type { UserRole } from '@shared/types';
 
 interface AuthRequest extends Request {
@@ -13,7 +14,9 @@ interface AuthRequest extends Request {
 
 export const list = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const categories = await categoriesService.getAllCategories();
+    // Get current schedule (Published schedule with id: 1)
+    const currentSchedule = await scheduleService.getScheduleDetail(1, req.user!);
+    const categories = await categoriesService.getAllCategories(currentSchedule.id);
     res.json(categories);
   } catch (error) {
     console.error('Error in list categories:', error);
@@ -62,9 +65,16 @@ export const get = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const create = async (req: Request, res: Response): Promise<void> => {
+export const create = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const category = await categoriesService.createCategory(req.body);
+    // Get current schedule (Published schedule with id: 1) and add to request body
+    const currentSchedule = await scheduleService.getScheduleDetail(1, req.user!);
+    const categoryData = {
+      ...req.body,
+      scheduleId: currentSchedule.id
+    };
+    
+    const category = await categoriesService.createCategory(categoryData);
     res.status(201).json(category);
   } catch (error: any) {
     if (error.name === 'ZodError') {
