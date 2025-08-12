@@ -6,6 +6,8 @@ import HomePage from './pages/HomePage'
 import SchedulePage from './pages/SchedulePage'
 import BigBoardPage from './pages/BigBoardPage'
 import PeoplePage from './pages/PeoplePage'
+import UsersPage from './pages/UsersPage'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuthStore } from './store/authStore'
 import { useScheduleStore } from './store/scheduleStore'
 
@@ -36,6 +38,14 @@ function App() {
           <Route path="/schedule/:id?" element={<SchedulePage />} />
           <Route path="/board" element={<BigBoardPage />} />
           <Route path="/people" element={<PeoplePage />} />
+          <Route 
+            path="/users" 
+            element={
+              <ProtectedRoute requireOperations>
+                <UsersPage />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

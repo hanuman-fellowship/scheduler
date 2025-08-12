@@ -150,3 +150,5 @@ export const createTestResidentCategory = async (scheduleId: number, categoryDat
     },
   });
 };
+
+export { prisma };

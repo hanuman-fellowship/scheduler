@@ -115,6 +115,31 @@ export interface CreateUserRequest {
   areaIds?: number[];
 }
 
+export interface UpdateUserRequest {
+  username?: string;
+  email?: string;
+  roles?: UserRole[];
+  areaIds?: number[];
+}
+
+export interface DeleteUserRequest {
+  id: number;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+}
+
+export interface UserListResponse {
+  id: number;
+  username: string;
+  email: string;
+  roles: UserRole[];
+  areas?: AreaResponse[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CopyScheduleRequest {
   sourceId: number;
   name: string;
@@ -156,4 +181,22 @@ export const CreateShiftFormSchema = z.object({
 
 export const CopyScheduleFormSchema = z.object({
   name: z.string().min(1),
+});
+
+export const CreateUserFormSchema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  email: z.string().email('Valid email is required'),
+  roles: z.array(z.enum(['operations', 'manager', 'personnel'])).min(1, 'At least one role is required'),
+  areaIds: z.array(z.number()).optional(),
+});
+
+export const UpdateUserFormSchema = z.object({
+  username: z.string().min(1, 'Username is required').optional(),
+  email: z.string().email('Valid email is required').optional(),
+  roles: z.array(z.enum(['operations', 'manager', 'personnel'])).min(1, 'At least one role is required').optional(),
+  areaIds: z.array(z.number()).optional(),
+});
+
+export const ResetPasswordFormSchema = z.object({
+  email: z.string().email('Valid email is required'),
 });

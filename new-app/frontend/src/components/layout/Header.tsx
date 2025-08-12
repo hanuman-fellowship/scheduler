@@ -28,9 +28,7 @@ export default function Header() {
 
         {isOperations() && (
           <MenuDropdown trigger="Operations">
-            <MenuItem to="/users/add">New User...</MenuItem>
-            <MenuItem to="/users/edit">Edit User...</MenuItem>
-            <MenuItem to="/users/delete">Delete User...</MenuItem>
+            <MenuItem to="/users">Manage Users...</MenuItem>
             <DropdownSeparator />
             <MenuItem to="/users/notes">Notepad</MenuItem>
             <MenuItem to="/manager-notes">Notes for Managers...</MenuItem>

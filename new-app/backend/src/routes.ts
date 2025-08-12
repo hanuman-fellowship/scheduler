@@ -61,9 +61,11 @@ export const createApp = (options: {
 
   // User management (operations only)
   app.get('/api/users', requireAuth, requireRole('operations'), asyncHandler(userController.list));
+  app.get('/api/users/:id', requireAuth, requireRole('operations'), asyncHandler(userController.get));
   app.post('/api/users', requireAuth, requireRole('operations'), asyncHandler(userController.create));
   app.put('/api/users/:id', requireAuth, requireRole('operations'), asyncHandler(userController.update));
   app.delete('/api/users/:id', requireAuth, requireRole('operations'), asyncHandler(userController.deleteUser));
+  app.post('/api/users/reset-password', requireAuth, requireRole('operations'), asyncHandler(userController.resetPassword));
 
   // Schedule routes
   app.get('/api/schedules', requireAuth, asyncHandler(scheduleController.list));
