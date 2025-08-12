@@ -9,17 +9,22 @@ Modern workforce scheduling application built with React + Node.js, replacing a 
 ## <� Core Development Standards
 
 ### **Always Write Tests**
+
 - **Backend**: Unit tests for all service layer business logic
-- **Frontend**: Component tests for user interactions and critical paths  
+- **Frontend**: Component tests for user interactions and critical paths
 - **Integration**: API endpoint tests with real database
 - **Requirement**: All new features must include comprehensive tests
 
 ### **Always Run Quality Checks**
+
 **Required after completing ANY development task:**
+
 ```bash
 cd /Users/shantam/Software/scheduler/new-app && npm run check
 ```
+
 This command:
+
 - Runs TypeScript compilation across ALL workspaces (shared, backend, frontend)
 - Executes all tests to ensure nothing is broken
 - Validates shared types consistency
@@ -28,26 +33,28 @@ This command:
 **If `npm run check` fails, the task is not done. Fix all errors before proceeding.**
 
 ### **Small, Testable, Maintainable Functions**
+
 - **Backend**: Thin controllers that delegate to services
 - **Frontend**: Dumb components that receive data via props
 - **Shared Types**: Use `@shared/types` for API contracts
 - **Single Responsibility**: Each function does one thing well
 
 ### **Testing Strategy**
+
 ```typescript
-//  GOOD: Test business logic in services  
-describe('createCategory', () => {
-  it('should create category with valid input', async () => {
-    const input = { name: 'Test', color: '#FF0000', scheduleId: 1 };
+//  GOOD: Test business logic in services
+describe("createCategory", () => {
+  it("should create category with valid input", async () => {
+    const input = { name: "Test", color: "#FF0000", scheduleId: 1 };
     const result = await categoriesService.createCategory(input);
-    expect(result.name).toBe('Test');
+    expect(result.name).toBe("Test");
   });
 });
 
 //  GOOD: Test user interactions in components
-test('should create category when form is submitted', async () => {
+test("should create category when form is submitted", async () => {
   render(<CategoryForm onSubmit={mockSubmit} />);
-  await user.click(screen.getByRole('button', { name: 'Create' }));
+  await user.click(screen.getByRole("button", { name: "Create" }));
   expect(mockSubmit).toHaveBeenCalled();
 });
 ```
@@ -57,7 +64,7 @@ test('should create category when form is submitted', async () => {
 ```bash
 # From /new-app directory
 npm run dev           # Start both frontend and backend
-npm run check         # TypeScript check all workspaces  
+npm run check         # TypeScript check all workspaces
 npm run test          # Run all tests (required)
 npm run setup         # Database setup and migrations
 ```
@@ -65,6 +72,7 @@ npm run setup         # Database setup and migrations
 ## =� Implementation Checklist
 
 Before considering any feature complete:
+
 -  Are functions small and focused?
 -  Are there unit tests for business logic?
 -  Are shared types used for API contracts?
@@ -75,20 +83,23 @@ Before considering any feature complete:
 ## =� Architecture Principles
 
 ### **Backend Patterns**
+
 - Thin controllers that delegate to services
 - Business logic in service layer (fully tested)
 - Shared TypeScript types for API inputs/outputs
 - Role-based authentication on all protected endpoints
 
-### **Frontend Patterns**  
+### **Frontend Patterns**
+
 - Dumb components that receive data via props
 - Business logic in custom hooks and services
 - React Query for server state, Zustand for client state
 - Schedule context integration for all operations
 
 ### **Database Design**
+
 - Integer primary keys for performance
-- Schedule-scoped operations (all data tied to schedules)  
+- Schedule-scoped operations (all data tied to schedules)
 - Complete change tracking for undo/redo
 - Role-based data access patterns
 
@@ -104,7 +115,7 @@ Before considering any feature complete:
 
 - **Main Project**: `/new-app/`
 - **Documentation**: `/new-app/docs/`
-- **Backend Instructions**: `/new-app/backend/CLAUDE.md`  
+- **Backend Instructions**: `/new-app/backend/CLAUDE.md`
 - **Frontend Instructions**: `/new-app/frontend/CLAUDE.md`
 - **Shared Types**: `/new-app/shared/src/types.ts`
 
@@ -115,6 +126,7 @@ Before considering any feature complete:
 **CRITICAL**: Always keep documentation current with implementation status:
 
 ### **Update Documentation After Every Feature**
+
 - Update `/new-app/CLAUDE.md` with current implementation status
 - Mark completed features as ✅ **COMPLETED** (remove implementation details)
 - Update pending features with current priorities
@@ -122,20 +134,27 @@ Before considering any feature complete:
 - Keep examples current with actual implementation
 
 ### **Documentation Best Practices**
-- **Completed features**: Simply note "✅ User Management - COMPLETED" 
+
+- **Completed features**: Simply note "✅ User Management - COMPLETED"
 - **In-progress features**: Document current status and next steps
 - **Future features**: List priorities and dependencies
 - **Remove stale details**: Don't keep detailed plans for finished features
 - **Keep it current**: Documentation should reflect actual state of codebase
 
 ### **Mandatory Quality Check**
+
 Every development task must end with:
+
 ```bash
 cd /Users/shantam/Software/scheduler/new-app && npm run check
 ```
+
 **If this command fails, the task is incomplete. Fix all errors before proceeding.**
 
 ---
 
 **Remember**: This is a quality-focused codebase. Every feature must be properly tested, type-safe, follow established patterns, and have current documentation. No shortcuts on testing, quality checks, or documentation updates.
+
 - when implementing a feature, if the details are not clear, look at the legacy code and trace the workflow, make a detailed plan and write it down before proceeding
+- run `npm run check` from the new-app directoryu when finishing a feature
+- run `npm run test` from the new-app directory when finishing a feature
