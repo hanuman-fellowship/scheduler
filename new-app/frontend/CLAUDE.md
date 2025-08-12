@@ -4,6 +4,8 @@
 
 You are developing the frontend for a workforce scheduling application. This is a React + Vite application that consumes a REST API to replace a legacy CakePHP interface.
 
+**⚠️ Critical Requirement**: Before implementing any new UI component or user interaction, you MUST examine the legacy CakePHP views and templates to understand the exact user experience, workflow steps, and interface patterns. While we modernize the implementation, we must preserve the user journey and interaction design.
+
 ## 🎯 Core Development Principles
 
 ### **Dumb Views That Take Advantage of Reusable Components**
@@ -19,20 +21,20 @@ interface CategoryListProps {
   loading?: boolean;
 }
 
-export const CategoryList: React.FC<CategoryListProps> = ({ 
-  categories, 
-  onCategoryCreate, 
-  onCategoryEdit, 
-  loading = false 
+export const CategoryList: React.FC<CategoryListProps> = ({
+  categories,
+  onCategoryCreate,
+  onCategoryEdit,
+  loading = false
 }) => {
   if (loading) return <LoadingSpinner />;
-  
+
   return (
     <div className="space-y-2">
       {categories.map(category => (
-        <CategoryItem 
-          key={category.id} 
-          category={category} 
+        <CategoryItem
+          key={category.id}
+          category={category}
           onEdit={(data) => onCategoryEdit(category.id, data)}
         />
       ))}
@@ -58,14 +60,14 @@ export const useCategories = () => {
     queryKey: ['categories'],
     queryFn: categoriesService.getCategories
   });
-  
+
   const createCategoryMutation = useMutation({
     mutationFn: categoriesService.createCategory,
     onSuccess: () => {
       queryClient.invalidateQueries(['categories']);
     }
   });
-  
+
   return {
     categories,
     loading: isLoading,
@@ -76,9 +78,9 @@ export const useCategories = () => {
 // ✅ Component uses the hook
 export const CategoriesPage: React.FC = () => {
   const { categories, loading, createCategory } = useCategories();
-  
+
   return (
-    <CategoryList 
+    <CategoryList
       categories={categories}
       loading={loading}
       onCategoryCreate={createCategory}
@@ -91,17 +93,28 @@ export const CategoriesPage: React.FC = () => {
 
 Focus on testing user interactions and critical paths:
 
+### **Always Run Quality Checks When Completing Tasks**
+
+**Required Step**: After completing any development task, always run `npm run check` from the `new-app/` directory to ensure:
+
+- TypeScript compilation passes
+- All workspaces have consistent types
+- No type errors exist across the codebase
+- Code quality standards are maintained
+
+**Command**: `cd new-app && npm run check`
+
 ```typescript
 // ✅ GOOD: Test user interactions
 test('should create category when form is submitted', async () => {
   const mockSubmit = vi.fn();
   render(<AddCategoryForm onSubmit={mockSubmit} />);
-  
+
   const user = userEvent.setup();
-  
+
   await user.type(screen.getByLabelText('Category Name'), 'Test Category');
   await user.click(screen.getByRole('button', { name: 'Create Category' }));
-  
+
   expect(mockSubmit).toHaveBeenCalledWith({
     name: 'Test Category',
     color: expect.any(String)
@@ -111,7 +124,7 @@ test('should create category when form is submitted', async () => {
 // ✅ Test component behavior
 test('should show loading state while categories are loading', () => {
   render(<CategoryList categories={[]} loading={true} onCategoryCreate={vi.fn()} />);
-  
+
   expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
 });
 ```
@@ -119,12 +132,14 @@ test('should show loading state while categories are loading', () => {
 ## Key Requirements
 
 ### Speed & Simplicity
+
 - Use established React patterns and libraries
-- Build reusable component library for consistency  
+- Build reusable component library for consistency
 - Keep components simple and focused
 - Responsive design that works on mobile
 
 ### Tech Stack
+
 - **Framework**: React 18 + TypeScript + Vite
 - **Styling**: Tailwind CSS
 - **Components**: Shadcn/UI or similar component library
@@ -136,6 +151,7 @@ test('should show loading state while categories are loading', () => {
 ## API Integration
 
 The backend API specification is in `/docs/API_ENDPOINTS.md`. Key patterns:
+
 - JWT token authentication via Authorization header
 - RESTful endpoints with consistent error responses
 - Role-based data filtering (operations see everything, managers see their areas, personnel see published only)
@@ -143,6 +159,7 @@ The backend API specification is in `/docs/API_ENDPOINTS.md`. Key patterns:
 ## Authentication Flow
 
 Based on `/docs/AUTH_SPECS.md`:
+
 - Login form → JWT token → store in localStorage
 - Include token in all API requests
 - Redirect to login if token expires
@@ -153,12 +170,14 @@ Based on `/docs/AUTH_SPECS.md`:
 From `/docs/BUSINESS_WORKFLOWS.md`, key user journeys:
 
 ### Manager Workflow
+
 1. Login → View published schedules
 2. Create area request → Build schedule → Submit to operations
 3. Manage people in their areas
 4. View/edit shifts and assignments
 
-### Operations Workflow  
+### Operations Workflow
+
 1. Login → Access all features
 2. Manage users and system settings
 3. Review/approve schedule requests
@@ -166,6 +185,7 @@ From `/docs/BUSINESS_WORKFLOWS.md`, key user journeys:
 5. Full schedule editing capabilities
 
 ### Personnel Workflow
+
 1. Login → View published schedules
 2. See their assignments
 3. Basic read-only access
@@ -229,39 +249,46 @@ frontend/
 ## State Management Strategy
 
 ### React Query (TanStack Query)
+
 - API data fetching and caching
 - Automatic background refetching
 - Optimistic updates for assignments
 
 ### Zustand Store
+
 - Authentication state (user, token, roles)
 - UI state (selected schedule, sidebar state)
 - Current schedule context
 
 ### Local Component State
+
 - Form state (React Hook Form)
 - UI interactions (modals, dropdowns)
 
 ## Key UI Components
 
 ### Schedule Grid/Calendar View
+
 - Display areas as columns, days as rows
 - Drag-and-drop for assignments
 - Color coding by person categories
 - Conflict highlighting
 
 ### Assignment Management
+
 - Modal for assigning people to shifts
 - Availability checking and conflict warnings
 - Star/unstar assignments
 - Swap assignment functionality
 
 ### Request Workflow (Managers)
+
 - Create request form with area/schedule selection
 - Progress indicator (draft → submitted → accepted)
 - Email confirmation feedback
 
 ### User Management (Operations)
+
 - User list with role management
 - Area assignment for managers
 - Password reset functionality
@@ -276,6 +303,7 @@ frontend/
 ## Development Status
 
 ### ✅ Phase 1: Foundation (COMPLETED)
+
 1. ✅ Authentication flow and protected routing
 2. ✅ Basic layout with navigation
 3. ✅ Role-based header menus (Operations, Manager, Personnel)
@@ -283,18 +311,21 @@ frontend/
 5. ✅ Dropdown menu system with hover behavior
 
 ### 🚧 Phase 2: Core Features (IN PROGRESS)
+
 1. ✅ People and area management UI
 2. 🔄 Backend API integration
 3. ⭕ Shift creation and editing
 4. ⭕ Assignment interface with drag-and-drop
 
 ### 🔜 Phase 3: Workflows (PLANNED)
+
 1. Schedule copying and publishing
 2. Request submission workflow
 3. Email notifications feedback
 4. Undo/redo functionality
 
 ### 🔜 Phase 4: Polish (PLANNED)
+
 1. Advanced calendar views
 2. Mobile optimization
 3. Loading states and error handling
@@ -303,6 +334,7 @@ frontend/
 ## Current Frontend Architecture
 
 ### ✅ Implemented Components
+
 - **Layout**: Header, Layout with role-based navigation
 - **UI Components**: MenuDropdown, MenuItem, Modal, BoxyButton
 - **Pages**: HomePage, PeoplePage, BigBoardPage, LoginPage
@@ -311,12 +343,14 @@ frontend/
 - **Testing**: 17 focused tests covering component behavior and regressions
 
 ### 🔧 Component Patterns Established
+
 - **MenuDropdown**: Reusable hover-based dropdown with instant switching
 - **MenuItem**: Navigation component with proper SPA routing
 - **MenuContext**: Shared state for coordinated menu behavior
 - **Modal System**: Reusable modal for forms and dialogs
 
 ### 🧪 Testing Strategy
+
 - **17 Tests**: Focused, essential coverage without redundancy
 - **Unit Tests**: Component behavior and interactions
 - **Integration Tests**: Multi-component workflows
@@ -324,6 +358,7 @@ frontend/
 - **Test Structure**: Co-located with components, shared utilities
 
 ### 📊 Code Quality Metrics
+
 - **Test Coverage**: Core functionality and user interactions
 - **Component Architecture**: Separation of concerns, reusability
 - **Type Safety**: Full TypeScript coverage
@@ -332,6 +367,7 @@ frontend/
 ## Development Commands
 
 Based on the workspace setup:
+
 - `npm run dev` - Start Vite development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build

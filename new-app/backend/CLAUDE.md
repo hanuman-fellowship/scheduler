@@ -4,6 +4,8 @@
 
 You are developing the backend for a workforce scheduling application. This is a Node.js + Express + Prisma API that replaces a legacy CakePHP application.
 
+**⚠️ Critical Requirement**: Before implementing any new API endpoint or business logic, you MUST examine the legacy CakePHP code to understand the exact workflow patterns, business rules, and user interactions. While we modernize the implementation, we must preserve the user experience and business logic flow.
+
 ## 🎯 Core Development Principles
 
 ### **Small Controller Actions That Delegate**
@@ -33,25 +35,27 @@ Every service function must have corresponding unit tests:
 
 ```typescript
 // Service function
-export const createCategory = async (data: CreateCategoryInput): Promise<CategoryOutput> => {
+export const createCategory = async (
+  data: CreateCategoryInput
+): Promise<CategoryOutput> => {
   const category = await prisma.residentCategory.create({
     data: {
       name: data.name,
       color: data.color,
       scheduleId: data.scheduleId,
-    }
+    },
   });
   return mapCategoryToOutput(category);
 };
 
 // Required unit test
-describe('categoriesService.createCategory', () => {
-  it('should create category with valid input', async () => {
-    const input = { name: 'Test', color: '#FF0000', scheduleId: 1 };
+describe("categoriesService.createCategory", () => {
+  it("should create category with valid input", async () => {
+    const input = { name: "Test", color: "#FF0000", scheduleId: 1 };
     const result = await categoriesService.createCategory(input);
-    
-    expect(result.name).toBe('Test');
-    expect(result.color).toBe('#FF0000');
+
+    expect(result.name).toBe("Test");
+    expect(result.color).toBe("#FF0000");
     expect(result.scheduleId).toBe(1);
   });
 });
@@ -86,7 +90,7 @@ export const createCategory = async (
 
 // Frontend also uses the same types
 const { mutate } = useMutation<CategoryOutput, Error, CreateCategoryInput>({
-  mutationFn: categoriesService.createCategory
+  mutationFn: categoriesService.createCategory,
 });
 ```
 
@@ -98,6 +102,39 @@ const { mutate } = useMutation<CategoryOutput, Error, CreateCategoryInput>({
 - Integer primary keys (not UUIDs)
 - Straightforward REST API design
 - Minimize complexity wherever possible
+
+### Legacy Code Reference
+
+**Before implementing any new feature, study the legacy CakePHP code:**
+
+1. **Controllers** (`/controllers/`) - Understand the workflow steps and user interactions
+2. **Models** (`/models/`) - Study business logic, validation rules, and relationships
+3. **Views** (`/views/`) - See how data is presented and what user actions are available
+4. **Database** (`/config/sql/`) - Understand the data structure and constraints
+
+**Example workflow analysis:**
+
+- **Assignment Process**: Study `assignments_controller.php` to see the exact steps users follow
+- **Permission Checks**: Examine `app_controller.php` and `app_helper.php` for role-based logic
+- **Data Validation**: Look at model files for business rule enforcement
+- **User Interface**: Check view files for form layouts and interaction patterns
+
+**Implementation strategy:**
+
+- **Preserve the workflow**: Keep the same user journey and decision points
+- **Modernize the code**: Use clean architecture, better error handling, and improved performance
+- **Test compatibility**: Ensure the new API produces the same results for the same inputs
+
+### **Always Run Quality Checks When Completing Tasks**
+
+**Required Step**: After completing any development task, always run `npm run check` from the `new-app/` directory to ensure:
+
+- TypeScript compilation passes
+- All workspaces have consistent types
+- No type errors exist across the codebase
+- Code quality standards are maintained
+
+**Command**: `cd new-app && npm run check`
 
 ### Tech Stack
 
@@ -232,7 +269,7 @@ NODE_ENV=development
 As you develop backend features:
 
 1. **Update API Documentation**: When adding endpoints, document them in the main project files
-2. **Update Shared Types**: Keep `shared/src/types.ts` current with new interfaces  
+2. **Update Shared Types**: Keep `shared/src/types.ts` current with new interfaces
 3. **Document Business Logic**: Complex service functions should have clear docstrings
 4. **Update Examples**: Keep code examples in documentation current with implementation
 
