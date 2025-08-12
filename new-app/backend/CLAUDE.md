@@ -4,11 +4,97 @@
 
 You are developing the backend for a workforce scheduling application. This is a Node.js + Express + Prisma API that replaces a legacy CakePHP application.
 
+## 🎯 Core Development Principles
+
+### **Small Controller Actions That Delegate**
+
+Controllers should be thin and delegate business logic to services:
+
+```typescript
+// ✅ GOOD: Thin controller
+export const createCategory = async (req: Request, res: Response) => {
+  try {
+    const result = await categoriesService.createCategory(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ❌ BAD: Fat controller with business logic
+export const createCategory = async (req: Request, res: Response) => {
+  // Don't put validation, database logic, etc. in controllers
+};
+```
+
+### **Always Write Unit Tests**
+
+Every service function must have corresponding unit tests:
+
+```typescript
+// Service function
+export const createCategory = async (data: CreateCategoryInput): Promise<CategoryOutput> => {
+  const category = await prisma.residentCategory.create({
+    data: {
+      name: data.name,
+      color: data.color,
+      scheduleId: data.scheduleId,
+    }
+  });
+  return mapCategoryToOutput(category);
+};
+
+// Required unit test
+describe('categoriesService.createCategory', () => {
+  it('should create category with valid input', async () => {
+    const input = { name: 'Test', color: '#FF0000', scheduleId: 1 };
+    const result = await categoriesService.createCategory(input);
+    
+    expect(result.name).toBe('Test');
+    expect(result.color).toBe('#FF0000');
+    expect(result.scheduleId).toBe(1);
+  });
+});
+```
+
+### **Use Shared Types for Inputs and Outputs**
+
+All API contracts must use shared TypeScript types:
+
+```typescript
+// shared/src/types.ts
+export interface CreateCategoryInput {
+  name: string;
+  color: string;
+  scheduleId: number;
+}
+
+export interface CategoryOutput {
+  id: number;
+  name: string;
+  color: string;
+  scheduleId: number;
+  createdAt: string;
+}
+
+// Backend service uses shared types
+export const createCategory = async (
+  data: CreateCategoryInput
+): Promise<CategoryOutput> => {
+  // Implementation
+};
+
+// Frontend also uses the same types
+const { mutate } = useMutation<CategoryOutput, Error, CreateCategoryInput>({
+  mutationFn: categoriesService.createCategory
+});
+```
+
 ## Key Requirements
 
 ### Speed & Simplicity
 
-- Use standard patterns and libraries to ship fast
+- Small, focused functions that are easy to test
 - Integer primary keys (not UUIDs)
 - Straightforward REST API design
 - Minimize complexity wherever possible
@@ -139,4 +225,22 @@ NODE_ENV=development
 - Add basic integration tests for auth and key endpoints
 - Unit tests for complex business logic (change tracking, merging)
 
-Remember: The goal is a working application as fast as possible. Use standard patterns, avoid over-engineering, and reference the detailed specifications in `/docs/` for any questions about business logic or data relationships.
+## 📝 Documentation Maintenance
+
+### Keep Documentation Current
+
+As you develop backend features:
+
+1. **Update API Documentation**: When adding endpoints, document them in the main project files
+2. **Update Shared Types**: Keep `shared/src/types.ts` current with new interfaces  
+3. **Document Business Logic**: Complex service functions should have clear docstrings
+4. **Update Examples**: Keep code examples in documentation current with implementation
+
+### Testing Standards
+
+- **Service Layer Focus**: Most tests should be at the service layer where business logic lives
+- **Controller Tests**: Light integration tests to ensure proper request/response handling
+- **Database Tests**: Use test database for integration tests
+- **Mocking**: Mock external dependencies but not your own services
+
+Remember: The goal is a working application as fast as possible. Use standard patterns, avoid over-engineering, write comprehensive tests, and keep documentation current with the implementation.

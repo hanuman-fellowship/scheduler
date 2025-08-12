@@ -4,12 +4,124 @@
 
 You are developing the frontend for a workforce scheduling application. This is a React + Vite application that consumes a REST API to replace a legacy CakePHP interface.
 
+## 🎯 Core Development Principles
+
+### **Dumb Views That Take Advantage of Reusable Components**
+
+Components should be focused on display logic and receive data via props:
+
+```typescript
+// ✅ GOOD: Dumb component that receives data
+interface CategoryListProps {
+  categories: Category[];
+  onCategoryCreate: (category: CreateCategoryInput) => void;
+  onCategoryEdit: (id: number, category: UpdateCategoryInput) => void;
+  loading?: boolean;
+}
+
+export const CategoryList: React.FC<CategoryListProps> = ({ 
+  categories, 
+  onCategoryCreate, 
+  onCategoryEdit, 
+  loading = false 
+}) => {
+  if (loading) return <LoadingSpinner />;
+  
+  return (
+    <div className="space-y-2">
+      {categories.map(category => (
+        <CategoryItem 
+          key={category.id} 
+          category={category} 
+          onEdit={(data) => onCategoryEdit(category.id, data)}
+        />
+      ))}
+      <AddCategoryForm onSubmit={onCategoryCreate} />
+    </div>
+  );
+};
+
+// ❌ BAD: Component that fetches its own data
+export const CategoryList: React.FC = () => {
+  // Don't put API calls, business logic in components
+};
+```
+
+### **Separate Logic from Display**
+
+Use custom hooks and services to handle business logic:
+
+```typescript
+// ✅ GOOD: Logic in custom hook
+export const useCategories = () => {
+  const { data: categories = [], isLoading } = useQuery({
+    queryKey: ['categories'],
+    queryFn: categoriesService.getCategories
+  });
+  
+  const createCategoryMutation = useMutation({
+    mutationFn: categoriesService.createCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['categories']);
+    }
+  });
+  
+  return {
+    categories,
+    loading: isLoading,
+    createCategory: createCategoryMutation.mutate,
+  };
+};
+
+// ✅ Component uses the hook
+export const CategoriesPage: React.FC = () => {
+  const { categories, loading, createCategory } = useCategories();
+  
+  return (
+    <CategoryList 
+      categories={categories}
+      loading={loading}
+      onCategoryCreate={createCategory}
+    />
+  );
+};
+```
+
+### **Make Sure Important Functionality Is Tested**
+
+Focus on testing user interactions and critical paths:
+
+```typescript
+// ✅ GOOD: Test user interactions
+test('should create category when form is submitted', async () => {
+  const mockSubmit = vi.fn();
+  render(<AddCategoryForm onSubmit={mockSubmit} />);
+  
+  const user = userEvent.setup();
+  
+  await user.type(screen.getByLabelText('Category Name'), 'Test Category');
+  await user.click(screen.getByRole('button', { name: 'Create Category' }));
+  
+  expect(mockSubmit).toHaveBeenCalledWith({
+    name: 'Test Category',
+    color: expect.any(String)
+  });
+});
+
+// ✅ Test component behavior
+test('should show loading state while categories are loading', () => {
+  render(<CategoryList categories={[]} loading={true} onCategoryCreate={vi.fn()} />);
+  
+  expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+});
+```
+
 ## Key Requirements
 
 ### Speed & Simplicity
 - Use established React patterns and libraries
-- Component libraries (Shadcn/UI or similar) for rapid development
-- Straightforward state management (React Query + Zustand)
+- Build reusable component library for consistency  
+- Keep components simple and focused
 - Responsive design that works on mobile
 
 ### Tech Stack
@@ -247,4 +359,29 @@ VITE_APP_NAME=Scheduler
 - Keyboard navigation for schedule grid
 - Screen reader friendly
 
-Remember: Focus on getting core functionality working quickly. The schedule grid view and assignment interface are the most complex parts - start with simple list views and iterate toward more advanced UIs.
+## 📝 Documentation Maintenance
+
+### Keep Documentation Current
+
+As you develop frontend features:
+
+1. **Update Component Documentation**: Document new reusable components with usage examples
+2. **Update Shared Types**: Keep types current with API changes
+3. **Document State Management**: New hooks and stores should be documented
+4. **Update Examples**: Keep code examples current with actual implementation
+
+### Testing Standards
+
+- **User Interactions**: Test what users actually do (clicking, typing, navigating)
+- **Component Behavior**: Test props, state changes, and rendering logic
+- **Integration Tests**: Test component + hook combinations
+- **Avoid Testing Implementation Details**: Focus on behavior, not internal state
+
+### Component Library Standards
+
+- **Consistent API**: Similar props patterns across components
+- **TypeScript First**: All components should have proper type definitions
+- **Accessibility**: Use semantic HTML and ARIA labels
+- **Documentation**: Include usage examples and prop documentation
+
+Remember: Focus on getting core functionality working quickly with well-tested, reusable components. The schedule grid view and assignment interface are the most complex parts - start with simple list views and iterate toward more advanced UIs while maintaining high code quality.
