@@ -21,7 +21,7 @@ describe('AuthController', () => {
   describe('POST /auth/login', () => {
     it('should login with valid credentials', async () => {
       const response = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'password123'
@@ -35,7 +35,7 @@ describe('AuthController', () => {
 
     it('should reject invalid username', async () => {
       const response = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'nonexistent',
           password: 'password123'
@@ -47,7 +47,7 @@ describe('AuthController', () => {
 
     it('should reject invalid password', async () => {
       const response = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'wrongpassword'
@@ -59,7 +59,7 @@ describe('AuthController', () => {
 
     it('should reject missing username', async () => {
       const response = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           password: 'password123'
         });
@@ -70,7 +70,7 @@ describe('AuthController', () => {
 
     it('should reject missing password', async () => {
       const response = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser'
         });
@@ -84,7 +84,7 @@ describe('AuthController', () => {
     it('should return 204 status', async () => {
       // First login to get a token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'password123'
@@ -93,7 +93,7 @@ describe('AuthController', () => {
       const authToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post('/auth/logout')
+        .post('/api/auth/logout')
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(204);
@@ -101,7 +101,7 @@ describe('AuthController', () => {
 
     it('should reject access without authentication', async () => {
       const response = await request(testApp)
-        .post('/auth/logout');
+        .post('/api/auth/logout');
 
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('error');
@@ -112,7 +112,7 @@ describe('AuthController', () => {
     it('should change password with valid old password', async () => {
       // First login to get a token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'password123'
@@ -121,7 +121,7 @@ describe('AuthController', () => {
       const authToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post('/auth/change-password')
+        .post('/api/auth/change-password')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           oldPassword: 'password123',
@@ -135,7 +135,7 @@ describe('AuthController', () => {
     it('should reject change password with invalid old password', async () => {
       // First login to get a token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'password123'
@@ -144,7 +144,7 @@ describe('AuthController', () => {
       const authToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post('/auth/change-password')
+        .post('/api/auth/change-password')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           oldPassword: 'wrongpassword',
@@ -157,7 +157,7 @@ describe('AuthController', () => {
 
     it('should reject change password without authentication', async () => {
       const response = await request(testApp)
-        .post('/auth/change-password')
+        .post('/api/auth/change-password')
         .send({
           oldPassword: 'password123',
           newPassword: 'newpassword123'
@@ -170,7 +170,7 @@ describe('AuthController', () => {
     it('should reject change password with short new password', async () => {
       // First login to get a token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'password123'
@@ -179,7 +179,7 @@ describe('AuthController', () => {
       const authToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post('/auth/change-password')
+        .post('/api/auth/change-password')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           oldPassword: 'password123',

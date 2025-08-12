@@ -30,7 +30,7 @@ describe('UserController', () => {
     it('should list users for operations role', async () => {
       // Login as operations user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'operations_user',
           password: 'password123'
@@ -39,7 +39,7 @@ describe('UserController', () => {
       const operationsToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .get('/users')
+        .get('/api/users')
         .set('Authorization', `Bearer ${operationsToken}`);
 
       expect(response.status).toBe(200);
@@ -50,7 +50,7 @@ describe('UserController', () => {
     it('should reject access for non-operations role', async () => {
       // Login as regular user
       const regularLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -59,7 +59,7 @@ describe('UserController', () => {
       const regularToken = regularLoginResponse.body.token;
 
       const response = await request(testApp)
-        .get('/users')
+        .get('/api/users')
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(403);
@@ -68,7 +68,7 @@ describe('UserController', () => {
 
     it('should reject access without authentication', async () => {
       const response = await request(testApp)
-        .get('/users');
+        .get('/api/users');
 
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('error');
@@ -79,7 +79,7 @@ describe('UserController', () => {
     it('should create user for operations role', async () => {
       // Login as operations user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'operations_user',
           password: 'password123'
@@ -95,7 +95,7 @@ describe('UserController', () => {
       };
 
       const response = await request(testApp)
-        .post('/users')
+        .post('/api/users')
         .set('Authorization', `Bearer ${operationsToken}`)
         .send(newUser);
 
@@ -108,7 +108,7 @@ describe('UserController', () => {
     it('should reject user creation for non-operations role', async () => {
       // Login as regular user
       const regularLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -124,7 +124,7 @@ describe('UserController', () => {
       };
 
       const response = await request(testApp)
-        .post('/users')
+        .post('/api/users')
         .set('Authorization', `Bearer ${regularToken}`)
         .send(newUser);
 
@@ -141,7 +141,7 @@ describe('UserController', () => {
       };
 
       const response = await request(testApp)
-        .post('/users')
+        .post('/api/users')
         .send(newUser);
 
       expect(response.status).toBe(401);
@@ -153,7 +153,7 @@ describe('UserController', () => {
     it('should return not implemented', async () => {
       // Login as operations user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'operations_user',
           password: 'password123'
@@ -167,7 +167,7 @@ describe('UserController', () => {
       };
 
       const response = await request(testApp)
-        .put(`/users/${regularUser.id}`)
+        .put(`/api/users/${regularUser.id}`)
         .set('Authorization', `Bearer ${operationsToken}`)
         .send(updateData);
 
@@ -179,7 +179,7 @@ describe('UserController', () => {
     it('should reject user update for non-operations role', async () => {
       // Login as regular user
       const regularLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -192,7 +192,7 @@ describe('UserController', () => {
       };
 
       const response = await request(testApp)
-        .put(`/users/${operationsUser.id}`)
+        .put(`/api/users/${operationsUser.id}`)
         .set('Authorization', `Bearer ${regularToken}`)
         .send(updateData);
 
@@ -205,7 +205,7 @@ describe('UserController', () => {
     it('should delete user for operations role', async () => {
       // Login as operations user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'operations_user',
           password: 'password123'
@@ -214,7 +214,7 @@ describe('UserController', () => {
       const operationsToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .delete(`/users/${regularUser.id}`)
+        .delete(`/api/users/${regularUser.id}`)
         .set('Authorization', `Bearer ${operationsToken}`);
 
       expect(response.status).toBe(204);
@@ -223,7 +223,7 @@ describe('UserController', () => {
     it('should reject user deletion for non-operations role', async () => {
       // Login as regular user
       const regularLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -232,7 +232,7 @@ describe('UserController', () => {
       const regularToken = regularLoginResponse.body.token;
 
       const response = await request(testApp)
-        .delete(`/users/${operationsUser.id}`)
+        .delete(`/api/users/${operationsUser.id}`)
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(403);

@@ -27,7 +27,7 @@ describe('Auth Middleware', () => {
     it('should allow access with valid token', async () => {
       // Login to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'password123'
@@ -36,7 +36,7 @@ describe('Auth Middleware', () => {
       const authToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .get('/schedules')
+        .get('/api/schedules')
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(200);
@@ -44,7 +44,7 @@ describe('Auth Middleware', () => {
 
     it('should reject access without token', async () => {
       const response = await request(testApp)
-        .get('/schedules');
+        .get('/api/schedules');
 
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('error');
@@ -52,7 +52,7 @@ describe('Auth Middleware', () => {
 
     it('should reject access with invalid token', async () => {
       const response = await request(testApp)
-        .get('/schedules')
+        .get('/api/schedules')
         .set('Authorization', 'Bearer invalid-token');
 
       expect(response.status).toBe(401);
@@ -61,7 +61,7 @@ describe('Auth Middleware', () => {
 
     it('should reject access with malformed authorization header', async () => {
       const response = await request(testApp)
-        .get('/schedules')
+        .get('/api/schedules')
         .set('Authorization', 'InvalidFormat');
 
       expect(response.status).toBe(401);
@@ -81,7 +81,7 @@ describe('Auth Middleware', () => {
 
       // Login as operations user
       const operationsLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'operations_user',
           password: 'password123'
@@ -90,7 +90,7 @@ describe('Auth Middleware', () => {
       const operationsToken = operationsLoginResponse.body.token;
 
       const response = await request(testApp)
-        .get('/users')
+        .get('/api/users')
         .set('Authorization', `Bearer ${operationsToken}`);
 
       expect(response.status).toBe(200);
@@ -99,7 +99,7 @@ describe('Auth Middleware', () => {
     it('should reject access for user without required role', async () => {
       // Login to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'testuser',
           password: 'password123'
@@ -108,7 +108,7 @@ describe('Auth Middleware', () => {
       const authToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .get('/users')
+        .get('/api/users')
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(403);
@@ -117,7 +117,7 @@ describe('Auth Middleware', () => {
 
     it('should reject access without authentication', async () => {
       const response = await request(testApp)
-        .get('/users');
+        .get('/api/users');
 
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('error');
@@ -125,7 +125,7 @@ describe('Auth Middleware', () => {
 
     it('should reject access with invalid token for role check', async () => {
       const response = await request(testApp)
-        .get('/users')
+        .get('/api/users')
         .set('Authorization', 'Bearer invalid-token');
 
       expect(response.status).toBe(401);
@@ -137,7 +137,7 @@ describe('Auth Middleware', () => {
     it('should apply both requireAuth and requireRole in sequence', async () => {
       // Test that requireAuth is applied first (401 before 403)
       const response = await request(testApp)
-        .get('/users');
+        .get('/api/users');
 
       expect(response.status).toBe(401); // requireAuth fails first
       expect(response.body).toHaveProperty('error');
@@ -147,7 +147,7 @@ describe('Auth Middleware', () => {
       // This test would require JWT expiration testing
       // For now, we'll test that malformed tokens are handled
       const response = await request(testApp)
-        .get('/schedules')
+        .get('/api/schedules')
         .set('Authorization', 'Bearer expired.token.here');
 
       expect(response.status).toBe(401);

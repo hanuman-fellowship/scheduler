@@ -39,7 +39,7 @@ describe('ScheduleController', () => {
     it('should list schedules for authenticated user', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -48,7 +48,7 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .get('/schedules')
+        .get('/api/schedules')
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(200);
@@ -60,7 +60,7 @@ describe('ScheduleController', () => {
 
     it('should reject access without authentication', async () => {
       const response = await request(testApp)
-        .get('/schedules');
+        .get('/api/schedules');
 
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('error');
@@ -71,7 +71,7 @@ describe('ScheduleController', () => {
     it('should get schedule for owner', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -80,7 +80,7 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .get(`/schedules/${testSchedule.id}`)
+        .get(`/api/schedules/${testSchedule.id}`)
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(200);
@@ -91,7 +91,7 @@ describe('ScheduleController', () => {
     it('should get schedule for operations user', async () => {
       // Login as operations user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'operations_user',
           password: 'password123'
@@ -100,7 +100,7 @@ describe('ScheduleController', () => {
       const operationsToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .get(`/schedules/${testSchedule.id}`)
+        .get(`/api/schedules/${testSchedule.id}`)
         .set('Authorization', `Bearer ${operationsToken}`);
 
       expect(response.status).toBe(200);
@@ -117,7 +117,7 @@ describe('ScheduleController', () => {
       });
 
       const otherLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'other_user',
           password: 'password123'
@@ -126,7 +126,7 @@ describe('ScheduleController', () => {
       const otherToken = otherLoginResponse.body.token;
 
       const response = await request(testApp)
-        .get(`/schedules/${testSchedule.id}`)
+        .get(`/api/schedules/${testSchedule.id}`)
         .set('Authorization', `Bearer ${otherToken}`);
 
       expect(response.status).toBe(403);
@@ -135,7 +135,7 @@ describe('ScheduleController', () => {
 
     it('should reject access without authentication', async () => {
       const response = await request(testApp)
-        .get(`/schedules/${testSchedule.id}`);
+        .get(`/api/schedules/${testSchedule.id}`);
 
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('error');
@@ -144,7 +144,7 @@ describe('ScheduleController', () => {
     it('should return 404 for non-existent schedule', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -153,7 +153,7 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .get('/schedules/99999')
+        .get('/api/schedules/99999')
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(404);
@@ -165,7 +165,7 @@ describe('ScheduleController', () => {
     it('should return not implemented', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -174,7 +174,7 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/schedules/${testSchedule.id}/copy`)
+        .post(`/api/schedules/${testSchedule.id}/copy`)
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(501);
@@ -191,7 +191,7 @@ describe('ScheduleController', () => {
       });
 
       const otherLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'copy_user',
           password: 'password123'
@@ -200,7 +200,7 @@ describe('ScheduleController', () => {
       const otherToken = otherLoginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/schedules/${testSchedule.id}/copy`)
+        .post(`/api/schedules/${testSchedule.id}/copy`)
         .set('Authorization', `Bearer ${otherToken}`);
 
       expect(response.status).toBe(501);
@@ -210,10 +210,10 @@ describe('ScheduleController', () => {
   });
 
   describe('POST /schedules/:id/publish', () => {
-    it('should return not implemented', async () => {
+    it('should reject access for non-operations user', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -222,15 +222,14 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/schedules/${testSchedule.id}/publish`)
+        .post(`/api/schedules/${testSchedule.id}/publish`)
         .set('Authorization', `Bearer ${regularToken}`);
 
-      expect(response.status).toBe(501);
+      expect(response.status).toBe(403);
       expect(response.body).toHaveProperty('error');
-      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
     });
 
-    it('should return not implemented for non-owner non-operations user', async () => {
+    it('should reject access for non-operations user', async () => {
       const otherUser = await createTestUser({
         username: 'publish_user',
         email: 'publish@example.com',
@@ -239,7 +238,7 @@ describe('ScheduleController', () => {
       });
 
       const otherLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'publish_user',
           password: 'password123'
@@ -248,12 +247,11 @@ describe('ScheduleController', () => {
       const otherToken = otherLoginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/schedules/${testSchedule.id}/publish`)
+        .post(`/api/schedules/${testSchedule.id}/publish`)
         .set('Authorization', `Bearer ${otherToken}`);
 
-      expect(response.status).toBe(501);
+      expect(response.status).toBe(403);
       expect(response.body).toHaveProperty('error');
-      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
     });
   });
 
@@ -261,7 +259,7 @@ describe('ScheduleController', () => {
     it('should delete schedule for owner', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -270,7 +268,7 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .delete(`/schedules/${testSchedule.id}`)
+        .delete(`/api/schedules/${testSchedule.id}`)
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(204);
@@ -293,7 +291,7 @@ describe('ScheduleController', () => {
       });
 
       const otherLoginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'delete_user',
           password: 'password123'
@@ -302,7 +300,7 @@ describe('ScheduleController', () => {
       const otherToken = otherLoginResponse.body.token;
 
       const response = await request(testApp)
-        .delete(`/schedules/${newSchedule.id}`)
+        .delete(`/api/schedules/${newSchedule.id}`)
         .set('Authorization', `Bearer ${otherToken}`);
 
       expect(response.status).toBe(403);
@@ -312,7 +310,7 @@ describe('ScheduleController', () => {
     it('should return 404 for non-existent schedule', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           username: 'regular_user',
           password: 'password123'
@@ -321,7 +319,7 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .delete('/schedules/99999')
+        .delete('/api/schedules/99999')
         .set('Authorization', `Bearer ${regularToken}`);
 
       expect(response.status).toBe(404);

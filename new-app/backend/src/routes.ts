@@ -5,6 +5,8 @@ import cors from 'cors';
 import * as authController from './controllers/authController';
 import * as userController from './controllers/userController';
 import * as scheduleController from './controllers/scheduleController';
+import * as peopleController from './controllers/peopleController';
+import * as categoriesController from './controllers/categoriesController';
 import { requireAuth, requireRole } from './middleware/auth';
 
 const app = express();
@@ -48,6 +50,20 @@ app.get('/api/schedules/:id', requireAuth, asyncHandler(scheduleController.get))
 app.post('/api/schedules/copy', requireAuth, asyncHandler(scheduleController.copy));
 app.post('/api/schedules/publish', requireAuth, requireRole('operations'), asyncHandler(scheduleController.publish));
 app.delete('/api/schedules/:id', requireAuth, asyncHandler(scheduleController.deleteSchedule));
+
+// People management (operations only for now)
+app.get('/api/people', requireAuth, asyncHandler(peopleController.list));
+app.get('/api/people/:id', requireAuth, asyncHandler(peopleController.get));
+app.post('/api/people', requireAuth, requireRole('operations'), asyncHandler(peopleController.create));
+app.put('/api/people/:id', requireAuth, requireRole('operations'), asyncHandler(peopleController.update));
+app.delete('/api/people/:id', requireAuth, requireRole('operations'), asyncHandler(peopleController.deletePerson));
+
+// Categories management (operations only for now)
+app.get('/api/categories', requireAuth, asyncHandler(categoriesController.list));
+app.get('/api/categories/:id', requireAuth, asyncHandler(categoriesController.get));
+app.post('/api/categories', requireAuth, requireRole('operations'), asyncHandler(categoriesController.create));
+app.put('/api/categories/:id', requireAuth, requireRole('operations'), asyncHandler(categoriesController.update));
+app.delete('/api/categories/:id', requireAuth, requireRole('operations'), asyncHandler(categoriesController.deleteCategory));
 
 // 404 handler
 app.use('*', (req, res) => {

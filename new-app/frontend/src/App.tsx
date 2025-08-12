@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import SchedulePage from './pages/SchedulePage'
 import BigBoardPage from './pages/BigBoardPage'
+import PeoplePage from './pages/PeoplePage'
 import { useAuthStore } from './store/authStore'
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/schedule/:id?" element={<SchedulePage />} />
           <Route path="/board" element={<BigBoardPage />} />
+          <Route path="/people" element={<PeoplePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
