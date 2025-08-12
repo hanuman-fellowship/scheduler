@@ -13,7 +13,7 @@ describe('AuthController', () => {
     testUser = await createTestUser({
       username: 'testuser',
       email: 'test@example.com',
-      password: 'password123',
+      password: 'password',
       roles: ['personnel']
     });
   });
@@ -24,7 +24,7 @@ describe('AuthController', () => {
         .post('/api/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password'
         });
 
       expect(response.status).toBe(200);
@@ -38,7 +38,7 @@ describe('AuthController', () => {
         .post('/api/auth/login')
         .send({
           username: 'nonexistent',
-          password: 'password123'
+          password: 'password'
         });
 
       expect(response.status).toBe(401);
@@ -61,7 +61,7 @@ describe('AuthController', () => {
       const response = await request(testApp)
         .post('/api/auth/login')
         .send({
-          password: 'password123'
+          password: 'password'
         });
 
       expect(response.status).toBe(400);
@@ -87,7 +87,7 @@ describe('AuthController', () => {
         .post('/api/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password'
         });
 
       const authToken = loginResponse.body.token;
@@ -115,7 +115,7 @@ describe('AuthController', () => {
         .post('/api/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password'
         });
 
       const authToken = loginResponse.body.token;
@@ -124,8 +124,8 @@ describe('AuthController', () => {
         .post('/api/auth/change-password')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          oldPassword: 'password123',
-          newPassword: 'newpassword123'
+          oldPassword: 'password',
+          newPassword: 'newpassword'
         });
 
       expect(response.status).toBe(204);
@@ -138,7 +138,7 @@ describe('AuthController', () => {
         .post('/api/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password'
         });
 
       const authToken = loginResponse.body.token;
@@ -148,7 +148,7 @@ describe('AuthController', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           oldPassword: 'wrongpassword',
-          newPassword: 'newpassword123'
+          newPassword: 'newpassword'
         });
 
       expect(response.status).toBe(400);
@@ -159,8 +159,8 @@ describe('AuthController', () => {
       const response = await request(testApp)
         .post('/api/auth/change-password')
         .send({
-          oldPassword: 'password123',
-          newPassword: 'newpassword123'
+          oldPassword: 'password',
+          newPassword: 'newpassword'
         });
 
       expect(response.status).toBe(401);
@@ -173,7 +173,7 @@ describe('AuthController', () => {
         .post('/api/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password'
         });
 
       const authToken = loginResponse.body.token;
@@ -182,7 +182,7 @@ describe('AuthController', () => {
         .post('/api/auth/change-password')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          oldPassword: 'password123',
+          oldPassword: 'password',
           newPassword: '123'
         });
 

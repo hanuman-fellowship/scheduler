@@ -14,14 +14,14 @@ describe('UserController Integration', () => {
       username: 'operations',
       email: 'ops@example.com',
       roles: ['operations'],
-      password: 'testpass123'
+      password: 'password'
     });
     
     const loginResponse = await request(testApp)
       .post('/api/auth/login')
       .send({
         username: 'operations',
-        password: 'testpass123'
+        password: 'password'
       });
     
     operationsToken = loginResponse.body.token;
@@ -64,14 +64,14 @@ describe('UserController Integration', () => {
         username: 'manager',
         email: 'manager@example.com',
         roles: ['manager'],
-        password: 'testpass123'
+        password: 'password'
       });
 
       const loginResponse = await request(testApp)
         .post('/api/auth/login')
         .send({
           username: 'manager',
-          password: 'testpass123'
+          password: 'password'
         });
 
       const response = await request(testApp)

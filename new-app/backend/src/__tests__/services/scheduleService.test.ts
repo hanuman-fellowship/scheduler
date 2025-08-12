@@ -14,14 +14,14 @@ describe('ScheduleService', () => {
     const operationsUserData = await createTestUser({
       username: 'operations_user',
       email: 'operations@example.com',
-      password: 'password123',
+      password: 'password',
       roles: ['operations']
     });
 
     const regularUserData = await createTestUser({
       username: 'regular_user',
       email: 'regular@example.com',
-      password: 'password123',
+      password: 'password',
       roles: ['personnel']
     });
 
@@ -100,7 +100,7 @@ describe('ScheduleService', () => {
       const otherUserData = await createTestUser({
         username: 'other_user',
         email: 'other@example.com',
-        password: 'password123',
+        password: 'password',
         roles: ['personnel']
       });
 
@@ -157,7 +157,7 @@ describe('ScheduleService', () => {
       const otherUserData = await createTestUser({
         username: 'delete_user',
         email: 'delete@example.com',
-        password: 'password123',
+        password: 'password',
         roles: ['personnel']
       });
 

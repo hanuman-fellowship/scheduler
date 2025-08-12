@@ -7,6 +7,7 @@ import {
   createTestSchedule,
   resetTestDatabase 
 } from '../utils/testDbOptimized';
+import { issueTestToken } from '../utils/authTestHelpers';
 
 const app = createApp({ 
   enableCors: false, 
@@ -25,8 +26,7 @@ describe('Area Controller', () => {
   beforeEach(async () => {
     await resetTestDatabase();
     
-    testSchedule = await createTestSchedule({ name: 'Test Schedule' });
-    
+    // Create users first
     operationsUser = await createTestUser({ 
       username: 'operations', 
       email: 'operations@test.com', 
@@ -41,16 +41,15 @@ describe('Area Controller', () => {
       roles: ['manager'] 
     });
 
-    // Get auth tokens
-    const operationsLogin = await request(app)
-      .post('/api/auth/login')
-      .send({ username: 'operations', password: 'password' });
-    operationsToken = operationsLogin.body.token;
+    // Create schedule with explicit userId
+    testSchedule = await createTestSchedule({ 
+      name: 'Test Schedule',
+      userId: operationsUser.id
+    });
 
-    const managerLogin = await request(app)
-      .post('/api/auth/login')
-      .send({ username: 'manager', password: 'password' });
-    managerToken = managerLogin.body.token;
+    // Generate auth tokens directly (much faster than login API calls)
+    operationsToken = issueTestToken(operationsUser.id, ['operations']);
+    managerToken = issueTestToken(managerUser.id, ['manager']);
   });
 
   describe('GET /api/areas', () => {

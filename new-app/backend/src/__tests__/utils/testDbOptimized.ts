@@ -1,9 +1,44 @@
 import { prisma } from './testConfig';
+import { createTestUserData, PRECOMPUTED_PASSWORD_HASH } from './authTestHelpers';
+import type { UserRole } from '@shared/types';
 
-// Simple database reset between tests - more reliable than complex cleanup
+// Fast database reset using TRUNCATE CASCADE - much faster than deleteMany
 export const resetTestDatabase = async () => {
   try {
-    // Use a transaction for faster cleanup
+    // Use raw SQL for maximum performance
+    await prisma.$executeRaw`
+      TRUNCATE TABLE 
+        "change_fields", 
+        "change_models", 
+        "changes", 
+        "assignments", 
+        "shifts", 
+        "floating_shifts", 
+        "constant_shifts", 
+        "off_days", 
+        "people_schedules", 
+        "personnel_notes", 
+        "operations_notes", 
+        "manager_notes", 
+        "areas", 
+        "days", 
+        "resident_categories", 
+        "schedules", 
+        "roles", 
+        "users", 
+        "people"
+      RESTART IDENTITY CASCADE
+    `;
+  } catch (error) {
+    console.error('Failed to reset test database:', error);
+    throw error;
+  }
+};
+
+// Alternative transaction-based reset if needed for specific tests
+export const resetTestDatabaseTransaction = async () => {
+  try {
+    // Use a transaction for safer cleanup when needed
     await prisma.$transaction(async (tx) => {
       // Clean up in reverse order of dependencies (most efficient order)
       await tx.changeField.deleteMany();
@@ -38,7 +73,7 @@ export interface TestUser {
   username: string;
   email: string;
   password: string;
-  roles: string[];
+  roles: UserRole[];
 }
 
 export interface TestSchedule {
@@ -90,24 +125,27 @@ export interface TestAssignment {
   shiftId: number;
 }
 
-// Simple test data creation
+// Simple test data creation using precomputed hash for speed
 export const createTestUser = async (userData: Partial<Omit<TestUser, 'id'>>) => {
-  const bcrypt = await import('bcryptjs');
-  const hashedPassword = await bcrypt.hash(userData.password || 'password123', 10);
-  const roles = userData.roles || ['personnel'];
+  const testUserData = createTestUserData({
+    username: userData.username,
+    email: userData.email,
+    password: userData.password,
+    roles: userData.roles
+  });
 
   const user = await prisma.user.create({
     data: {
-      username: userData.username || 'testuser',
-      email: userData.email || 'test@example.com',
-      password: hashedPassword,
+      username: testUserData.username,
+      email: testUserData.email,
+      password: PRECOMPUTED_PASSWORD_HASH, // Use precomputed hash - much faster
     },
   });
 
   // Create roles for the user
-  if (roles.length > 0) {
+  if (testUserData.roles.length > 0) {
     await prisma.role.createMany({
-      data: roles.map(roleName => ({
+      data: testUserData.roles.map(roleName => ({
         userId: user.id,
         name: roleName
       }))
@@ -117,22 +155,11 @@ export const createTestUser = async (userData: Partial<Omit<TestUser, 'id'>>) =>
   return user;
 };
 
-export const createTestSchedule = async (scheduleData: Partial<Omit<TestSchedule, 'id'>>) => {
-  // If userId is not provided, create a default user
-  let userId = scheduleData.userId;
-  if (!userId) {
-    const timestamp = Date.now();
-    const user = await createTestUser({ 
-      username: `testuser${timestamp}`, 
-      email: `test${timestamp}@example.com` 
-    });
-    userId = user.id;
-  }
-
+export const createTestSchedule = async (scheduleData: { name?: string; userId: number; template?: boolean; request?: number }) => {
   return await prisma.schedule.create({
     data: {
       name: scheduleData.name || 'Test Schedule',
-      userId,
+      userId: scheduleData.userId,
       template: scheduleData.template || false,
       request: scheduleData.request || 0,
     },

@@ -18,7 +18,7 @@ describe('Auth Middleware', () => {
     testUser = await createTestUser({
       username: 'testuser',
       email: 'test@example.com',
-      password: 'password123',
+      password: 'password',
       roles: ['personnel']
     });
   });
@@ -30,7 +30,7 @@ describe('Auth Middleware', () => {
         .post('/api/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password'
         });
 
       const authToken = loginResponse.body.token;
@@ -75,7 +75,7 @@ describe('Auth Middleware', () => {
       const operationsUser = await createTestUser({
         username: 'operations_user',
         email: 'operations@example.com',
-        password: 'password123',
+        password: 'password',
         roles: ['operations']
       });
 
@@ -84,7 +84,7 @@ describe('Auth Middleware', () => {
         .post('/api/auth/login')
         .send({
           username: 'operations_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const operationsToken = operationsLoginResponse.body.token;
@@ -102,7 +102,7 @@ describe('Auth Middleware', () => {
         .post('/api/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password'
         });
 
       const authToken = loginResponse.body.token;

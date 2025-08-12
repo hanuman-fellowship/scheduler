@@ -6,6 +6,7 @@ import {
   createTestAssignment,
   createTestDay,
   createTestPerson,
+  createTestUser,
   resetTestDatabase, 
   prisma 
 } from '../utils/testDbOptimized';
@@ -16,7 +17,8 @@ describe('areaService', () => {
 
   beforeEach(async () => {
     await resetTestDatabase();
-    testSchedule = await createTestSchedule({ name: 'Test Schedule' });
+    const user = await createTestUser({ username: 'testuser', roles: ['operations'] });
+    testSchedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
   });
 
   describe('createArea', () => {
@@ -80,7 +82,8 @@ describe('areaService', () => {
 
   describe('getAllAreas', () => {
     it('should return areas for specific schedule', async () => {
-      const schedule2 = await createTestSchedule({ name: 'Schedule 2' });
+      const user2 = await createTestUser({ username: 'testuser2', roles: ['operations'] });
+      const schedule2 = await createTestSchedule({ name: 'Schedule 2', userId: user2.id });
       
       await createTestArea(testSchedule.id, { name: 'Kitchen', shortName: 'K' });
       await createTestArea(testSchedule.id, { name: 'Dining', shortName: 'D' });

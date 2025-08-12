@@ -16,7 +16,7 @@ describe('PeopleController', () => {
     operationsUser = await createTestUser({
       username: 'operations',
       email: 'ops@example.com',
-      password: 'password123',
+      password: 'password',
       roles: ['operations']
     });
 
@@ -42,7 +42,7 @@ describe('PeopleController', () => {
       .post('/api/auth/login')
       .send({
         username: 'operations',
-        password: 'password123'
+        password: 'password'
       });
 
     authToken = loginResponse.body.token;
@@ -99,7 +99,7 @@ describe('PeopleController', () => {
       const personnelUser = await createTestUser({
         username: 'personnel',
         email: 'personnel@example.com', 
-        password: 'password123',
+        password: 'password',
         roles: ['personnel']
       });
 
@@ -107,7 +107,7 @@ describe('PeopleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'personnel',
-          password: 'password123'
+          password: 'password'
         });
 
       const response = await request(testApp)

@@ -46,7 +46,8 @@ describe('shiftService', () => {
     });
 
     it('should include area and day details in response', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
       const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
 
@@ -74,7 +75,8 @@ describe('shiftService', () => {
     });
 
     it('should throw error when end time is before start time', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
       const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
 
@@ -91,7 +93,8 @@ describe('shiftService', () => {
     });
 
     it('should throw error when area does not exist', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
 
       const shiftData = {
@@ -107,8 +110,10 @@ describe('shiftService', () => {
     });
 
     it('should throw error when area and day belong to different schedules', async () => {
-      const schedule1 = await createTestSchedule({ name: 'Schedule 1' });
-      const schedule2 = await createTestSchedule({ name: 'Schedule 2' });
+      const user1 = await createTestUser({ roles: ['operations'] });
+      const user2 = await createTestUser({ roles: ['operations'] });
+      const schedule1 = await createTestSchedule({ name: 'Schedule 1', userId: user1.id });
+      const schedule2 = await createTestSchedule({ name: 'Schedule 2', userId: user2.id });
       const area = await createTestArea(schedule1.id, { name: 'Kitchen', shortName: 'K' });
       const day = await createTestDay(schedule2.id, { name: 'Monday', dayOfWeek: 2 });
 
@@ -127,7 +132,8 @@ describe('shiftService', () => {
 
   describe('getAllShifts', () => {
     it('should return empty array when no shifts exist', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       
       const result = await shiftService.getAllShifts(schedule.id);
       
@@ -135,7 +141,8 @@ describe('shiftService', () => {
     });
 
     it('should return shifts ordered by day and time', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
       const day1 = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
       const day2 = await createTestDay(schedule.id, { name: 'Sunday', dayOfWeek: 1 });
@@ -182,7 +189,8 @@ describe('shiftService', () => {
 
   describe('updateShift', () => {
     it('should update shift with valid data', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
       const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
 
@@ -208,7 +216,8 @@ describe('shiftService', () => {
     });
 
     it('should prevent reducing numPeople below current assignments', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
       const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
 
@@ -252,7 +261,8 @@ describe('shiftService', () => {
 
   describe('deleteShift', () => {
     it('should delete existing shift', async () => {
-      const schedule = await createTestSchedule({ name: 'Test Schedule' });
+      const user = await createTestUser({ roles: ['operations'] });
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
       const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
       const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
 

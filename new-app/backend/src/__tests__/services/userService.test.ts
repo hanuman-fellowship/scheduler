@@ -7,14 +7,15 @@ import {
   prisma 
 } from '../utils/testDbOptimized';
 import * as userService from '../../services/userService';
-import type { CreateUserRequest, UpdateUserRequest } from '@shared/types';
+import type { CreateUserRequest, UpdateUserRequest, UserRole } from '@shared/types';
 
 // Helper to get a default schedule for testing
 const getDefaultSchedule = async () => {
   // Try to find existing schedule or create one
   let schedule = await prisma.schedule.findFirst();
   if (!schedule) {
-    schedule = await createTestSchedule({ name: 'Test Schedule' });
+    const user = await createTestUser({ username: 'scheduleuser', roles: ['operations'] });
+    schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
   }
   return schedule;
 };
@@ -23,7 +24,7 @@ const getDefaultSchedule = async () => {
 const createUser = async ({ username, email, roles, areaIds }: { 
   username: string; 
   email: string; 
-  roles: string[]; 
+  roles: UserRole[]; 
   areaIds?: number[] 
 }) => {
   const user = await createTestUser({ username, email, roles });
@@ -74,7 +75,7 @@ describe('userService', () => {
       await createUser({
         username: 'testuser',
         email: 'test@example.com',
-        roles: ['operations']
+        roles: ['operations'] as UserRole[]
       });
     });
 
@@ -99,7 +100,7 @@ describe('userService', () => {
       const user = await createUser({
         username: 'testuser2',
         email: 'test2@example.com',
-        roles: ['manager']
+        roles: ['manager'] as UserRole[]
       });
 
       const existingUser = await userService.checkUserExists('testuser2', 'test2@example.com', user.id);
@@ -120,13 +121,13 @@ describe('userService', () => {
       await createUser({
         username: 'ops',
         email: 'ops@example.com',
-        roles: ['operations']
+        roles: ['operations'] as UserRole[]
       });
 
       await createUser({
         username: 'manager',
         email: 'manager@example.com',
-        roles: ['manager'],
+        roles: ['manager'] as UserRole[],
         areaIds: [area.id]
       });
 
@@ -161,7 +162,7 @@ describe('userService', () => {
       const createdUser = await createUser({
         username: 'testuser',
         email: 'test@example.com',
-        roles: ['personnel']
+        roles: ['personnel'] as UserRole[]
       });
 
       const user = await userService.getUserById(createdUser.id);
@@ -212,7 +213,7 @@ describe('userService', () => {
       await createUser({
         username: 'duplicate',
         email: 'first@example.com',
-        roles: ['operations']
+        roles: ['operations'] as UserRole[]
       });
 
       const userData: CreateUserRequest = {
@@ -228,7 +229,7 @@ describe('userService', () => {
       await createUser({
         username: 'first',
         email: 'duplicate@example.com',
-        roles: ['operations']
+        roles: ['operations'] as UserRole[]
       });
 
       const userData: CreateUserRequest = {
@@ -248,7 +249,7 @@ describe('userService', () => {
       existingUser = await createUser({
         username: 'original',
         email: 'original@example.com',
-        roles: ['personnel']
+        roles: ['personnel'] as UserRole[]
       });
     });
 
@@ -300,7 +301,7 @@ describe('userService', () => {
       await createUser({
         username: 'taken',
         email: 'taken@example.com',
-        roles: ['operations']
+        roles: ['operations'] as UserRole[]
       });
 
       const updateData: UpdateUserRequest = {
@@ -316,7 +317,7 @@ describe('userService', () => {
       const user = await createUser({
         username: 'todelete',
         email: 'delete@example.com',
-        roles: ['personnel']
+        roles: ['personnel'] as UserRole[]
       });
 
       await userService.deleteUser(user.id);
@@ -337,7 +338,7 @@ describe('userService', () => {
       existingUser = await createUser({
         username: 'resettest',
         email: 'reset@example.com',
-        roles: ['operations']
+        roles: ['operations'] as UserRole[]
       });
     });
 

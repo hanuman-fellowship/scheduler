@@ -33,7 +33,7 @@ describe('shiftController', () => {
       .post('/api/auth/login')
       .send({
         username: 'operations',
-        password: 'password123'
+        password: 'password'
       });
     operationsToken = opsLoginResponse.body.token;
 
@@ -41,12 +41,13 @@ describe('shiftController', () => {
       .post('/api/auth/login')
       .send({
         username: 'manager',
-        password: 'password123'
+        password: 'password'
       });
     managerToken = managerLoginResponse.body.token;
 
     // Create test data
-    schedule = await createTestSchedule({ name: 'Test Schedule' });
+    const user = await createTestUser({ username: 'scheduleowner', roles: ['operations'] });
+    schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
     area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
     day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
   });

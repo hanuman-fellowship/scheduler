@@ -16,14 +16,14 @@ describe('ScheduleController', () => {
     operationsUser = await createTestUser({
       username: 'operations_user',
       email: 'operations@example.com',
-      password: 'password123',
+      password: 'password',
       roles: ['operations']
     });
 
     regularUser = await createTestUser({
       username: 'regular_user',
       email: 'regular@example.com',
-      password: 'password123',
+      password: 'password',
       roles: ['personnel']
     });
 
@@ -43,7 +43,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'regular_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const regularToken = loginResponse.body.token;
@@ -75,7 +75,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'regular_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const regularToken = loginResponse.body.token;
@@ -95,7 +95,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'operations_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const operationsToken = loginResponse.body.token;
@@ -113,7 +113,7 @@ describe('ScheduleController', () => {
       const otherUser = await createTestUser({
         username: 'other_user',
         email: 'other@example.com',
-        password: 'password123',
+        password: 'password',
         roles: ['personnel']
       });
 
@@ -121,7 +121,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'other_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const otherToken = otherLoginResponse.body.token;
@@ -148,7 +148,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'regular_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const regularToken = loginResponse.body.token;
@@ -169,7 +169,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'regular_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const regularToken = loginResponse.body.token;
@@ -188,7 +188,7 @@ describe('ScheduleController', () => {
       const otherUser = await createTestUser({
         username: 'copy_user',
         email: 'copy@example.com',
-        password: 'password123',
+        password: 'password',
         roles: ['personnel']
       });
 
@@ -196,7 +196,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'copy_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const otherToken = otherLoginResponse.body.token;
@@ -219,7 +219,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'regular_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const regularToken = loginResponse.body.token;
@@ -237,7 +237,7 @@ describe('ScheduleController', () => {
       const otherUser = await createTestUser({
         username: 'publish_user',
         email: 'publish@example.com',
-        password: 'password123',
+        password: 'password',
         roles: ['personnel']
       });
 
@@ -245,7 +245,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'publish_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const otherToken = otherLoginResponse.body.token;
@@ -267,7 +267,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'regular_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const regularToken = loginResponse.body.token;
@@ -291,7 +291,7 @@ describe('ScheduleController', () => {
       const otherUser = await createTestUser({
         username: 'delete_user',
         email: 'delete@example.com',
-        password: 'password123',
+        password: 'password',
         roles: ['personnel']
       });
 
@@ -299,7 +299,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'delete_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const otherToken = otherLoginResponse.body.token;
@@ -318,7 +318,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'regular_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const regularToken = loginResponse.body.token;
@@ -359,7 +359,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'operations_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const operationsToken = loginResponse.body.token;
@@ -395,7 +395,7 @@ describe('ScheduleController', () => {
         .post('/api/auth/login')
         .send({
           username: 'operations_user',
-          password: 'password123'
+          password: 'password'
         });
 
       const operationsToken = loginResponse.body.token;

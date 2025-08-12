@@ -27,7 +27,7 @@ export const createTestUser = async (userData: Partial<Omit<TestUser, 'id'>> = {
   const defaultUser: Omit<TestUser, 'id'> = {
     username: `testuser${userCounter}`,
     email: `test${userCounter}@example.com`,
-    password: 'password123',
+    password: 'password',
     roles: ['personnel'],
     ...userData
   };
