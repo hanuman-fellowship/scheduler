@@ -7,12 +7,14 @@ You are developing the backend for a workforce scheduling application. This is a
 ## Key Requirements
 
 ### Speed & Simplicity
+
 - Use standard patterns and libraries to ship fast
 - Integer primary keys (not UUIDs)
 - Straightforward REST API design
 - Minimize complexity wherever possible
 
 ### Tech Stack
+
 - **Runtime**: Node.js 20
 - **Framework**: Express.js
 - **Database**: PostgreSQL with Prisma ORM
@@ -23,6 +25,7 @@ You are developing the backend for a workforce scheduling application. This is a
 ## Database Schema
 
 The complete Prisma schema is documented in `/docs/DATA_MODEL_SIMPLE.md`. Key entities:
+
 - `users` with `roles` (operations/manager/personnel)
 - `schedules` with branching via `parent_id`
 - `areas`, `people`, `shifts`, `assignments`
@@ -32,6 +35,7 @@ The complete Prisma schema is documented in `/docs/DATA_MODEL_SIMPLE.md`. Key en
 ## API Specification
 
 Full REST API specification is in `/docs/API_ENDPOINTS.md`. Key patterns:
+
 - JWT authentication on all endpoints except `/api/auth/login`
 - Role-based authorization (operations > manager > personnel)
 - Consistent error responses with field-level validation
@@ -40,6 +44,7 @@ Full REST API specification is in `/docs/API_ENDPOINTS.md`. Key patterns:
 ## Authentication & Authorization
 
 Detailed specs in `/docs/AUTH_SPECS.md`:
+
 - JWT tokens with 24-hour expiration
 - Role-based middleware for endpoint protection
 - Manager area access validation
@@ -48,6 +53,7 @@ Detailed specs in `/docs/AUTH_SPECS.md`:
 ## Business Logic
 
 Core workflows documented in `/docs/BUSINESS_WORKFLOWS.md`:
+
 - Schedule creation, copying, publishing workflow
 - Request submission (manager → operations)
 - Assignment management with conflict detection
@@ -69,7 +75,7 @@ backend/
 │   │   └── routes.ts (login, logout, change password)
 │   ├── routes/
 │   │   ├── users.ts
-│   │   ├── schedules.ts  
+│   │   ├── schedules.ts
 │   │   ├── areas.ts
 │   │   ├── people.ts
 │   │   ├── shifts.ts
@@ -84,6 +90,7 @@ backend/
 ## Development Commands
 
 Based on the workspace setup:
+
 - `npm run dev` - Start development server with hot reload
 - `npm run prisma -- migrate dev` - Run database migrations
 - `npm run prisma -- studio` - Open Prisma Studio
@@ -92,7 +99,7 @@ Based on the workspace setup:
 ## Key Implementation Notes
 
 1. **Start Simple**: Get basic CRUD operations working first
-2. **JWT Middleware**: Implement auth middleware early for all protected routes  
+2. **JWT Middleware**: Implement auth middleware early for all protected routes
 3. **Validation**: Use Zod schemas for request validation
 4. **Error Handling**: Consistent error response format
 5. **Database Seeding**: Create seed data for development
@@ -105,18 +112,18 @@ Based on the workspace setup:
 3. **Phase 3**: Schedule workflow (copy, publish, requests)
 4. **Phase 4**: Change tracking, email notifications
 
-## 🚨 CRITICAL: Testing Architecture Issue
+## ✅ RESOLVED: Testing Architecture Issue
 
-**When adding new API routes, you MUST update TWO files:**
+**The testing architecture has been refactored to use a single source of truth for routes.**
+
+**When adding new API routes, you only need to update ONE file:**
 
 1. `src/routes.ts` (production routes)
-2. `src/__tests__/utils/testApp.ts` (test routes)
+2. **That's it!** Tests automatically get the new route
 
-**Forgetting the test routes will cause 404 test failures.**
+See `TESTING_ROUTES.md` for detailed explanation of the new approach.
 
-See `TESTING_ROUTES.md` for detailed explanation and examples.
-
-This architectural issue should be fixed to use the main routes file in tests.
+**Status: ✅ RESOLVED** - No more duplicate route maintenance required.
 
 ## Environment Variables
 

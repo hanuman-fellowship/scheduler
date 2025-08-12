@@ -162,7 +162,7 @@ describe('ScheduleController', () => {
     });
   });
 
-  describe('POST /schedules/:id/copy', () => {
+  describe('POST /schedules/copy', () => {
     it('should return not implemented', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
@@ -175,8 +175,9 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/api/schedules/${testSchedule.id}/copy`)
-        .set('Authorization', `Bearer ${regularToken}`);
+        .post('/api/schedules/copy')
+        .set('Authorization', `Bearer ${regularToken}`)
+        .send({ sourceId: testSchedule.id, name: 'Copy of Test Schedule' });
 
       expect(response.status).toBe(501);
       expect(response.body).toHaveProperty('error');
@@ -201,8 +202,9 @@ describe('ScheduleController', () => {
       const otherToken = otherLoginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/api/schedules/${testSchedule.id}/copy`)
-        .set('Authorization', `Bearer ${otherToken}`);
+        .post('/api/schedules/copy')
+        .set('Authorization', `Bearer ${otherToken}`)
+        .send({ sourceId: testSchedule.id, name: 'Copy of Test Schedule' });
 
       expect(response.status).toBe(501);
       expect(response.body).toHaveProperty('error');
@@ -210,7 +212,7 @@ describe('ScheduleController', () => {
     });
   });
 
-  describe('POST /schedules/:id/publish', () => {
+  describe('POST /schedules/publish', () => {
     it('should reject access for non-operations user', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
@@ -223,8 +225,9 @@ describe('ScheduleController', () => {
       const regularToken = loginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/api/schedules/${testSchedule.id}/publish`)
-        .set('Authorization', `Bearer ${regularToken}`);
+        .post('/api/schedules/publish')
+        .set('Authorization', `Bearer ${regularToken}`)
+        .send({ scheduleId: testSchedule.id });
 
       expect(response.status).toBe(403);
       expect(response.body).toHaveProperty('error');
@@ -248,8 +251,9 @@ describe('ScheduleController', () => {
       const otherToken = otherLoginResponse.body.token;
 
       const response = await request(testApp)
-        .post(`/api/schedules/${testSchedule.id}/publish`)
-        .set('Authorization', `Bearer ${otherToken}`);
+        .post('/api/schedules/publish')
+        .set('Authorization', `Bearer ${otherToken}`)
+        .send({ scheduleId: testSchedule.id });
 
       expect(response.status).toBe(403);
       expect(response.body).toHaveProperty('error');

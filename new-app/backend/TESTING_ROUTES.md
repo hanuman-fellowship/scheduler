@@ -1,54 +1,87 @@
-# 🚨 CRITICAL: Testing Routes Architecture Issue
+# Testing Routes Configuration
 
-## Problem
-**The test suite uses a separate route definition in `src/__tests__/utils/testApp.ts` instead of the main `src/routes.ts` file.**
+## Overview
 
-This means:
-- **Every new route MUST be added to BOTH files**
-- **Tests will fail with 404 errors if routes are missing from testApp.ts**
-- **Production and test environments may have different route configurations**
+The test suite uses the main `src/routes.ts` file directly through a configurable `createApp` function. This ensures:
 
-## When Adding New Routes
+- **Single source of truth** for all routes
+- **Automatic route synchronization** between production and tests
+- **No duplicate route maintenance**
+- **Consistent API behavior** across environments
 
-### ✅ REQUIRED STEPS:
+## How It Works
+
+### Single Route Definition
+
+Routes are defined only in `src/routes.ts` and automatically available in tests.
+
+### Test Configuration
+
+Tests use the main routes with test-appropriate settings:
+
+```typescript
+// In testApp.ts
+export const createTestApp = () => {
+  return createApp({
+    enableCors: false, // Disable CORS for tests
+    enableLogging: false, // Disable request logging for cleaner test output
+    enableErrorHandlers: false, // Disable error handlers to catch errors in tests
+    enableHealthCheck: false, // Disable health check endpoint for tests
+  });
+};
+```
+
+## Adding New Routes
+
+**You only need to add routes to ONE place:**
+
 1. Add route to `src/routes.ts` (production)
-2. **ALSO add route to `src/__tests__/utils/testApp.ts` (tests)**
-3. Import the controller function in testApp.ts if needed
+2. **That's it!** Tests automatically get the new route
 
-### ❌ COMMON MISTAKE:
-Adding routes only to `src/routes.ts` will cause tests to fail with 404 errors.
-
-## Example: Adding getCurrentSchedule Route
+## Example: Adding a New Route
 
 **Step 1: Add to main routes (`src/routes.ts`):**
-```typescript
-app.get('/api/schedules/current', requireAuth, asyncHandler(scheduleController.getCurrentSchedule));
-```
-
-**Step 2: Add to test routes (`src/__tests__/utils/testApp.ts`):**
-```typescript
-// Import the function
-import { getCurrentSchedule } from '../../controllers/scheduleController';
-
-// Add the route
-app.get('/api/schedules/current', requireAuth, getCurrentSchedule);
-```
-
-## Root Cause
-The test suite was designed to have isolated route definitions for better test control, but this creates maintenance overhead and consistency issues.
-
-## Recommended Fix (Future)
-Refactor tests to use the main `src/routes.ts` file directly:
 
 ```typescript
-// Better approach - use actual production routes
-import routes from '../../routes';
-export const testApp = routes;
+app.get(
+  "/api/schedules/current",
+  requireAuth,
+  asyncHandler(scheduleController.getCurrentSchedule)
+);
 ```
 
-## Current Workaround
-Until the architecture is fixed, **always remember to update both route files** when adding new endpoints.
+**Step 2: Nothing else needed!** Tests automatically get this route.
+
+## Implementation Details
+
+The `src/routes.ts` file exports a `createApp` function that can be configured for different environments:
+
+```typescript
+export const createApp = (
+  options: {
+    enableCors?: boolean;
+    enableLogging?: boolean;
+    enableErrorHandlers?: boolean;
+    enableHealthCheck?: boolean;
+  } = {}
+) => {
+  // ... route definitions
+  return app;
+};
+
+// Export the default production app
+const app = createApp();
+export default app;
+```
+
+## Benefits
+
+- **No maintenance overhead** - Add routes in one place, they work everywhere
+- **Eliminated 404 test failures** - Tests automatically have access to all production routes
+- **Better test isolation** - Tests use production routes but with test-appropriate middleware disabled
+- **Future-proof** - New routes automatically work in tests without any additional steps
 
 ---
-**Created**: After discovering getCurrentSchedule test failures due to missing route in testApp.ts  
-**Priority**: High - affects all new endpoint development
+
+**Last Updated**: After refactoring to use configurable main routes  
+**Status**: ✅ Working - Single source of truth for all routes
