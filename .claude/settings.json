@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash(npm run check)",
+      "Bash(npm test)",
+      "Bash(npm run test)",
+      "Bash(npm run test:*)",
+      "Bash(npm run test:coverage)",
+      "Bash(mkdir*)"
+    ]
+  }
+}

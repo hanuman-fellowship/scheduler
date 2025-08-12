@@ -69,6 +69,8 @@ All detailed specifications are in `/docs/`:
 - **Categories CRUD**: Working category creation with automatic schedule scoping
 - **Database Seeding**: Foundational data (Published schedule, Kitchen area, Residents category)
 - **Authentication Flow**: Complete login/logout with JWT tokens and role-based access
+- **Areas Management System**: Complete CRUD operations for areas with shift clearing functionality
+- **User Management System**: Full user lifecycle management with roles and permissions
 
 ### 🎯 Schedule Context System (NEW)
 
@@ -140,15 +142,16 @@ All detailed specifications are in `/docs/`:
 - ✅ User authentication with JWT
 - ✅ Schedule context system (current schedule management)
 - ✅ Categories management with automatic schedule scoping
+- ✅ Areas management system (CRUD, shift clearing, validation)
 - ✅ Role-based access control and navigation
 - ✅ User management system (CRUD, roles, area assignments)
 - ✅ Database structure with all models
 - ✅ API foundation with error handling
-- ✅ Comprehensive test coverage (140+ tests)
+- ✅ Comprehensive test coverage (150+ tests)
 
 ### 🔄 **Ready for Implementation**
 
-- ⭕ People management (add people to schedules)
+- 🔄 People management (basic CRUD exists, needs enhancement)
 - ⭕ Shift creation and management
 - ⭕ Basic assignment system
 - ⭕ Schedule grid/calendar view
@@ -300,6 +303,18 @@ npm run check         # TypeScript check all workspaces
 npm run test          # Run tests all workspaces
 npm run build         # Build for production
 ```
+
+## Development Server Status
+
+**Note**: Development servers are typically running in a separate terminal by the user. Do not attempt to start `npm run dev` unless explicitly requested, as ports may already be in use.
+
+## Future Improvements
+
+### Time Entry System Enhancement
+
+**Current Implementation**: The shift time selector uses HTML5 time inputs with 15-minute increments and automatic rounding.
+
+**Future Enhancement**: Replace with "Scheduler3" time entry approach for better user experience. When implementing this improvement, ask the user for details about the Scheduler3 time entry system to understand the preferred interaction pattern and user interface design.
 
 ## Current Implementation Status
 

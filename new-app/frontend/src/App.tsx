@@ -6,7 +6,9 @@ import HomePage from './pages/HomePage'
 import SchedulePage from './pages/SchedulePage'
 import BigBoardPage from './pages/BigBoardPage'
 import PeoplePage from './pages/PeoplePage'
+import AreasPage from './pages/AreasPage'
 import UsersPage from './pages/UsersPage'
+import ShiftsAddPage from './pages/ShiftsAddPage'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuthStore } from './store/authStore'
 import { useScheduleStore } from './store/scheduleStore'
@@ -39,10 +41,26 @@ function App() {
           <Route path="/board" element={<BigBoardPage />} />
           <Route path="/people" element={<PeoplePage />} />
           <Route 
+            path="/areas" 
+            element={
+              <ProtectedRoute requireOperations>
+                <AreasPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/users" 
             element={
               <ProtectedRoute requireOperations>
                 <UsersPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/shifts/add" 
+            element={
+              <ProtectedRoute requireOperations>
+                <ShiftsAddPage />
               </ProtectedRoute>
             } 
           />

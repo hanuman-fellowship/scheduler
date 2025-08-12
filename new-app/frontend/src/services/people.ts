@@ -4,8 +4,7 @@ export interface Person {
   id: number
   first: string
   last: string
-  name: string
-  display_name: string
+  displayName: string
   category?: {
     id: number
     name: string
@@ -16,8 +15,9 @@ export interface Person {
 export interface CreatePersonRequest {
   first: string
   last: string
-  display_name?: string
-  resident_category_id: number
+  displayName?: string
+  residentCategoryId: number
+  scheduleId: number
 }
 
 export interface UpdatePersonRequest extends Partial<CreatePersonRequest> {}

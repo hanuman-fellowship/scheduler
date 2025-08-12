@@ -91,7 +91,7 @@ export default function PeoplePage() {
                 className="w-4 h-4 border border-gray-800"
                 style={{ backgroundColor: person.category?.color || '#ccc' }}
               />
-              <span className="font-medium">{person.name}</span>
+              <span className="font-medium">{person.displayName}</span>
               <span className="text-sm text-gray-600">
                 ({person.category?.name || 'No category'})
               </span>

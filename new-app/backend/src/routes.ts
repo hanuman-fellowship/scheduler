@@ -7,6 +7,9 @@ import * as userController from './controllers/userController';
 import * as scheduleController from './controllers/scheduleController';
 import * as peopleController from './controllers/peopleController';
 import * as categoriesController from './controllers/categoriesController';
+import * as shiftController from './controllers/shiftController';
+import * as areaController from './controllers/areaController';
+import * as dayController from './controllers/dayController';
 import { requireAuth, requireRole } from './middleware/auth';
 
 // Create a function that can be configured for different environments
@@ -88,6 +91,25 @@ export const createApp = (options: {
   app.post('/api/categories', requireAuth, requireRole('operations'), asyncHandler(categoriesController.create));
   app.put('/api/categories/:id', requireAuth, requireRole('operations'), asyncHandler(categoriesController.update));
   app.delete('/api/categories/:id', requireAuth, requireRole('operations'), asyncHandler(categoriesController.deleteCategory));
+
+  // Shift management (operations only for now)
+  app.get('/api/shifts', requireAuth, asyncHandler(shiftController.list));
+  app.get('/api/shifts/:id', requireAuth, asyncHandler(shiftController.get));
+  app.post('/api/shifts', requireAuth, requireRole('operations'), asyncHandler(shiftController.create));
+  app.put('/api/shifts/:id', requireAuth, requireRole('operations'), asyncHandler(shiftController.update));
+  app.delete('/api/shifts/:id', requireAuth, requireRole('operations'), asyncHandler(shiftController.deleteShift));
+
+  // Area management
+  app.get('/api/areas', requireAuth, asyncHandler(areaController.list));
+  app.get('/api/areas/:id', requireAuth, asyncHandler(areaController.get));
+  app.post('/api/areas', requireAuth, requireRole('operations'), asyncHandler(areaController.create));
+  app.put('/api/areas/:id', requireAuth, requireRole('operations'), asyncHandler(areaController.update));
+  app.delete('/api/areas/:id', requireAuth, requireRole('operations'), asyncHandler(areaController.deleteArea));
+  app.post('/api/areas/:id/clear', requireAuth, requireRole('operations'), asyncHandler(areaController.clearArea));
+
+  // Day management (read-only)
+  app.get('/api/days', requireAuth, asyncHandler(dayController.list));
+  app.get('/api/days/:id', requireAuth, asyncHandler(dayController.get));
 
   // Error handlers (only in production)
   if (enableErrorHandlers) {

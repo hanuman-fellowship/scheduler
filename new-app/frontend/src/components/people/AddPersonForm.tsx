@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { categoriesService } from '../../services/categories'
 import { peopleService } from '../../services/people'
+import { useScheduleStore } from '../../store/scheduleStore'
 
 interface AddPersonFormProps {
   onSuccess: () => void
@@ -11,16 +12,19 @@ interface AddPersonFormProps {
 interface CreatePersonRequest {
   first: string
   last: string
-  display_name?: string
-  resident_category_id: number
+  displayName?: string
+  residentCategoryId: number
+  scheduleId: number
 }
 
 export default function AddPersonForm({ onSuccess, onCancel }: AddPersonFormProps) {
+  const { currentSchedule } = useScheduleStore()
   const [formData, setFormData] = useState<CreatePersonRequest>({
     first: '',
     last: '',
-    display_name: '',
-    resident_category_id: 0,
+    displayName: '',
+    residentCategoryId: 0,
+    scheduleId: currentSchedule?.id || 1, // Default to schedule ID 1 if not loaded
   })
 
   const queryClient = useQueryClient()
@@ -45,6 +49,15 @@ export default function AddPersonForm({ onSuccess, onCancel }: AddPersonFormProp
 
   const handleInputChange = (field: keyof CreatePersonRequest, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  // Ensure we have a current schedule
+  if (!currentSchedule) {
+    return (
+      <div className="p-4 text-center text-red-600">
+        No schedule selected. Please reload the page.
+      </div>
+    )
   }
 
   return (
@@ -78,14 +91,14 @@ export default function AddPersonForm({ onSuccess, onCancel }: AddPersonFormProp
       </div>
 
       <div>
-        <label htmlFor="display_name" className="block text-sm font-medium">
+        <label htmlFor="displayName" className="block text-sm font-medium">
           Display Name:
         </label>
         <input
-          id="display_name"
+          id="displayName"
           type="text"
-          value={formData.display_name}
-          onChange={(e) => handleInputChange('display_name', e.target.value)}
+          value={formData.displayName}
+          onChange={(e) => handleInputChange('displayName', e.target.value)}
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
         <i className="text-xs text-gray-600">(leave blank to auto-generate)</i>
@@ -97,8 +110,8 @@ export default function AddPersonForm({ onSuccess, onCancel }: AddPersonFormProp
         </label>
         <select
           id="category"
-          value={formData.resident_category_id}
-          onChange={(e) => handleInputChange('resident_category_id', parseInt(e.target.value))}
+          value={formData.residentCategoryId}
+          onChange={(e) => handleInputChange('residentCategoryId', parseInt(e.target.value))}
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
           required
         >

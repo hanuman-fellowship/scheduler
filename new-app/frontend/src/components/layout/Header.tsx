@@ -13,6 +13,10 @@ export default function Header() {
     navigate('/people', { state: { openAddPersonModal: true } })
   }
 
+  const handleNewAreaClick = () => {
+    navigate('/areas', { state: { openAddAreaModal: true } })
+  }
+
   return (
     <MenuProvider>
       <div className="no-print">
@@ -114,7 +118,7 @@ export default function Header() {
             <MenuDropdown trigger="Areas">
               <MenuItem to="/areas">View Schedule...</MenuItem>
               <DropdownSeparator />
-              <MenuItem to="/areas/add">New Area...</MenuItem>
+              <MenuItem onClick={handleNewAreaClick}>New Area...</MenuItem>
               <DropdownSeparator />
               <MenuItem to="/areas/clear">Clear Area...</MenuItem>
               <MenuItem to="/areas/delete">Delete Area...</MenuItem>
