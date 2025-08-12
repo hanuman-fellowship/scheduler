@@ -114,8 +114,8 @@ CREATE TABLE "shifts" (
     "schedule_id" INTEGER NOT NULL,
     "area_id" INTEGER NOT NULL,
     "day_id" INTEGER NOT NULL,
-    "start" TEXT NOT NULL,
-    "end" TEXT NOT NULL,
+    "start_at_seconds" INTEGER NOT NULL,
+    "end_at_seconds" INTEGER NOT NULL,
     "num_people" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "shifts_pkey" PRIMARY KEY ("id")
@@ -138,8 +138,8 @@ CREATE TABLE "constant_shifts" (
     "schedule_id" INTEGER NOT NULL,
     "resident_category_id" INTEGER NOT NULL,
     "day_id" INTEGER NOT NULL,
-    "start" TEXT NOT NULL,
-    "end" TEXT NOT NULL,
+    "start_at_seconds" INTEGER NOT NULL,
+    "end_at_seconds" INTEGER NOT NULL,
     "specify_hours" BOOLEAN NOT NULL DEFAULT false,
     "hours" DECIMAL(65,30),
 

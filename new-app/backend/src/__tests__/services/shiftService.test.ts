@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import * as shiftService from '../../services/shiftService';
 import { resetTestDatabase, createTestUser, createTestSchedule, createTestArea, createTestDay, createTestPerson } from '../utils/testDbOptimized';
+import { timeStringToSeconds, secondsToTimeString } from '@shared/types';
 import prisma from '../../services/prisma';
 
 describe('shiftService', () => {
@@ -28,8 +29,8 @@ describe('shiftService', () => {
       const shiftData = {
         areaId: testArea.id,
         dayId: testDay.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 2,
         scheduleId: testSchedule.id,
       };
@@ -39,8 +40,8 @@ describe('shiftService', () => {
       expect(result.id).toBeDefined();
       expect(result.areaId).toBe(testArea.id);
       expect(result.dayId).toBe(testDay.id);
-      expect(result.start).toBe('09:00:00');
-      expect(result.end).toBe('17:00:00');
+      expect(result.startAtSeconds).toBe(timeStringToSeconds('09:00:00'));
+      expect(result.endAtSeconds).toBe(timeStringToSeconds('17:00:00'));
       expect(result.numPeople).toBe(2);
       expect(result.scheduleId).toBe(testSchedule.id);
     });
@@ -54,8 +55,8 @@ describe('shiftService', () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       };
@@ -83,8 +84,8 @@ describe('shiftService', () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
-        start: '17:00:00',
-        end: '09:00:00', // End before start
+        startAtSeconds: timeStringToSeconds('17:00:00'),
+        endAtSeconds: timeStringToSeconds('09:00:00'), // End before start
         numPeople: 1,
         scheduleId: schedule.id,
       };
@@ -100,8 +101,8 @@ describe('shiftService', () => {
       const shiftData = {
         areaId: 999, // Non-existent area
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       };
@@ -120,8 +121,8 @@ describe('shiftService', () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
         scheduleId: schedule1.id,
       };
@@ -151,8 +152,8 @@ describe('shiftService', () => {
       await shiftService.createShift({
         areaId: area.id,
         dayId: day1.id,
-        start: '17:00:00',
-        end: '18:00:00',
+        startAtSeconds: timeStringToSeconds('17:00:00'),
+        endAtSeconds: timeStringToSeconds('18:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       });
@@ -160,8 +161,8 @@ describe('shiftService', () => {
       await shiftService.createShift({
         areaId: area.id,
         dayId: day1.id,
-        start: '09:00:00',
-        end: '10:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('10:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       });
@@ -169,8 +170,8 @@ describe('shiftService', () => {
       await shiftService.createShift({
         areaId: area.id,
         dayId: day2.id, // Sunday (dayOfWeek: 1) should come first
-        start: '12:00:00',
-        end: '13:00:00',
+        startAtSeconds: timeStringToSeconds('12:00:00'),
+        endAtSeconds: timeStringToSeconds('13:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       });
@@ -181,9 +182,9 @@ describe('shiftService', () => {
       // Should be ordered by dayOfWeek first, then start time
       expect(result[0].day?.dayOfWeek).toBe(1); // Sunday
       expect(result[1].day?.dayOfWeek).toBe(2); // Monday
-      expect(result[1].start).toBe('09:00:00'); // Earlier Monday shift
+      expect(result[1].startAtSeconds).toBe(timeStringToSeconds('09:00:00')); // Earlier Monday shift
       expect(result[2].day?.dayOfWeek).toBe(2); // Monday
-      expect(result[2].start).toBe('17:00:00'); // Later Monday shift
+      expect(result[2].startAtSeconds).toBe(timeStringToSeconds('17:00:00')); // Later Monday shift
     });
   });
 
@@ -197,21 +198,21 @@ describe('shiftService', () => {
       const shift = await shiftService.createShift({
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       });
 
       const result = await shiftService.updateShift(shift.id, {
-        start: '10:00:00',
-        end: '18:00:00',
+        startAtSeconds: timeStringToSeconds('10:00:00'),
+        endAtSeconds: timeStringToSeconds('18:00:00'),
         numPeople: 3,
       });
 
       expect(result).not.toBeNull();
-      expect(result!.start).toBe('10:00:00');
-      expect(result!.end).toBe('18:00:00');
+      expect(result!.startAtSeconds).toBe(timeStringToSeconds('10:00:00'));
+      expect(result!.endAtSeconds).toBe(timeStringToSeconds('18:00:00'));
       expect(result!.numPeople).toBe(3);
     });
 
@@ -224,8 +225,8 @@ describe('shiftService', () => {
       const shift = await shiftService.createShift({
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 3,
         scheduleId: schedule.id,
       });
@@ -269,8 +270,8 @@ describe('shiftService', () => {
       const shift = await shiftService.createShift({
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       });

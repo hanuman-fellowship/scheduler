@@ -103,6 +103,35 @@ const { mutate } = useMutation<CategoryOutput, Error, CreateCategoryInput>({
 - Straightforward REST API design
 - Minimize complexity wherever possible
 
+### Time Handling
+
+**Always use the centralized time utilities from `@shared/types`:**
+
+```typescript
+import { timeStringToSeconds, secondsToDisplayTime, validateTimeSeconds } from '@shared/types';
+
+// Store times as integers (seconds since midnight)
+const startSeconds = timeStringToSeconds('09:00:00'); // 32400
+const endSeconds = timeStringToSeconds('17:00:00');   // 61200
+
+// Validate time values
+validateTimeSeconds(startSeconds); // throws if invalid
+
+// Database operations use seconds directly
+await prisma.shift.create({
+  data: {
+    startAtSeconds: startSeconds,
+    endAtSeconds: endSeconds,
+    // ...
+  }
+});
+```
+
+**Database Schema:**
+- All time fields use `start_at_seconds` and `end_at_seconds` (INTEGER columns)
+- No legacy TIME columns - seconds-based storage only
+- Range: 0-86399 (midnight to 11:59:59 PM)
+
 ### Legacy Code Reference
 
 **Before implementing any new feature, study the legacy CakePHP code:**

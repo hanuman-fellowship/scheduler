@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import request from 'supertest';
 import { createTestApp } from '../utils/testApp';
 import { resetTestDatabase, createTestUser, createTestSchedule, createTestArea, createTestDay } from '../utils/testDbOptimized';
+import { timeStringToSeconds } from '@shared/types';
 import type { Express } from 'express';
 
 describe('shiftController', () => {
@@ -61,8 +62,8 @@ describe('shiftController', () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 2,
         scheduleId: schedule.id,
       };
@@ -76,8 +77,8 @@ describe('shiftController', () => {
       expect(response.body).toMatchObject({
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 2,
         scheduleId: schedule.id,
       });
@@ -88,8 +89,8 @@ describe('shiftController', () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       };
@@ -106,8 +107,8 @@ describe('shiftController', () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
-        start: '17:00:00',
-        end: '09:00:00', // End before start
+        startAtSeconds: timeStringToSeconds('17:00:00'),
+        endAtSeconds: timeStringToSeconds('09:00:00'), // End before start
         numPeople: 1,
         scheduleId: schedule.id,
       };
@@ -151,8 +152,8 @@ describe('shiftController', () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
         scheduleId: schedule.id,
       };
@@ -171,8 +172,8 @@ describe('shiftController', () => {
       expect(response.body[0]).toMatchObject({
         areaId: area.id,
         dayId: day.id,
-        start: '09:00:00',
-        end: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 1,
       });
     });
@@ -203,8 +204,8 @@ describe('shiftController', () => {
         .send({
           areaId: area.id,
           dayId: day.id,
-          start: '09:00:00',
-          end: '17:00:00',
+          startAtSeconds: timeStringToSeconds('09:00:00'),
+          endAtSeconds: timeStringToSeconds('17:00:00'),
           numPeople: 1,
           scheduleId: schedule.id,
         });
@@ -212,8 +213,8 @@ describe('shiftController', () => {
       const shiftId = createResponse.body.id;
 
       const updateData = {
-        start: '10:00:00',
-        end: '18:00:00',
+        startAtSeconds: timeStringToSeconds('10:00:00'),
+        endAtSeconds: timeStringToSeconds('18:00:00'),
         numPeople: 3,
       };
 
@@ -225,8 +226,8 @@ describe('shiftController', () => {
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
         id: shiftId,
-        start: '10:00:00',
-        end: '18:00:00',
+        startAtSeconds: timeStringToSeconds('10:00:00'),
+        endAtSeconds: timeStringToSeconds('18:00:00'),
         numPeople: 3,
       });
     });
@@ -259,8 +260,8 @@ describe('shiftController', () => {
         .send({
           areaId: area.id,
           dayId: day.id,
-          start: '09:00:00',
-          end: '17:00:00',
+          startAtSeconds: timeStringToSeconds('09:00:00'),
+          endAtSeconds: timeStringToSeconds('17:00:00'),
           numPeople: 1,
           scheduleId: schedule.id,
         });

@@ -10,6 +10,7 @@ import {
   resetTestDatabase, 
   prisma 
 } from '../utils/testDbOptimized';
+import { timeStringToSeconds } from '@shared/types';
 import * as areaService from '../../services/areaService';
 
 describe('areaService', () => {
@@ -218,8 +219,8 @@ describe('areaService', () => {
       const shift = await createTestShift(testSchedule.id, {
         areaId: area.id,
         dayId: day.id,
-        startTime: '09:00:00',
-        endTime: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 2
       });
 
@@ -263,16 +264,16 @@ describe('areaService', () => {
       const shift1 = await createTestShift(testSchedule.id, {
         areaId: area.id,
         dayId: day1.id,
-        startTime: '09:00:00',
-        endTime: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 2
       });
 
       const shift2 = await createTestShift(testSchedule.id, {
         areaId: area.id,
         dayId: day2.id,
-        startTime: '10:00:00',
-        endTime: '18:00:00',
+        startAtSeconds: timeStringToSeconds('10:00:00'),
+        endAtSeconds: timeStringToSeconds('18:00:00'),
         numPeople: 1
       });
 
@@ -327,16 +328,16 @@ describe('areaService', () => {
       await createTestShift(testSchedule.id, {
         areaId: area.id,
         dayId: day1.id,
-        startTime: '09:00:00',
-        endTime: '17:00:00',
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
         numPeople: 2
       });
 
       const shift2 = await createTestShift(testSchedule.id, {
         areaId: area.id,
         dayId: day2.id,
-        startTime: '10:00:00',
-        endTime: '18:00:00',
+        startAtSeconds: timeStringToSeconds('10:00:00'),
+        endAtSeconds: timeStringToSeconds('18:00:00'),
         numPeople: 1
       });
 

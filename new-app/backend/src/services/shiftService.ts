@@ -4,8 +4,8 @@ import { z } from 'zod';
 export const CreateShiftSchema = z.object({
   areaId: z.number().int().positive('Valid area is required'),
   dayId: z.number().int().positive('Valid day is required'),
-  start: z.string().regex(/^\d{2}:\d{2}:\d{2}$/, 'Start time must be in HH:MM:SS format'),
-  end: z.string().regex(/^\d{2}:\d{2}:\d{2}$/, 'End time must be in HH:MM:SS format'),
+  startAtSeconds: z.number().int().min(0).max(86399, 'Start time must be between 0-86399 seconds'),
+  endAtSeconds: z.number().int().min(0).max(86399, 'End time must be between 0-86399 seconds'),
   numPeople: z.number().int().min(1, 'Must have at least 1 person'),
   scheduleId: z.number().int().positive('Schedule ID is required'),
 });
@@ -17,8 +17,8 @@ export interface Shift {
   scheduleId: number;
   areaId: number;
   dayId: number;
-  start: string;
-  end: string;
+  startAtSeconds: number;
+  endAtSeconds: number;
   numPeople: number;
   area?: {
     id: number;
@@ -67,7 +67,7 @@ export async function getAllShifts(scheduleId: number): Promise<Shift[]> {
     },
     orderBy: [
       { day: { dayOfWeek: 'asc' } },
-      { start: 'asc' },
+      { startAtSeconds: 'asc' },
     ],
   });
 
@@ -138,7 +138,7 @@ export async function getShiftsByArea(areaId: number, scheduleId: number): Promi
     },
     orderBy: [
       { day: { dayOfWeek: 'asc' } },
-      { start: 'asc' },
+      { startAtSeconds: 'asc' },
     ],
   });
 
@@ -149,7 +149,7 @@ export async function createShift(data: z.infer<typeof CreateShiftSchema>): Prom
   const validatedData = CreateShiftSchema.parse(data);
   
   // Validate that end time is after start time
-  if (validatedData.end <= validatedData.start) {
+  if (validatedData.endAtSeconds <= validatedData.startAtSeconds) {
     throw new Error("End time must be after start time");
   }
 
@@ -177,8 +177,8 @@ export async function createShift(data: z.infer<typeof CreateShiftSchema>): Prom
       scheduleId: validatedData.scheduleId,
       areaId: validatedData.areaId,
       dayId: validatedData.dayId,
-      start: validatedData.start,
-      end: validatedData.end,
+      startAtSeconds: validatedData.startAtSeconds,
+      endAtSeconds: validatedData.endAtSeconds,
       numPeople: validatedData.numPeople,
     },
     include: {
@@ -233,17 +233,17 @@ export async function updateShift(id: number, data: z.infer<typeof UpdateShiftSc
   }
 
   // Validate time ordering if both start and end are provided
-  const start = validatedData.start || existing.start;
-  const end = validatedData.end || existing.end;
-  if (end <= start) {
+  const startAtSeconds = validatedData.startAtSeconds || existing.startAtSeconds;
+  const endAtSeconds = validatedData.endAtSeconds || existing.endAtSeconds;
+  if (endAtSeconds <= startAtSeconds) {
     throw new Error("End time must be after start time");
   }
 
   const updateData: any = {};
   if (validatedData.areaId !== undefined) updateData.areaId = validatedData.areaId;
   if (validatedData.dayId !== undefined) updateData.dayId = validatedData.dayId;
-  if (validatedData.start !== undefined) updateData.start = validatedData.start;
-  if (validatedData.end !== undefined) updateData.end = validatedData.end;
+  if (validatedData.startAtSeconds !== undefined) updateData.startAtSeconds = validatedData.startAtSeconds;
+  if (validatedData.endAtSeconds !== undefined) updateData.endAtSeconds = validatedData.endAtSeconds;
   if (validatedData.numPeople !== undefined) updateData.numPeople = validatedData.numPeople;
 
   const shift = await prisma.shift.update({
@@ -293,8 +293,8 @@ function transformShiftResponse(shift: any): Shift {
     scheduleId: shift.scheduleId,
     areaId: shift.areaId,
     dayId: shift.dayId,
-    start: shift.start,
-    end: shift.end,
+    startAtSeconds: shift.startAtSeconds,
+    endAtSeconds: shift.endAtSeconds,
     numPeople: shift.numPeople,
     area: shift.area ? {
       id: shift.area.id,

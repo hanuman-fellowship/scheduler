@@ -29,27 +29,13 @@ export const getAreaSchedule = async (areaId: number, user: AuthUser): Promise<A
         },
         orderBy: [
           { day: { dayOfWeek: 'asc' } },
-          { start: 'asc' }
+          { startAtSeconds: 'asc' }
         ]
       },
       floatingShifts: {
         include: {
           person: true
         }
-      },
-      managers: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true
-            }
-          }
-        }
-      },
-      managerNotes: {
-        where: { scheduleId },
-        orderBy: { id: 'asc' }
       }
     }
   });
@@ -59,8 +45,7 @@ export const getAreaSchedule = async (areaId: number, user: AuthUser): Promise<A
   }
 
   // Check permissions
-  const editable = user.roles.includes('operations') || 
-    area.managers.some(m => m.userId === user.id);
+  const editable = user.roles.includes('operations');
 
   if (!editable && !user.roles.includes('operations') && !user.roles.includes('personnel')) {
     throw new Error('Access denied');
@@ -73,8 +58,8 @@ export const getAreaSchedule = async (areaId: number, user: AuthUser): Promise<A
     id: shift.id,
     areaId: shift.areaId,
     dayId: shift.dayId,
-    start: shift.start,
-    end: shift.end,
+    startAtSeconds: shift.startAtSeconds,
+    endAtSeconds: shift.endAtSeconds,
     numPeople: shift.numPeople,
     assignments: shift.assignments.map(assignment => ({
       id: assignment.id,
@@ -102,17 +87,16 @@ export const getAreaSchedule = async (areaId: number, user: AuthUser): Promise<A
       name: area.name,
       shortName: area.shortName,
       shifts: shiftsWithAssignments,
-      floatingShifts: area.floatingShifts.map(fs => ({
+      floatingShifts: area.floatingShifts?.map(fs => ({
         id: fs.id,
         areaId: fs.areaId,
         personId: fs.personId,
         hours: Number(fs.hours)
-      })),
-      manager: area.managers[0]?.user
+      })) || []
     },
     bounds,
     editable,
-    notes: area.managerNotes[0]?.content
+    notes: undefined
   };
 };
 
@@ -188,8 +172,8 @@ export const getPersonSchedule = async (personId: number, user: AuthUser): Promi
       id: assignment.shift.id,
       areaId: assignment.shift.areaId,
       dayId: assignment.shift.dayId,
-      start: assignment.shift.start,
-      end: assignment.shift.end,
+      startAtSeconds: assignment.shift.startAtSeconds,
+      endAtSeconds: assignment.shift.endAtSeconds,
       numPeople: assignment.shift.numPeople,
       area: {
         id: assignment.shift.area.id,
@@ -261,7 +245,7 @@ export const getGapsSchedule = async (user: AuthUser): Promise<GapsScheduleRespo
     },
     orderBy: [
       { day: { dayOfWeek: 'asc' } },
-      { start: 'asc' }
+      { startAtSeconds: 'asc' }
     ]
   });
 
@@ -270,8 +254,8 @@ export const getGapsSchedule = async (user: AuthUser): Promise<GapsScheduleRespo
     id: shift.id,
     areaId: shift.areaId,
     dayId: shift.dayId,
-    start: shift.start,
-    end: shift.end,
+    startAtSeconds: shift.startAtSeconds,
+    endAtSeconds: shift.endAtSeconds,
     numPeople: shift.numPeople,
     assignments: shift.assignments.map(assignment => ({
       id: assignment.id,
@@ -306,9 +290,8 @@ function calculateHoursByDay(assignments: any[]): HoursByDay {
     const shift = assignment.shift;
     const dayId = shift.dayId;
     
-    const startTime = new Date(`1970-01-01T${shift.start}`);
-    const endTime = new Date(`1970-01-01T${shift.end}`);
-    const hours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+    // Convert seconds to hours
+    const hours = (shift.endAtSeconds - shift.startAtSeconds) / 3600;
     
     hoursByDay[dayId] = (hoursByDay[dayId] || 0) + hours;
   });

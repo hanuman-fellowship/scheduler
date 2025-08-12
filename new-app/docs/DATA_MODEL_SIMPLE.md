@@ -90,9 +90,18 @@ Based on the actual legacy code, keeping it simple for fastest development:
 - `schedule_id` (Integer, Foreign Key → schedules.id)
 - `area_id` (Integer, Foreign Key → areas.id)
 - `day_id` (Integer, Foreign Key → days.id)
-- `start` (Time, Required)
-- `end` (Time, Required)
+- `start_at_seconds` (Integer, Required) // Seconds since midnight (0-86399)
+- `end_at_seconds` (Integer, Required)   // Seconds since midnight (0-86399)
 - `num_people` (Integer, Default: 1)
+
+**Time Storage Notes:**
+- Time stored as integers (seconds since midnight) for better performance and simpler filtering
+- Example: 8:30 AM = 8*3600 + 30*60 = 30600 seconds since midnight
+- Example: 5:15 PM = 17*3600 + 15*60 = 62100 seconds since midnight
+- No TIME columns - using seconds-based approach exclusively
+- **All time operations use centralized utilities in `shared/src/timeUtils.ts`**
+- **Conversion functions**: `timeStringToSeconds()`, `secondsToDisplayTime()`, `calculateDurationHours()`, etc.
+- **Time periods**: Morning (0-43200s), Afternoon (43200-61200s), Evening (61200-86400s)
 
 ### floating_shifts
 **Fields:**
@@ -108,8 +117,8 @@ Based on the actual legacy code, keeping it simple for fastest development:
 - `schedule_id` (Integer, Foreign Key → schedules.id)
 - `resident_category_id` (Integer, Foreign Key → resident_categories.id)
 - `day_id` (Integer, Foreign Key → days.id)
-- `start` (Time, Required)
-- `end` (Time, Required)
+- `start_at_seconds` (Integer, Required) // Seconds since midnight (0-86399)
+- `end_at_seconds` (Integer, Required)   // Seconds since midnight (0-86399)
 - `specify_hours` (Boolean, Default: false)
 - `hours` (Decimal, Nullable)
 

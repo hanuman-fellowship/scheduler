@@ -357,29 +357,56 @@ The application has a complete, tested foundation ready for core feature develop
 ### ✅ **Fully Implemented & Tested Systems**
 
 1. **Authentication System**: Complete JWT-based auth with role-based access control
-2. **Database Layer**: PostgreSQL with Prisma ORM, complete schema, and seed data
+2. **Database Layer**: PostgreSQL with Prisma ORM, complete schema with seconds-based time storage
 3. **Schedule Context Architecture**: Current schedule management throughout the application
 4. **Categories Management**: Full CRUD with automatic schedule scoping
 5. **User Management System**: Complete CRUD operations for users with role and area assignment
 6. **API Foundation**: Express server with error handling and comprehensive test coverage
 7. **Frontend Framework**: React app with routing, state management, and component library
-8. **Test Coverage**: 140+ passing tests (110 backend + 30 frontend) covering all implemented features
+8. **Centralized Time Handling**: Complete time utility system with seconds-based storage and comprehensive validation
+9. **Test Coverage**: 331+ passing tests (35 shared + 182 backend + 114 frontend) covering all implemented features
 
 ### 📋 **Key Architecture Files**
 
-- **Database Schema**: `backend/prisma/schema.prisma` - Complete data model
+- **Database Schema**: `backend/prisma/schema.prisma` - Complete data model with seconds-based time storage
+- **Time Utilities**: `shared/src/timeUtils.ts` - Centralized time handling functions with 35 comprehensive tests
 - **Seed Data**: `backend/src/seed.ts` - Foundational data creation
 - **Schedule Context**: `frontend/src/store/scheduleStore.ts` - Schedule state management
 - **API Routes**: `backend/src/routes.ts` - RESTful API endpoints
-- **Test Suites**: Comprehensive coverage in `__tests__` directories
+- **Test Suites**: Comprehensive coverage in `__tests__` directories across all workspaces
 - **Documentation**: Complete specs in `/docs/` and implementation guides
+
+### ⏰ **Centralized Time Handling System**
+
+**All time operations use the centralized utilities in `shared/src/timeUtils.ts`:**
+
+- **Storage Format**: Times stored as integers (seconds since midnight: 0-86399)
+- **Database Schema**: `start_at_seconds` and `end_at_seconds` columns replace legacy TIME fields
+- **Time Periods**: Morning (0-43200s), Afternoon (43200-61200s), Evening (61200-86400s)
+- **Conversion Functions**: String ↔ Seconds, Display formatting, HTML inputs, Duration calculations
+- **Validation**: Complete input validation and error handling
+- **Testing**: 35 comprehensive test cases covering all functions and edge cases
+
+**Usage Example:**
+```typescript
+import { timeStringToSeconds, secondsToDisplayTime, getTimePeriods } from '@shared/types';
+
+// Convert time for database storage
+const startSeconds = timeStringToSeconds('09:00:00'); // 32400
+
+// Convert for display
+const displayTime = secondsToDisplayTime(32400); // "9:00 AM"
+
+// Get time periods for UI
+const periods = getTimePeriods(); // [Morning, Afternoon, Evening]
+```
 
 ### 🚀 **Ready for Core Features**
 
 The next development phase can focus on core scheduling features:
 
 1. **People Management** - Add people to schedules with categories
-2. **Shift Creation** - Time-based shifts with area assignments
+2. **Shift Creation** - Time-based shifts with area assignments using centralized time utilities
 3. **Assignment System** - Assign people to shifts with conflict detection
 4. **Schedule Views** - Calendar/grid display of the complete schedule
 
@@ -392,5 +419,7 @@ The next development phase can focus on core scheduling features:
 ---
 
 **Branch**: `new-app-setup`
-**Status**: ✅ Foundation Complete with User Management - Ready for core feature development
-**Last Updated**: User Management System fully implemented with CRUD operations
+**Status**: ✅ Foundation Complete with Centralized Time System - Ready for core feature development
+**Last Updated**: Centralized time handling system implemented with seconds-based storage and comprehensive testing
+
+- when making changes, don't worry about backwards compatibillity. Just adopt the new method completely.

@@ -173,13 +173,13 @@ model ResidentCategory {
 }
 
 model Shift {
-  id         Int  @id @default(autoincrement())
-  scheduleId Int  @map("schedule_id")
-  areaId     Int  @map("area_id")
-  dayId      Int  @map("day_id")
-  start      String // Store as "HH:MM:SS" string for simplicity
-  end        String // Store as "HH:MM:SS" string for simplicity
-  numPeople  Int  @default(1) @map("num_people")
+  id            Int @id @default(autoincrement())
+  scheduleId    Int @map("schedule_id")
+  areaId        Int @map("area_id")
+  dayId         Int @map("day_id")
+  startAtSeconds Int @map("start_at_seconds") // Seconds since midnight (0-86399)
+  endAtSeconds   Int @map("end_at_seconds")   // Seconds since midnight (0-86399)
+  numPeople     Int @default(1) @map("num_people")
 
   schedule    Schedule     @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   area        Area         @relation(fields: [areaId], references: [id], onDelete: Cascade)
@@ -208,8 +208,8 @@ model ConstantShift {
   scheduleId         Int     @map("schedule_id")
   residentCategoryId Int     @map("resident_category_id")
   dayId              Int     @map("day_id")
-  start              String  // Store as "HH:MM:SS" string
-  end                String  // Store as "HH:MM:SS" string
+  startAtSeconds     Int     @map("start_at_seconds") // Seconds since midnight (0-86399)
+  endAtSeconds       Int     @map("end_at_seconds")   // Seconds since midnight (0-86399)
   specifyHours       Boolean @default(false) @map("specify_hours")
   hours              Decimal?
 

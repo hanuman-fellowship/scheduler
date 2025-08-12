@@ -1,6 +1,10 @@
 // All shared types for the scheduler app
 import { z } from 'zod';
 
+// Export time utilities for use throughout the app
+export * from './timeUtils';
+import type { TimePeriodName } from './timeUtils';
+
 // ============================================================================
 // Auth Types
 // ============================================================================
@@ -85,8 +89,8 @@ export interface ShiftResponse {
   id: number;
   areaId: number;
   dayId: number;
-  start: string; // "HH:MM:SS"
-  end: string; // "HH:MM:SS"
+  startAtSeconds: number; // Seconds since midnight (0-86399)
+  endAtSeconds: number;   // Seconds since midnight (0-86399)
   numPeople: number;
 }
 
@@ -176,8 +180,8 @@ export interface CopyScheduleRequest {
 export interface CreateShiftRequest {
   areaId: number;
   dayId: number;
-  start: string;
-  end: string;
+  startAtSeconds: number; // Seconds since midnight
+  endAtSeconds: number;   // Seconds since midnight
   numPeople: number;
 }
 
@@ -202,8 +206,8 @@ export const ChangePasswordRequestSchema = z.object({
 });
 
 export const CreateShiftFormSchema = z.object({
-  start: z.string().min(1),
-  end: z.string().min(1),
+  startAtSeconds: z.number().min(0).max(86399), // 0-86399 seconds in a day
+  endAtSeconds: z.number().min(0).max(86399),
   numPeople: z.number().min(1),
 });
 
@@ -233,22 +237,15 @@ export const ResetPasswordFormSchema = z.object({
 // Schedule View Types
 // ============================================================================
 
-export interface TimeSlot {
-  id: string;
-  name: string;
-  startTime: string;
-  endTime: string;
-}
-
-export interface TimeRange {
-  start: string;
-  end: string;
+export interface TimePeriod {
+  name: TimePeriodName;
+  startSeconds: number; // Start boundary in seconds since midnight
+  endSeconds: number;   // End boundary in seconds since midnight
 }
 
 export interface ScheduleBounds {
   days: { [key: number]: string }; // { 1: "Sunday", 2: "Monday", ... }
-  slots: TimeSlot[];
-  bounds: { [slot: string]: { [day: string]: TimeRange } };
+  timePeriods: TimePeriod[]; // 3 hardcoded periods: Morning, Afternoon, Evening
 }
 
 export interface HoursByDay {
@@ -269,8 +266,8 @@ export interface AssignmentWithShiftResponse extends AssignmentResponse {
     id: number;
     areaId: number;
     dayId: number;
-    start: string;
-    end: string;
+    startAtSeconds: number; // Seconds since midnight
+    endAtSeconds: number;   // Seconds since midnight
     numPeople: number;
     area: {
       id: number;

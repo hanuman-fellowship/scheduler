@@ -49,6 +49,54 @@ export const CategoryList: React.FC = () => {
 };
 ```
 
+### **Time Handling in Frontend**
+
+**Always use the centralized time utilities from `@shared/types`:**
+
+```typescript
+import { 
+  timeStringToSeconds, 
+  secondsToDisplayTime, 
+  toHtmlTimeInput, 
+  parseHtmlTimeInput,
+  createTimeOptions 
+} from '@shared/types';
+
+// Component with time input
+const ShiftForm: React.FC = ({ onSubmit }) => {
+  const [startTime, setStartTime] = useState('09:00');
+  
+  const handleSubmit = () => {
+    // Convert to seconds for API
+    const startAtSeconds = parseHtmlTimeInput(startTime);
+    onSubmit({ startAtSeconds, endAtSeconds, ... });
+  };
+  
+  return (
+    <input 
+      type="time" 
+      value={startTime}
+      onChange={(e) => setStartTime(e.target.value)}
+    />
+  );
+};
+
+// Display shifts with formatted times
+const ShiftDisplay: React.FC<{ shift }> = ({ shift }) => {
+  const displayTime = secondsToDisplayTime(shift.startAtSeconds); // "9:00 AM"
+  return <span>{displayTime}</span>;
+};
+
+// Time picker options
+const timeOptions = createTimeOptions(15, 8, 18); // 15-min intervals, 8AM-6PM
+```
+
+**Key Patterns:**
+- HTML time inputs use `HH:MM` format with `parseHtmlTimeInput()` and `toHtmlTimeInput()`
+- Display times with `secondsToDisplayTime()` for user-friendly format
+- Store/send seconds to backend using `timeStringToSeconds()`
+- Use `createTimeOptions()` for select dropdowns
+
 ### **Separate Logic from Display**
 
 Use custom hooks and services to handle business logic:

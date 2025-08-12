@@ -112,8 +112,8 @@ export interface TestResidentCategory {
 
 export interface TestShift {
   id: number;
-  startTime: string;
-  endTime: string;
+  startAtSeconds: number;
+  endAtSeconds: number;
   numPeople: number;
   areaId: number;
   dayId: number;
@@ -224,8 +224,8 @@ export const createTestShift = async (scheduleId: number, shiftData: Partial<Omi
   return await prisma.shift.create({
     data: {
       scheduleId,
-      start: shiftData.startTime || '09:00:00',
-      end: shiftData.endTime || '17:00:00',
+      startAtSeconds: shiftData.startAtSeconds || 32400, // 09:00:00 = 9*3600 = 32400 seconds
+      endAtSeconds: shiftData.endAtSeconds || 61200,     // 17:00:00 = 17*3600 = 61200 seconds
       numPeople: shiftData.numPeople || 1,
       areaId,
       dayId,
