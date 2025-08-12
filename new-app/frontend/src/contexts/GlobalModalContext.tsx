@@ -4,12 +4,16 @@ import AddShiftForm from '../components/shifts/AddShiftForm'
 import AddPersonForm from '../components/people/AddPersonForm'
 import AddCategoryForm from '../components/people/AddCategoryForm'
 import AddAreaForm from '../components/areas/AddAreaForm'
+import { AreaSelectionContent } from '../components/schedules/AreaSelectionContent'
+import { PersonSelectionContent } from '../components/schedules/PersonSelectionContent'
 
-type ModalType = 'shift' | 'person' | 'category' | 'area' | null
+type ModalType = 'shift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | null
 
 interface GlobalModalContextType {
   openModal: (type: ModalType) => void
   closeModal: () => void
+  openAreaSelectionModal: () => void
+  openPersonSelectionModal: () => void
 }
 
 const GlobalModalContext = createContext<GlobalModalContextType | undefined>(undefined)
@@ -25,8 +29,21 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
     setActiveModal(null)
   }
 
+  const openAreaSelectionModal = () => {
+    setActiveModal('areaSelection')
+  }
+
+  const openPersonSelectionModal = () => {
+    setActiveModal('personSelection')
+  }
+
   return (
-    <GlobalModalContext.Provider value={{ openModal, closeModal }}>
+    <GlobalModalContext.Provider value={{ 
+      openModal, 
+      closeModal, 
+      openAreaSelectionModal, 
+      openPersonSelectionModal 
+    }}>
       {children}
 
       {/* Shift Modal */}
@@ -73,6 +90,28 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
       >
         <AddAreaForm
           onSuccess={closeModal}
+          onCancel={closeModal}
+        />
+      </Modal>
+
+      {/* Area Selection Modal */}
+      <Modal
+        isOpen={activeModal === 'areaSelection'}
+        onClose={closeModal}
+        title="View Area Schedule"
+      >
+        <AreaSelectionContent
+          onCancel={closeModal}
+        />
+      </Modal>
+
+      {/* Person Selection Modal */}
+      <Modal
+        isOpen={activeModal === 'personSelection'}
+        onClose={closeModal}
+        title="View Person Schedule"
+      >
+        <PersonSelectionContent
           onCancel={closeModal}
         />
       </Modal>

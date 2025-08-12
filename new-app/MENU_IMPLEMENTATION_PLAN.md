@@ -72,8 +72,8 @@ Based on analysis of the new app's Header.tsx and comparison with legacy system 
 
 ## 🎯 **PEOPLE MENU** (Operations Only)
 
-### ✅ **Partially Implemented**  
-- **View Schedule...** → Basic people page exists
+### ✅ **Fully Implemented**
+- **View Schedule...** → ✅ **FULLY IMPLEMENTED** (Person selection modal with category grouping and keyboard shortcuts)
 - **Big Board** → Page exists but needs implementation
 - **New Person...** → Modal trigger exists, needs backend
 - **New Category...** → ✅ **FULLY IMPLEMENTED**
@@ -92,7 +92,7 @@ Based on analysis of the new app's Header.tsx and comparison with legacy system 
 ## 🎯 **AREAS MENU** (Operations Only)
 
 ### ✅ **Fully Implemented**
-- **View Schedule...** → ✅ **FULLY IMPLEMENTED** (AreasPage with full management)
+- **View Schedule...** → ✅ **FULLY IMPLEMENTED** (Area selection modal with keyboard shortcuts and session memory)
 - **New Area...** → ✅ **FULLY IMPLEMENTED** (AddAreaForm with validation)
 
 ### ✅ **Backend Implemented**

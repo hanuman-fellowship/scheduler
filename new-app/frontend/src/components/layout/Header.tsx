@@ -2,13 +2,36 @@ import { Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { MenuProvider } from '../../contexts/MenuContext'
 import { useGlobalModal } from '../../contexts/GlobalModalContext'
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts'
 import MenuDropdown from '../ui/MenuDropdown'
 import MenuItem from '../ui/MenuItem'
 import DropdownSeparator from '../ui/DropdownSeparator'
 
 export default function Header() {
   const { user, logout, isOperations, isManager, isPersonnel } = useAuthStore()
-  const { openModal } = useGlobalModal()
+  const { openModal, openAreaSelectionModal, openPersonSelectionModal } = useGlobalModal()
+
+  // Set up keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'p',
+      ctrlKey: true,
+      callback: () => {
+        if (isOperations()) {
+          openPersonSelectionModal();
+        }
+      }
+    },
+    {
+      key: 'a',
+      ctrlKey: true,
+      callback: () => {
+        if (isOperations()) {
+          openAreaSelectionModal();
+        }
+      }
+    }
+  ]);
 
   return (
     <MenuProvider>
@@ -91,7 +114,7 @@ export default function Header() {
           <>
             <span className="text-gray-500">|</span>
             <MenuDropdown trigger="People">
-              <MenuItem to="/people">View Schedule...</MenuItem>
+              <MenuItem onClick={openPersonSelectionModal} shortcut="Ctrl+P">View Schedule...</MenuItem>
               <MenuItem to="/board">Big Board</MenuItem>
               <DropdownSeparator />
               <MenuItem onClick={() => openModal('person')}>New Person...</MenuItem>
@@ -109,7 +132,7 @@ export default function Header() {
             </MenuDropdown>
 
             <MenuDropdown trigger="Areas">
-              <MenuItem to="/areas">View Schedule...</MenuItem>
+              <MenuItem onClick={openAreaSelectionModal} shortcut="Ctrl+A">View Schedule...</MenuItem>
               <DropdownSeparator />
               <MenuItem onClick={() => openModal('area')}>New Area...</MenuItem>
               <DropdownSeparator />

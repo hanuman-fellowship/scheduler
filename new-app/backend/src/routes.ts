@@ -10,6 +10,7 @@ import * as categoriesController from './controllers/categoriesController';
 import * as shiftController from './controllers/shiftController';
 import * as areaController from './controllers/areaController';
 import * as dayController from './controllers/dayController';
+import * as scheduleViewController from './controllers/scheduleViewController';
 import { requireAuth, requireRole } from './middleware/auth';
 
 // Create a function that can be configured for different environments
@@ -110,6 +111,11 @@ export const createApp = (options: {
   // Day management (read-only)
   app.get('/api/days', requireAuth, asyncHandler(dayController.list));
   app.get('/api/days/:id', requireAuth, asyncHandler(dayController.get));
+
+  // Schedule view routes
+  app.get('/api/areas/:areaId/schedule', requireAuth, asyncHandler(scheduleViewController.getAreaSchedule));
+  app.get('/api/people/:personId/schedule', requireAuth, asyncHandler(scheduleViewController.getPersonSchedule));
+  app.get('/api/schedule/gaps', requireAuth, asyncHandler(scheduleViewController.getGapsSchedule));
 
   // Error handlers (only in production)
   if (enableErrorHandlers) {

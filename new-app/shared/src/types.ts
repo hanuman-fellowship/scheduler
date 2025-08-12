@@ -228,3 +228,81 @@ export const UpdateUserFormSchema = z.object({
 export const ResetPasswordFormSchema = z.object({
   email: z.string().email('Valid email is required'),
 });
+
+// ============================================================================
+// Schedule View Types
+// ============================================================================
+
+export interface TimeSlot {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface TimeRange {
+  start: string;
+  end: string;
+}
+
+export interface ScheduleBounds {
+  days: { [key: number]: string }; // { 1: "Sunday", 2: "Monday", ... }
+  slots: TimeSlot[];
+  bounds: { [slot: string]: { [day: string]: TimeRange } };
+}
+
+export interface HoursByDay {
+  [dayId: number]: number;
+}
+
+export interface AssignmentResponse {
+  id: number;
+  shiftId: number;
+  personId: number;
+  name?: string;
+  star: boolean;
+  person?: PersonResponse;
+}
+
+export interface ShiftWithAssignments extends ShiftResponse {
+  assignments: AssignmentResponse[];
+}
+
+export interface AreaScheduleResponse {
+  area: AreaResponse & {
+    shifts: ShiftWithAssignments[];
+    manager?: {
+      id: number;
+      username: string;
+    };
+  };
+  bounds: ScheduleBounds;
+  editable: boolean;
+  requestId?: number;
+  notes?: string;
+}
+
+export interface PersonScheduleResponse {
+  person: PersonResponse & {
+    assignments: AssignmentResponse[];
+  };
+  bounds: ScheduleBounds;
+  editable: boolean;
+  totalHours: HoursByDay;
+  notes: {
+    operations: { id: number; content: string }[];
+    personnel: { id: number; content: string }[];
+  };
+  offDays: number[]; // array of dayIds where person is off
+}
+
+export interface GapsScheduleResponse {
+  unassignedShifts: ShiftWithAssignments[];
+  bounds: ScheduleBounds;
+}
+
+export interface ScheduleViewMode {
+  type: 'area' | 'person' | 'gaps';
+  id: number | 'gaps';
+  mode: 'view' | 'edit' | 'request' | 'print';
+}

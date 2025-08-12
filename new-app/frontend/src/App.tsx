@@ -9,6 +9,7 @@ import PeoplePage from './pages/PeoplePage'
 import AreasPage from './pages/AreasPage'
 import UsersPage from './pages/UsersPage'
 import ProtectedRoute from './components/auth/ProtectedRoute'
+import { ScheduleView } from './components/schedules/ScheduleView'
 import { useAuthStore } from './store/authStore'
 import { useScheduleStore } from './store/scheduleStore'
 
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/schedule/:id?" element={<SchedulePage />} />
+          <Route path="/schedule-view/:type/:id" element={<ScheduleView />} />
           <Route path="/board" element={<BigBoardPage />} />
           <Route path="/people" element={<PeoplePage />} />
           <Route 
