@@ -1,25 +1,10 @@
-import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { peopleService } from '../services/people'
 import { categoriesService } from '../services/categories'
-import Modal from '../components/ui/Modal'
-import AddPersonForm from '../components/people/AddPersonForm'
-import AddCategoryForm from '../components/people/AddCategoryForm'
+import { useGlobalModal } from '../contexts/GlobalModalContext'
 
 export default function PeoplePage() {
-  const location = useLocation()
-  const [showAddPerson, setShowAddPerson] = useState(false)
-  const [showAddCategory, setShowAddCategory] = useState(false)
-
-  // Auto-open Add Person modal if opened via navigation state
-  useEffect(() => {
-    if (location.state?.openAddPersonModal) {
-      setShowAddPerson(true)
-      // Clear the state to prevent modal from reopening on refresh
-      window.history.replaceState(null, '', location.pathname)
-    }
-  }, [location.state, location.pathname])
+  const { openModal } = useGlobalModal()
 
   const { data: people = [], isLoading: peopleLoading } = useQuery({
     queryKey: ['people'],
@@ -41,13 +26,13 @@ export default function PeoplePage() {
         <h1 className="text-2xl font-bold">People Management</h1>
         <div className="space-x-2">
           <button
-            onClick={() => setShowAddCategory(true)}
+            onClick={() => openModal('category')}
             className="boxy-button"
           >
             New Category...
           </button>
           <button
-            onClick={() => setShowAddPerson(true)}
+            onClick={() => openModal('person')}
             className="boxy-button"
           >
             New Person...
@@ -102,29 +87,6 @@ export default function PeoplePage() {
           )}
         </div>
       </div>
-
-      {/* Modals */}
-      <Modal
-        isOpen={showAddPerson}
-        onClose={() => setShowAddPerson(false)}
-        title="Add Person"
-      >
-        <AddPersonForm
-          onSuccess={() => setShowAddPerson(false)}
-          onCancel={() => setShowAddPerson(false)}
-        />
-      </Modal>
-
-      <Modal
-        isOpen={showAddCategory}
-        onClose={() => setShowAddCategory(false)}
-        title="New Resident Category"
-      >
-        <AddCategoryForm
-          onSuccess={() => setShowAddCategory(false)}
-          onCancel={() => setShowAddCategory(false)}
-        />
-      </Modal>
     </div>
   )
 }

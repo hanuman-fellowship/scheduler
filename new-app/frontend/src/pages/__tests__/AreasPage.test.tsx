@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import AreasPage from '../AreasPage'
 import { useScheduleStore } from '../../store/scheduleStore'
+import { createTestWrapper } from '../../__tests__/utils/testWrappers'
 
 // Mock the services
 vi.mock('../../services/areas', () => ({
@@ -16,6 +16,18 @@ vi.mock('../../services/areas', () => ({
 
 // Mock the schedule store
 vi.mock('../../store/scheduleStore')
+
+// Mock the global modal context
+vi.mock('../../contexts/GlobalModalContext', async () => {
+  const actual = await vi.importActual('../../contexts/GlobalModalContext')
+  return {
+    ...actual,
+    useGlobalModal: vi.fn(() => ({
+      openModal: vi.fn(),
+      closeModal: vi.fn()
+    }))
+  }
+})
 
 // Mock react-router-dom with useLocation
 vi.mock('react-router-dom', async () => {
@@ -48,8 +60,6 @@ vi.mock('../../components/areas/EditAreaForm', () => ({
 }))
 
 describe('AreasPage', () => {
-  let queryClient: QueryClient
-
   const mockSchedule = {
     id: 1,
     name: 'Test Schedule',
@@ -78,13 +88,6 @@ describe('AreasPage', () => {
   ]
 
   beforeEach(() => {
-    queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { retry: false },
-        mutations: { retry: false }
-      }
-    })
-
     // Mock the schedule store
     vi.mocked(useScheduleStore).mockReturnValue({
       currentSchedule: mockSchedule,
@@ -103,13 +106,8 @@ describe('AreasPage', () => {
   })
 
   const renderWithProviders = (component: React.ReactElement) => {
-    return render(
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          {component}
-        </BrowserRouter>
-      </QueryClientProvider>
-    )
+    const TestWrapper = createTestWrapper()
+    return render(component, { wrapper: TestWrapper })
   }
 
   it('should render page title and new area button', async () => {
@@ -164,9 +162,16 @@ describe('AreasPage', () => {
     })
   })
 
-  it('should open add area modal when New Area button is clicked', async () => {
+  it('should call openModal when New Area button is clicked', async () => {
     const { areasService } = await import('../../services/areas')
+    const { useGlobalModal } = await import('../../contexts/GlobalModalContext')
     vi.mocked(areasService.getAreas).mockResolvedValue(mockAreas)
+
+    const mockOpenModal = vi.fn()
+    vi.mocked(useGlobalModal).mockReturnValue({
+      openModal: mockOpenModal,
+      closeModal: vi.fn()
+    })
 
     const user = userEvent.setup()
     renderWithProviders(<AreasPage />)
@@ -177,13 +182,19 @@ describe('AreasPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'New Area...' }))
 
-    expect(screen.getByText('Add Area')).toBeInTheDocument()
-    expect(screen.getByTestId('add-area-form')).toBeInTheDocument()
+    expect(mockOpenModal).toHaveBeenCalledWith('area')
   })
 
-  it('should open add area modal from empty state button', async () => {
+  it('should call openModal from empty state button', async () => {
     const { areasService } = await import('../../services/areas')
+    const { useGlobalModal } = await import('../../contexts/GlobalModalContext')
     vi.mocked(areasService.getAreas).mockResolvedValue([])
+
+    const mockOpenModal = vi.fn()
+    vi.mocked(useGlobalModal).mockReturnValue({
+      openModal: mockOpenModal,
+      closeModal: vi.fn()
+    })
 
     const user = userEvent.setup()
     renderWithProviders(<AreasPage />)
@@ -194,8 +205,7 @@ describe('AreasPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Create First Area' }))
 
-    expect(screen.getByText('Add Area')).toBeInTheDocument()
-    expect(screen.getByTestId('add-area-form')).toBeInTheDocument()
+    expect(mockOpenModal).toHaveBeenCalledWith('area')
   })
 
   it('should show edit and delete buttons for each area', async () => {
@@ -304,7 +314,7 @@ describe('AreasPage', () => {
     })
   })
 
-  it('should close modals when form actions are triggered', async () => {
+  it('should close edit modal when form actions are triggered', async () => {
     const { areasService } = await import('../../services/areas')
     vi.mocked(areasService.getAreas).mockResolvedValue(mockAreas)
 
@@ -315,15 +325,17 @@ describe('AreasPage', () => {
       expect(screen.getByText('Kitchen')).toBeInTheDocument()
     })
 
-    // Open add modal
-    await user.click(screen.getByRole('button', { name: 'New Area...' }))
-    expect(screen.getByTestId('add-area-form')).toBeInTheDocument()
+    // Open edit modal (this is still local to the page)
+    const editButtons = screen.getAllByRole('button', { name: 'Edit' })
+    await user.click(editButtons[0])
+    
+    expect(screen.getByTestId('edit-area-form')).toBeInTheDocument()
 
     // Simulate form success
-    await user.click(screen.getByRole('button', { name: 'Submit' }))
+    await user.click(screen.getByRole('button', { name: 'Update' }))
     
     await waitFor(() => {
-      expect(screen.queryByTestId('add-area-form')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('edit-area-form')).not.toBeInTheDocument()
     })
   })
 
@@ -339,40 +351,4 @@ describe('AreasPage', () => {
     expect(screen.getByText('Loading schedule context...')).toBeInTheDocument()
   })
 
-  it('should handle navigation state for opening add modal', async () => {
-    const { areasService } = await import('../../services/areas')
-    vi.mocked(areasService.getAreas).mockResolvedValue(mockAreas)
-
-    // Mock window.history.replaceState to track calls
-    const mockReplaceState = vi.fn()
-    Object.defineProperty(window, 'history', {
-      value: { replaceState: mockReplaceState },
-      writable: true
-    })
-
-    // Set location mock to have navigation state
-    vi.mocked(useLocation).mockReturnValue({
-      state: { openAddAreaModal: true },
-      pathname: '/areas',
-      search: '',
-      hash: '',
-      key: 'test'
-    })
-
-    renderWithProviders(<AreasPage />)
-
-    // Wait for areas to load first
-    await waitFor(() => {
-      expect(screen.getByText('Kitchen')).toBeInTheDocument()
-    })
-
-    // Modal should open automatically due to navigation state
-    await waitFor(() => {
-      expect(screen.getByText('Add Area')).toBeInTheDocument()
-      expect(screen.getByTestId('add-area-form')).toBeInTheDocument()
-    })
-
-    // Verify that replaceState was called to clear the navigation state
-    expect(mockReplaceState).toHaveBeenCalledWith(null, '', '/areas')
-  })
 })

@@ -65,10 +65,10 @@ This document tracks the migration status of all menu items from the legacy Cake
 |-------------|-----------|---------|----------|
 | View Schedule... | `/people` | ✅ Working | High |
 | Big Board | `/board` | ✅ Working | High |
-| New Person... | `/people/add` | 🟡 Stubbed | High |
+| New Person... | Global Modal | ✅ Working | High |
 | Restore Person... | `/people/restore` | 🔴 Missing | Medium |
 | Retire Person... | `/people/retire` | 🔴 Missing | Medium |
-| New Category... | `/categories/add` | 🔴 Missing | Medium |
+| New Category... | Global Modal | ✅ Working | Medium |
 | Edit Category... | `/categories/edit` | 🔴 Missing | Medium |
 | Reorder Categories... | `/categories/reorder` | 🔴 Missing | Low |
 | Delete Category... | `/categories/delete` | 🔴 Missing | Low |
@@ -78,8 +78,8 @@ This document tracks the migration status of all menu items from the legacy Cake
 ### Areas Menu (Operations Only)
 | Legacy Item | New Route | Status | Priority |
 |-------------|-----------|---------|----------|
-| View Schedule... | `/areas` | 🟡 Stubbed | High |
-| New Area... | `/areas/add` | 🟡 Stubbed | High |
+| View Schedule... | `/areas` | ✅ Working | High |
+| New Area... | Global Modal | ✅ Working | High |
 | Clear Area... | `/areas/clear` | 🔴 Missing | Medium |
 | Delete Area... | `/areas/delete` | 🔴 Missing | Medium |
 | Affected Schedules... | `/areas/affected-schedules` | 🔴 Missing | Low |
@@ -88,7 +88,7 @@ This document tracks the migration status of all menu items from the legacy Cake
 ### Shifts Menu (Operations Only)
 | Legacy Item | New Route | Status | Priority |
 |-------------|-----------|---------|----------|
-| New Shift... | `/shifts/add` | 🔴 Missing | High |
+| New Shift... | Global Modal | ✅ Working | High |
 | New Floating Shift... | `/floating-shifts/add` | 🔴 Missing | High |
 | New Constant Shift... | `/constant-shifts/add` | 🔴 Missing | Medium |
 

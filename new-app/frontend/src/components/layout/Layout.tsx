@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import Header from './Header'
+import { GlobalModalProvider } from '../../contexts/GlobalModalContext'
 
 interface LayoutProps {
   children: ReactNode
@@ -7,11 +8,13 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div id="container">
-      <div id="content">
-        <Header />
-        {children}
+    <GlobalModalProvider>
+      <div id="container">
+        <div id="content">
+          <Header />
+          {children}
+        </div>
       </div>
-    </div>
+    </GlobalModalProvider>
   )
 }

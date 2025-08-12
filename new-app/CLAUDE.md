@@ -60,8 +60,9 @@ All detailed specifications are in `/docs/`:
 - Prisma schema with all database models
 - CLAUDE.md files for parallel development
 - **Frontend Foundation**: React app with routing and authentication flow
-- **Component Library**: Reusable UI components (MenuDropdown, MenuItem, etc.)
-- **Testing Framework**: Complete test coverage - 117 passing tests (87 backend + 30 frontend)
+- **Component Library**: Reusable UI components (MenuDropdown, MenuItem, Modal, etc.)
+- **Global Modal System**: Centralized modal management for creating shifts, people, categories, and areas from anywhere
+- **Testing Framework**: Complete test coverage - 260 passing tests (182 backend + 78 frontend)
 - **Navigation System**: Working dropdown menus with hover behavior
 - **Menu System**: Instant switching between menus with proper UX
 - **Backend API Foundation**: Express server with JWT auth and database connection

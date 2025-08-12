@@ -8,7 +8,6 @@ import BigBoardPage from './pages/BigBoardPage'
 import PeoplePage from './pages/PeoplePage'
 import AreasPage from './pages/AreasPage'
 import UsersPage from './pages/UsersPage'
-import ShiftsAddPage from './pages/ShiftsAddPage'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuthStore } from './store/authStore'
 import { useScheduleStore } from './store/scheduleStore'
@@ -53,14 +52,6 @@ function App() {
             element={
               <ProtectedRoute requireOperations>
                 <UsersPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/shifts/add" 
-            element={
-              <ProtectedRoute requireOperations>
-                <ShiftsAddPage />
               </ProtectedRoute>
             } 
           />

@@ -1,29 +1,18 @@
-import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { areasService, type Area } from '../services/areas'
 import { useScheduleStore } from '../store/scheduleStore'
+import { useGlobalModal } from '../contexts/GlobalModalContext'
 import Modal from '../components/ui/Modal'
-import AddAreaForm from '../components/areas/AddAreaForm'
 import EditAreaForm from '../components/areas/EditAreaForm'
 
 export default function AreasPage() {
-  const location = useLocation()
   const queryClient = useQueryClient()
   const { currentSchedule } = useScheduleStore()
+  const { openModal } = useGlobalModal()
   
-  const [showAddArea, setShowAddArea] = useState(false)
   const [editingArea, setEditingArea] = useState<Area | null>(null)
   const [confirmDeleteArea, setConfirmDeleteArea] = useState<Area | null>(null)
-
-  // Auto-open Add Area modal if opened via navigation state
-  useEffect(() => {
-    if (location.state?.openAddAreaModal) {
-      setShowAddArea(true)
-      // Clear the state to prevent modal from reopening on refresh
-      window.history.replaceState(null, '', location.pathname)
-    }
-  }, [location.state, location.pathname])
 
   const { data: areas = [], isLoading: areasLoading } = useQuery({
     queryKey: ['areas', currentSchedule?.id],
@@ -62,7 +51,7 @@ export default function AreasPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Areas Management</h1>
         <button
-          onClick={() => setShowAddArea(true)}
+          onClick={() => openModal('area')}
           className="boxy-button"
         >
           New Area...
@@ -109,7 +98,7 @@ export default function AreasPage() {
           <div className="text-center py-8">
             <p className="text-gray-600 mb-4">No areas yet. Create one to get started.</p>
             <button
-              onClick={() => setShowAddArea(true)}
+              onClick={() => openModal('area')}
               className="boxy-button"
             >
               Create First Area
@@ -117,18 +106,6 @@ export default function AreasPage() {
           </div>
         )}
       </div>
-
-      {/* Add Area Modal */}
-      <Modal
-        isOpen={showAddArea}
-        onClose={() => setShowAddArea(false)}
-        title="Add Area"
-      >
-        <AddAreaForm
-          onSuccess={() => setShowAddArea(false)}
-          onCancel={() => setShowAddArea(false)}
-        />
-      </Modal>
 
       {/* Edit Area Modal */}
       <Modal

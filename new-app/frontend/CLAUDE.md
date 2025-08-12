@@ -337,21 +337,25 @@ frontend/
 
 - **Layout**: Header, Layout with role-based navigation
 - **UI Components**: MenuDropdown, MenuItem, Modal, BoxyButton
-- **Pages**: HomePage, PeoplePage, BigBoardPage, LoginPage
-- **Services**: API client setup, auth service, people service
+- **Pages**: HomePage, PeoplePage, BigBoardPage, LoginPage, AreasPage
+- **Services**: API client setup, auth service, people service, areas service, shifts service
 - **State**: Zustand auth store, React Query for server state
-- **Testing**: 17 focused tests covering component behavior and regressions
+- **Global Modal System**: Centralized modal management via GlobalModalContext
+- **Testing**: 78 focused tests covering component behavior and regressions
 
 ### 🔧 Component Patterns Established
 
 - **MenuDropdown**: Reusable hover-based dropdown with instant switching
 - **MenuItem**: Navigation component with proper SPA routing
 - **MenuContext**: Shared state for coordinated menu behavior
-- **Modal System**: Reusable modal for forms and dialogs
+- **Global Modal System**: Centralized modal management that can be triggered from anywhere
+  - Supports shift, person, category, and area creation modals
+  - No page navigation required - modals open instantly on current page
+  - Accessible via `useGlobalModal()` hook from any component
 
 ### 🧪 Testing Strategy
 
-- **17 Tests**: Focused, essential coverage without redundancy
+- **78 Tests**: Focused, essential coverage without redundancy
 - **Unit Tests**: Component behavior and interactions
 - **Integration Tests**: Multi-component workflows
 - **Regression Tests**: Specific bug fixes (person menu issue)

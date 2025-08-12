@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { randomUUID } from 'crypto';
 import type { UserRole } from '@shared/types';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'test-secret';
@@ -35,10 +36,10 @@ export const createTestUserData = (userData: {
   password?: string;
   roles?: UserRole[];
 }) => {
-  const timestamp = Date.now();
+  const uniqueId = randomUUID();
   return {
-    username: userData.username || `testuser${timestamp}`,
-    email: userData.email || `test${timestamp}@example.com`,
+    username: userData.username || `testuser_${uniqueId}`,
+    email: userData.email || `test_${uniqueId}@example.com`,
     password: PRECOMPUTED_PASSWORD_HASH, // Use precomputed hash instead of bcrypt.hash
     roles: userData.roles || ['personnel']
   };

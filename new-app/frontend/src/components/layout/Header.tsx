@@ -1,21 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { MenuProvider } from '../../contexts/MenuContext'
+import { useGlobalModal } from '../../contexts/GlobalModalContext'
 import MenuDropdown from '../ui/MenuDropdown'
 import MenuItem from '../ui/MenuItem'
 import DropdownSeparator from '../ui/DropdownSeparator'
 
 export default function Header() {
   const { user, logout, isOperations, isManager, isPersonnel } = useAuthStore()
-  const navigate = useNavigate()
-
-  const handleNewPersonClick = () => {
-    navigate('/people', { state: { openAddPersonModal: true } })
-  }
-
-  const handleNewAreaClick = () => {
-    navigate('/areas', { state: { openAddAreaModal: true } })
-  }
+  const { openModal } = useGlobalModal()
 
   return (
     <MenuProvider>
@@ -101,7 +94,7 @@ export default function Header() {
               <MenuItem to="/people">View Schedule...</MenuItem>
               <MenuItem to="/board">Big Board</MenuItem>
               <DropdownSeparator />
-              <MenuItem onClick={handleNewPersonClick}>New Person...</MenuItem>
+              <MenuItem onClick={() => openModal('person')}>New Person...</MenuItem>
               <DropdownSeparator />
               <MenuItem to="/people/restore">Restore Person...</MenuItem>
               <MenuItem to="/people/retire">Retire Person...</MenuItem>
@@ -118,7 +111,7 @@ export default function Header() {
             <MenuDropdown trigger="Areas">
               <MenuItem to="/areas">View Schedule...</MenuItem>
               <DropdownSeparator />
-              <MenuItem onClick={handleNewAreaClick}>New Area...</MenuItem>
+              <MenuItem onClick={() => openModal('area')}>New Area...</MenuItem>
               <DropdownSeparator />
               <MenuItem to="/areas/clear">Clear Area...</MenuItem>
               <MenuItem to="/areas/delete">Delete Area...</MenuItem>
@@ -128,7 +121,7 @@ export default function Header() {
             </MenuDropdown>
 
             <MenuDropdown trigger="Shifts">
-              <MenuItem to="/shifts/add">New Shift...</MenuItem>
+              <MenuItem onClick={() => openModal('shift')}>New Shift...</MenuItem>
               <MenuItem to="/floating-shifts/add">New Floating Shift...</MenuItem>
               <MenuItem to="/constant-shifts/add">New Constant Shift...</MenuItem>
             </MenuDropdown>
