@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { MenuProvider } from '../../contexts/MenuContext'
 import MenuDropdown from '../ui/MenuDropdown'
@@ -7,6 +7,11 @@ import DropdownSeparator from '../ui/DropdownSeparator'
 
 export default function Header() {
   const { user, logout, isOperations, isManager, isPersonnel } = useAuthStore()
+  const navigate = useNavigate()
+
+  const handleNewPersonClick = () => {
+    navigate('/people', { state: { openAddPersonModal: true } })
+  }
 
   return (
     <MenuProvider>
@@ -94,7 +99,7 @@ export default function Header() {
               <MenuItem to="/people">View Schedule...</MenuItem>
               <MenuItem to="/board">Big Board</MenuItem>
               <DropdownSeparator />
-              <MenuItem to="/people/add">New Person...</MenuItem>
+              <MenuItem onClick={handleNewPersonClick}>New Person...</MenuItem>
               <DropdownSeparator />
               <MenuItem to="/people/restore">Restore Person...</MenuItem>
               <MenuItem to="/people/retire">Retire Person...</MenuItem>

@@ -36,7 +36,6 @@ function App() {
           <Route path="/schedule/:id?" element={<SchedulePage />} />
           <Route path="/board" element={<BigBoardPage />} />
           <Route path="/people" element={<PeoplePage />} />
-          <Route path="/people/add" element={<PeoplePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

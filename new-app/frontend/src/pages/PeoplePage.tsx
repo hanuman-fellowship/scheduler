@@ -12,12 +12,14 @@ export default function PeoplePage() {
   const [showAddPerson, setShowAddPerson] = useState(false)
   const [showAddCategory, setShowAddCategory] = useState(false)
 
-  // Auto-open Add Person modal if navigated to /people/add
+  // Auto-open Add Person modal if opened via navigation state
   useEffect(() => {
-    if (location.pathname === '/people/add') {
+    if (location.state?.openAddPersonModal) {
       setShowAddPerson(true)
+      // Clear the state to prevent modal from reopening on refresh
+      window.history.replaceState(null, '', location.pathname)
     }
-  }, [location.pathname])
+  }, [location.state, location.pathname])
 
   const { data: people = [], isLoading: peopleLoading } = useQuery({
     queryKey: ['people'],
