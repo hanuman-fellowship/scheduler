@@ -43,14 +43,18 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
     return getDayOfWeek(dayId) === todayDay;
   };
 
-  const getShiftsForCell = (dayId: number, slotId: string) => {
+  const getShiftsForCell = (dayId: number, timePeriodName: string) => {
+    // Find the time period to get its boundaries
+    const timePeriod = bounds.timePeriods.find(p => p.name === timePeriodName);
+    if (!timePeriod) return [];
+
     switch (type) {
       case 'area':
         const areaData = data as AreaScheduleResponse;
         return areaData.area.shifts.filter(shift => 
           shift.dayId === dayId &&
-          shift.start <= bounds.slots.find(s => s.id === slotId)?.startTime! &&
-          shift.end >= bounds.slots.find(s => s.id === slotId)?.endTime!
+          shift.startAtSeconds < timePeriod.endSeconds &&
+          shift.endAtSeconds > timePeriod.startSeconds
         );
 
       case 'person':
@@ -60,15 +64,15 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
           .filter(assignment => {
             const shift = assignment.shift;
             return shift.dayId === dayId &&
-              shift.start <= bounds.slots.find(s => s.id === slotId)?.startTime! &&
-              shift.end >= bounds.slots.find(s => s.id === slotId)?.endTime!;
+              shift.startAtSeconds < timePeriod.endSeconds &&
+              shift.endAtSeconds > timePeriod.startSeconds;
           })
           .map(assignment => ({
             id: assignment.shift.id,
             areaId: assignment.shift.areaId,
             dayId: assignment.shift.dayId,
-            start: assignment.shift.start,
-            end: assignment.shift.end,
+            startAtSeconds: assignment.shift.startAtSeconds,
+            endAtSeconds: assignment.shift.endAtSeconds,
             numPeople: assignment.shift.numPeople,
             assignments: [{
               id: assignment.id,
@@ -84,14 +88,25 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
         const gapsData = data as GapsScheduleResponse;
         return gapsData.unassignedShifts.filter(shift => 
           shift.dayId === dayId &&
-          shift.start <= bounds.slots.find(s => s.id === slotId)?.startTime! &&
-          shift.end >= bounds.slots.find(s => s.id === slotId)?.endTime!
+          shift.startAtSeconds < timePeriod.endSeconds &&
+          shift.endAtSeconds > timePeriod.startSeconds
         );
 
       default:
         return [];
     }
   };
+
+  // Safety check for required data
+  if (!bounds || !bounds.timePeriods || !bounds.days) {
+    return (
+      <div className="flex items-center justify-center h-32">
+        <div className="text-lg text-gray-500">
+          No schedule data available
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -118,24 +133,24 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
           </tr>
         </thead>
         <tbody>
-          {bounds.slots.map(slot => (
-            <tr key={slot.id}>
+          {bounds.timePeriods.map(timePeriod => (
+            <tr key={timePeriod.name}>
               <td className="border-2 border-black bg-gray-50 p-2 text-center text-sm font-medium">
-                {slot.name}
+                {timePeriod.name}
               </td>
               {Object.entries(bounds.days).map(([dayId, dayName]) => {
-                const shifts = getShiftsForCell(parseInt(dayId), slot.id);
+                const shifts = getShiftsForCell(parseInt(dayId), timePeriod.name);
                 return (
                   <ShiftCell
-                    key={`${slot.id}-${dayId}`}
+                    key={`${timePeriod.name}-${dayId}`}
                     shifts={shifts}
                     dayId={parseInt(dayId)}
-                    timeSlot={slot}
+                    timeSlot={{ id: timePeriod.name, name: timePeriod.name }}
                     type={type}
                     editable={editable}
                     isToday={isToday(parseInt(dayId))}
                     onShiftClick={onShiftClick}
-                    onAdd={onAddShift ? () => onAddShift(parseInt(dayId), slot.id) : undefined}
+                    onAdd={onAddShift ? () => onAddShift(parseInt(dayId), timePeriod.name) : undefined}
                   />
                 );
               })}

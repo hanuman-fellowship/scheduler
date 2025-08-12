@@ -14,10 +14,9 @@ const mockShift: ShiftWithAssignments = {
   id: 1,
   areaId: 1,
   dayId: 2,
-  start: '08:00',
-  end: '12:00',
+  startAtSeconds: 28800, // 8:00 AM
+  endAtSeconds: 43200, // 12:00 PM
   numPeople: 2,
-  scheduleId: 1,
   assignments: [
     {
       id: 1,
@@ -47,10 +46,9 @@ const mockPersonShift: ShiftWithAssignments = {
   id: 1,
   areaId: 1,
   dayId: 2,
-  start: '08:00',
-  end: '12:00',
+  startAtSeconds: 28800, // 8:00 AM
+  endAtSeconds: 43200, // 12:00 PM
   numPeople: 1,
-  scheduleId: 1,
   assignments: [
     {
       id: 1,
@@ -71,10 +69,9 @@ const mockGapsShift: ShiftWithAssignments = {
   id: 2,
   areaId: 1,
   dayId: 3,
-  start: '13:00',
-  end: '17:00',
+  startAtSeconds: 46800, // 1:00 PM
+  endAtSeconds: 61200, // 5:00 PM
   numPeople: 2,
-  scheduleId: 1,
   assignments: []
 };
 
@@ -99,7 +96,7 @@ describe('ShiftCell', () => {
       );
 
       // Should show time range
-      expect(screen.getByText('8AM-12PM')).toBeInTheDocument();
+      expect(screen.getByText('8:00 AM-12:00 PM')).toBeInTheDocument();
 
       // Should show assigned person
       expect(screen.getByText('John D')).toBeInTheDocument();
@@ -180,7 +177,7 @@ describe('ShiftCell', () => {
         </table>
       );
 
-      const shiftElement = screen.getByText('8AM-12PM').closest('div');
+      const shiftElement = screen.getByText('8:00 AM-12:00 PM').closest('div');
       await user.click(shiftElement!);
 
       expect(mockOnShiftClick).toHaveBeenCalledWith(1);
@@ -210,7 +207,7 @@ describe('ShiftCell', () => {
       expect(screen.getByText('K')).toBeInTheDocument();
 
       // Should show time range
-      expect(screen.getByText('8AM-12PM')).toBeInTheDocument();
+      expect(screen.getByText('8:00 AM-12:00 PM')).toBeInTheDocument();
 
       // Should show star
       expect(screen.getByText('⭐')).toBeInTheDocument();
@@ -273,7 +270,7 @@ describe('ShiftCell', () => {
       );
 
       // Should show time range
-      expect(screen.getByText('1PM-5PM')).toBeInTheDocument();
+      expect(screen.getByText('1:00 PM-5:00 PM')).toBeInTheDocument();
 
       // Should show need for people
       expect(screen.getByText('Need 2 people')).toBeInTheDocument();

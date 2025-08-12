@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { ShiftWithAssignments, TimeSlot } from '@shared/types';
+import { secondsToDisplayTime } from '../../../../shared/src/timeUtils';
 
 interface ShiftCellProps {
   shifts: ShiftWithAssignments[];
@@ -24,18 +25,10 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const formatTimeRange = (start: string, end: string) => {
-    const formatTime = (time: string) => {
-      const [hours, minutes] = time.split(':');
-      const hour = parseInt(hours, 10);
-      const minute = parseInt(minutes, 10);
-      const period = hour >= 12 ? 'PM' : 'AM';
-      const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-      const displayMinute = minute === 0 ? '' : `:${minute.toString().padStart(2, '0')}`;
-      return `${displayHour}${displayMinute}${period}`;
-    };
-
-    return `${formatTime(start)}-${formatTime(end)}`;
+  const formatTimeRange = (startSeconds: number, endSeconds: number) => {
+    const startTime = secondsToDisplayTime(startSeconds);
+    const endTime = secondsToDisplayTime(endSeconds);
+    return `${startTime}-${endTime}`;
   };
 
   const renderShift = (shift: ShiftWithAssignments) => {
@@ -48,7 +41,7 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
             onClick={() => onShiftClick?.(shift.id)}
           >
             <div className="font-semibold">
-              {formatTimeRange(shift.start, shift.end)}
+              {formatTimeRange(shift.startAtSeconds, shift.endAtSeconds)}
             </div>
             <div className="space-y-1">
               {shift.assignments.map(assignment => (
@@ -83,7 +76,7 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
             <div className="font-semibold text-blue-600">
               {assignment?.area?.shortName || `Area ${shift.areaId}`}
             </div>
-            <div>{formatTimeRange(shift.start, shift.end)}</div>
+            <div>{formatTimeRange(shift.startAtSeconds, shift.endAtSeconds)}</div>
             {assignment?.star && <span className="text-yellow-500">⭐</span>}
           </div>
         );
@@ -96,7 +89,7 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
             onClick={() => onShiftClick?.(shift.id)}
           >
             <div className="font-semibold text-red-600">
-              {formatTimeRange(shift.start, shift.end)}
+              {formatTimeRange(shift.startAtSeconds, shift.endAtSeconds)}
             </div>
             <div className="text-red-500">
               Need {shift.numPeople} people

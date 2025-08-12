@@ -59,7 +59,7 @@ export default function AddShiftForm({
     e.preventDefault()
     
     // Validate form
-    if (formData.areaId === 0) {
+    if (!formData.areaId || formData.areaId === 0) {
       return
     }
 
@@ -125,12 +125,12 @@ export default function AddShiftForm({
         </label>
         <select
           id="area"
-          value={formData.areaId}
+          value={formData.areaId || ''}
           onChange={(e) => handleInputChange('areaId', parseInt(e.target.value))}
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
           required
         >
-          <option value={0}>Select an area...</option>
+          <option value="">Select an area...</option>
           {areas.map((area) => (
             <option key={area.id} value={area.id}>
               {area.name}
@@ -223,7 +223,7 @@ export default function AddShiftForm({
         </button>
         <button
           type="submit"
-          disabled={createShiftMutation.isPending || formData.areaId === 0}
+          disabled={createShiftMutation.isPending || !formData.areaId || formData.areaId === 0}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
         >
           {createShiftMutation.isPending ? 'Creating...' : 'Create Shift'}

@@ -13,21 +13,23 @@ const mockBounds: ScheduleBounds = {
     6: 'Friday',
     7: 'Saturday'
   },
-  slots: [
+  timePeriods: [
     {
-      id: '08:00-12:00',
-      name: '8:00 AM - 12:00 PM',
-      startTime: '08:00',
-      endTime: '12:00'
+      name: 'Morning',
+      startSeconds: 0,
+      endSeconds: 43200 // 12:00 PM
     },
     {
-      id: '13:00-17:00',
-      name: '1:00 PM - 5:00 PM',
-      startTime: '13:00',
-      endTime: '17:00'
+      name: 'Afternoon',
+      startSeconds: 43200,
+      endSeconds: 61200 // 5:00 PM
+    },
+    {
+      name: 'Evening',
+      startSeconds: 61200,
+      endSeconds: 86400 // 11:59:59 PM
     }
-  ],
-  bounds: {}
+  ]
 };
 
 const mockAreaSchedule: AreaScheduleResponse = {
@@ -42,10 +44,9 @@ const mockAreaSchedule: AreaScheduleResponse = {
         id: 1,
         areaId: 1,
         dayId: 2, // Monday
-        start: '08:00',
-        end: '12:00',
+        startAtSeconds: 28800, // 8:00 AM
+        endAtSeconds: 43200, // 12:00 PM
         numPeople: 2,
-        scheduleId: 1,
         assignments: [
           {
             id: 1,
@@ -101,8 +102,8 @@ const mockPersonSchedule: PersonScheduleResponse = {
           id: 1,
           areaId: 1,
           dayId: 2, // Monday
-          start: '08:00',
-          end: '12:00',
+          startAtSeconds: 28800, // 8:00 AM
+          endAtSeconds: 43200, // 12:00 PM
           numPeople: 2,
           area: {
             id: 1,
@@ -129,10 +130,9 @@ const mockGapsSchedule: GapsScheduleResponse = {
       id: 2,
       areaId: 1,
       dayId: 3, // Tuesday
-      start: '13:00',
-      end: '17:00',
+      startAtSeconds: 46800, // 1:00 PM
+      endAtSeconds: 61200, // 5:00 PM
       numPeople: 1,
-      scheduleId: 1,
       assignments: []
     }
   ],
@@ -154,9 +154,10 @@ describe('ScheduleGrid', () => {
     expect(screen.getByText('Monday')).toBeInTheDocument();
     expect(screen.getByText('Tuesday')).toBeInTheDocument();
 
-    // Check that time slots are rendered
-    expect(screen.getByText('8:00 AM - 12:00 PM')).toBeInTheDocument();
-    expect(screen.getByText('1:00 PM - 5:00 PM')).toBeInTheDocument();
+    // Check that time periods are rendered
+    expect(screen.getByText('Morning')).toBeInTheDocument();
+    expect(screen.getByText('Afternoon')).toBeInTheDocument();
+    expect(screen.getByText('Evening')).toBeInTheDocument();
 
     // Check that the grid has proper styling
     const table = screen.getByRole('table');
@@ -175,7 +176,7 @@ describe('ScheduleGrid', () => {
 
     // Should render the grid structure
     expect(screen.getByText('Monday')).toBeInTheDocument();
-    expect(screen.getByText('8:00 AM - 12:00 PM')).toBeInTheDocument();
+    expect(screen.getByText('Morning')).toBeInTheDocument();
   });
 
   it('renders gaps schedule grid correctly', () => {
@@ -190,7 +191,7 @@ describe('ScheduleGrid', () => {
 
     // Should render the grid structure
     expect(screen.getByText('Tuesday')).toBeInTheDocument();
-    expect(screen.getByText('1:00 PM - 5:00 PM')).toBeInTheDocument();
+    expect(screen.getByText('Afternoon')).toBeInTheDocument();
   });
 
   it('renders grid structure correctly', () => {
@@ -228,7 +229,7 @@ describe('ScheduleGrid', () => {
 
     // Should still render the grid structure
     expect(screen.getByText('Monday')).toBeInTheDocument();
-    expect(screen.getByText('8:00 AM - 12:00 PM')).toBeInTheDocument();
+    expect(screen.getByText('Morning')).toBeInTheDocument();
   });
 
   it('calls onShiftClick when shift is clicked', () => {
