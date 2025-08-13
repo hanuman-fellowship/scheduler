@@ -223,6 +223,49 @@ export interface BaseOptionsResponse {
   };
 }
 
+// Schedule management types
+export interface CopyScheduleInput {
+  name: string;
+  sourceId: number;
+  copyType: 'full' | 'structure' | 'template';
+}
+
+export interface CreateTemplateInput {
+  name: string;
+  sourceId: number;
+}
+
+export interface PublishScheduleInput {
+  scheduleId: number;
+  groupName: string;
+  startDate: string;
+  endDate: string;
+  groupType: 'new' | 'existing';
+  existingGroupId?: number;
+}
+
+export interface TemplateResponse {
+  id: number;
+  name: string;
+  createdAt: string;
+}
+
+export interface ScheduleGroupResponse {
+  id: number;
+  name: string;
+  start: string;
+  end: string;
+  schedules: ScheduleResponse[];
+}
+
+export interface PublishedScheduleResponse {
+  id: number;
+  name: string;
+  groupName: string;
+  startDate: string;
+  endDate: string;
+}
+
 export interface CreateShiftRequest {
   areaId: number;
   dayId: number;

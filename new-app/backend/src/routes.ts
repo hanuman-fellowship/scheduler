@@ -13,6 +13,7 @@ import * as dayController from './controllers/dayController';
 import * as scheduleViewController from './controllers/scheduleViewController';
 import * as assignmentController from './controllers/assignmentController';
 import * as requestController from './controllers/requestController';
+import * as scheduleManagementController from './controllers/scheduleManagementController';
 import { requireAuth, requireRole } from './middleware/auth';
 
 // Create a function that can be configured for different environments
@@ -122,6 +123,14 @@ export const createApp = (options: {
   app.post('/api/requests/:id/accept', requireAuth, requireRole('operations'), asyncHandler(requestController.accept));
   app.delete('/api/requests/:id', requireAuth, asyncHandler(requestController.deleteRequest)); // Managers and operations can delete
   app.get('/api/requests/base-options/:areaId', requireAuth, requireRole('manager'), asyncHandler(requestController.getBaseOptions));
+
+  // Schedule management
+  app.post('/api/schedules/copy', requireAuth, asyncHandler(scheduleManagementController.copySchedule));
+  app.post('/api/schedules/templates', requireAuth, requireRole('operations'), asyncHandler(scheduleManagementController.createTemplate));
+  app.get('/api/schedules/templates', requireAuth, asyncHandler(scheduleManagementController.getTemplates));
+  app.post('/api/schedules/publish', requireAuth, requireRole('operations'), asyncHandler(scheduleManagementController.publishSchedule));
+  app.get('/api/schedules/groups', requireAuth, asyncHandler(scheduleManagementController.getScheduleGroups));
+  app.get('/api/schedules/published', requireAuth, asyncHandler(scheduleManagementController.getPublishedSchedule));
 
   // Area management
   app.get('/api/areas', requireAuth, asyncHandler(areaController.list));

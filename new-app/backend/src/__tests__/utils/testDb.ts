@@ -240,6 +240,8 @@ export const cleanupTestData = async () => {
   await prisma.day.deleteMany();
   await prisma.residentCategory.deleteMany();
   await prisma.schedule.deleteMany();
+  await prisma.scheduleGroup.deleteMany();
+  await prisma.manager.deleteMany();
   await prisma.role.deleteMany();
   await prisma.user.deleteMany();
   await prisma.person.deleteMany();
