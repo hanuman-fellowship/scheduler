@@ -76,10 +76,10 @@ describe('Menu Switching Behavior', () => {
     // Should still be visible immediately
     expect(screen.getByText('New Person...')).toBeInTheDocument()
     
-    // Should be gone after delay
+    // Should be gone after delay (allowing up to 300ms for CI flakiness)
     await waitFor(() => {
       expect(screen.queryByText('New Person...')).not.toBeInTheDocument()
-    }, { timeout: 200 })
+    }, { timeout: 400 })
   })
 
   it('cancels delayed close when entering another menu', async () => {

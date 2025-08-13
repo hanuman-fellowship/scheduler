@@ -20,6 +20,8 @@ import {
   parseHtmlTimeInput,
   toHtmlTimeInput,
   legacyTimeToSeconds,
+  formatTimeForDisplay,
+  formatTimeRange,
   TIME_PERIODS,
   SECONDS_PER_HOUR,
   SECONDS_PER_MINUTE,
@@ -299,6 +301,83 @@ describe('timeUtils', () => {
       
       expect(backToHtml).toBe(htmlTime);
       expect(displayTime).toBe('2:30 PM');
+    });
+  });
+
+  describe('formatTimeForDisplay (minimal schedule format)', () => {
+    it('should format times without :00 for hours (no AM/PM)', () => {
+      expect(formatTimeForDisplay(28800)).toBe('8');      // 8:00 AM -> "8"
+      expect(formatTimeForDisplay(43200)).toBe('12');     // 12:00 PM -> "12"
+      expect(formatTimeForDisplay(61200)).toBe('5');      // 5:00 PM -> "5"
+      expect(formatTimeForDisplay(0)).toBe('12');         // 12:00 AM -> "12"
+      expect(formatTimeForDisplay(3600)).toBe('1');       // 1:00 AM -> "1"
+      expect(formatTimeForDisplay(39600)).toBe('11');     // 11:00 AM -> "11"
+    });
+
+    it('should show minutes when not zero', () => {
+      expect(formatTimeForDisplay(30600)).toBe('8:30');   // 8:30 AM -> "8:30"
+      expect(formatTimeForDisplay(31500)).toBe('8:45');   // 8:45 AM -> "8:45"
+      expect(formatTimeForDisplay(45900)).toBe('12:45');  // 12:45 PM -> "12:45"
+      expect(formatTimeForDisplay(63900)).toBe('5:45');   // 5:45 PM -> "5:45"
+      expect(formatTimeForDisplay(4500)).toBe('1:15');    // 1:15 AM -> "1:15"
+    });
+
+    it('should handle afternoon times correctly (12-hour format)', () => {
+      expect(formatTimeForDisplay(46800)).toBe('1');      // 1:00 PM -> "1"
+      expect(formatTimeForDisplay(50400)).toBe('2');      // 2:00 PM -> "2"
+      expect(formatTimeForDisplay(54000)).toBe('3');      // 3:00 PM -> "3"
+      expect(formatTimeForDisplay(57600)).toBe('4');      // 4:00 PM -> "4"
+      expect(formatTimeForDisplay(48600)).toBe('1:30');   // 1:30 PM -> "1:30"
+    });
+
+    it('should handle evening times correctly', () => {
+      expect(formatTimeForDisplay(64800)).toBe('6');      // 6:00 PM -> "6"
+      expect(formatTimeForDisplay(72000)).toBe('8');      // 8:00 PM -> "8"
+      expect(formatTimeForDisplay(75600)).toBe('9');      // 9:00 PM -> "9"
+      expect(formatTimeForDisplay(82800)).toBe('11');     // 11:00 PM -> "11"
+      expect(formatTimeForDisplay(66600)).toBe('6:30');   // 6:30 PM -> "6:30"
+    });
+
+    it('should handle midnight and noon correctly', () => {
+      expect(formatTimeForDisplay(0)).toBe('12');         // 12:00 AM -> "12"
+      expect(formatTimeForDisplay(43200)).toBe('12');     // 12:00 PM -> "12"
+      expect(formatTimeForDisplay(1800)).toBe('12:30');   // 12:30 AM -> "12:30"
+      expect(formatTimeForDisplay(45000)).toBe('12:30');  // 12:30 PM -> "12:30"
+    });
+
+    it('should throw error for invalid times', () => {
+      expect(() => formatTimeForDisplay(-1)).toThrow();
+      expect(() => formatTimeForDisplay(86400)).toThrow();
+      expect(() => formatTimeForDisplay(100000)).toThrow();
+    });
+  });
+
+  describe('formatTimeRange (minimal schedule format)', () => {
+    it('should format time ranges without :00 for hours (no AM/PM)', () => {
+      expect(formatTimeRange(28800, 43200)).toBe('8 - 12');        // 8:00 AM - 12:00 PM -> "8 - 12"
+      expect(formatTimeRange(32400, 61200)).toBe('9 - 5');         // 9:00 AM - 5:00 PM -> "9 - 5"
+      expect(formatTimeRange(43200, 61200)).toBe('12 - 5');        // 12:00 PM - 5:00 PM -> "12 - 5"
+      expect(formatTimeRange(3600, 7200)).toBe('1 - 2');           // 1:00 AM - 2:00 AM -> "1 - 2"
+    });
+
+    it('should show minutes when present', () => {
+      expect(formatTimeRange(30600, 43200)).toBe('8:30 - 12');     // 8:30 AM - 12:00 PM -> "8:30 - 12"
+      expect(formatTimeRange(28800, 52200)).toBe('8 - 2:30');      // 8:00 AM - 2:30 PM -> "8 - 2:30"
+      expect(formatTimeRange(30600, 59400)).toBe('8:30 - 4:30');   // 8:30 AM - 4:30 PM -> "8:30 - 4:30"
+      expect(formatTimeRange(5400, 10800)).toBe('1:30 - 3');       // 1:30 AM - 3:00 AM -> "1:30 - 3"
+    });
+
+    it('should handle cross-meridiem shifts (your examples)', () => {
+      expect(formatTimeRange(3600, 7200)).toBe('1 - 2');           // 1:00 AM - 2:00 AM -> "1 - 2"
+      expect(formatTimeRange(5400, 10800)).toBe('1:30 - 3');       // 1:30 AM - 3:00 AM -> "1:30 - 3"
+      expect(formatTimeRange(39600, 46800)).toBe('11 - 1');        // 11:00 AM - 1:00 PM -> "11 - 1"
+      expect(formatTimeRange(82800, 3600)).toBe('11 - 1');         // Would need special handling for overnight
+    });
+
+    it('should handle various shift patterns', () => {
+      expect(formatTimeRange(25200, 54000)).toBe('7 - 3');         // 7:00 AM - 3:00 PM -> "7 - 3"
+      expect(formatTimeRange(54000, 82800)).toBe('3 - 11');        // 3:00 PM - 11:00 PM -> "3 - 11"
+      expect(formatTimeRange(27900, 34200)).toBe('7:45 - 9:30');   // 7:45 AM - 9:30 AM -> "7:45 - 9:30"
     });
   });
 });

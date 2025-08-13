@@ -230,6 +230,41 @@ export function toHtmlTimeInput(seconds: number): string {
   return secondsToTimeStringShort(seconds);
 }
 
+/**
+ * Legacy-compatible time formatting for schedule shifts
+ * Displays minimal time format: "1", "1:30", "11", no AM/PM
+ * Examples: "1 - 2", "1:30 - 3", "11 - 1"
+ * @param seconds - Seconds since midnight (0-86399)
+ * @returns Minimal time string without AM/PM
+ */
+export function formatTimeForDisplay(seconds: number): string {
+  if (seconds < 0 || seconds >= SECONDS_PER_DAY) {
+    throw new Error(`Invalid seconds: ${seconds}. Must be 0-86399`);
+  }
+
+  const hours = Math.floor(seconds / SECONDS_PER_HOUR);
+  const minutes = Math.floor((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+
+  // Convert to 12-hour format without leading zero
+  const displayHour = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+
+  // Only show minutes if not zero
+  const displayMinute = minutes === 0 ? '' : `:${minutes.toString().padStart(2, '0')}`;
+
+  return `${displayHour}${displayMinute}`;
+}
+
+/**
+ * Display time range for shifts (matches Ruby display_time method)
+ * Shows range without :00 for hours (e.g., "8 - 4:30", "9:15 - 5")
+ * @param startSeconds - Start time in seconds since midnight
+ * @param endSeconds - End time in seconds since midnight
+ * @returns Time range string
+ */
+export function formatTimeRange(startSeconds: number, endSeconds: number): string {
+  return `${formatTimeForDisplay(startSeconds)} - ${formatTimeForDisplay(endSeconds)}`;
+}
+
 // Legacy support functions (for migration from old TIME fields)
 /**
  * Convert legacy TIME string to seconds (supports various formats)

@@ -95,8 +95,8 @@ describe('ShiftCell', () => {
         </table>
       );
 
-      // Should show time range
-      expect(screen.getByText('8:00 AM-12:00 PM')).toBeInTheDocument();
+      // Should show time range (minimal format)
+      expect(screen.getByText('8 - 12')).toBeInTheDocument();
 
       // Should show assigned person
       expect(screen.getByText('John D')).toBeInTheDocument();
@@ -177,7 +177,7 @@ describe('ShiftCell', () => {
         </table>
       );
 
-      const shiftElement = screen.getByText('8:00 AM-12:00 PM').closest('div');
+      const shiftElement = screen.getByText('8 - 12').closest('div');
       await user.click(shiftElement!);
 
       expect(mockOnShiftClick).toHaveBeenCalledWith(1);
@@ -206,8 +206,8 @@ describe('ShiftCell', () => {
       // Should show area short name
       expect(screen.getByText('K')).toBeInTheDocument();
 
-      // Should show time range
-      expect(screen.getByText('8:00 AM-12:00 PM')).toBeInTheDocument();
+      // Should show time range (minimal format)
+      expect(screen.getByText('8 - 12')).toBeInTheDocument();
 
       // Should show star
       expect(screen.getByText('⭐')).toBeInTheDocument();
@@ -269,8 +269,8 @@ describe('ShiftCell', () => {
         </table>
       );
 
-      // Should show time range
-      expect(screen.getByText('1:00 PM-5:00 PM')).toBeInTheDocument();
+      // Should show time range (minimal format)
+      expect(screen.getByText('1 - 5')).toBeInTheDocument();
 
       // Should show need for people
       expect(screen.getByText('Need 2 people')).toBeInTheDocument();

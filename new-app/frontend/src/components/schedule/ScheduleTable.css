@@ -1,0 +1,255 @@
+/* Legacy-compatible schedule table styles - 774px fixed width */
+
+.schedule-table-container {
+  overflow-x: auto;
+  padding: 20px;
+}
+
+/* Main table - CRITICAL: Must be exactly 774px wide */
+.schedule-table {
+  width: 774px !important;
+  border: 2px solid #000000;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  table-layout: fixed;
+}
+
+/* Request mode background */
+.schedule-table.request-mode {
+  background-image: url('/img/request.jpg');
+  background-repeat: repeat;
+}
+
+/* Table headers */
+.day-header-row th {
+  border: 2px solid #000000;
+  padding: 4px;
+  font-weight: bold;
+  text-align: center;
+  height: 30px;
+}
+
+.time-slot-header {
+  width: 75px;
+  background-color: #f0f0f0;
+}
+
+.day-header {
+  width: 75px;
+  background-color: #ffffff;
+}
+
+/* Today highlighting - CRITICAL: Must be #FFFADC */
+.day-header.today,
+.shift-cell.today,
+.hours-cell.today {
+  background-color: #FFFADC !important;
+}
+
+/* Time slot rows */
+.time-slot-row td {
+  border: 2px solid #000000;
+  vertical-align: top;
+  padding: 1px;
+}
+
+.time-slot-label {
+  width: 75px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #f0f0f0;
+  padding: 4px;
+}
+
+/* Shift cells - CRITICAL: 75px width, 60px minimum height */
+.shift-cell {
+  width: 75px;
+  min-height: 60px;
+  height: 60px;
+  position: relative;
+  background-color: white;
+}
+
+.shift-cell.editable:hover {
+  background-color: #FFF8BA;
+}
+
+/* Shift blocks - CRITICAL: Legacy stacking pattern */
+span.shift {
+  display: block;
+  padding-top: 0px;
+  cursor: pointer;
+}
+
+/* CRITICAL: 20px padding between stacked shifts */
+span.shift.stacked {
+  padding-top: 20px !important;
+}
+
+/* Person shifts have no padding */
+span.person.shift {
+  padding: 0px !important;
+}
+
+/* Assignment styling */
+span.assignment {
+  display: inline-block;
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+span.assignment.starred {
+  font-weight: bold;
+}
+
+span.assignment.unassigned {
+  color: #999999;
+  font-style: italic;
+}
+
+/* Star indicator */
+span.star {
+  color: #FFD700;
+  font-size: 14px;
+}
+
+/* Interactive elements */
+.add-shift-button {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+  line-height: 1;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.shift-cell.editable:hover .add-shift-button {
+  opacity: 1;
+}
+
+.unassign-button,
+.delete-floating-shift {
+  margin-left: 4px;
+  font-size: 14px;
+  color: #ff0000;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.unassign-button:hover,
+.delete-floating-shift:hover {
+  opacity: 1;
+}
+
+/* Hours summary row */
+.hours-summary-row td {
+  border: 2px solid #000000;
+  padding: 4px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+
+.hours-label {
+  width: 75px;
+  background-color: #f0f0f0;
+}
+
+.hours-cell {
+  width: 75px;
+}
+
+.hours-total {
+  font-weight: bold;
+  background-color: #e0e0e0;
+}
+
+/* Floating shifts row */
+.floating-shifts-row td {
+  border: 2px solid #000000;
+  padding: 8px;
+  background-color: #f5f5f5;
+}
+
+.floating-shifts-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.floating-shifts-label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.floating-shift {
+  background-color: #e8f5e9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.floating-shift:hover {
+  background-color: #c8e6c9;
+}
+
+.add-floating-shift {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.add-floating-shift:hover {
+  background-color: #45a049;
+}
+
+/* Off day styling */
+td.day-off {
+  background-color: #DDDDDD;
+}
+
+/* Hover effects */
+a:hover {
+  background-color: #FFF8BA;
+}
+
+/* Print mode adjustments */
+@media print {
+  .schedule-table-container {
+    padding: 0;
+  }
+
+  .add-shift-button,
+  .unassign-button,
+  .delete-floating-shift,
+  .add-floating-shift {
+    display: none !important;
+  }
+
+  .schedule-table {
+    border: 1px solid #000000;
+  }
+
+  .shift-cell.editable:hover {
+    background-color: inherit;
+  }
+}

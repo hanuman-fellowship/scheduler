@@ -363,8 +363,10 @@ The application has a complete, tested foundation ready for core feature develop
 5. **User Management System**: Complete CRUD operations for users with role and area assignment
 6. **API Foundation**: Express server with error handling and comprehensive test coverage
 7. **Frontend Framework**: React app with routing, state management, and component library
-8. **Centralized Time Handling**: Complete time utility system with seconds-based storage and comprehensive validation
-9. **Test Coverage**: 331+ passing tests (35 shared + 182 backend + 114 frontend) covering all implemented features
+8. **Centralized Time Handling**: Complete time utility system with seconds-based storage, legacy formatting, and comprehensive validation
+9. **Schedule View Backend**: Complete API endpoints with hardcoded time periods and legacy-style time formatting
+10. **Schedule View Components**: Legacy-compatible 774px table with all display components (ScheduleTable, TimeSlotRow, ShiftCell, etc.)
+11. **Test Coverage**: 377 passing tests (43 shared + 182 backend + 152 frontend) covering all implemented features
 
 ### 📋 **Key Architecture Files**
 
@@ -384,8 +386,9 @@ The application has a complete, tested foundation ready for core feature develop
 - **Database Schema**: `start_at_seconds` and `end_at_seconds` columns replace legacy TIME fields
 - **Time Periods**: Morning (0-43200s), Afternoon (43200-61200s), Evening (61200-86400s)
 - **Conversion Functions**: String ↔ Seconds, Display formatting, HTML inputs, Duration calculations
+- **Legacy Formatting**: `formatTimeForDisplay()` and `formatTimeRange()` for Ruby-compatible display
 - **Validation**: Complete input validation and error handling
-- **Testing**: 35 comprehensive test cases covering all functions and edge cases
+- **Testing**: 43 comprehensive test cases covering all functions and edge cases
 
 **Usage Example:**
 ```typescript
@@ -419,7 +422,7 @@ The next development phase can focus on core scheduling features:
 ---
 
 **Branch**: `new-app-setup`
-**Status**: ✅ Foundation Complete with Centralized Time System - Ready for core feature development
-**Last Updated**: Centralized time handling system implemented with seconds-based storage and comprehensive testing
+**Status**: ✅ Schedule View Components Complete - Phase 1 & 2 Complete, Ready for Integration
+**Last Updated**: Legacy-compatible schedule view components implemented with 774px table layout, 377 passing tests
 
 - when making changes, don't worry about backwards compatibillity. Just adopt the new method completely.
