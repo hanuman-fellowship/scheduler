@@ -91,8 +91,17 @@ describe('EditCopyModal', () => {
     const user = userEvent.setup()
     const onSuccess = vi.fn()
     
-    // Mock successful API response
-    const mockResponse = {
+    // Mock copy API response
+    const mockCopyResponse = {
+      message: 'Schedule copied successfully',
+      schedule: {
+        id: 2,
+        name: 'Test Schedule Copy'
+      }
+    }
+    
+    // Mock full schedule details response
+    const mockFullSchedule = {
       id: 2,
       name: 'Test Schedule Copy',
       userId: 1,
@@ -102,9 +111,16 @@ describe('EditCopyModal', () => {
       updatedAt: '2024-01-01T00:00:00Z'
     }
     
+    // Mock first call to copy endpoint
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => mockResponse
+      json: async () => mockCopyResponse
+    })
+    
+    // Mock second call to get full schedule details
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockFullSchedule
     })
     
     renderComponent({ onSuccess })
@@ -130,7 +146,15 @@ describe('EditCopyModal', () => {
     })
     
     await waitFor(() => {
-      expect(mockScheduleStore.switchToSchedule).toHaveBeenCalledWith(mockResponse)
+      expect(mockFetch).toHaveBeenCalledWith('/api/schedules/2', {
+        headers: {
+          'Authorization': 'Bearer test-token'
+        }
+      })
+    })
+    
+    await waitFor(() => {
+      expect(mockScheduleStore.switchToSchedule).toHaveBeenCalledWith(mockFullSchedule)
       expect(onSuccess).toHaveBeenCalled()
     })
   })
@@ -214,13 +238,11 @@ describe('EditCopyModal', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        id: 2,
-        name: 'Trimmed Name',
-        userId: 1,
-        request: 0,
-        template: false,
-        createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T00:00:00Z'
+        message: 'Schedule copied successfully',
+        schedule: {
+          id: 2,
+          name: 'Trimmed Name'
+        }
       })
     })
     

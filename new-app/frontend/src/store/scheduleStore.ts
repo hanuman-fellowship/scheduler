@@ -65,6 +65,11 @@ export const useScheduleStore = create<ScheduleStore>()(
         set({ isLoading: true })
         
         try {
+          // Validate schedule object
+          if (!schedule || !schedule.id || !schedule.name) {
+            throw new Error('Invalid schedule object provided')
+          }
+          
           // For now, just update the local state since we don't have the API endpoint yet
           // TODO: Implement actual schedule switching API call
           set({ currentSchedule: schedule, isLoading: false })

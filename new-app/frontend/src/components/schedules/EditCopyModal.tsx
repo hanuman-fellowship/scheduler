@@ -15,11 +15,6 @@ interface CopyScheduleRequest {
 interface CopyScheduleResponse {
   id: number
   name: string
-  userId: number
-  request: number
-  template: boolean
-  createdAt: string
-  updatedAt: string
 }
 
 export default function EditCopyModal({ onSuccess, onCancel }: EditCopyModalProps) {
@@ -29,7 +24,7 @@ export default function EditCopyModal({ onSuccess, onCancel }: EditCopyModalProp
   const queryClient = useQueryClient()
 
   const copyMutation = useMutation<CopyScheduleResponse, Error, CopyScheduleRequest>({
-    mutationFn: async (data) => {
+    mutationFn: async (requestData) => {
       const authStorage = localStorage.getItem('auth-storage')
       const token = authStorage ? JSON.parse(authStorage).state.token : ''
       
@@ -39,7 +34,7 @@ export default function EditCopyModal({ onSuccess, onCancel }: EditCopyModalProp
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(requestData)
       })
 
       if (!response.ok) {
@@ -47,14 +42,45 @@ export default function EditCopyModal({ onSuccess, onCancel }: EditCopyModalProp
         throw new Error(errorData.message || 'Failed to copy schedule')
       }
 
-      return response.json()
+      const responseData = await response.json()
+      return responseData.schedule
     },
     onSuccess: async (newSchedule) => {
-      // Invalidate schedule queries
+      // Invalidate schedule queries to refresh the list
       await queryClient.invalidateQueries({ queryKey: ['schedules'] })
       
-      // Switch to the new copied schedule
-      await switchToSchedule(newSchedule)
+      // Fetch the complete schedule details
+      try {
+        const authStorage = localStorage.getItem('auth-storage')
+        const token = authStorage ? JSON.parse(authStorage).state.token : ''
+        
+        const response = await fetch(`/api/schedules/${newSchedule.id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        
+        if (response.ok) {
+          const fullScheduleData = await response.json()
+          // Switch to the new copied schedule with complete data
+          await switchToSchedule(fullScheduleData)
+        } else {
+          console.error('Failed to fetch full schedule details')
+          // Fallback: create basic schedule object
+          const fallbackSchedule = {
+            id: newSchedule.id,
+            name: newSchedule.name,
+            userId: null,
+            template: false,
+            request: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+          await switchToSchedule(fallbackSchedule)
+        }
+      } catch (error) {
+        console.error('Error fetching schedule details:', error)
+      }
       
       onSuccess()
     },
