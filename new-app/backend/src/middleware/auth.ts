@@ -4,7 +4,7 @@ import prisma from '../services/prisma';
 import type { UserRole } from '@shared/types';
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production';
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: {
     id: number;
     username: string;

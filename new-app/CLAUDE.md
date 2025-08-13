@@ -52,12 +52,12 @@ npm run dev           # Start both backend and frontend
 - **Shift Management**: Context-aware creation/editing with hover UI and click-to-edit
 - **Assignment System**: Complete frontend and backend with conflict detection and modal UI
 - **People Management Enhanced**: Advanced retire/restore functionality with category-based organization
+- **Request System**: Complete Manager → Operations workflow for schedule requests and approvals
 
 ## 🎯 Next Development Priorities
 
 ### Phase 6: Advanced Workflows (Current Focus)
 
-- **Request System**: Manager → Operations workflow (create, submit, approve requests)
 - **Schedule Management**: Copy schedules, templates, publishing workflow
 - **Email Integration**: Notifications for schedule changes and user management
 
@@ -129,18 +129,28 @@ npm run dev           # Start both backend and frontend
   - ✅ **RestoreModal UI**: Two-step restoration process (select person, then category)
   - ✅ **Enhanced PeoplePage**: Category-organized display with retire/restore actions
   - ✅ **Comprehensive Testing**: Full test coverage for retire/restore workflows
+- ✅ **Request System**: Complete Manager → Operations request workflow implementation
+  - ✅ **3-State Workflow**: Draft (editable) → Submitted (review) → Accepted (merged) request lifecycle
+  - ✅ **Request Creation**: Template-based request creation with base schedule options (published, templates, previous requests, blank)
+  - ✅ **Manager Interface**: Draft request management with create, edit, submit, delete operations
+  - ✅ **Operations Interface**: Submitted request review with area-grouped display and acceptance workflow
+  - ✅ **Schedule Merging**: Smart conflict resolution when accepting requests (clear area vs merge options)
+  - ✅ **Permission System**: Area-manager relationship validation and role-based access control
+  - ✅ **API Integration**: Complete REST API with 7 endpoints for full request lifecycle
+  - ✅ **Comprehensive Testing**: Full test coverage for request creation, submission, and acceptance workflows
 - ✅ Database structure with all models
 - ✅ API foundation with error handling
-- ✅ Comprehensive test coverage (475+ tests: 45 shared + 208 backend + 222+ frontend)
+- ✅ Comprehensive test coverage (487+ tests: 45 shared + 220 backend + 222+ frontend)
 
 ### ✅ **Working Features Summary**
 
-All core systems are operational with comprehensive test coverage (475+ tests):
+All core systems are operational with comprehensive test coverage (487+ tests):
 
 - **Schedule Views**: Area/person/gaps schedule display with navigation modals
 - **Shift Management**: Context-aware creation/editing with hover UI and validation
 - **Assignment System**: Complete frontend and backend with click-to-assign workflow
 - **People Management**: Enhanced retire/restore with category-based organization and bulk operations
+- **Request Management**: Complete Manager → Operations workflow with template-based creation and smart merging
 - **Schedule Context**: Current schedule system with automatic scoping
 - **User/Areas/Categories**: Full CRUD operations with role-based permissions
 
@@ -154,7 +164,7 @@ npm run dev:frontend  # Frontend only
 
 # Quality Checks (ALWAYS RUN AFTER COMPLETING TASKS)
 npm run check         # TypeScript compilation across all workspaces
-npm run test          # Run all tests (475+ tests must pass)
+npm run test          # Run all tests (487+ tests must pass)
 
 # Database
 npm run migrate       # Run Prisma migrations
@@ -205,8 +215,8 @@ npm run setup         # Full setup (install + migrate + seed)
 
 ---
 
-**Status**: 🚀 **Core Scheduling Complete** - Full scheduling with enhanced people management, 475+ tests passing
+**Status**: 🎉 **Advanced Workflows Complete** - Full scheduling with request management system, 487+ tests passing
 
-**Focus**: Ready for advanced workflows (Request System, Schedule Management, Email Integration)
+**Focus**: Ready for final workflows (Schedule Management, Email Integration, Change Tracking)
 
 - always keep the md files up to date after finishing a task

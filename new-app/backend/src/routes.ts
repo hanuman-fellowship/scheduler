@@ -12,6 +12,7 @@ import * as areaController from './controllers/areaController';
 import * as dayController from './controllers/dayController';
 import * as scheduleViewController from './controllers/scheduleViewController';
 import * as assignmentController from './controllers/assignmentController';
+import * as requestController from './controllers/requestController';
 import { requireAuth, requireRole } from './middleware/auth';
 
 // Create a function that can be configured for different environments
@@ -112,6 +113,15 @@ export const createApp = (options: {
   app.put('/api/assignments/:id', requireAuth, requireRole('operations'), asyncHandler(assignmentController.updateAssignment));
   app.delete('/api/assignments/:id', requireAuth, requireRole('operations'), asyncHandler(assignmentController.deleteAssignment));
   app.post('/api/assignments/:id/star', requireAuth, requireRole('operations'), asyncHandler(assignmentController.toggleAssignmentStar));
+
+  // Request management
+  app.post('/api/requests', requireAuth, requireRole('manager'), asyncHandler(requestController.create));
+  app.get('/api/requests/drafts', requireAuth, requireRole('manager'), asyncHandler(requestController.getDrafts));
+  app.post('/api/requests/:id/submit', requireAuth, requireRole('manager'), asyncHandler(requestController.submit));
+  app.get('/api/requests/submitted', requireAuth, requireRole('operations'), asyncHandler(requestController.getSubmitted));
+  app.post('/api/requests/:id/accept', requireAuth, requireRole('operations'), asyncHandler(requestController.accept));
+  app.delete('/api/requests/:id', requireAuth, asyncHandler(requestController.deleteRequest)); // Managers and operations can delete
+  app.get('/api/requests/base-options/:areaId', requireAuth, requireRole('manager'), asyncHandler(requestController.getBaseOptions));
 
   // Area management
   app.get('/api/areas', requireAuth, asyncHandler(areaController.list));

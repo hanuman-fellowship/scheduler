@@ -178,6 +178,51 @@ export interface CopyScheduleRequest {
   name: string;
 }
 
+// Request management types
+export interface CreateRequestInput {
+  name: string;
+  areaId: number;
+  baseType: 'published' | 'template' | 'request' | 'blank';
+  baseScheduleId?: number;
+}
+
+export interface RequestResponse {
+  id: number;
+  name: string;
+  areaId: number;
+  areaName: string;
+  managerName: string;
+  submittedAt: string;
+  request: 1; // Only submitted requests
+}
+
+export interface RequestsByArea {
+  [areaName: string]: {
+    areaName: string;
+    requests: RequestResponse[];
+  };
+}
+
+export interface DraftRequestResponse {
+  id: number;
+  name: string;
+  areaName: string;
+  createdAt: string;
+}
+
+export interface BaseScheduleOption {
+  id: number;
+  name: string;
+}
+
+export interface BaseOptionsResponse {
+  baseOptions: {
+    published: BaseScheduleOption[];
+    templates: BaseScheduleOption[];
+    previousRequests: BaseScheduleOption[];
+  };
+}
+
 export interface CreateShiftRequest {
   areaId: number;
   dayId: number;
