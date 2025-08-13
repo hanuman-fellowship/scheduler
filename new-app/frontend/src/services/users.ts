@@ -2,7 +2,6 @@ import { api } from './api';
 import type {
   CreateUserRequest,
   UpdateUserRequest,
-  ResetPasswordRequest,
   UserListResponse
 } from '@shared/types';
 

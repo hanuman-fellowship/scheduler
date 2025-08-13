@@ -73,7 +73,7 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
             onClick={editable ? () => onShiftClick?.(shift.id) : undefined}
           >
             <div className="font-semibold text-blue-600">
-              {assignment?.area?.shortName || `Area ${shift.areaId}`}
+{`Area ${shift.areaId}`}
             </div>
             <div>{formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}</div>
             {assignment?.star && <span className="text-yellow-500">⭐</span>}

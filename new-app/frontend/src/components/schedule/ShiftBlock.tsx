@@ -48,8 +48,9 @@ export const ShiftBlock: React.FC<ShiftBlockProps> = ({
 
   // Person schedule: show area short name and time
   if (type === 'person') {
-    // Get area info from the first assignment's shift data
-    const area = 'area' in shift ? shift.area : null;
+    // For person schedules, the shift doesn't contain area info directly
+    // The area info would come from the API response context
+    // For now, just show the time range without area info
     
     return (
       <span 
@@ -57,15 +58,6 @@ export const ShiftBlock: React.FC<ShiftBlockProps> = ({
         onClick={() => editable && onShiftClick?.(shift.id)}
         style={{ cursor: editable ? 'pointer' : 'default' }}
       >
-        {area && (
-          <>
-            <b>
-              <a href="#" onClick={(e) => e.preventDefault()}>
-                {area.shortName}
-              </a>
-            </b>{' '}
-          </>
-        )}
         {timeRange}
         <br />
       </span>

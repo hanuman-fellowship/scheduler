@@ -2,7 +2,7 @@ import BoxyButton from '../components/ui/BoxyButton'
 import { useDashboard } from '../hooks/useDashboard'
 
 export default function HomePage() {
-  const { data: dashboardData } = useDashboard()
+  const { data: _ } = useDashboard()
 
   return (
     <div className="p-4">

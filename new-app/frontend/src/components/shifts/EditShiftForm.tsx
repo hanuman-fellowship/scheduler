@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { shiftService, type UpdateShiftRequest, type Shift } from '../../services/shifts'
+import { shiftService, type UpdateShiftRequest } from '../../services/shifts'
 import { areasService } from '../../services/areas'
 import { daysService } from '../../services/days'
 import { useScheduleStore } from '../../store/scheduleStore'

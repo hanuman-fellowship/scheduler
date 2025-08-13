@@ -100,7 +100,7 @@ describe('App Component', () => {
     })
 
     it('should reload schedule when authentication state changes', async () => {
-      let authState = { token: null }
+      let authState: { token: string | null } = { token: null }
       
       // Mock dynamic auth state
       vi.mocked(useAuthStore).mockImplementation(() => authState as any)

@@ -31,7 +31,7 @@ export const ScheduleView: React.FC = () => {
     }
 
     const parsedId = type === 'gaps' ? 'gaps' : parseInt(id, 10);
-    if (type !== 'gaps' && (isNaN(parsedId as number) || parsedId <= 0)) {
+    if (type !== 'gaps' && (isNaN(parsedId as number) || (parsedId as number) <= 0)) {
       return [null, 'Invalid schedule view ID'];
     }
 

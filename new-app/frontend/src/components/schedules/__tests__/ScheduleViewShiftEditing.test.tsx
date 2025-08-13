@@ -29,27 +29,29 @@ const mockAreaScheduleData = {
   area: {
     id: 1,
     name: 'Kitchen',
-    manager: { username: 'manager1' },
+    shortName: 'K',
     shifts: [
       {
         id: 1,
+        areaId: 1,
         dayId: 1,
         startAtSeconds: 28800, // 8:00 AM
         endAtSeconds: 32400, // 9:00 AM
         numPeople: 2,
         assignments: [
-          { id: 1, personId: 1, name: 'John Doe', star: false }
+          { id: 1, shiftId: 1, personId: 1, name: 'John Doe', star: false }
         ]
       }
     ],
-    floatingShifts: []
+    floatingShifts: [],
+    manager: { id: 1, username: 'manager1' }
   },
   bounds: {
     days: { 1: 'Sunday', 2: 'Monday', 3: 'Tuesday', 4: 'Wednesday', 5: 'Thursday', 6: 'Friday', 7: 'Saturday' },
     timePeriods: [
-      { name: 'Morning', startSeconds: 0, endSeconds: 43200 },
-      { name: 'Afternoon', startSeconds: 43200, endSeconds: 61200 },
-      { name: 'Evening', startSeconds: 61200, endSeconds: 86400 }
+      { name: 'Morning' as const, startSeconds: 0, endSeconds: 43200 },
+      { name: 'Afternoon' as const, startSeconds: 43200, endSeconds: 61200 },
+      { name: 'Evening' as const, startSeconds: 61200, endSeconds: 86400 }
     ]
   },
   editable: true
@@ -94,7 +96,7 @@ describe('ScheduleView Shift Editing', () => {
       data: mockAreaScheduleData,
       isLoading: false,
       error: null
-    })
+    } as any)
   })
 
   it('should make shift times clickable when schedule is editable', async () => {
@@ -199,6 +201,7 @@ describe('ScheduleView Shift Editing', () => {
       bounds: mockAreaScheduleData.bounds,
       totalHours: { 1: 1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 },
       notes: { operations: [], personnel: [] },
+      offDays: [],
       editable: true
     }
 
@@ -208,7 +211,7 @@ describe('ScheduleView Shift Editing', () => {
       data: personScheduleData,
       isLoading: false,
       error: null
-    })
+    } as any)
 
     renderWithProviders(<ScheduleView />)
 
@@ -234,11 +237,11 @@ describe('ScheduleView Shift Editing', () => {
       unassignedShifts: [
         {
           id: 1,
+          areaId: 1,
           dayId: 1,
           startAtSeconds: 28800, // 8:00 AM
           endAtSeconds: 32400, // 9:00 AM
           numPeople: 2,
-          area: { id: 1, name: 'Kitchen', shortName: 'K' },
           assignments: []
         }
       ],
@@ -252,7 +255,7 @@ describe('ScheduleView Shift Editing', () => {
       data: gapsScheduleData,
       isLoading: false,
       error: null
-    })
+    } as any)
 
     renderWithProviders(<ScheduleView />)
 

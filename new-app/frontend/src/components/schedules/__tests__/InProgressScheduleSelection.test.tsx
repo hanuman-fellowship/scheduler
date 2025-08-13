@@ -23,7 +23,7 @@ const mockSchedules = [
     name: 'My Working Schedule',
     userId: 1,
     template: false,
-    request: 0,
+    request: 0 as 0 | 1 | 2,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
   },
@@ -32,7 +32,7 @@ const mockSchedules = [
     name: 'Other User Schedule',
     userId: 2,
     template: false,
-    request: 0,
+    request: 0 as 0 | 1 | 2,
     createdAt: '2024-01-02T00:00:00Z',
     updatedAt: '2024-01-02T00:00:00Z'
   },
@@ -41,7 +41,7 @@ const mockSchedules = [
     name: 'Published Schedule',
     userId: null,
     template: false,
-    request: 0,
+    request: 0 as 0 | 1 | 2,
     createdAt: '2024-01-03T00:00:00Z',
     updatedAt: '2024-01-03T00:00:00Z'
   }
@@ -88,7 +88,7 @@ describe('InProgressScheduleSelection', () => {
       isPersonnel: vi.fn(() => false)
     })
 
-    mockSchedulesService.getSchedules.mockResolvedValue(mockSchedules)
+    mockSchedulesService.getSchedules.mockResolvedValue({ mine: mockSchedules })
   })
 
   it('should render loading state initially', () => {
@@ -214,7 +214,7 @@ describe('InProgressScheduleSelection', () => {
   })
 
   it('should show empty state when no schedules found', async () => {
-    mockSchedulesService.getSchedules.mockResolvedValue([])
+    mockSchedulesService.getSchedules.mockResolvedValue({ mine: [] })
     
     renderWithQueryClient(
       <InProgressScheduleSelection

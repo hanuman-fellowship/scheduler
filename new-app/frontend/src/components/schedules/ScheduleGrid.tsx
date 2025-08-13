@@ -1,6 +1,6 @@
 import React from 'react';
 import { ShiftCell } from './ShiftCell';
-import type { ScheduleBounds, AreaScheduleResponse, PersonScheduleResponse, GapsScheduleResponse } from '@shared/types';
+import type { ScheduleBounds, AreaScheduleResponse, PersonScheduleResponse, GapsScheduleResponse, ShiftWithAssignments } from '@shared/types';
 
 interface ScheduleGridProps {
   bounds: ScheduleBounds;
@@ -51,7 +51,7 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
     switch (type) {
       case 'area':
         const areaData = data as AreaScheduleResponse;
-        return areaData.area.shifts.filter(shift => 
+        return (areaData.area.shifts as ShiftWithAssignments[]).filter(shift => 
           shift.dayId === dayId &&
           shift.startAtSeconds < timePeriod.endSeconds &&
           shift.endAtSeconds > timePeriod.startSeconds
@@ -145,7 +145,12 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
                     key={`${timePeriod.name}-${dayId}`}
                     shifts={shifts}
                     dayId={parseInt(dayId)}
-                    timeSlot={{ id: timePeriod.name, name: timePeriod.name }}
+                    timeSlot={{ 
+                      id: timePeriod.name, 
+                      name: timePeriod.name,
+                      startTime: `${Math.floor(timePeriod.startSeconds / 3600)}:00`,
+                      endTime: `${Math.floor(timePeriod.endSeconds / 3600)}:00`
+                    }}
                     type={type}
                     editable={editable}
                     isToday={isToday(parseInt(dayId))}

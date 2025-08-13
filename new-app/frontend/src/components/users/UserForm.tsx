@@ -136,7 +136,7 @@ export default function UserForm({ user, onSubmit, onCancel, isLoading = false, 
             Managed Areas
           </label>
           <div className="space-y-2 max-h-32 overflow-y-auto border border-gray-200 rounded p-2">
-            {areas.map((area) => (
+            {areas.map((area: any) => (
               <label key={area.id} className="flex items-center">
                 <input
                   type="checkbox"
@@ -159,7 +159,7 @@ export default function UserForm({ user, onSubmit, onCancel, isLoading = false, 
         <BoxyButton onClick={onCancel}>
           Cancel
         </BoxyButton>
-        <BoxyButton onClick={handleSubmit}>
+        <BoxyButton onClick={() => handleSubmit({} as React.FormEvent)}>
           {isLoading ? 'Saving...' : (user ? 'Update User' : 'Create User')}
         </BoxyButton>
       </div>

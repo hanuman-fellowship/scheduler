@@ -136,7 +136,6 @@ describe('AddShiftForm', () => {
       expect(screen.getByLabelText('Day:')).toBeInTheDocument()
     })
 
-    const daySelect = screen.getByLabelText('Day:')
     const sundayOption = screen.getByRole('option', { name: 'Sunday' })
     const mondayOption = screen.getByRole('option', { name: 'Monday' })
     const tuesdayOption = screen.getByRole('option', { name: 'Tuesday' })
@@ -246,8 +245,8 @@ describe('AddShiftForm', () => {
       scheduleId: 1,
       areaId: 1,
       dayId: 1,
-      start: '09:00:00',
-      end: '17:00:00',
+      startAtSeconds: 32400,
+      endAtSeconds: 61200,
       numPeople: 2
     })
 

@@ -210,7 +210,7 @@ describe('RetireModal', () => {
   })
 
   it('should show loading state', () => {
-    vi.mocked(fetch).mockResolvedValue(new Promise(() => {})) // Never resolves
+    vi.mocked(fetch).mockImplementation(() => new Promise(() => {})) // Never resolves
 
     renderWithProviders(
       <RetireModal isOpen={true} onClose={vi.fn()} />

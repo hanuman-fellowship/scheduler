@@ -164,9 +164,7 @@ describe('AddPersonForm', () => {
       first: 'John',
       last: 'Doe',
       displayName: 'John Doe',
-      category: mockCategories[0],
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z'
+      category: mockCategories[0]
     })
 
     renderWithProviders()
@@ -297,11 +295,9 @@ describe('AddPersonForm', () => {
     const { peopleService } = await import('../../../services/people')
     vi.mocked(peopleService.createPerson).mockResolvedValue({
       id: 1,
-      name: 'John Doe',
-      categoryId: 1,
-      scheduleId: 1,
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z',
+      first: 'John',
+      last: 'Doe',
+      displayName: 'John Doe',
       category: mockCategories[0]
     })
 

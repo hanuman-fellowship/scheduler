@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { scheduleManagementService } from '../../services/scheduleManagementService';
-import { scheduleService } from '../../services/scheduleService';
+import { schedulesService } from '../../services/schedules';
 import { CopyScheduleInput } from '@shared/types';
 
 interface CopyScheduleModalProps {
@@ -22,7 +22,7 @@ export const CopyScheduleModal: React.FC<CopyScheduleModalProps> = ({
   // Fetch available schedules to copy from
   const { data: schedulesData } = useQuery({
     queryKey: ['schedules'],
-    queryFn: scheduleService.getSchedules,
+    queryFn: schedulesService.getSchedules,
     enabled: isOpen
   });
 
@@ -73,10 +73,6 @@ export const CopyScheduleModal: React.FC<CopyScheduleModalProps> = ({
   if (!isOpen) return null;
 
   const allSchedules = schedulesData?.mine || [];
-  const allSources = [
-    ...allSchedules.filter(s => !s.template && s.request === 0),
-    ...templates
-  ];
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -122,7 +118,7 @@ export const CopyScheduleModal: React.FC<CopyScheduleModalProps> = ({
             >
               <option value="">Select a schedule...</option>
               <optgroup label="My Schedules">
-                {allSchedules.filter(s => !s.template).map(schedule => (
+                {allSchedules.filter((s: any) => !s.template).map((schedule: any) => (
                   <option key={`schedule-${schedule.id}`} value={schedule.id}>
                     {schedule.name}
                   </option>

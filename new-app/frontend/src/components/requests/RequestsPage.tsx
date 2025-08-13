@@ -66,14 +66,6 @@ export const RequestsPage: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
-  };
-
   if (!user?.roles.includes('manager') && !user?.roles.includes('operations')) {
     return (
       <div className="p-6">

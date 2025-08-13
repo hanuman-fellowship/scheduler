@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AddAreaForm from '../AddAreaForm'
@@ -173,7 +173,7 @@ describe('AddAreaForm', () => {
       scheduleId: 1,
       name: 'Dining Room',
       shortName: 'DR',
-      notes: null
+      notes: undefined
     })
 
     const user = userEvent.setup()

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { requestService } from '../../services/requestService';
 import { useAuthStore } from '../../store/authStore';
-import { RequestsByArea, RequestResponse } from '@shared/types';
+import { RequestResponse } from '@shared/types';
 
 export const SubmittedRequestsPage: React.FC = () => {
   const [expandedAreas, setExpandedAreas] = useState<Set<number>>(new Set());
@@ -77,14 +77,6 @@ export const SubmittedRequestsPage: React.FC = () => {
     if (confirm(`Are you sure you want to delete "${requestName}"? This action cannot be undone.`)) {
       deleteRequestMutation.mutate(requestId);
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
   };
 
   if (!user?.roles.includes('operations')) {

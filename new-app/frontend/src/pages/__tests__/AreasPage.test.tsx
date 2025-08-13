@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useLocation } from 'react-router-dom'
 import AreasPage from '../AreasPage'
@@ -24,7 +24,16 @@ vi.mock('../../contexts/GlobalModalContext', async () => {
     ...actual,
     useGlobalModal: vi.fn(() => ({
       openModal: vi.fn(),
-      closeModal: vi.fn()
+      closeModal: vi.fn(),
+      openAreaSelectionModal: vi.fn(),
+      openPersonSelectionModal: vi.fn(),
+      openEditCategoryModal: vi.fn(),
+      openDeleteCategoryModal: vi.fn(),
+      openInProgressSchedulesModal: vi.fn(),
+      openPublishedSchedulesModal: vi.fn(),
+      openAssignmentModal: vi.fn(),
+      openEditCopyModal: vi.fn(),
+      openDeleteScheduleModal: vi.fn()
     }))
   }
 })
@@ -83,7 +92,7 @@ describe('AreasPage', () => {
       scheduleId: 1,
       name: 'Dining Room',
       shortName: 'DR',
-      notes: null
+      notes: undefined
     }
   ]
 
@@ -170,7 +179,16 @@ describe('AreasPage', () => {
     const mockOpenModal = vi.fn()
     vi.mocked(useGlobalModal).mockReturnValue({
       openModal: mockOpenModal,
-      closeModal: vi.fn()
+      closeModal: vi.fn(),
+      openAreaSelectionModal: vi.fn(),
+      openPersonSelectionModal: vi.fn(),
+      openEditCategoryModal: vi.fn(),
+      openDeleteCategoryModal: vi.fn(),
+      openInProgressSchedulesModal: vi.fn(),
+      openPublishedSchedulesModal: vi.fn(),
+      openAssignmentModal: vi.fn(),
+      openEditCopyModal: vi.fn(),
+      openDeleteScheduleModal: vi.fn()
     })
 
     const user = userEvent.setup()
@@ -193,7 +211,16 @@ describe('AreasPage', () => {
     const mockOpenModal = vi.fn()
     vi.mocked(useGlobalModal).mockReturnValue({
       openModal: mockOpenModal,
-      closeModal: vi.fn()
+      closeModal: vi.fn(),
+      openAreaSelectionModal: vi.fn(),
+      openPersonSelectionModal: vi.fn(),
+      openEditCategoryModal: vi.fn(),
+      openDeleteCategoryModal: vi.fn(),
+      openInProgressSchedulesModal: vi.fn(),
+      openPublishedSchedulesModal: vi.fn(),
+      openAssignmentModal: vi.fn(),
+      openEditCopyModal: vi.fn(),
+      openDeleteScheduleModal: vi.fn()
     })
 
     const user = userEvent.setup()

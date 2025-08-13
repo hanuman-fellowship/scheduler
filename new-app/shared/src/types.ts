@@ -338,6 +338,13 @@ export interface TimePeriod {
   endSeconds: number;   // End boundary in seconds since midnight
 }
 
+export interface TimeSlot {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+}
+
 export interface ScheduleBounds {
   days: { [key: number]: string }; // { 1: "Sunday", 2: "Monday", ... }
   timePeriods: TimePeriod[]; // 3 hardcoded periods: Morning, Afternoon, Evening

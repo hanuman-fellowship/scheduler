@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { scheduleNavigationService, type PersonForSelection, type PeopleByCategory } from '../../services/scheduleNavigation';
+import { scheduleNavigationService, type PersonForSelection } from '../../services/scheduleNavigation';
 
 interface PersonSelectionContentProps {
   onCancel: () => void;

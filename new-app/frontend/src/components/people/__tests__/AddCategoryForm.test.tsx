@@ -116,9 +116,7 @@ describe('AddCategoryForm', () => {
     vi.mocked(categoriesService.createCategory).mockResolvedValue({
       id: 1,
       name: 'Test Category',
-      color: '#FF0000',
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z'
+      color: '#FF0000'
     })
 
     renderWithProviders()
@@ -195,9 +193,7 @@ describe('AddCategoryForm', () => {
     vi.mocked(categoriesService.createCategory).mockResolvedValue({
       id: 1,
       name: 'Test Category',
-      color: '#FF0000',
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z'
+      color: '#FF0000'
     })
 
     renderWithProviders()

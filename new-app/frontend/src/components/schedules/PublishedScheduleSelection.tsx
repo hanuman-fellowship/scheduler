@@ -28,7 +28,10 @@ export const PublishedScheduleSelection: React.FC<PublishedScheduleSelectionProp
   })
 
   const switchScheduleMutation = useMutation({
-    mutationFn: (schedule: Schedule) => switchToSchedule(schedule),
+    mutationFn: async (schedule: Schedule) => {
+      switchToSchedule(schedule)
+      return schedule
+    },
     onSuccess: (schedule) => {
       queryClient.invalidateQueries({ queryKey: ['schedules'] })
       onScheduleSelected(schedule)
@@ -88,13 +91,23 @@ export const PublishedScheduleSelection: React.FC<PublishedScheduleSelectionProp
   }
 
   // Filter published schedules (name = 'Published', user_id = null)
-  const publishedSchedules = schedulesData?.filter(schedule => 
-    schedule.name === 'Published' && 
-    schedule.userId === null
-  ) || []
+  const publishedSchedules = (schedulesData?.mine || []).filter((schedule: any) => 
+    schedule.name === 'Published'
+  )
+
+  // Map API ScheduleResponse to local Schedule type expected by the store
+  const publishedSchedulesForStore: Schedule[] = publishedSchedules.map((s: any) => ({
+    id: s.id,
+    name: s.name,
+    userId: null,
+    template: Boolean(s.template),
+    request: Number(s.request),
+    createdAt: s.createdAt,
+    updatedAt: s.updatedAt ?? s.createdAt,
+  }))
 
   // Group by year (extract from createdAt date)
-  const scheduleGroups: ScheduleGroup[] = publishedSchedules.reduce((groups, schedule) => {
+  const scheduleGroups: ScheduleGroup[] = publishedSchedulesForStore.reduce((groups, schedule) => {
     const year = new Date(schedule.createdAt).getFullYear().toString()
     const existingGroup = groups.find(g => g.year === year)
     
@@ -137,7 +150,7 @@ export const PublishedScheduleSelection: React.FC<PublishedScheduleSelectionProp
                   
                   {isExpanded && (
                     <div className="ml-6 space-y-1">
-                      {group.schedules.map((schedule) => {
+                       {group.schedules.map((schedule) => {
                         const isCurrentSchedule = currentSchedule?.id === schedule.id
                         
                         return (

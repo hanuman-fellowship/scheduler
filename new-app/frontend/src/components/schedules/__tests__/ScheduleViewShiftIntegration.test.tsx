@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
@@ -33,24 +33,27 @@ const mockAreaScheduleData = {
   area: {
     id: 1,
     name: 'Kitchen',
-    manager: { username: 'manager1' },
+    shortName: 'K',
     shifts: [
       {
         id: 1,
+        areaId: 1,
         dayId: 1,
         startAtSeconds: 28800, // 8:00 AM
         endAtSeconds: 32400, // 9:00 AM
+        numPeople: 1,
         assignments: []
       }
     ],
-    floatingShifts: []
+    floatingShifts: [],
+    manager: { id: 1, username: 'manager1' }
   },
   bounds: {
     days: { 1: 'Sunday', 2: 'Monday', 3: 'Tuesday', 4: 'Wednesday', 5: 'Thursday', 6: 'Friday', 7: 'Saturday' },
     timePeriods: [
-      { name: 'Morning', startSeconds: 0, endSeconds: 43200 },
-      { name: 'Afternoon', startSeconds: 43200, endSeconds: 61200 },
-      { name: 'Evening', startSeconds: 61200, endSeconds: 86400 }
+      { name: 'Morning' as const, startSeconds: 0, endSeconds: 43200 },
+      { name: 'Afternoon' as const, startSeconds: 43200, endSeconds: 61200 },
+      { name: 'Evening' as const, startSeconds: 61200, endSeconds: 86400 }
     ]
   },
   editable: true
@@ -97,14 +100,17 @@ describe('ScheduleView Shift Integration', () => {
       openEditCategoryModal: vi.fn(),
       openDeleteCategoryModal: vi.fn(),
       openInProgressSchedulesModal: vi.fn(),
-      openPublishedSchedulesModal: vi.fn()
+      openPublishedSchedulesModal: vi.fn(),
+      openAssignmentModal: vi.fn(),
+      openEditCopyModal: vi.fn(),
+      openDeleteScheduleModal: vi.fn()
     })
 
     mockUseScheduleView.mockReturnValue({
       data: mockAreaScheduleData,
       isLoading: false,
       error: null
-    })
+    } as any)
   })
 
   it('should render add shift buttons when schedule is editable', async () => {
@@ -182,7 +188,7 @@ describe('ScheduleView Shift Integration', () => {
       data: dataWithFloatingShift,
       isLoading: false,
       error: null
-    })
+    } as any)
 
     renderWithProviders(<ScheduleView />)
 

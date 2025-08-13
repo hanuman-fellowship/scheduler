@@ -8,7 +8,7 @@ export const useAreas = () => {
     error
   } = useQuery({
     queryKey: ['areas'],
-    queryFn: areasService.getAreas,
+    queryFn: () => areasService.getAreas(),
   });
 
   return {

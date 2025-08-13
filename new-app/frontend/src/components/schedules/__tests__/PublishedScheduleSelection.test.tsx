@@ -20,7 +20,7 @@ const mockPublishedSchedules = [
     name: 'Published',
     userId: null,
     template: false,
-    request: 0,
+    request: 0 as 0 | 1 | 2,
     createdAt: '2024-01-15T00:00:00Z',
     updatedAt: '2024-01-15T00:00:00Z'
   },
@@ -29,7 +29,7 @@ const mockPublishedSchedules = [
     name: 'Published',
     userId: null,
     template: false,
-    request: 0,
+    request: 0 as 0 | 1 | 2,
     createdAt: '2024-02-15T00:00:00Z',
     updatedAt: '2024-02-15T00:00:00Z'
   },
@@ -38,7 +38,7 @@ const mockPublishedSchedules = [
     name: 'Published',
     userId: null,
     template: false,
-    request: 0,
+    request: 0 as 0 | 1 | 2,
     createdAt: '2023-12-15T00:00:00Z',
     updatedAt: '2023-12-15T00:00:00Z'
   },
@@ -47,7 +47,7 @@ const mockPublishedSchedules = [
     name: 'Working Schedule',
     userId: 1,
     template: false,
-    request: 0,
+    request: 0 as 0 | 1 | 2,
     createdAt: '2024-01-15T00:00:00Z',
     updatedAt: '2024-01-15T00:00:00Z'
   }
@@ -84,7 +84,7 @@ describe('PublishedScheduleSelection', () => {
       isLoading: false
     })
 
-    mockSchedulesService.getSchedules.mockResolvedValue(mockPublishedSchedules)
+    mockSchedulesService.getSchedules.mockResolvedValue({ mine: mockPublishedSchedules })
   })
 
   it('should render loading state initially', () => {
@@ -239,7 +239,7 @@ describe('PublishedScheduleSelection', () => {
 
   it('should show empty state when no published schedules found', async () => {
     // Return only working schedules (userId is not null)
-    mockSchedulesService.getSchedules.mockResolvedValue([mockPublishedSchedules[3]])
+    mockSchedulesService.getSchedules.mockResolvedValue({ mine: [mockPublishedSchedules[3]] })
     
     renderWithQueryClient(
       <PublishedScheduleSelection

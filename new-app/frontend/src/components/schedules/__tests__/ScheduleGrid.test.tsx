@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import { ScheduleGrid } from '../ScheduleGrid';
 import type { ScheduleBounds, AreaScheduleResponse, PersonScheduleResponse, GapsScheduleResponse } from '@shared/types';
 
@@ -37,8 +38,6 @@ const mockAreaSchedule: AreaScheduleResponse = {
     id: 1,
     name: 'Kitchen',
     shortName: 'K',
-    scheduleId: 1,
-    notes: 'Kitchen area',
     shifts: [
       {
         id: 1,
@@ -71,7 +70,8 @@ const mockAreaSchedule: AreaScheduleResponse = {
           }
         ]
       }
-    ]
+    ],
+    floatingShifts: []
   },
   bounds: mockBounds,
   editable: true
@@ -84,8 +84,6 @@ const mockPersonSchedule: PersonScheduleResponse = {
     last: 'Doe',
     displayName: 'John D',
     name: 'John D',
-    email: 'john@example.com',
-    active: true,
     category: {
       id: 1,
       name: 'Residents',

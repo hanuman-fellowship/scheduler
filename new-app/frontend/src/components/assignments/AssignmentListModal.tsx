@@ -1,6 +1,5 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { AssignmentResponse } from '@shared/types';
 import { assignmentService } from '../../services/assignmentService';
 import Modal from '../ui/Modal';
 

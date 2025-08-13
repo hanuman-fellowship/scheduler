@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { peopleService } from '../services/people'
 import { categoriesService } from '../services/categories'
 import { useGlobalModal } from '../contexts/GlobalModalContext'
 import { RetireModal } from '../components/people/RetireModal'

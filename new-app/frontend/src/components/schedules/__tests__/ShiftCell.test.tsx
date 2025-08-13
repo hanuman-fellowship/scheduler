@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { ShiftCell } from '../ShiftCell';
 import type { ShiftWithAssignments, TimeSlot } from '@shared/types';
@@ -30,8 +31,6 @@ const mockShift: ShiftWithAssignments = {
         last: 'Doe',
         displayName: 'John D',
         name: 'John D',
-        email: 'john@example.com',
-        active: true,
         category: {
           id: 1,
           name: 'Residents',
@@ -55,12 +54,7 @@ const mockPersonShift: ShiftWithAssignments = {
       shiftId: 1,
       personId: 1,
       name: undefined,
-      star: true,
-      area: {
-        id: 1,
-        name: 'Kitchen',
-        shortName: 'K'
-      }
+      star: true
     }
   ]
 };

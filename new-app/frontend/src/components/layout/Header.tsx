@@ -118,8 +118,8 @@ export default function Header() {
 
         {(isOperations() || isManager()) && (
           <MenuDropdown trigger="Schedules">
-            <MenuItem onClick={openInProgressSchedulesModal} shortcut="Ctrl+I">In Progress...</MenuItem>
-            <MenuItem onClick={openPublishedSchedulesModal} shortcut="Ctrl+O">Published...</MenuItem>
+            <MenuItem onClick={openInProgressSchedulesModal}>In Progress...</MenuItem>
+            <MenuItem onClick={openPublishedSchedulesModal}>Published...</MenuItem>
             <DropdownSeparator />
             <MenuItem to="/schedule-view/gaps/gaps">View Gaps</MenuItem>
             {canEdit && (
@@ -145,7 +145,7 @@ export default function Header() {
           <>
             <span className="text-gray-500">|</span>
             <MenuDropdown trigger="People">
-              {canView && <MenuItem onClick={openPersonSelectionModal} shortcut="Ctrl+P">View Schedule...</MenuItem>}
+              {canView && <MenuItem onClick={openPersonSelectionModal}>View Schedule...</MenuItem>}
               <MenuItem to="/board">Big Board</MenuItem>
               {canEdit && (
                 <>
@@ -167,7 +167,7 @@ export default function Header() {
             </MenuDropdown>
 
             <MenuDropdown trigger="Areas">
-              {canView && <MenuItem onClick={openAreaSelectionModal} shortcut="Ctrl+A">View Schedule...</MenuItem>}
+              {canView && <MenuItem onClick={openAreaSelectionModal}>View Schedule...</MenuItem>}
               {canEdit && (
                 <>
                   <DropdownSeparator />

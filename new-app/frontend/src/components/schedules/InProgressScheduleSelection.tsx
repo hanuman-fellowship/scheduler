@@ -24,7 +24,10 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
   })
 
   const switchScheduleMutation = useMutation({
-    mutationFn: (schedule: Schedule) => switchToSchedule(schedule),
+    mutationFn: async (schedule: Schedule) => {
+      switchToSchedule(schedule)
+      return schedule
+    },
     onSuccess: (schedule) => {
       queryClient.invalidateQueries({ queryKey: ['schedules'] })
       onScheduleSelected(schedule)
@@ -74,15 +77,15 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
   }
 
   // Filter in-progress schedules (user-owned, non-template, non-request)
-  const inProgressSchedules = schedulesData?.filter(schedule => 
+  const inProgressSchedules = schedulesData?.mine?.filter((schedule: any) => 
     schedule.userId !== null && 
     !schedule.template && 
     schedule.request === 0
   ) || []
 
   // Group by user
-  const mySchedules = inProgressSchedules.filter(s => s.userId === user?.id)
-  const otherSchedules = inProgressSchedules.filter(s => s.userId !== user?.id)
+  const mySchedules = inProgressSchedules.filter((s: any) => s.userId === user?.id)
+  const otherSchedules = inProgressSchedules.filter((s: any) => s.userId !== user?.id)
 
   const ScheduleList = ({ schedules, title }: { schedules: Schedule[], title: string }) => (
     <div className="mb-6">
@@ -126,8 +129,8 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
           <legend className="px-2 font-bold">Select Schedule</legend>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <ScheduleList schedules={mySchedules} title="My Schedules" />
-            <ScheduleList schedules={otherSchedules} title="Other Schedules" />
+            <ScheduleList schedules={mySchedules as Schedule[]} title="My Schedules" />
+            <ScheduleList schedules={otherSchedules as Schedule[]} title="Other Schedules" />
           </div>
         </fieldset>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { shiftService, type CreateShiftWithScheduleRequest } from '../../services/shifts'
+import { shiftService } from '../../services/shifts'
 import { areasService } from '../../services/areas'
 import { daysService } from '../../services/days'
 import { useScheduleStore } from '../../store/scheduleStore'
