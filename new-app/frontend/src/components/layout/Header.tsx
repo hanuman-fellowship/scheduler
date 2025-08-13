@@ -1,15 +1,21 @@
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import { useScheduleStore } from '../../store/scheduleStore'
 import { MenuProvider } from '../../contexts/MenuContext'
 import { useGlobalModal } from '../../contexts/GlobalModalContext'
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts'
 import MenuDropdown from '../ui/MenuDropdown'
 import MenuItem from '../ui/MenuItem'
 import DropdownSeparator from '../ui/DropdownSeparator'
+import { ScheduleStatusIndicator } from '../schedules/ScheduleStatusIndicator'
 
 export default function Header() {
   const { user, logout, isOperations, isManager, isPersonnel } = useAuthStore()
-  const { openModal, openAreaSelectionModal, openPersonSelectionModal } = useGlobalModal()
+  const { isEditable, isRequest } = useScheduleStore()
+  const { openModal, openAreaSelectionModal, openPersonSelectionModal, openInProgressSchedulesModal, openPublishedSchedulesModal } = useGlobalModal()
+  
+  // Check if current schedule allows editing operations
+  const canEdit = isEditable() || isRequest()
 
   // Set up keyboard shortcuts
   useKeyboardShortcuts([
@@ -28,6 +34,24 @@ export default function Header() {
       callback: () => {
         if (isOperations()) {
           openAreaSelectionModal();
+        }
+      }
+    },
+    {
+      key: 'i',
+      ctrlKey: true,
+      callback: () => {
+        if (isOperations() || isManager()) {
+          openInProgressSchedulesModal();
+        }
+      }
+    },
+    {
+      key: 'o',
+      ctrlKey: true,
+      callback: () => {
+        if (isOperations() || isManager()) {
+          openPublishedSchedulesModal();
         }
       }
     }
@@ -91,22 +115,26 @@ export default function Header() {
 
         {(isOperations() || isManager()) && (
           <MenuDropdown trigger="Schedules">
-            <MenuItem to="/schedule">In Progress...</MenuItem>
-            <MenuItem to="/schedule/published">Published...</MenuItem>
+            <MenuItem onClick={openInProgressSchedulesModal} shortcut="Ctrl+I">In Progress...</MenuItem>
+            <MenuItem onClick={openPublishedSchedulesModal} shortcut="Ctrl+O">Published...</MenuItem>
             <DropdownSeparator />
             <MenuItem to="/schedule-view/gaps/gaps">View Gaps</MenuItem>
-            <DropdownSeparator />
-            <MenuItem to="/days/edit">Edit Days...</MenuItem>
-            <MenuItem to="/boundaries/edit">Edit Times...</MenuItem>
-            <DropdownSeparator />
-            <MenuItem to="/schedule/copy">Edit a Copy...</MenuItem>
-            <MenuItem to="/schedule/delete">Delete...</MenuItem>
-            <DropdownSeparator />
-            <MenuItem to="/schedule/template">New From Template...</MenuItem>
-            <MenuItem to="/schedule/save-template">Save as Template...</MenuItem>
-            <MenuItem to="/schedule/delete-template">Delete Template...</MenuItem>
-            <DropdownSeparator />
-            <MenuItem to="/settings/toggle-dates">Show/Hide Dates</MenuItem>
+            {canEdit && (
+              <>
+                <DropdownSeparator />
+                <MenuItem to="/days/edit">Edit Days...</MenuItem>
+                <MenuItem to="/boundaries/edit">Edit Times...</MenuItem>
+                <DropdownSeparator />
+                <MenuItem to="/schedule/copy">Edit a Copy...</MenuItem>
+                <MenuItem to="/schedule/delete">Delete...</MenuItem>
+                <DropdownSeparator />
+                <MenuItem to="/schedule/template">New From Template...</MenuItem>
+                <MenuItem to="/schedule/save-template">Save as Template...</MenuItem>
+                <MenuItem to="/schedule/delete-template">Delete Template...</MenuItem>
+                <DropdownSeparator />
+                <MenuItem to="/settings/toggle-dates">Show/Hide Dates</MenuItem>
+              </>
+            )}
           </MenuDropdown>
         )}
 
@@ -114,46 +142,56 @@ export default function Header() {
           <>
             <span className="text-gray-500">|</span>
             <MenuDropdown trigger="People">
-              <MenuItem onClick={openPersonSelectionModal} shortcut="Ctrl+P">View Schedule...</MenuItem>
+              {canEdit && <MenuItem onClick={openPersonSelectionModal} shortcut="Ctrl+P">View Schedule...</MenuItem>}
               <MenuItem to="/board">Big Board</MenuItem>
-              <DropdownSeparator />
-              <MenuItem onClick={() => openModal('person')}>New Person...</MenuItem>
-              <DropdownSeparator />
-              <MenuItem to="/people/restore">Restore Person...</MenuItem>
-              <MenuItem to="/people/retire">Retire Person...</MenuItem>
-              <DropdownSeparator />
-              <MenuItem onClick={() => openModal('category')}>New Category...</MenuItem>
-              <MenuItem to="/categories/edit">Edit Category...</MenuItem>
-              <MenuItem to="/categories/reorder">Reorder Categories...</MenuItem>
-              <MenuItem to="/categories/delete">Delete Category...</MenuItem>
-              <DropdownSeparator />
-              <MenuItem to="/people/affected-schedules">Affected Schedules...</MenuItem>
+              {canEdit && (
+                <>
+                  <DropdownSeparator />
+                  <MenuItem onClick={() => openModal('person')}>New Person...</MenuItem>
+                  <DropdownSeparator />
+                  <MenuItem to="/people/restore">Restore Person...</MenuItem>
+                  <MenuItem to="/people/retire">Retire Person...</MenuItem>
+                  <DropdownSeparator />
+                  <MenuItem onClick={() => openModal('category')}>New Category...</MenuItem>
+                  <MenuItem to="/categories/edit">Edit Category...</MenuItem>
+                  <MenuItem to="/categories/reorder">Reorder Categories...</MenuItem>
+                  <MenuItem to="/categories/delete">Delete Category...</MenuItem>
+                  <DropdownSeparator />
+                  <MenuItem to="/people/affected-schedules">Affected Schedules...</MenuItem>
+                </>
+              )}
               <MenuItem to="/people/print">Print People...</MenuItem>
             </MenuDropdown>
 
             <MenuDropdown trigger="Areas">
-              <MenuItem onClick={openAreaSelectionModal} shortcut="Ctrl+A">View Schedule...</MenuItem>
-              <DropdownSeparator />
-              <MenuItem onClick={() => openModal('area')}>New Area...</MenuItem>
-              <DropdownSeparator />
-              <MenuItem to="/areas/clear">Clear Area...</MenuItem>
-              <MenuItem to="/areas/delete">Delete Area...</MenuItem>
-              <DropdownSeparator />
-              <MenuItem to="/areas/affected-schedules">Affected Schedules...</MenuItem>
+              {canEdit && <MenuItem onClick={openAreaSelectionModal} shortcut="Ctrl+A">View Schedule...</MenuItem>}
+              {canEdit && (
+                <>
+                  <DropdownSeparator />
+                  <MenuItem onClick={() => openModal('area')}>New Area...</MenuItem>
+                  <DropdownSeparator />
+                  <MenuItem to="/areas/clear">Clear Area...</MenuItem>
+                  <MenuItem to="/areas/delete">Delete Area...</MenuItem>
+                  <DropdownSeparator />
+                  <MenuItem to="/areas/affected-schedules">Affected Schedules...</MenuItem>
+                </>
+              )}
               <MenuItem to="/areas/print">Print Areas...</MenuItem>
             </MenuDropdown>
 
-            <MenuDropdown trigger="Shifts">
-              <MenuItem onClick={() => openModal('shift')}>New Shift...</MenuItem>
-              <MenuItem to="/floating-shifts/add">New Floating Shift...</MenuItem>
-              <MenuItem to="/constant-shifts/add">New Constant Shift...</MenuItem>
-            </MenuDropdown>
+            {canEdit && (
+              <MenuDropdown trigger="Shifts">
+                <MenuItem onClick={() => openModal('shift')}>New Shift...</MenuItem>
+                <MenuItem to="/floating-shifts/add">New Floating Shift...</MenuItem>
+                <MenuItem to="/constant-shifts/add">New Constant Shift...</MenuItem>
+              </MenuDropdown>
+            )}
           </>
         )}
           </div>
 
           {/* Changes Section - Right Side */}
-          {isOperations() && (
+          {isOperations() && canEdit && (
             <div className="flex items-center space-x-3 text-xs font-bold">
               <span className="text-gray-400 cursor-not-allowed px-2" title="Redo feature not yet implemented (ctrl+r)">
                 Redo
@@ -171,6 +209,9 @@ export default function Header() {
           )}
 
         </div>
+        
+        {/* Schedule Status Indicator - Below main header */}
+        <ScheduleStatusIndicator />
       </div>
     </MenuProvider>
   )

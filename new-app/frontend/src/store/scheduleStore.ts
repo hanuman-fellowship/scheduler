@@ -17,6 +17,10 @@ interface ScheduleStore {
   setCurrentSchedule: (schedule: Schedule) => void
   clearCurrentSchedule: () => void
   loadCurrentSchedule: () => Promise<void>
+  switchToSchedule: (schedule: Schedule) => Promise<void>
+  isEditable: () => boolean
+  isPublished: () => boolean
+  isRequest: () => boolean
 }
 
 export const useScheduleStore = create<ScheduleStore>()(
@@ -54,6 +58,61 @@ export const useScheduleStore = create<ScheduleStore>()(
           console.error('Error loading current schedule:', error)
           set({ isLoading: false })
         }
+      },
+      
+      switchToSchedule: async (schedule: Schedule) => {
+        set({ isLoading: true })
+        
+        try {
+          // For now, just update the local state since we don't have the API endpoint yet
+          // TODO: Implement actual schedule switching API call
+          set({ currentSchedule: schedule, isLoading: false })
+          
+          // Store the user's schedule preference
+          localStorage.setItem('last-selected-schedule-id', schedule.id.toString())
+          
+          console.log(`Switched to schedule: ${schedule.name} (ID: ${schedule.id})`)
+        } catch (error) {
+          console.error('Error switching schedule:', error)
+          set({ isLoading: false })
+          throw error
+        }
+      },
+      
+      // Check if current schedule is editable
+      // A schedule is editable if user owns it (userId matches) AND user has operations role
+      isEditable: () => {
+        const schedule = get().currentSchedule
+        if (!schedule) return false
+        
+        // Get user from auth storage directly to avoid circular dependency
+        const authStorage = localStorage.getItem('auth-storage')
+        if (!authStorage) return false
+        
+        try {
+          const authState = JSON.parse(authStorage)
+          const user = authState?.state?.user
+          
+          if (!user) return false
+          
+          // Schedule is editable if user owns it AND has operations role
+          return schedule.userId === user.id && user.roles.includes('operations')
+        } catch (error) {
+          console.error('Error checking schedule editable status:', error)
+          return false
+        }
+      },
+      
+      // Check if current schedule is published
+      isPublished: () => {
+        const schedule = get().currentSchedule
+        return schedule?.name === 'Published' && schedule?.userId === null
+      },
+      
+      // Check if current schedule is a request
+      isRequest: () => {
+        const schedule = get().currentSchedule
+        return schedule?.request === 2
       }
     }),
     {

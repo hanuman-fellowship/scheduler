@@ -54,39 +54,44 @@ Based on analysis of the new app's Header.tsx and comparison with legacy system 
 ## 🎯 **SCHEDULES MENU** (Operations & Manager)
 
 ### ✅ **Fully Implemented**
-- **Published...** → ✅ **FULLY IMPLEMENTED** (Complete schedule viewing with legacy-compatible 774px layout)
+- **Published...** → ✅ **FULLY IMPLEMENTED** (Modal-based published schedule selection with year grouping and keyboard shortcuts)
+- **In Progress...** → ✅ **FULLY IMPLEMENTED** (Modal-based working schedule selection with user grouping and immediate context switching)
 - **View Gaps** → ✅ **FULLY IMPLEMENTED** (Gaps schedule view with unassigned shifts display)
 
+### ✅ **Schedule Editing Mode - FULLY IMPLEMENTED**
+- **Conditional Menu Visibility** → ✅ **FULLY IMPLEMENTED** (Edit-only items show/hide based on schedule ownership + operations role)
+- **Legacy Permission Matching** → ✅ **FULLY IMPLEMENTED** (Exactly matches CakePHP `$editable` flag behavior)
+- **Visual Status Indicator** → ✅ **FULLY IMPLEMENTED** (Real-time editing mode display with status icons)
+
 ### ⭕ **Not Implemented**
-- **In Progress...** → Need schedule selection/switching
-- **Edit Days...** → Need days management
-- **Edit Times...** → Need time boundaries management
-- **Edit a Copy...** → Need schedule copying workflow
-- **Delete...** → Need schedule deletion with validation
-- **New From Template...** → Need template system
-- **Save as Template...** → Need template system
-- **Delete Template...** → Need template system
-- **Show/Hide Dates** → Need UI settings
+- **Edit Days...** → Need days management (⚠️ Only visible in editing mode)
+- **Edit Times...** → Need time boundaries management (⚠️ Only visible in editing mode)
+- **Edit a Copy...** → Need schedule copying workflow (⚠️ Only visible in editing mode)
+- **Delete...** → Need schedule deletion with validation (⚠️ Only visible in editing mode)
+- **New From Template...** → Need template system (⚠️ Only visible in editing mode)
+- **Save as Template...** → Need template system (⚠️ Only visible in editing mode)
+- **Delete Template...** → Need template system (⚠️ Only visible in editing mode)
+- **Show/Hide Dates** → Need UI settings (⚠️ Only visible in editing mode)
 
 ---
 
 ## 🎯 **PEOPLE MENU** (Operations Only)
 
 ### ✅ **Fully Implemented**
-- **View Schedule...** → ✅ **FULLY IMPLEMENTED** (Person selection modal with category grouping and keyboard shortcuts)
+- **View Schedule...** → ✅ **FULLY IMPLEMENTED** (Person selection modal with category grouping and keyboard shortcuts) (⚠️ Only visible in editing mode)
 - **Big Board** → Page exists but needs implementation
-- **New Person...** → Modal trigger exists, needs backend
-- **New Category...** → ✅ **FULLY IMPLEMENTED**
+- **New Person...** → Modal trigger exists, needs backend (⚠️ Only visible in editing mode)
+- **New Category...** → ✅ **FULLY IMPLEMENTED** (⚠️ Only visible in editing mode)
 
 ### ✅ **Fully Implemented**
-- **Edit Category...** → ✅ **FULLY IMPLEMENTED** (Modal-based category editing with validation and React Query integration)
-- **Delete Category...** → ✅ **FULLY IMPLEMENTED** (Safe category deletion with confirmation modal and business rule validation)
+- **Edit Category...** → ✅ **FULLY IMPLEMENTED** (Modal-based category editing with validation and React Query integration) (⚠️ Only visible in editing mode)
+- **Delete Category...** → ✅ **FULLY IMPLEMENTED** (Safe category deletion with confirmation modal and business rule validation) (⚠️ Only visible in editing mode)
 
 ### ⭕ **Not Implemented**
-- **Restore Person...** → Need person lifecycle management
-- **Retire Person...** → Need person lifecycle management
-- **Reorder Categories...** → Need category ordering
-- **Affected Schedules...** → Need cross-schedule analysis
+- **Restore Person...** → Need person lifecycle management (⚠️ Only visible in editing mode)
+- **Retire Person...** → Need person lifecycle management (⚠️ Only visible in editing mode)
+- **Reorder Categories...** → Need category ordering (⚠️ Only visible in editing mode)
+- **Affected Schedules...** → Need cross-schedule analysis (⚠️ Only visible in editing mode)
 - **Print People...** → Need print functionality
 
 ---
@@ -94,20 +99,20 @@ Based on analysis of the new app's Header.tsx and comparison with legacy system 
 ## 🎯 **AREAS MENU** (Operations Only)
 
 ### ✅ **Fully Implemented**
-- **View Schedule...** → ✅ **FULLY IMPLEMENTED** (Area selection modal with keyboard shortcuts and session memory)
-- **New Area...** → ✅ **FULLY IMPLEMENTED** (AddAreaForm with validation)
+- **View Schedule...** → ✅ **FULLY IMPLEMENTED** (Area selection modal with keyboard shortcuts and session memory) (⚠️ Only visible in editing mode)
+- **New Area...** → ✅ **FULLY IMPLEMENTED** (AddAreaForm with validation) (⚠️ Only visible in editing mode)
 
 ### ✅ **Backend Implemented**
-- **Clear Area...** → ✅ **BACKEND COMPLETE** (API endpoint `/api/areas/:id/clear`)
-- **Delete Area...** → ✅ **FULLY IMPLEMENTED** (Safe deletion with shift clearing)
+- **Clear Area...** → ✅ **BACKEND COMPLETE** (API endpoint `/api/areas/:id/clear`) (⚠️ Only visible in editing mode)
+- **Delete Area...** → ✅ **FULLY IMPLEMENTED** (Safe deletion with shift clearing) (⚠️ Only visible in editing mode)
 
 ### ⭕ **Not Implemented**
-- **Affected Schedules...** → Need cross-schedule analysis UI
+- **Affected Schedules...** → Need cross-schedule analysis UI (⚠️ Only visible in editing mode)
 - **Print Areas...** → Need print functionality
 
 ---
 
-## 🎯 **SHIFTS MENU** (Operations Only)
+## 🎯 **SHIFTS MENU** (Operations Only) ⚠️ **ENTIRE MENU ONLY VISIBLE IN EDITING MODE**
 
 ### ✅ **Fully Implemented**
 - **New Shift...** → ✅ **FULLY IMPLEMENTED** (Complete shift creation with time picker, area/day selection, validation)
@@ -118,7 +123,7 @@ Based on analysis of the new app's Header.tsx and comparison with legacy system 
 
 ---
 
-## 🎯 **CHANGES SECTION** (Operations Only)
+## 🎯 **CHANGES SECTION** (Operations Only) ⚠️ **ENTIRE SECTION ONLY VISIBLE IN EDITING MODE**
 
 ### ⭕ **Completely Unimplemented**
 - **Undo** → Need change tracking system

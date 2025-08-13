@@ -203,4 +203,235 @@ describe('Schedule Store', () => {
       })
     })
   })
+
+  describe('editing mode functionality', () => {
+    describe('isEditable', () => {
+      it('should return false when no current schedule', () => {
+        const { isEditable } = useScheduleStore.getState()
+        expect(isEditable()).toBe(false)
+      })
+
+      it('should return false when no user in auth storage', () => {
+        mockLocalStorage.getItem.mockReturnValue(null)
+        
+        const schedule = {
+          id: 1,
+          name: 'Test Schedule',
+          userId: 1,
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isEditable } = useScheduleStore.getState()
+        expect(isEditable()).toBe(false)
+      })
+
+      it('should return true when user owns schedule and has operations role', () => {
+        const authStorage = JSON.stringify({
+          state: {
+            user: {
+              id: 1,
+              username: 'test',
+              email: 'test@example.com',
+              roles: ['operations']
+            }
+          }
+        })
+        
+        mockLocalStorage.getItem.mockImplementation((key: string) => {
+          if (key === 'auth-storage') return authStorage
+          return null
+        })
+        
+        const schedule = {
+          id: 1,
+          name: 'Test Schedule',
+          userId: 1,
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isEditable } = useScheduleStore.getState()
+        expect(isEditable()).toBe(true)
+      })
+
+      it('should return false when user owns schedule but does not have operations role', () => {
+        const authStorage = JSON.stringify({
+          state: {
+            user: {
+              id: 1,
+              username: 'test',
+              email: 'test@example.com',
+              roles: ['manager']
+            }
+          }
+        })
+        
+        mockLocalStorage.getItem.mockImplementation((key: string) => {
+          if (key === 'auth-storage') return authStorage
+          return null
+        })
+        
+        const schedule = {
+          id: 1,
+          name: 'Test Schedule',
+          userId: 1,
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isEditable } = useScheduleStore.getState()
+        expect(isEditable()).toBe(false)
+      })
+
+      it('should return false when user does not own schedule even with operations role', () => {
+        const authStorage = JSON.stringify({
+          state: {
+            user: {
+              id: 1,
+              username: 'test',
+              email: 'test@example.com',
+              roles: ['operations']
+            }
+          }
+        })
+        
+        mockLocalStorage.getItem.mockImplementation((key: string) => {
+          if (key === 'auth-storage') return authStorage
+          return null
+        })
+        
+        const schedule = {
+          id: 1,
+          name: 'Test Schedule',
+          userId: 2, // Different user ID
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isEditable } = useScheduleStore.getState()
+        expect(isEditable()).toBe(false)
+      })
+
+      it('should handle malformed auth storage gracefully', () => {
+        mockLocalStorage.getItem.mockImplementation((key: string) => {
+          if (key === 'auth-storage') return 'invalid json'
+          return null
+        })
+        
+        const schedule = {
+          id: 1,
+          name: 'Test Schedule',
+          userId: 1,
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isEditable } = useScheduleStore.getState()
+        expect(isEditable()).toBe(false)
+      })
+    })
+
+    describe('isPublished', () => {
+      it('should return true for published schedule', () => {
+        const schedule = {
+          id: 1,
+          name: 'Published',
+          userId: null,
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isPublished } = useScheduleStore.getState()
+        expect(isPublished()).toBe(true)
+      })
+
+      it('should return false for non-published schedule', () => {
+        const schedule = {
+          id: 1,
+          name: 'Working Schedule',
+          userId: 1,
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isPublished } = useScheduleStore.getState()
+        expect(isPublished()).toBe(false)
+      })
+
+      it('should return false when no current schedule', () => {
+        const { isPublished } = useScheduleStore.getState()
+        expect(isPublished()).toBe(false)
+      })
+    })
+
+    describe('isRequest', () => {
+      it('should return true for request schedule', () => {
+        const schedule = {
+          id: 1,
+          name: 'Test Request',
+          userId: 1,
+          template: false,
+          request: 2,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isRequest } = useScheduleStore.getState()
+        expect(isRequest()).toBe(true)
+      })
+
+      it('should return false for non-request schedule', () => {
+        const schedule = {
+          id: 1,
+          name: 'Working Schedule',
+          userId: 1,
+          template: false,
+          request: 0,
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: '2024-01-01T00:00:00Z'
+        }
+        
+        useScheduleStore.getState().setCurrentSchedule(schedule)
+        
+        const { isRequest } = useScheduleStore.getState()
+        expect(isRequest()).toBe(false)
+      })
+
+      it('should return false when no current schedule', () => {
+        const { isRequest } = useScheduleStore.getState()
+        expect(isRequest()).toBe(false)
+      })
+    })
+  })
 })

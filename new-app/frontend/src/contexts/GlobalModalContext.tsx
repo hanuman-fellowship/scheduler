@@ -8,8 +8,10 @@ import { AreaSelectionContent } from '../components/schedules/AreaSelectionConte
 import { PersonSelectionContent } from '../components/schedules/PersonSelectionContent'
 import EditCategoryForm from '../components/categories/EditCategoryForm'
 import DeleteCategoryModal from '../components/categories/DeleteCategoryModal'
+import { InProgressScheduleSelection } from '../components/schedules/InProgressScheduleSelection'
+import { PublishedScheduleSelection } from '../components/schedules/PublishedScheduleSelection'
 
-type ModalType = 'shift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | null
+type ModalType = 'shift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | 'inProgressSchedules' | 'publishedSchedules' | null
 
 interface Category {
   id: number
@@ -24,6 +26,8 @@ interface GlobalModalContextType {
   openPersonSelectionModal: () => void
   openEditCategoryModal: (category: Category) => void
   openDeleteCategoryModal: (category: Category) => void
+  openInProgressSchedulesModal: () => void
+  openPublishedSchedulesModal: () => void
 }
 
 const GlobalModalContext = createContext<GlobalModalContextType | undefined>(undefined)
@@ -62,6 +66,16 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
     setModalData(category)
   }
 
+  const openInProgressSchedulesModal = () => {
+    setActiveModal('inProgressSchedules')
+    setModalData(null)
+  }
+
+  const openPublishedSchedulesModal = () => {
+    setActiveModal('publishedSchedules')
+    setModalData(null)
+  }
+
   return (
     <GlobalModalContext.Provider value={{ 
       openModal, 
@@ -69,7 +83,9 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
       openAreaSelectionModal, 
       openPersonSelectionModal,
       openEditCategoryModal,
-      openDeleteCategoryModal
+      openDeleteCategoryModal,
+      openInProgressSchedulesModal,
+      openPublishedSchedulesModal
     }}>
       {children}
 
@@ -171,6 +187,30 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
             onCancel={closeModal}
           />
         )}
+      </Modal>
+
+      {/* In Progress Schedules Modal */}
+      <Modal
+        isOpen={activeModal === 'inProgressSchedules'}
+        onClose={closeModal}
+        title="In Progress Schedules"
+      >
+        <InProgressScheduleSelection
+          onCancel={closeModal}
+          onScheduleSelected={closeModal}
+        />
+      </Modal>
+
+      {/* Published Schedules Modal */}
+      <Modal
+        isOpen={activeModal === 'publishedSchedules'}
+        onClose={closeModal}
+        title="Published Schedules"
+      >
+        <PublishedScheduleSelection
+          onCancel={closeModal}
+          onScheduleSelected={closeModal}
+        />
       </Modal>
     </GlobalModalContext.Provider>
   )

@@ -74,6 +74,8 @@ All detailed specifications are in `/docs/`:
 - **User Management System**: Full user lifecycle management with roles and permissions
 - **Schedule View System**: Complete legacy-compatible schedule display with 774px table layout, navigation menus, and all three view types (area, person, gaps)
 - **Category Management System**: Complete CRUD operations for categories with modal-based editing, safe deletion with validation, and integration with people management
+- **Schedule Selection System**: Modal-based schedule selection following legacy patterns with "In Progress" vs "Published" modes, keyboard shortcuts (Ctrl+I, Ctrl+O), and immediate context switching
+- **Schedule Editing Mode System**: Complete role-based editing mode with visual status indicators, conditional menu visibility, and legacy-compatible permission handling
 
 ### 🎯 Schedule Context System (NEW)
 
@@ -117,12 +119,27 @@ All detailed specifications are in `/docs/`:
 - ✅ **Data Flow**: Full React Query integration with error handling and caching
 - ✅ **Visual Compatibility**: Today highlighting, time formatting, and shift stacking
 - ✅ **Routing System**: `/schedule-view/:type/:id` routes working for all view types
-- ✅ **Test Coverage**: 379 passing tests across all workspaces (45 shared + 182 backend + 152 frontend)
+- ✅ **Test Coverage**: 424 passing tests across all workspaces (45 shared + 182 backend + 197 frontend)
 - ✅ **Quality Assurance**: TypeScript compilation and quality checks passing
 
 **Working User Flow**: Menu → Modal Selection → Schedule View → Legacy-Compatible Grid Display
 
-#### **📈 Phase 2: Core Scheduling Operations**
+#### **✅ Phase 2: Schedule Editing Mode System - COMPLETED**
+
+**Complete role-based editing mode system now functional:**
+
+- ✅ **Schedule Store Enhancement**: `isEditable()`, `isPublished()`, `isRequest()` methods for mode detection
+- ✅ **Permission Logic**: User ownership + operations role validation matching legacy system
+- ✅ **Visual Status Indicator**: `ScheduleStatusIndicator` component showing current editing mode
+- ✅ **Conditional Menu System**: Edit-only menu items show/hide based on schedule editability
+- ✅ **Header Integration**: All menu dropdowns (Schedules, People, Areas, Shifts) respect editing mode
+- ✅ **Status Display**: Clear visual indicators (✏️ Editing, 📅 Published, 📝 Request, 👀 Viewing)
+- ✅ **Test Coverage**: 27 comprehensive tests (7 component + 20 store tests) for editing mode functionality
+- ✅ **Quality Assurance**: TypeScript compilation and error handling for malformed data
+
+**Working User Flow**: Schedule Selection → Editing Mode Detection → Conditional Menu Visibility → Status Indicator Display
+
+#### **📈 Phase 3: Core Scheduling Operations**
 
 1. **Shift Management**: Create and edit shifts with time picker interface
 2. **Assignment System**: Assign people to shifts with conflict detection
@@ -146,7 +163,7 @@ All detailed specifications are in `/docs/`:
 - ✅ Areas management system (CRUD, shift clearing, validation)
 - ✅ Role-based access control and navigation
 - ✅ User management system (CRUD, roles, area assignments)
-- ✅ **Schedule View System (NEW)**: Complete schedule display and navigation functionality
+- ✅ **Schedule View System**: Complete schedule display and navigation functionality
   - ✅ Backend API endpoints for area, person, and gaps schedules
   - ✅ Frontend grid components with legacy-style layout (774px width)
   - ✅ Schedule bounds calculation and time slot management
@@ -154,9 +171,14 @@ All detailed specifications are in `/docs/`:
   - ✅ **Navigation Menus**: Area and person selection modals with keyboard shortcuts
   - ✅ **Selection Memory**: localStorage integration for remembering last selections
   - ✅ **Category Integration**: People grouped by category with color coding
+- ✅ **Schedule Editing Mode System**: Complete role-based editing permissions
+  - ✅ **Permission Detection**: `isEditable()`, `isPublished()`, `isRequest()` methods
+  - ✅ **Visual Status Indicator**: Real-time editing mode display component
+  - ✅ **Conditional Menus**: Edit-only items show/hide based on schedule permissions
+  - ✅ **Legacy Compatibility**: Matches CakePHP `$editable` flag behavior exactly
 - ✅ Database structure with all models
 - ✅ API foundation with error handling
-- ✅ Comprehensive test coverage (275+ tests: 182 backend + 93 frontend)
+- ✅ Comprehensive test coverage (424 tests: 45 shared + 182 backend + 197 frontend)
 
 ### ✅ **Currently Available Features - FULLY WORKING**
 
@@ -168,6 +190,9 @@ All detailed specifications are in `/docs/`:
 - ✅ **Visual Schedule Interface**: Today highlighting, hover states, and legacy-compatible styling
 - ✅ **Working API Integration**: All schedule view endpoints functional with proper authentication
 - ✅ **Reliable Navigation**: Click area/person in selection modals → navigate to working schedule view
+- ✅ **Schedule Editing Mode System**: Complete role-based permission system with visual status indicators
+- ✅ **Conditional Menu Visibility**: Edit-only menu items automatically show/hide based on schedule ownership and user role
+- ✅ **Legacy-Compatible Permissions**: Exactly matches CakePHP `$editable` flag behavior (user ownership + operations role)
 
 ### ⭕ **Next Implementation Priorities**
 
