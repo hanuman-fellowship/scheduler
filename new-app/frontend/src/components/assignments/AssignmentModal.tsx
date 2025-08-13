@@ -55,7 +55,7 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
     }
     acc[categoryId].people.push(person);
     return acc;
-  }, {} as Record<number, { category: any; people: AvailablePersonResponse[] }>);
+  }, {} as Record<number, { category: { id: number; name: string; color: string }; people: AvailablePersonResponse[] }>);
 
   const handleAssignPerson = (personId: number) => {
     createAssignmentMutation.mutate({
@@ -149,7 +149,7 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
                       style={{ color: category.color }}
                       title={!person.available ? person.conflictReason : undefined}
                     >
-                      {person.name}
+                      {person.displayName || person.name}
                       {!person.available && (
                         <span className="text-xs text-red-500 ml-2">
                           ({person.conflictReason})

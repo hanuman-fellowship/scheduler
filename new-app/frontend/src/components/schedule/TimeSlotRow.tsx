@@ -10,6 +10,7 @@ interface TimeSlotRowProps {
   editable: boolean;
   todayDayId?: number;
   onShiftClick?: (shiftId: number) => void;
+  onAssignmentClick?: (shiftId: number, shiftName: string) => void;
   onAddShift?: (dayId: number, periodName: string) => void;
 }
 
@@ -21,6 +22,7 @@ export const TimeSlotRow: React.FC<TimeSlotRowProps> = ({
   editable,
   todayDayId,
   onShiftClick,
+  onAssignmentClick,
   onAddShift
 }) => {
   // Filter shifts for this time period based on start time
@@ -50,6 +52,7 @@ export const TimeSlotRow: React.FC<TimeSlotRowProps> = ({
             editable={editable}
             isToday={isToday}
             onShiftClick={onShiftClick}
+            onAssignmentClick={onAssignmentClick}
             onAdd={() => onAddShift?.(dayId, period.name)}
           />
         );

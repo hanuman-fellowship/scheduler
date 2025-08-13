@@ -5,7 +5,7 @@ interface AssignmentListProps {
   assignments: AssignmentResponse[];
   numPeople: number;
   editable: boolean;
-  onAssignmentClick?: (assignmentId: number) => void;
+  onAssignmentClick?: () => void; // Updated to match ShiftBlock usage
   onUnassign?: (assignmentId: number) => void;
 }
 
@@ -30,7 +30,7 @@ export const AssignmentList: React.FC<AssignmentListProps> = ({
             color: assignment.person?.category?.color || 'inherit',
             cursor: editable ? 'pointer' : 'default'
           }}
-          onClick={() => editable && onAssignmentClick?.(assignment.id)}
+          onClick={() => editable && onAssignmentClick?.()}
         >
           {assignment.star && <span className="star">★ </span>}
           {assignment.person ? 
@@ -54,7 +54,12 @@ export const AssignmentList: React.FC<AssignmentListProps> = ({
 
       {/* Render unassigned placeholders */}
       {Array.from({ length: unassignedCount }, (_, index) => (
-        <span key={`unassigned-${index}`} className="assignment unassigned">
+        <span 
+          key={`unassigned-${index}`} 
+          className="assignment unassigned"
+          style={{ cursor: editable ? 'pointer' : 'default' }}
+          onClick={() => editable && onAssignmentClick?.()}
+        >
           ________
           <br />
         </span>

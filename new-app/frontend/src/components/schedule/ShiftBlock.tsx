@@ -9,6 +9,7 @@ interface ShiftBlockProps {
   isFirst: boolean;
   editable: boolean;
   onShiftClick?: (shiftId: number) => void;
+  onAssignmentClick?: (shiftId: number, shiftName: string) => void;
 }
 
 export const ShiftBlock: React.FC<ShiftBlockProps> = ({
@@ -16,7 +17,8 @@ export const ShiftBlock: React.FC<ShiftBlockProps> = ({
   type,
   isFirst,
   editable,
-  onShiftClick
+  onShiftClick,
+  onAssignmentClick
 }) => {
   const timeRange = formatTimeRange(shift.startAtSeconds, shift.endAtSeconds);
 
@@ -38,6 +40,7 @@ export const ShiftBlock: React.FC<ShiftBlockProps> = ({
           assignments={shift.assignments}
           numPeople={shift.numPeople}
           editable={editable}
+          onAssignmentClick={() => onAssignmentClick?.(shift.id, timeRange)}
         />
       </span>
     );

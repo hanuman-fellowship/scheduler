@@ -11,8 +11,9 @@ import EditCategoryForm from '../components/categories/EditCategoryForm'
 import DeleteCategoryModal from '../components/categories/DeleteCategoryModal'
 import { InProgressScheduleSelection } from '../components/schedules/InProgressScheduleSelection'
 import { PublishedScheduleSelection } from '../components/schedules/PublishedScheduleSelection'
+import { AssignmentModal } from '../components/assignments/AssignmentModal'
 
-type ModalType = 'shift' | 'editShift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | 'inProgressSchedules' | 'publishedSchedules' | null
+type ModalType = 'shift' | 'editShift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | 'inProgressSchedules' | 'publishedSchedules' | 'assignment' | null
 
 interface Category {
   id: number
@@ -29,6 +30,7 @@ interface GlobalModalContextType {
   openDeleteCategoryModal: (category: Category) => void
   openInProgressSchedulesModal: () => void
   openPublishedSchedulesModal: () => void
+  openAssignmentModal: (shiftId: number, shiftName: string) => void
 }
 
 const GlobalModalContext = createContext<GlobalModalContextType | undefined>(undefined)
@@ -77,6 +79,11 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
     setModalData(null)
   }
 
+  const openAssignmentModal = (shiftId: number, shiftName: string) => {
+    setActiveModal('assignment')
+    setModalData({ shiftId, shiftName })
+  }
+
   return (
     <GlobalModalContext.Provider value={{ 
       openModal, 
@@ -86,7 +93,8 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
       openEditCategoryModal,
       openDeleteCategoryModal,
       openInProgressSchedulesModal,
-      openPublishedSchedulesModal
+      openPublishedSchedulesModal,
+      openAssignmentModal
     }}>
       {children}
 
@@ -231,6 +239,16 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
           onScheduleSelected={closeModal}
         />
       </Modal>
+
+      {/* Assignment Modal */}
+      {modalData?.shiftId && (
+        <AssignmentModal
+          isOpen={activeModal === 'assignment'}
+          onClose={closeModal}
+          shiftId={modalData.shiftId}
+          shiftName={modalData.shiftName}
+        />
+      )}
     </GlobalModalContext.Provider>
   )
 }

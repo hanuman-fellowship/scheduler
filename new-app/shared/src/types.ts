@@ -192,6 +192,12 @@ export interface CreateAssignmentRequest {
   name?: string; // if personId = null
 }
 
+export interface UpdateAssignmentRequest {
+  personId?: number | null;
+  name?: string;
+  star?: boolean;
+}
+
 // ============================================================================
 // Validation Schemas (simple, only for user forms)
 // ============================================================================

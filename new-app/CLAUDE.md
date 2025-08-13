@@ -50,18 +50,13 @@ npm run dev           # Start both backend and frontend
 - **Schedule Views**: Legacy-compatible display (area/person/gaps views) with navigation
 - **Schedule Editing Mode**: Role-based permission system with visual indicators
 - **Shift Management**: Context-aware creation/editing with hover UI and click-to-edit
-- **Assignment System Backend**: Complete API with conflict detection algorithm
+- **Assignment System**: Complete frontend and backend with conflict detection and modal UI
 
 ## 🎯 Next Development Priorities
 
-### Phase 5: Assignment UI (Current Focus)
+### Phase 6: Advanced Workflows (Current Focus)
 
-- **Assignment Modal**: Frontend interface for assigning people to shifts with conflict indicators
-- **Schedule Integration**: Click-to-assign workflow within existing schedule views
 - **People Enhancement**: Advanced people management (retire/restore, category ordering)
-
-### Phase 6: Advanced Workflows
-
 - **Request System**: Manager → Operations workflow (create, submit, approve requests)
 - **Schedule Management**: Copy schedules, templates, publishing workflow
 - **Email Integration**: Notifications for schedule changes and user management
@@ -120,17 +115,24 @@ npm run dev           # Start both backend and frontend
   - ✅ **Assignment Protection**: Prevents reducing people count below current assignments
   - ✅ **Delete Functionality**: Safe shift deletion with confirmation dialog
   - ✅ **Permission-Based**: Edit functionality only available for editable schedules
+- ✅ **Assignment UI Integration**: Complete frontend assignment system
+  - ✅ **Assignment Modal**: People selection with category grouping and conflict indicators
+  - ✅ **Click-to-Assign Workflow**: Clickable assignment areas in schedule views
+  - ✅ **Real-time Conflict Detection**: Shows time conflicts, off days, and existing assignments
+  - ✅ **"Other" Assignment Support**: Custom name assignments for non-person entries
+  - ✅ **Global Modal Integration**: Centralized assignment modal management
+  - ✅ **Legacy UX Compatibility**: Maintains exact CakePHP user interaction patterns
 - ✅ Database structure with all models
 - ✅ API foundation with error handling
-- ✅ Comprehensive test coverage (443+ tests: 45 shared + 196 backend + 202+ frontend)
+- ✅ Comprehensive test coverage (458+ tests: 45 shared + 196 backend + 213+ frontend)
 
 ### ✅ **Working Features Summary**
 
-All core systems are operational with comprehensive test coverage (450+ tests):
+All core systems are operational with comprehensive test coverage (458+ tests):
 
 - **Schedule Views**: Area/person/gaps schedule display with navigation modals
 - **Shift Management**: Context-aware creation/editing with hover UI and validation
-- **Assignment Backend**: Complete API with conflict detection (ready for UI integration)
+- **Assignment System**: Complete frontend and backend with click-to-assign workflow
 - **Schedule Context**: Current schedule system with automatic scoping
 - **User/Areas/Categories**: Full CRUD operations with role-based permissions
 
@@ -195,6 +197,8 @@ npm run setup         # Full setup (install + migrate + seed)
 
 ---
 
-**Status**: 🚀 **Ready for Assignment UI Development** - All foundational systems complete, 450+ tests passing
+**Status**: 🎉 **Assignment System Complete** - Full scheduling workflow operational, 458+ tests passing
 
-**Focus**: Build assignment modal UI and integrate with existing schedule views
+**Focus**: Ready for advanced workflows (People Enhancement, Request System, Schedule Management)
+
+- always keep the md files up to date after finishing a task

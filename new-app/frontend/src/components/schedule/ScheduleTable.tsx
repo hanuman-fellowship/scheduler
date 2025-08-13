@@ -18,6 +18,7 @@ interface ScheduleTableProps {
   mode?: 'view' | 'edit' | 'request' | 'print';
   onAddShift?: (dayId: number, periodName: string) => void;
   onShiftClick?: (shiftId: number) => void;
+  onAssignmentClick?: (shiftId: number, shiftName: string) => void;
   onAddFloatingShift?: () => void;
 }
 
@@ -29,6 +30,7 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({
   mode = 'view',
   onAddShift,
   onShiftClick,
+  onAssignmentClick,
   onAddFloatingShift
 }) => {
   // Get today's day of week (1 = Sunday)
@@ -92,6 +94,7 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({
               editable={editable && mode === 'edit'}
               todayDayId={todayDayId ? parseInt(todayDayId) : undefined}
               onShiftClick={onShiftClick}
+              onAssignmentClick={onAssignmentClick}
               onAddShift={onAddShift}
             />
           ))}

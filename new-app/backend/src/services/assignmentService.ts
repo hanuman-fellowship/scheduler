@@ -201,13 +201,15 @@ export async function toggleAssignmentStar(id: number): Promise<AssignmentRespon
 
 export async function getAvailablePeopleForShift(shiftId: number): Promise<Array<{
   id: number;
-  first: string;
-  last: string;
+  name: string;
   displayName?: string;
-  categoryName: string;
-  categoryColor: string;
+  category: {
+    id: number;
+    name: string;
+    color: string;
+  };
   available: boolean;
-  conflicts: string[];
+  conflictReason?: string;
 }>> {
   const shift = await prisma.shift.findUnique({
     where: { id: shiftId },
@@ -295,13 +297,15 @@ export async function getAvailablePeopleForShift(shiftId: number): Promise<Array
 
       return {
         id: person.id,
-        first: person.first,
-        last: person.last,
+        name: `${person.first} ${person.last}`,
         displayName: person.displayName || undefined,
-        categoryName: personSchedule.residentCategory.name,
-        categoryColor: personSchedule.residentCategory.color || '#000000',
+        category: {
+          id: personSchedule.residentCategory.id,
+          name: personSchedule.residentCategory.name,
+          color: personSchedule.residentCategory.color || '#000000'
+        },
         available,
-        conflicts,
+        conflictReason: conflicts.length > 0 ? conflicts.join(', ') : undefined,
       };
     });
 }

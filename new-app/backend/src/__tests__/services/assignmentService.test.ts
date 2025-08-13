@@ -319,12 +319,13 @@ describe('assignmentService', () => {
       expect(result).toHaveLength(2)
       expect(result[0]).toMatchObject({
         id: person1.id,
-        first: 'John',
-        last: 'Doe',
-        categoryName: 'Residents',
-        categoryColor: '#008080',
-        available: true,
-        conflicts: []
+        name: 'John Doe',
+        category: {
+          id: expect.any(Number),
+          name: 'Residents',
+          color: '#008080'
+        },
+        available: true
       })
     })
 
@@ -369,7 +370,7 @@ describe('assignmentService', () => {
 
       expect(result).toHaveLength(1)
       expect(result[0].available).toBe(false)
-      expect(result[0].conflicts).toContain('Conflicts with 32400-36000')
+      expect(result[0].conflictReason).toContain('Conflicts with 32400-36000')
     })
   })
 

@@ -10,6 +10,7 @@ interface ShiftCellProps {
   editable: boolean;
   isToday: boolean;
   onShiftClick?: (shiftId: number) => void;
+  onAssignmentClick?: (shiftId: number, shiftName: string) => void;
   onAdd?: () => void;
 }
 
@@ -21,6 +22,7 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
   editable,
   isToday,
   onShiftClick,
+  onAssignmentClick,
   onAdd
 }) => {
   return (
@@ -37,6 +39,7 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
           isFirst={index === 0}
           editable={editable}
           onShiftClick={onShiftClick}
+          onAssignmentClick={onAssignmentClick}
         />
       ))}
 

@@ -14,7 +14,7 @@ export const ScheduleView: React.FC = () => {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode') as 'view' | 'edit' | 'request' | 'print' || 'view';
   const { isEditable, isRequest } = useScheduleStore();
-  const { openModal } = useGlobalModal();
+  const { openModal, openAssignmentModal } = useGlobalModal();
 
   // Determine if we should be in editing mode
   const canEdit = isEditable() || isRequest();
@@ -99,6 +99,14 @@ export const ScheduleView: React.FC = () => {
     openModal('editShift', { shiftId });
   }, [canEdit, openModal]);
 
+  // Handle assignment creation - click on empty assignment slot or "Need X more"
+  const handleAssignmentClick = React.useCallback((shiftId: number, shiftName: string) => {
+    if (!canEdit) return;
+
+    // Open assignment modal with shift ID and name
+    openAssignmentModal(shiftId, shiftName);
+  }, [canEdit, openAssignmentModal]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -145,6 +153,7 @@ export const ScheduleView: React.FC = () => {
               mode={editMode}
               onAddShift={handleAddShift}
               onShiftClick={handleShiftClick}
+              onAssignmentClick={handleAssignmentClick}
               onAddFloatingShift={handleAddFloatingShift}
             />
             {areaData.area.floatingShifts?.length > 0 && (
@@ -181,6 +190,7 @@ export const ScheduleView: React.FC = () => {
               mode={editMode}
               onAddShift={handleAddShift}
               onShiftClick={handleShiftClick}
+              onAssignmentClick={handleAssignmentClick}
               onAddFloatingShift={handleAddFloatingShift}
             />
             {(personData.notes.operations.length > 0 || personData.notes.personnel.length > 0) && (
@@ -217,10 +227,11 @@ export const ScheduleView: React.FC = () => {
             <ScheduleTable
               bounds={gapsData.bounds}
               data={gapsData}
-              editable={false}
+              editable={true}
               type="gaps"
               mode={mode}
               onShiftClick={handleShiftClick}
+              onAssignmentClick={handleAssignmentClick}
             />
           </div>
         );
