@@ -4,7 +4,7 @@ import { categoriesService } from '../services/categories'
 import { useGlobalModal } from '../contexts/GlobalModalContext'
 
 export default function PeoplePage() {
-  const { openModal } = useGlobalModal()
+  const { openModal, openEditCategoryModal, openDeleteCategoryModal } = useGlobalModal()
 
   const { data: people = [], isLoading: peopleLoading } = useQuery({
     queryKey: ['people'],
@@ -47,14 +47,32 @@ export default function PeoplePage() {
           {categories.map((category) => (
             <div 
               key={category.id}
-              className="flex items-center space-x-4 p-2 border border-gray-300 rounded"
+              className="flex items-center justify-between p-2 border border-gray-300 rounded hover:bg-gray-50"
             >
-              <div 
-                className="w-4 h-4 border border-gray-800"
-                style={{ backgroundColor: category.color }}
-              />
-              <span className="font-medium">{category.name}</span>
-              <span className="text-sm text-gray-600">({category.color})</span>
+              <div className="flex items-center space-x-4">
+                <div 
+                  className="w-4 h-4 border border-gray-800"
+                  style={{ backgroundColor: category.color }}
+                />
+                <span className="font-medium">{category.name}</span>
+                <span className="text-sm text-gray-600">({category.color})</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <button
+                  onClick={() => openEditCategoryModal(category)}
+                  className="text-blue-600 hover:text-blue-800 p-1 rounded text-sm"
+                  title="Edit category"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => openDeleteCategoryModal(category)}
+                  className="text-red-600 hover:text-red-800 p-1 rounded text-sm"
+                  title="Delete category"
+                >
+                  🗑️
+                </button>
+              </div>
             </div>
           ))}
           {categories.length === 0 && (

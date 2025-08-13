@@ -119,5 +119,12 @@ export const scheduleNavigationService = {
   navigateToPersonSchedule(personId: number): string {
     this.setLastSelectedPerson(personId);
     return `/schedule-view/person/${personId}`;
+  },
+
+  /**
+   * Navigate to gaps schedule view
+   */
+  navigateToGapsSchedule(): string {
+    return `/schedule-view/gaps/gaps`;
   }
 };

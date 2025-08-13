@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ShiftWithAssignments } from '@shared/types';
-import { formatTimeRange } from '@shared/types';
+import { formatTimeRange } from '../../../../shared/src/timeUtils';
 import { AssignmentList } from './AssignmentList';
 
 interface ShiftBlockProps {

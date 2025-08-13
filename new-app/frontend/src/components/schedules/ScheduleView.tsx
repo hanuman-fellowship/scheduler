@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useScheduleView } from '../../hooks/useScheduleView';
-import { ScheduleGrid } from './ScheduleGrid';
+import { ScheduleTable } from '../schedule/ScheduleTable';
 import { ScheduleHeader } from './ScheduleHeader';
 import { FloatingShifts } from './FloatingShifts';
 import { ScheduleNotes } from './ScheduleNotes';
@@ -88,11 +88,12 @@ export const ScheduleView: React.FC = () => {
               editable={areaData.editable}
               type="area"
             />
-            <ScheduleGrid
+            <ScheduleTable
               bounds={areaData.bounds}
               data={areaData}
               editable={areaData.editable}
               type="area"
+              mode={mode}
             />
             {areaData.area.floatingShifts?.length > 0 && (
               <FloatingShifts
@@ -120,11 +121,12 @@ export const ScheduleView: React.FC = () => {
               type="person"
               totalHours={Object.values(personData.totalHours).reduce((sum: number, hours: any) => sum + hours, 0)}
             />
-            <ScheduleGrid
+            <ScheduleTable
               bounds={personData.bounds}
               data={personData}
               editable={personData.editable}
               type="person"
+              mode={mode}
             />
             {(personData.notes.operations.length > 0 || personData.notes.personnel.length > 0) && (
               <div className="space-y-2">
@@ -157,11 +159,12 @@ export const ScheduleView: React.FC = () => {
               editable={false}
               type="gaps"
             />
-            <ScheduleGrid
+            <ScheduleTable
               bounds={gapsData.bounds}
               data={gapsData}
               editable={false}
               type="gaps"
+              mode={mode}
             />
           </div>
         );

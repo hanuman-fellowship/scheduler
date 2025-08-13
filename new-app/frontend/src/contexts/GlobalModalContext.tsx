@@ -6,35 +6,60 @@ import AddCategoryForm from '../components/people/AddCategoryForm'
 import AddAreaForm from '../components/areas/AddAreaForm'
 import { AreaSelectionContent } from '../components/schedules/AreaSelectionContent'
 import { PersonSelectionContent } from '../components/schedules/PersonSelectionContent'
+import EditCategoryForm from '../components/categories/EditCategoryForm'
+import DeleteCategoryModal from '../components/categories/DeleteCategoryModal'
 
-type ModalType = 'shift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | null
+type ModalType = 'shift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | null
+
+interface Category {
+  id: number
+  name: string
+  color: string
+}
 
 interface GlobalModalContextType {
-  openModal: (type: ModalType) => void
+  openModal: (type: ModalType, data?: any) => void
   closeModal: () => void
   openAreaSelectionModal: () => void
   openPersonSelectionModal: () => void
+  openEditCategoryModal: (category: Category) => void
+  openDeleteCategoryModal: (category: Category) => void
 }
 
 const GlobalModalContext = createContext<GlobalModalContextType | undefined>(undefined)
 
 export function GlobalModalProvider({ children }: { children: ReactNode }) {
   const [activeModal, setActiveModal] = useState<ModalType>(null)
+  const [modalData, setModalData] = useState<any>(null)
 
-  const openModal = (type: ModalType) => {
+  const openModal = (type: ModalType, data?: any) => {
     setActiveModal(type)
+    setModalData(data)
   }
 
   const closeModal = () => {
     setActiveModal(null)
+    setModalData(null)
   }
 
   const openAreaSelectionModal = () => {
     setActiveModal('areaSelection')
+    setModalData(null)
   }
 
   const openPersonSelectionModal = () => {
     setActiveModal('personSelection')
+    setModalData(null)
+  }
+
+  const openEditCategoryModal = (category: Category) => {
+    setActiveModal('editCategory')
+    setModalData(category)
+  }
+
+  const openDeleteCategoryModal = (category: Category) => {
+    setActiveModal('deleteCategory')
+    setModalData(category)
   }
 
   return (
@@ -42,7 +67,9 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
       openModal, 
       closeModal, 
       openAreaSelectionModal, 
-      openPersonSelectionModal 
+      openPersonSelectionModal,
+      openEditCategoryModal,
+      openDeleteCategoryModal
     }}>
       {children}
 
@@ -114,6 +141,36 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
         <PersonSelectionContent
           onCancel={closeModal}
         />
+      </Modal>
+
+      {/* Edit Category Modal */}
+      <Modal
+        isOpen={activeModal === 'editCategory'}
+        onClose={closeModal}
+        title="Edit Category"
+      >
+        {modalData && (
+          <EditCategoryForm
+            category={modalData}
+            onSuccess={closeModal}
+            onCancel={closeModal}
+          />
+        )}
+      </Modal>
+
+      {/* Delete Category Modal */}
+      <Modal
+        isOpen={activeModal === 'deleteCategory'}
+        onClose={closeModal}
+        title="Delete Category"
+      >
+        {modalData && (
+          <DeleteCategoryModal
+            category={modalData}
+            onSuccess={closeModal}
+            onCancel={closeModal}
+          />
+        )}
       </Modal>
     </GlobalModalContext.Provider>
   )

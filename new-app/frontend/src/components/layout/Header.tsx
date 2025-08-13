@@ -94,7 +94,7 @@ export default function Header() {
             <MenuItem to="/schedule">In Progress...</MenuItem>
             <MenuItem to="/schedule/published">Published...</MenuItem>
             <DropdownSeparator />
-            <MenuItem to="/people/gaps">View Gaps</MenuItem>
+            <MenuItem to="/schedule-view/gaps/gaps">View Gaps</MenuItem>
             <DropdownSeparator />
             <MenuItem to="/days/edit">Edit Days...</MenuItem>
             <MenuItem to="/boundaries/edit">Edit Times...</MenuItem>
@@ -122,7 +122,7 @@ export default function Header() {
               <MenuItem to="/people/restore">Restore Person...</MenuItem>
               <MenuItem to="/people/retire">Retire Person...</MenuItem>
               <DropdownSeparator />
-              <MenuItem to="/categories/add">New Category...</MenuItem>
+              <MenuItem onClick={() => openModal('category')}>New Category...</MenuItem>
               <MenuItem to="/categories/edit">Edit Category...</MenuItem>
               <MenuItem to="/categories/reorder">Reorder Categories...</MenuItem>
               <MenuItem to="/categories/delete">Delete Category...</MenuItem>

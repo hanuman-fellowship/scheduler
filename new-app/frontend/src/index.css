@@ -45,6 +45,10 @@
     @apply border border-gray-400 px-2 py-1 text-center inline-block hover:bg-schedule-hover;
   }
   
+  .boxy-button-secondary {
+    @apply border border-gray-400 px-2 py-1 text-center inline-block hover:bg-gray-100 text-gray-700;
+  }
+  
   /* Menu styling */
   .menu-item {
     @apply hover:bg-schedule-hover px-2 py-1 cursor-pointer;
