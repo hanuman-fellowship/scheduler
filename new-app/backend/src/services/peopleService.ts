@@ -20,6 +20,7 @@ export interface Person {
     id: number;
     name: string;
     color: string;
+    sortOrder?: number;
   };
 }
 
@@ -32,10 +33,22 @@ export async function getAllPeople(): Promise<Person[]> {
         },
       },
     },
-    orderBy: { first: 'asc' },
   });
 
-  return people.map(transformPersonResponse);
+  // Sort by category sort order, then by first name
+  const transformed = people.map(transformPersonResponse);
+  return transformed.sort((a, b) => {
+    // Sort by category sort order (nulls last)
+    const aSort = a.category?.sortOrder ?? 999;
+    const bSort = b.category?.sortOrder ?? 999;
+    
+    if (aSort !== bSort) {
+      return aSort - bSort;
+    }
+    
+    // Then by first name
+    return a.first.localeCompare(b.first);
+  });
 }
 
 export async function getPersonById(id: number): Promise<Person | null> {
@@ -139,6 +152,138 @@ export async function deletePerson(id: number): Promise<boolean> {
   return true;
 }
 
+// Retire person from current schedule (removes PeopleSchedule but keeps Person)
+export async function retirePerson(personId: number, scheduleId: number): Promise<string> {
+  const person = await prisma.person.findUnique({
+    where: { id: personId },
+  });
+
+  if (!person) {
+    throw new Error('Person not found');
+  }
+
+  // Remove from current schedule
+  const deleted = await prisma.peopleSchedule.deleteMany({
+    where: { 
+      personId: personId,
+      scheduleId: scheduleId
+    },
+  });
+
+  if (deleted.count === 0) {
+    throw new Error('Person not found in current schedule');
+  }
+
+  return `${person.first} ${person.last}`;
+}
+
+// Retire multiple people at once (bulk retirement)
+export async function retireMultiplePeople(peopleIds: number[], scheduleId: number): Promise<string[]> {
+  const retiredNames: string[] = [];
+  
+  for (const personId of peopleIds) {
+    try {
+      const name = await retirePerson(personId, scheduleId);
+      retiredNames.push(name);
+    } catch (error) {
+      // Skip people that can't be retired but don't fail the whole operation
+      console.warn(`Failed to retire person ${personId}:`, error);
+    }
+  }
+
+  return retiredNames;
+}
+
+// Get list of people who can be restored (not in current schedule)
+export async function getRestorablePeople(scheduleId: number): Promise<Person[]> {
+  // Find all people who are NOT in the current schedule
+  const people = await prisma.person.findMany({
+    where: {
+      peopleSchedules: {
+        none: {
+          scheduleId: scheduleId
+        }
+      }
+    },
+    orderBy: { first: 'asc' },
+  });
+
+  return people.map(person => ({
+    id: person.id,
+    first: person.first,
+    last: person.last,
+    displayName: person.displayName || `${person.first} ${person.last}`,
+  }));
+}
+
+// Restore person to schedule with selected category
+export async function restorePerson(personId: number, scheduleId: number, categoryId: number): Promise<string> {
+  const person = await prisma.person.findUnique({
+    where: { id: personId },
+  });
+
+  if (!person) {
+    throw new Error('Person not found');
+  }
+
+  // Check if person is already in this schedule
+  const existing = await prisma.peopleSchedule.findFirst({
+    where: {
+      personId: personId,
+      scheduleId: scheduleId
+    }
+  });
+
+  if (existing) {
+    throw new Error('Person is already in this schedule');
+  }
+
+  // Add to schedule with selected category
+  await prisma.peopleSchedule.create({
+    data: {
+      personId: personId,
+      scheduleId: scheduleId,
+      residentCategoryId: categoryId
+    }
+  });
+
+  return `${person.first} ${person.last}`;
+}
+
+// Get people grouped by category (for retire/restore UI)
+export async function getPeopleByCategory(): Promise<{[categoryId: number]: {
+  category: { id: number; name: string; color: string; sortOrder: number };
+  people: Person[];
+}}> {
+  const people = await getAllPeople();
+  
+  // Group by category
+  const groupedPeople: {[categoryId: number]: {
+    category: { id: number; name: string; color: string; sortOrder: number };
+    people: Person[];
+  }} = {};
+
+  people.forEach(person => {
+    if (person.category) {
+      const categoryId = person.category.id;
+      if (!groupedPeople[categoryId]) {
+        groupedPeople[categoryId] = {
+          category: {
+            id: person.category.id,
+            name: person.category.name,
+            color: person.category.color,
+            sortOrder: person.category.sortOrder || 999
+          },
+          people: []
+        };
+      }
+      groupedPeople[categoryId].people.push(person);
+    }
+  });
+
+  return groupedPeople;
+}
+
 // Helper functions
 async function generateDisplayName(first: string, last: string): Promise<string> {
   const conflictingPeople = await prisma.person.findMany({
@@ -164,6 +309,7 @@ function transformPersonResponse(person: any): Person {
       id: person.peopleSchedules[0].residentCategory.id,
       name: person.peopleSchedules[0].residentCategory.name,
       color: person.peopleSchedules[0].residentCategory.color,
+      sortOrder: person.peopleSchedules[0].residentCategory.sortOrder,
     } : undefined,
   };
 }

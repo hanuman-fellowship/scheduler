@@ -51,12 +51,12 @@ npm run dev           # Start both backend and frontend
 - **Schedule Editing Mode**: Role-based permission system with visual indicators
 - **Shift Management**: Context-aware creation/editing with hover UI and click-to-edit
 - **Assignment System**: Complete frontend and backend with conflict detection and modal UI
+- **People Management Enhanced**: Advanced retire/restore functionality with category-based organization
 
 ## 🎯 Next Development Priorities
 
 ### Phase 6: Advanced Workflows (Current Focus)
 
-- **People Enhancement**: Advanced people management (retire/restore, category ordering)
 - **Request System**: Manager → Operations workflow (create, submit, approve requests)
 - **Schedule Management**: Copy schedules, templates, publishing workflow
 - **Email Integration**: Notifications for schedule changes and user management
@@ -122,17 +122,25 @@ npm run dev           # Start both backend and frontend
   - ✅ **"Other" Assignment Support**: Custom name assignments for non-person entries
   - ✅ **Global Modal Integration**: Centralized assignment modal management
   - ✅ **Legacy UX Compatibility**: Maintains exact CakePHP user interaction patterns
+- ✅ **People Management Enhanced**: Complete retire/restore functionality for workforce management
+  - ✅ **Retire/Restore Backend**: Service layer with bulk operations and schedule scoping
+  - ✅ **Category-Based Display**: People grouped by category with sortOrder support
+  - ✅ **RetireModal UI**: Bulk selection with "Select All" per category functionality
+  - ✅ **RestoreModal UI**: Two-step restoration process (select person, then category)
+  - ✅ **Enhanced PeoplePage**: Category-organized display with retire/restore actions
+  - ✅ **Comprehensive Testing**: Full test coverage for retire/restore workflows
 - ✅ Database structure with all models
 - ✅ API foundation with error handling
-- ✅ Comprehensive test coverage (458+ tests: 45 shared + 196 backend + 213+ frontend)
+- ✅ Comprehensive test coverage (475+ tests: 45 shared + 208 backend + 222+ frontend)
 
 ### ✅ **Working Features Summary**
 
-All core systems are operational with comprehensive test coverage (458+ tests):
+All core systems are operational with comprehensive test coverage (475+ tests):
 
 - **Schedule Views**: Area/person/gaps schedule display with navigation modals
 - **Shift Management**: Context-aware creation/editing with hover UI and validation
 - **Assignment System**: Complete frontend and backend with click-to-assign workflow
+- **People Management**: Enhanced retire/restore with category-based organization and bulk operations
 - **Schedule Context**: Current schedule system with automatic scoping
 - **User/Areas/Categories**: Full CRUD operations with role-based permissions
 
@@ -146,7 +154,7 @@ npm run dev:frontend  # Frontend only
 
 # Quality Checks (ALWAYS RUN AFTER COMPLETING TASKS)
 npm run check         # TypeScript compilation across all workspaces
-npm run test          # Run all tests (450+ tests must pass)
+npm run test          # Run all tests (475+ tests must pass)
 
 # Database
 npm run migrate       # Run Prisma migrations
@@ -197,8 +205,8 @@ npm run setup         # Full setup (install + migrate + seed)
 
 ---
 
-**Status**: 🎉 **Assignment System Complete** - Full scheduling workflow operational, 458+ tests passing
+**Status**: 🚀 **Core Scheduling Complete** - Full scheduling with enhanced people management, 475+ tests passing
 
-**Focus**: Ready for advanced workflows (People Enhancement, Request System, Schedule Management)
+**Focus**: Ready for advanced workflows (Request System, Schedule Management, Email Integration)
 
 - always keep the md files up to date after finishing a task

@@ -82,8 +82,12 @@ export const createApp = (options: {
 
   // People management (operations only for now)
   app.get('/api/people', requireAuth, asyncHandler(peopleController.list));
+  app.get('/api/people/by-category', requireAuth, requireRole('operations'), asyncHandler(peopleController.listByCategory));
+  app.get('/api/people/restorable', requireAuth, requireRole('operations'), asyncHandler(peopleController.getRestorable));
   app.get('/api/people/:id', requireAuth, asyncHandler(peopleController.get));
   app.post('/api/people', requireAuth, requireRole('operations'), asyncHandler(peopleController.create));
+  app.post('/api/people/retire', requireAuth, requireRole('operations'), asyncHandler(peopleController.retire));
+  app.post('/api/people/:id/restore', requireAuth, requireRole('operations'), asyncHandler(peopleController.restore));
   app.put('/api/people/:id', requireAuth, requireRole('operations'), asyncHandler(peopleController.update));
   app.delete('/api/people/:id', requireAuth, requireRole('operations'), asyncHandler(peopleController.deletePerson));
 
