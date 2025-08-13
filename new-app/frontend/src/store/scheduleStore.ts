@@ -19,6 +19,7 @@ interface ScheduleStore {
   loadCurrentSchedule: () => Promise<void>
   switchToSchedule: (schedule: Schedule) => Promise<void>
   isEditable: () => boolean
+  isViewable: () => boolean
   isPublished: () => boolean
   isRequest: () => boolean
 }
@@ -99,6 +100,35 @@ export const useScheduleStore = create<ScheduleStore>()(
           return schedule.userId === user.id && user.roles.includes('operations')
         } catch (error) {
           console.error('Error checking schedule editable status:', error)
+          return false
+        }
+      },
+
+      // Check if current schedule is viewable (for person/area schedules)
+      // Operations can view any schedule, others can view published schedules
+      isViewable: () => {
+        const schedule = get().currentSchedule
+        if (!schedule) return false
+        
+        // Get user from auth storage directly to avoid circular dependency
+        const authStorage = localStorage.getItem('auth-storage')
+        if (!authStorage) return false
+        
+        try {
+          const authState = JSON.parse(authStorage)
+          const user = authState?.state?.user
+          
+          if (!user) return false
+          
+          // Operations role can view any schedule
+          if (user.roles.includes('operations')) {
+            return true
+          }
+          
+          // Other roles (managers, personnel) can view published schedules
+          return schedule.userId === null // Published schedules have userId = null
+        } catch (error) {
+          console.error('Error checking schedule viewable status:', error)
           return false
         }
       },

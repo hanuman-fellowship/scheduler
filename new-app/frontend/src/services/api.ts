@@ -8,6 +8,9 @@ export const api = axios.create({
   },
 })
 
+// Provide a second named export for existing code that expects `apiClient`
+export const apiClient = api
+
 // Request interceptor to add auth token
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token
@@ -44,3 +47,6 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+// Default export for modules using `import api from './api'`
+export default api

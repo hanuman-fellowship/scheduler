@@ -11,11 +11,14 @@ import { ScheduleStatusIndicator } from '../schedules/ScheduleStatusIndicator'
 
 export default function Header() {
   const { user, logout, isOperations, isManager, isPersonnel } = useAuthStore()
-  const { isEditable, isRequest } = useScheduleStore()
+  const { isEditable, isViewable, isRequest } = useScheduleStore()
   const { openModal, openAreaSelectionModal, openPersonSelectionModal, openInProgressSchedulesModal, openPublishedSchedulesModal } = useGlobalModal()
   
   // Check if current schedule allows editing operations
   const canEdit = isEditable() || isRequest()
+  
+  // Check if current schedule allows viewing operations (person/area schedules)
+  const canView = isViewable() || canEdit
 
   // Set up keyboard shortcuts
   useKeyboardShortcuts([
@@ -23,7 +26,7 @@ export default function Header() {
       key: 'p',
       ctrlKey: true,
       callback: () => {
-        if (isOperations()) {
+        if (isOperations() && canView) {
           openPersonSelectionModal();
         }
       }
@@ -32,7 +35,7 @@ export default function Header() {
       key: 'a',
       ctrlKey: true,
       callback: () => {
-        if (isOperations()) {
+        if (isOperations() && canView) {
           openAreaSelectionModal();
         }
       }
@@ -142,7 +145,7 @@ export default function Header() {
           <>
             <span className="text-gray-500">|</span>
             <MenuDropdown trigger="People">
-              {canEdit && <MenuItem onClick={openPersonSelectionModal} shortcut="Ctrl+P">View Schedule...</MenuItem>}
+              {canView && <MenuItem onClick={openPersonSelectionModal} shortcut="Ctrl+P">View Schedule...</MenuItem>}
               <MenuItem to="/board">Big Board</MenuItem>
               {canEdit && (
                 <>
@@ -164,7 +167,7 @@ export default function Header() {
             </MenuDropdown>
 
             <MenuDropdown trigger="Areas">
-              {canEdit && <MenuItem onClick={openAreaSelectionModal} shortcut="Ctrl+A">View Schedule...</MenuItem>}
+              {canView && <MenuItem onClick={openAreaSelectionModal} shortcut="Ctrl+A">View Schedule...</MenuItem>}
               {canEdit && (
                 <>
                   <DropdownSeparator />
