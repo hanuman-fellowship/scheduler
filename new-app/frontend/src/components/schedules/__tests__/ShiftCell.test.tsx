@@ -197,8 +197,8 @@ describe('ShiftCell', () => {
         </table>
       );
 
-      // Should show area short name
-      expect(screen.getByText('K')).toBeInTheDocument();
+      // Should show area ID (no short name available in mock)
+      expect(screen.getByText('Area 1')).toBeInTheDocument();
 
       // Should show time range (minimal format)
       expect(screen.getByText('8 - 12')).toBeInTheDocument();

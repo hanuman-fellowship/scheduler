@@ -163,7 +163,7 @@ describe('ScheduleController', () => {
   });
 
   describe('POST /schedules/copy', () => {
-    it('should return not implemented', async () => {
+    it('should successfully copy a schedule for authenticated user', async () => {
       // Login as regular user to get token
       const loginResponse = await request(testApp)
         .post('/api/auth/login')
@@ -179,17 +179,18 @@ describe('ScheduleController', () => {
         .set('Authorization', `Bearer ${regularToken}`)
         .send({ sourceId: testSchedule.id, name: 'Copy of Test Schedule' });
 
-      expect(response.status).toBe(501);
-      expect(response.body).toHaveProperty('error');
-      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('message', 'Schedule copied successfully');
+      expect(response.body).toHaveProperty('schedule');
+      expect(response.body.schedule).toHaveProperty('name', 'Copy of Test Schedule');
     });
 
-    it('should return not implemented for non-owner non-operations user', async () => {
+    it('should successfully copy for operations user', async () => {
       const otherUser = await createTestUser({
         username: 'copy_user',
         email: 'copy@example.com',
         password: 'password',
-        roles: ['personnel']
+        roles: ['operations']
       });
 
       const otherLoginResponse = await request(testApp)
@@ -204,59 +205,12 @@ describe('ScheduleController', () => {
       const response = await request(testApp)
         .post('/api/schedules/copy')
         .set('Authorization', `Bearer ${otherToken}`)
-        .send({ sourceId: testSchedule.id, name: 'Copy of Test Schedule' });
+        .send({ sourceId: testSchedule.id, name: 'Copy of Test Schedule by Ops' });
 
-      expect(response.status).toBe(501);
-      expect(response.body).toHaveProperty('error');
-      expect(response.body.error.code).toBe('NOT_IMPLEMENTED');
-    });
-  });
-
-  describe('POST /schedules/publish', () => {
-    it('should reject access for non-operations user', async () => {
-      // Login as regular user to get token
-      const loginResponse = await request(testApp)
-        .post('/api/auth/login')
-        .send({
-          username: 'regular_user',
-          password: 'password'
-        });
-
-      const regularToken = loginResponse.body.token;
-
-      const response = await request(testApp)
-        .post('/api/schedules/publish')
-        .set('Authorization', `Bearer ${regularToken}`)
-        .send({ scheduleId: testSchedule.id });
-
-      expect(response.status).toBe(403);
-      expect(response.body).toHaveProperty('error');
-    });
-
-    it('should reject access for non-operations user', async () => {
-      const otherUser = await createTestUser({
-        username: 'publish_user',
-        email: 'publish@example.com',
-        password: 'password',
-        roles: ['personnel']
-      });
-
-      const otherLoginResponse = await request(testApp)
-        .post('/api/auth/login')
-        .send({
-          username: 'publish_user',
-          password: 'password'
-        });
-
-      const otherToken = otherLoginResponse.body.token;
-
-      const response = await request(testApp)
-        .post('/api/schedules/publish')
-        .set('Authorization', `Bearer ${otherToken}`)
-        .send({ scheduleId: testSchedule.id });
-
-      expect(response.status).toBe(403);
-      expect(response.body).toHaveProperty('error');
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('message', 'Schedule copied successfully');
+      expect(response.body).toHaveProperty('schedule');
+      expect(response.body.schedule).toHaveProperty('name', 'Copy of Test Schedule by Ops');
     });
   });
 

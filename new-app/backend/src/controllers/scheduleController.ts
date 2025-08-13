@@ -69,14 +69,6 @@ export const get = async (req: AuthRequest, res: Response): Promise<void> => {
   }
 };
 
-export const copy = async (req: AuthRequest, res: Response): Promise<void> => {
-  res.status(501).json({ error: { message: 'Not implemented yet', code: 'NOT_IMPLEMENTED' } });
-};
-
-export const publish = async (req: AuthRequest, res: Response): Promise<void> => {
-  res.status(501).json({ error: { message: 'Not implemented yet', code: 'NOT_IMPLEMENTED' } });
-};
-
 export const deleteSchedule = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const scheduleId = parseInt(req.params.id);
