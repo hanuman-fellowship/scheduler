@@ -138,12 +138,13 @@ export const ScheduleView: React.FC = () => {
       case 'area':
         const areaData = scheduleData as any; // Type assertion for now
         return (
-          <div className="space-y-4">
+          <div className="space-y-0">
             <ScheduleHeader
               title={areaData.area.name}
-              subtitle={areaData.area.manager?.username}
+              subtitle={areaData.area.manager?.username || areaData.area.manager}
               editable={areaData.editable}
               type="area"
+              groupName={areaData.groupName}
             />
             <ScheduleTable
               bounds={areaData.bounds}
@@ -174,13 +175,15 @@ export const ScheduleView: React.FC = () => {
       case 'person':
         const personData = scheduleData as any; // Type assertion for now
         return (
-          <div className="space-y-4">
+          <div className="space-y-0">
             <ScheduleHeader
               title={personData.person.name}
               subtitle={personData.person.category.name}
               editable={personData.editable}
               type="person"
               totalHours={Object.values(personData.totalHours).reduce((sum: number, hours: any) => sum + hours, 0)}
+              groupName={personData.groupName}
+              personLastFirst={`${personData.person.last}, ${personData.person.first}`}
             />
             <ScheduleTable
               bounds={personData.bounds}
@@ -217,7 +220,7 @@ export const ScheduleView: React.FC = () => {
       case 'gaps':
         const gapsData = scheduleData as any; // Type assertion for now
         return (
-          <div className="space-y-4">
+          <div className="space-y-0">
             <ScheduleHeader
               title="Unassigned Shifts"
               subtitle="Shifts needing coverage"
@@ -242,7 +245,7 @@ export const ScheduleView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className="w-full">
       {renderScheduleContent()}
     </div>
   );

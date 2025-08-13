@@ -6,6 +6,8 @@ interface ScheduleHeaderProps {
   editable: boolean;
   type: 'area' | 'person' | 'gaps';
   totalHours?: number;
+  groupName?: string;
+  personLastFirst?: string;
   onEdit?: () => void;
 }
 
@@ -15,59 +17,103 @@ export const ScheduleHeader: React.FC<ScheduleHeaderProps> = ({
   editable,
   type,
   totalHours,
+  groupName,
+  personLastFirst,
   onEdit
 }) => {
-  const formatTotalHours = (hours: number) => {
-    return `${hours.toFixed(1)} hrs`;
-  };
-
   return (
-    <div className="bg-white border-2 border-black p-4 mb-4">
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <div className="flex items-center space-x-2">
-            <h1 
-              className={`text-xl font-bold ${editable ? 'cursor-pointer hover:text-blue-600' : ''}`}
-              onClick={editable ? onEdit : undefined}
-            >
-              {title}
-            </h1>
-            {editable && onEdit && (
-              <button
-                onClick={onEdit}
-                className="text-blue-600 hover:text-blue-800 text-sm"
-                title="Edit"
-              >
-                ✏️
-              </button>
-            )}
-          </div>
-          
-          {subtitle && (
-            <div className="text-gray-600 mt-1">
-              {type === 'area' ? `Manager: ${subtitle}` : 
-               type === 'person' ? `Category: ${subtitle}` : 
-               subtitle}
-            </div>
-          )}
-        </div>
-
-        <div className="flex-shrink-0">
-          {type === 'person' && totalHours !== undefined && (
-            <div className="text-right">
-              <div className="text-sm text-gray-600">Total Hours</div>
-              <div className="text-lg font-semibold">{formatTotalHours(totalHours)}</div>
-            </div>
-          )}
-          
-          {type === 'area' && (
-            <div className="text-right">
-              <div className="text-sm text-gray-600">Schedule</div>
-              <div className="text-lg font-semibold">Published</div>
-            </div>
-          )}
-        </div>
-      </div>
+    <div className="flex justify-center mb-0">
+      <table 
+        width={774} 
+        border={0} 
+        cellPadding={0} 
+        cellSpacing={0}
+        style={{ borderCollapse: 'separate' }}
+      >
+        <tbody>
+          <tr> 
+            <td width={99} rowSpan={2} colSpan={3} style={{ verticalAlign: 'top' }}> 
+              <p style={{ position: 'relative', top: '-10px', left: '20px' }}>
+                {type === 'area' ? 'Manager: ' : (
+                  <span 
+                    id="total_hours" 
+                    title="Display Hour Breakdown... (ctrl+h)" 
+                    style={{ textDecoration: 'none', cursor: 'pointer' }}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    Total Hours:
+                  </span>
+                )}
+                <span 
+                  className="title" 
+                  style={{ 
+                    paddingLeft: '3px', 
+                    position: 'relative', 
+                    top: '3px',
+                    fontWeight: 'bold' 
+                  }}
+                >
+                  {type === 'area' ? subtitle : (totalHours || '')}
+                </span>
+              </p>
+            </td> 
+            <td width={222} rowSpan={2} style={{ verticalAlign: 'top' }}> 
+              <div style={{ textAlign: 'center' }} className="title"> 
+                <span 
+                  id={type === 'area' ? 'area_name' : 'category_name'}
+                  style={{ 
+                    cursor: editable ? 'pointer' : 'default',
+                    fontWeight: 'bold'
+                  }}
+                  onClick={editable ? onEdit : undefined}
+                  title={editable ? 'Edit...' : ''}
+                >
+                  {type === 'person' ? subtitle : title}
+                </span>
+                <br />
+                Schedule
+              </div>
+            </td> 
+            <td width={107} style={{ verticalAlign: 'top' }}>
+              <div style={{ textAlign: 'right' }}>
+                {type === 'person' ? 'Name:' : ''}
+              </div>
+            </td> 
+            <td width={15} style={{ verticalAlign: 'top' }}>
+              &nbsp;
+            </td> 
+            <td width={178} style={{ verticalAlign: 'top' }}>
+              <span style={{ fontSize: '24px' }}> 
+                {type === 'person' && (
+                  <>
+                    <span 
+                      id="person_name"
+                      style={{ 
+                        cursor: editable ? 'pointer' : 'default',
+                        fontWeight: 'bold'
+                      }}
+                      onClick={editable ? onEdit : undefined}
+                      title={editable ? 'Edit Person...' : 'View Profile'}
+                    >
+                      {title}
+                    </span>
+                    <br />
+                    <span id="full_name">{personLastFirst}</span>
+                  </>
+                )}
+              </span>
+            </td> 
+          </tr> 
+          <tr> 
+            <td width={200} colSpan={3} style={{ padding: '4px', verticalAlign: 'top' }}> 
+              <div style={{ textAlign: 'center' }}>
+                {groupName || ''}
+              </div>
+            </td> 
+          </tr> 
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -222,6 +222,8 @@ npm run setup         # Full setup (install + migrate + seed)
 - **API Routes**: `backend/src/routes.ts` - All endpoints
 - **Time Utilities**: `shared/src/timeUtils.ts` - Centralized time handling
 - **Test Coverage**: 450+ tests across all workspaces
+- **🆕 Legacy Schedule Reference**: `LEGACY_AREA_SCHEDULE_SPECIFICATION.md` - Complete pixel-perfect specification of legacy schedule view
+- **🆕 Menu Implementation Status**: `MENU_IMPLEMENTATION_STATUS.md` - Complete status of all 63 legacy menu items
 
 ## Legacy Integration Principle
 
@@ -232,11 +234,54 @@ npm run setup         # Full setup (install + migrate + seed)
 - Controllers (`/controllers/`) - User workflows and interactions
 - Models (`/models/`) - Business rules and validation
 - Views (`/views/`) - UI patterns and user actions
+- **🆕 Legacy Schedule Spec**: `LEGACY_AREA_SCHEDULE_SPECIFICATION.md` - Complete visual and functional specification
 
 ---
 
 **Status**: 🚀 **Professional Scheduling System Complete** - Full enterprise-grade scheduling with advanced workflows, 531+ tests passing
 
-**Focus**: Ready for final polish (Email Integration, Change Tracking, Mobile Optimization)
+**Current Priority**: 🎨 **Legacy Schedule View Pixel-Perfect Implementation**
+
+### Phase 7: Schedule View Legacy Compliance (Current Focus)
+
+The complete legacy area schedule specification has been documented in `LEGACY_AREA_SCHEDULE_SPECIFICATION.md`. This comprehensive document catalogs every visual element, positioning, styling, and functionality from the original CakePHP implementation.
+
+**Implementation Tasks**:
+1. **Two-Table Structure**: Separate header table (774px, no border) and main schedule table (774px, 2px border)
+2. **Exact Measurements**: Implement precise cell widths (99px, 222px, 107px, 15px, 178px, 200px) and heights (60px shifts, 26px hours, 13px floating/notes)
+3. **Complex Positioning**: Relative positioning with pixel-perfect offsets (top:-10px, left:20px, etc.)
+4. **Interactive Elements**: Hidden add buttons on hover, ajax dialogs, role-based functionality
+5. **Dynamic Styling**: Today highlighting (#FFFADC), off-day backgrounds (#DDDDDD), hover effects (#FFF8BA)
+6. **Conditional Content**: Notes sections, navigation tables, hours rows based on context
+7. **Typography Matching**: Exact font sizes (.title 24px, #full_name 16px italic, stars 13pt)
+8. **Print/Screen Modes**: Different styling and content for print vs screen display
+
+**Current State**: Basic structure implemented, needs pixel-perfect refinement according to specification.
+
+### Phase 8: Menu Implementation Completion (After Schedule View)
+
+After completing the pixel-perfect schedule view implementation, the next major focus is completing the menu system based on `MENU_IMPLEMENTATION_STATUS.md`.
+
+**Current Menu Status**:
+- **✅ Fully Implemented**: 23 items (37%) - Core operations working
+- **⚠️ Partially Implemented**: 22 items (35%) - Routes exist, missing backend APIs  
+- **❌ Missing Entirely**: 18 items (28%) - Not implemented
+
+**Priority Implementation Order**:
+1. **Request Workflows** (Essential for manager role)
+   - Manager request creation and submission
+   - Operations request review and approval
+   - Request status tracking and management
+
+2. **Advanced Schedule Management**
+   - Template system implementation
+   - Enhanced copying and deletion workflows
+
+3. **People Management Enhancement**
+   - Person retire/restore functionality
+   - Category ordering system
+   - Advanced people management features
+
+**Final Focus**: Advanced features (Email Integration, Change Tracking, Mobile Optimization, Undo/Redo System)
 
 - always keep the md files up to date after finishing a task

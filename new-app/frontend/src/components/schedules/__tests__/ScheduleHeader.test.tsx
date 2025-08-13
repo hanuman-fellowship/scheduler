@@ -15,7 +15,8 @@ describe('ScheduleHeader', () => {
     );
 
     expect(screen.getByText('Kitchen')).toBeInTheDocument();
-    expect(screen.getByText('Manager: John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Manager:')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
   it('should display total hours for person schedules', () => {
@@ -29,9 +30,12 @@ describe('ScheduleHeader', () => {
       />
     );
 
+    // Person name appears once in the person name section
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    expect(screen.getByText('Category: Resident')).toBeInTheDocument();
-    expect(screen.getByText('40.5 hrs')).toBeInTheDocument();
+    // Category appears in the center section
+    expect(screen.getByText('Resident')).toBeInTheDocument();
+    // Hours appear in total hours section
+    expect(screen.getByText('40.5')).toBeInTheDocument();
   });
 
   it('should show edit button when editable', () => {
@@ -46,7 +50,7 @@ describe('ScheduleHeader', () => {
       />
     );
 
-    expect(screen.getByTitle('Edit')).toBeInTheDocument();
+    expect(screen.getByTitle('Edit...')).toBeInTheDocument();
   });
 
   it('should call onEdit when edit button is clicked', async () => {
@@ -63,7 +67,7 @@ describe('ScheduleHeader', () => {
       />
     );
 
-    const editButton = screen.getByTitle('Edit');
+    const editButton = screen.getByTitle('Edit...');
     await user.click(editButton);
 
     expect(mockOnEdit).toHaveBeenCalledTimes(1);
@@ -79,6 +83,6 @@ describe('ScheduleHeader', () => {
       />
     );
 
-    expect(screen.queryByTitle('Edit')).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Edit...')).not.toBeInTheDocument();
   });
 });
