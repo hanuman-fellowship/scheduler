@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react'
 import Modal from '../components/ui/Modal'
 import AddShiftForm from '../components/shifts/AddShiftForm'
+import EditShiftForm from '../components/shifts/EditShiftForm'
 import AddPersonForm from '../components/people/AddPersonForm'
 import AddCategoryForm from '../components/people/AddCategoryForm'
 import AddAreaForm from '../components/areas/AddAreaForm'
@@ -11,7 +12,7 @@ import DeleteCategoryModal from '../components/categories/DeleteCategoryModal'
 import { InProgressScheduleSelection } from '../components/schedules/InProgressScheduleSelection'
 import { PublishedScheduleSelection } from '../components/schedules/PublishedScheduleSelection'
 
-type ModalType = 'shift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | 'inProgressSchedules' | 'publishedSchedules' | null
+type ModalType = 'shift' | 'editShift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | 'inProgressSchedules' | 'publishedSchedules' | null
 
 interface Category {
   id: number
@@ -101,6 +102,22 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
           initialAreaId={modalData?.areaId}
           initialDayId={modalData?.dayId}
         />
+      </Modal>
+
+      {/* Edit Shift Modal */}
+      <Modal
+        isOpen={activeModal === 'editShift'}
+        onClose={closeModal}
+        title="Edit Shift"
+      >
+        {modalData?.shiftId && (
+          <EditShiftForm
+            shiftId={modalData.shiftId}
+            onSuccess={closeModal}
+            onCancel={closeModal}
+            onDelete={closeModal}
+          />
+        )}
       </Modal>
 
       {/* Person Modal */}

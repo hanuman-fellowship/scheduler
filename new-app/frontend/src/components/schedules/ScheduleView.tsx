@@ -91,6 +91,14 @@ export const ScheduleView: React.FC = () => {
     openModal('shift', floatingShiftContext);
   }, [canEdit, scheduleData, viewMode, openModal]);
 
+  // Handle shift editing - click on time to edit
+  const handleShiftClick = React.useCallback((shiftId: number) => {
+    if (!canEdit) return;
+
+    // Open edit shift modal with shift ID
+    openModal('editShift', { shiftId });
+  }, [canEdit, openModal]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -136,6 +144,7 @@ export const ScheduleView: React.FC = () => {
               type="area"
               mode={editMode}
               onAddShift={handleAddShift}
+              onShiftClick={handleShiftClick}
               onAddFloatingShift={handleAddFloatingShift}
             />
             {areaData.area.floatingShifts?.length > 0 && (
@@ -171,6 +180,7 @@ export const ScheduleView: React.FC = () => {
               type="person"
               mode={editMode}
               onAddShift={handleAddShift}
+              onShiftClick={handleShiftClick}
               onAddFloatingShift={handleAddFloatingShift}
             />
             {(personData.notes.operations.length > 0 || personData.notes.personnel.length > 0) && (
@@ -210,6 +220,7 @@ export const ScheduleView: React.FC = () => {
               editable={false}
               type="gaps"
               mode={mode}
+              onShiftClick={handleShiftClick}
             />
           </div>
         );

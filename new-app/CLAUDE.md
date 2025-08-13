@@ -139,25 +139,39 @@ All detailed specifications are in `/docs/`:
 
 **Working User Flow**: Schedule Selection → Editing Mode Detection → Conditional Menu Visibility → Status Indicator Display
 
-#### **✅ Phase 3: Shift Creation Integration - COMPLETED**
+#### **✅ Phase 3: Complete Shift Management Integration - COMPLETED**
 
-**Complete integration of shift creation within schedule views:**
+**Complete integration of shift creation and editing within schedule views:**
 
+**Shift Creation System:**
 - ✅ **Context-Aware Creation**: Shift creation modal pre-filled with area/day/time context from schedule grid
 - ✅ **Hover-Based UI**: Legacy-compatible add shift buttons that appear on hover over schedule cells
 - ✅ **Permission Integration**: Shift creation only available when schedule is editable (user ownership + operations role)
 - ✅ **Global Modal System**: Centralized modal management allows shift creation from any schedule view
-- ✅ **Legacy UX Pattern**: Maintains the same user interaction patterns as original CakePHP system
-- ✅ **Comprehensive Testing**: 5 focused test cases covering all shift integration scenarios
+
+**Shift Editing System:**
+- ✅ **Click-to-Edit**: Click on any shift time display to open edit modal (preserves legacy UX pattern)
+- ✅ **Full Form Editing**: Edit area, day, start time, end time, and people count with real-time validation
+- ✅ **Assignment Protection**: Prevents reducing people count below current assignments
+- ✅ **Time Validation**: Ensures end time is after start time with helpful error messages
+- ✅ **Safe Deletion**: Confirmation dialog for shift deletion with automatic assignment clearing
+- ✅ **Auto-Complete**: Start time changes automatically adjust end time (+1 hour)
+
+**Architecture & Quality:**
+- ✅ **Legacy UX Pattern**: Maintains exact user interaction patterns as original CakePHP system
 - ✅ **Type Safety**: Full TypeScript coverage with proper context data interfaces
+- ✅ **Comprehensive Testing**: Extensive test coverage for both creation and editing workflows
+- ✅ **Permission-Based**: All shift operations respect schedule editing permissions
 
-**Working User Flow**: Hover on Schedule Cell → Add Shift Button Appears → Click → Modal Opens with Context → Form Pre-filled
+**Working User Flows**: 
+- **Create**: Hover on Schedule Cell → Add Shift Button Appears → Click → Modal Opens with Context → Form Pre-filled
+- **Edit**: Click Shift Time → Edit Modal Opens → Modify Fields → Save/Delete → Schedule Updates
 
-#### **📈 Phase 4: Advanced Shift Operations**
+#### **📈 Phase 4: Advanced Assignment Operations**
 
-1. **Shift Editing**: Edit existing shifts with time picker interface
-2. **Assignment System**: Assign people to shifts with conflict detection
-3. **Drag-and-Drop Interface**: Visual assignment management
+1. **Assignment System**: Assign people to shifts with conflict detection
+2. **Drag-and-Drop Interface**: Visual assignment management
+3. **Assignment Swapping**: Move assignments between shifts
 4. **Schedule Publishing**: Workflow for publishing schedules with date ranges
 
 #### **🔧 Phase 3: Polish & Advanced Features**
@@ -195,9 +209,15 @@ All detailed specifications are in `/docs/`:
   - ✅ **Hover-Based UI**: Legacy-compatible add shift buttons on schedule cells
   - ✅ **Global Modal System**: Centralized shift creation from any schedule view
   - ✅ **Permission Integration**: Shift creation only available for editable schedules
+- ✅ **Shift Editing Integration**: Complete in-schedule shift editing system
+  - ✅ **Click-to-Edit**: Click on shift times to open edit modal (legacy UX pattern)
+  - ✅ **Full Form Editing**: Edit area, day, times, and people count with validation
+  - ✅ **Assignment Protection**: Prevents reducing people count below current assignments
+  - ✅ **Delete Functionality**: Safe shift deletion with confirmation dialog
+  - ✅ **Permission-Based**: Edit functionality only available for editable schedules
 - ✅ Database structure with all models
 - ✅ API foundation with error handling
-- ✅ Comprehensive test coverage (429 tests: 45 shared + 182 backend + 202 frontend)
+- ✅ Comprehensive test coverage (429+ tests: 45 shared + 182 backend + 202+ frontend)
 
 ### ✅ **Currently Available Features - FULLY WORKING**
 
@@ -214,13 +234,15 @@ All detailed specifications are in `/docs/`:
 - ✅ **Legacy-Compatible Permissions**: Exactly matches CakePHP `$editable` flag behavior (user ownership + operations role)
 - ✅ **Integrated Shift Creation**: Context-aware shift creation directly from schedule grid cells with legacy hover-based UX
 - ✅ **Modal-Based Workflow**: Centralized shift creation modal with pre-filled context (area, day, time period)
-- ✅ **Complete Test Coverage**: All shift integration functionality tested with 5 comprehensive test cases
+- ✅ **Complete Shift Editing**: Click on shift times to edit with full form validation and assignment protection
+- ✅ **Legacy UX Preservation**: Maintains exact click-to-edit interaction patterns from original CakePHP system
+- ✅ **Comprehensive Test Coverage**: All shift management functionality tested with extensive test cases
 
 ### ⭕ **Next Implementation Priorities**
 
-- ⭕ **Shift Editing**: Edit existing shifts from schedule views
-- ⭕ **Assignment System**: Assign people to shifts with conflict detection
-- ⭕ **People Enhancement**: Advanced people management features
+- ⭕ **Assignment System**: Assign people to shifts with conflict detection and visual feedback
+- ⭕ **Assignment Management**: Drag-and-drop assignment interface and swap functionality
+- ⭕ **People Enhancement**: Advanced people management features (retire/restore, category ordering)
 
 ### 🔜 **Future Features**
 
@@ -456,7 +478,7 @@ The next development phase can focus on core scheduling features:
 ---
 
 **Branch**: `new-app-setup`
-**Status**: ✅ Schedule View Components Complete - Phase 1 & 2 Complete, Ready for Integration
-**Last Updated**: Legacy-compatible schedule view components implemented with 774px table layout, 377 passing tests
+**Status**: ✅ Complete Shift Management System - Phase 1, 2 & 3 Complete, Ready for Assignment System
+**Last Updated**: Full shift creation and editing integration with legacy UX patterns, 429+ passing tests
 
 - when making changes, don't worry about backwards compatibillity. Just adopt the new method completely.
