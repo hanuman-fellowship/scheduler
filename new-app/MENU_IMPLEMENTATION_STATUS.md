@@ -5,8 +5,8 @@
 The React app has a **functional but incomplete** menu implementation. Core systems are fully working (authentication, schedule views, user management), but many legacy menu items exist only as placeholder routes without backend implementation or proper UI.
 
 **Total Legacy Menu Items**: 63
-- **✅ Fully Implemented**: 20 items (32%) - Core operations working  
-- **⚠️ Partially Implemented**: 25 items (40%) - Routes exist, missing backend APIs
+- **✅ Fully Implemented**: 22 items (35%) - Core operations working  
+- **⚠️ Partially Implemented**: 23 items (37%) - Routes exist, missing backend APIs
 - **❌ Missing Entirely**: 18 items (28%) - Not implemented
 
 ## ✅ **Fully Implemented & Working**
@@ -19,6 +19,8 @@ The React app has a **functional but incomplete** menu implementation. Core syst
 - ✅ **In Progress** (Ctrl+I) → Working modal with backend API
 - ✅ **Published** (Ctrl+O) → Working modal with backend API  
 - ✅ **View Gaps** → Working schedule view
+- ✅ **Edit a Copy** → Complete modal with schedule copying functionality
+- ✅ **Delete** → Complete modal with safe schedule deletion
 
 ### **People Menu** (Operations only)
 - ✅ **View Schedule** (Ctrl+P) → Working person selection + schedule views
@@ -50,8 +52,6 @@ The React app has a **functional but incomplete** menu implementation. Core syst
 - ⚠️ **Delete Requests** → Request cleanup
 
 ### **Schedule Management**
-- ⚠️ **Edit a Copy** → Backend API exists, needs frontend UI
-- ⚠️ **Delete** → Backend API exists, needs frontend UI
 - ⚠️ **Save as Template** → Template system
 - ⚠️ **New From Template** → Template system
 

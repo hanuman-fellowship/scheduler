@@ -12,7 +12,7 @@ import { ScheduleStatusIndicator } from '../schedules/ScheduleStatusIndicator'
 export default function Header() {
   const { user, logout, isOperations, isManager, isPersonnel } = useAuthStore()
   const { isEditable, isViewable, isRequest } = useScheduleStore()
-  const { openModal, openAreaSelectionModal, openPersonSelectionModal, openInProgressSchedulesModal, openPublishedSchedulesModal } = useGlobalModal()
+  const { openModal, openAreaSelectionModal, openPersonSelectionModal, openInProgressSchedulesModal, openPublishedSchedulesModal, openEditCopyModal, openDeleteScheduleModal } = useGlobalModal()
   
   // Check if current schedule allows editing operations
   const canEdit = isEditable() || isRequest()
@@ -128,8 +128,8 @@ export default function Header() {
                 <MenuItem to="/days/edit">Edit Days...</MenuItem>
                 <MenuItem to="/boundaries/edit">Edit Times...</MenuItem>
                 <DropdownSeparator />
-                <MenuItem to="/schedule/copy">Edit a Copy...</MenuItem>
-                <MenuItem to="/schedule/delete">Delete...</MenuItem>
+                <MenuItem onClick={openEditCopyModal}>Edit a Copy...</MenuItem>
+                <MenuItem onClick={openDeleteScheduleModal}>Delete...</MenuItem>
                 <DropdownSeparator />
                 <MenuItem to="/schedule/template">New From Template...</MenuItem>
                 <MenuItem to="/schedule/save-template">Save as Template...</MenuItem>

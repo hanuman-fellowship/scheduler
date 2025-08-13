@@ -12,8 +12,10 @@ import DeleteCategoryModal from '../components/categories/DeleteCategoryModal'
 import { InProgressScheduleSelection } from '../components/schedules/InProgressScheduleSelection'
 import { PublishedScheduleSelection } from '../components/schedules/PublishedScheduleSelection'
 import { AssignmentModal } from '../components/assignments/AssignmentModal'
+import EditCopyModal from '../components/schedules/EditCopyModal'
+import DeleteScheduleModal from '../components/schedules/DeleteScheduleModal'
 
-type ModalType = 'shift' | 'editShift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | 'inProgressSchedules' | 'publishedSchedules' | 'assignment' | null
+type ModalType = 'shift' | 'editShift' | 'person' | 'category' | 'area' | 'areaSelection' | 'personSelection' | 'editCategory' | 'deleteCategory' | 'inProgressSchedules' | 'publishedSchedules' | 'assignment' | 'editCopy' | 'deleteSchedule' | null
 
 interface Category {
   id: number
@@ -31,6 +33,8 @@ interface GlobalModalContextType {
   openInProgressSchedulesModal: () => void
   openPublishedSchedulesModal: () => void
   openAssignmentModal: (shiftId: number, shiftName: string) => void
+  openEditCopyModal: () => void
+  openDeleteScheduleModal: () => void
 }
 
 const GlobalModalContext = createContext<GlobalModalContextType | undefined>(undefined)
@@ -84,6 +88,16 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
     setModalData({ shiftId, shiftName })
   }
 
+  const openEditCopyModal = () => {
+    setActiveModal('editCopy')
+    setModalData(null)
+  }
+
+  const openDeleteScheduleModal = () => {
+    setActiveModal('deleteSchedule')
+    setModalData(null)
+  }
+
   return (
     <GlobalModalContext.Provider value={{ 
       openModal, 
@@ -94,7 +108,9 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
       openDeleteCategoryModal,
       openInProgressSchedulesModal,
       openPublishedSchedulesModal,
-      openAssignmentModal
+      openAssignmentModal,
+      openEditCopyModal,
+      openDeleteScheduleModal
     }}>
       {children}
 
@@ -249,6 +265,30 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
           shiftName={modalData.shiftName}
         />
       )}
+
+      {/* Edit Copy Modal */}
+      <Modal
+        isOpen={activeModal === 'editCopy'}
+        onClose={closeModal}
+        title="Edit a Copy"
+      >
+        <EditCopyModal
+          onSuccess={closeModal}
+          onCancel={closeModal}
+        />
+      </Modal>
+
+      {/* Delete Schedule Modal */}
+      <Modal
+        isOpen={activeModal === 'deleteSchedule'}
+        onClose={closeModal}
+        title="Delete Schedule"
+      >
+        <DeleteScheduleModal
+          onSuccess={closeModal}
+          onCancel={closeModal}
+        />
+      </Modal>
     </GlobalModalContext.Provider>
   )
 }
