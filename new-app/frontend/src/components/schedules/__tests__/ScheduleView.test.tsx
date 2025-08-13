@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { GlobalModalProvider } from '../../../contexts/GlobalModalContext';
 import { ScheduleView } from '../ScheduleView';
 
 // Mock the schedule view service
@@ -11,6 +12,21 @@ vi.mock('../../../services/scheduleView', () => ({
     getPersonSchedule: vi.fn(),
     getGapsSchedule: vi.fn()
   }
+}));
+
+// Mock the stores
+vi.mock('../../../store/scheduleStore', () => ({
+  useScheduleStore: vi.fn(() => ({
+    currentSchedule: { id: 1, name: 'Test Schedule', userId: 1, template: false, request: 0, createdAt: '', updatedAt: '' },
+    isLoading: false,
+    setCurrentSchedule: vi.fn(),
+    clearCurrentSchedule: vi.fn(),
+    loadCurrentSchedule: vi.fn(),
+    switchToSchedule: vi.fn(),
+    isEditable: vi.fn(() => false),
+    isPublished: vi.fn(() => false),
+    isRequest: vi.fn(() => false)
+  }))
 }));
 
 // Mock the useParams hook
@@ -35,7 +51,9 @@ const renderWithProviders = (component: React.ReactElement) => {
   return render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        {component}
+        <GlobalModalProvider>
+          {component}
+        </GlobalModalProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );

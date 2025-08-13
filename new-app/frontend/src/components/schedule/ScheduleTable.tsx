@@ -16,6 +16,9 @@ interface ScheduleTableProps {
   type: 'area' | 'person' | 'gaps';
   editable: boolean;
   mode?: 'view' | 'edit' | 'request' | 'print';
+  onAddShift?: (dayId: number, periodName: string) => void;
+  onShiftClick?: (shiftId: number) => void;
+  onAddFloatingShift?: () => void;
 }
 
 export const ScheduleTable: React.FC<ScheduleTableProps> = ({
@@ -23,7 +26,10 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({
   data,
   type,
   editable,
-  mode = 'view'
+  mode = 'view',
+  onAddShift,
+  onShiftClick,
+  onAddFloatingShift
 }) => {
   // Get today's day of week (1 = Sunday)
   const today = new Date().getDay() || 7; // Convert 0 (Sunday) to 7
@@ -85,6 +91,8 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({
               type={type}
               editable={editable && mode === 'edit'}
               todayDayId={todayDayId ? parseInt(todayDayId) : undefined}
+              onShiftClick={onShiftClick}
+              onAddShift={onAddShift}
             />
           ))}
 
@@ -98,10 +106,11 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({
           )}
 
           {/* Floating shifts row for area schedules */}
-          {type === 'area' && 'area' in data && data.area.floatingShifts?.length > 0 && (
+          {type === 'area' && 'area' in data && (
             <FloatingShiftsRow
-              floatingShifts={data.area.floatingShifts}
+              floatingShifts={data.area.floatingShifts || []}
               editable={editable && mode === 'edit'}
+              onAdd={onAddFloatingShift}
             />
           )}
         </tbody>

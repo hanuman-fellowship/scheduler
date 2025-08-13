@@ -98,6 +98,8 @@ export function GlobalModalProvider({ children }: { children: ReactNode }) {
         <AddShiftForm
           onSuccess={closeModal}
           onCancel={closeModal}
+          initialAreaId={modalData?.areaId}
+          initialDayId={modalData?.dayId}
         />
       </Modal>
 

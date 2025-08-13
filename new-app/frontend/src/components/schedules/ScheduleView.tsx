@@ -1,6 +1,8 @@
 import React from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useScheduleView } from '../../hooks/useScheduleView';
+import { useScheduleStore } from '../../store/scheduleStore';
+import { useGlobalModal } from '../../contexts/GlobalModalContext';
 import { ScheduleTable } from '../schedule/ScheduleTable';
 import { ScheduleHeader } from './ScheduleHeader';
 import { FloatingShifts } from './FloatingShifts';
@@ -11,6 +13,12 @@ export const ScheduleView: React.FC = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode') as 'view' | 'edit' | 'request' | 'print' || 'view';
+  const { isEditable, isRequest } = useScheduleStore();
+  const { openModal } = useGlobalModal();
+
+  // Determine if we should be in editing mode
+  const canEdit = isEditable() || isRequest();
+  const editMode = canEdit ? 'edit' : 'view';
 
   // Validate and construct view mode
   const [viewMode, validationError] = React.useMemo((): [ScheduleViewMode | null, string | null] => {
@@ -49,6 +57,39 @@ export const ScheduleView: React.FC = () => {
   }
 
   const { data: scheduleData, isLoading, error } = useScheduleView(viewMode);
+
+  // Handle shift creation based on the legacy pattern
+  const handleAddShift = React.useCallback((dayId: number, periodName: string) => {
+    if (!canEdit || !scheduleData) return;
+
+    // Create shift context based on schedule view type and position
+    const shiftContext = {
+      dayId,
+      periodName,
+      scheduleType: viewMode.type,
+      scheduleId: viewMode.id,
+      areaId: viewMode.type === 'area' ? viewMode.id : undefined,
+      personId: viewMode.type === 'person' ? viewMode.id : undefined
+    };
+
+    // Open shift modal with context
+    openModal('shift', shiftContext);
+  }, [canEdit, scheduleData, viewMode, openModal]);
+
+  // Handle floating shift creation
+  const handleAddFloatingShift = React.useCallback(() => {
+    if (!canEdit || !scheduleData) return;
+
+    const floatingShiftContext = {
+      scheduleType: viewMode.type,
+      scheduleId: viewMode.id,
+      areaId: viewMode.type === 'area' ? viewMode.id : undefined,
+      personId: viewMode.type === 'person' ? viewMode.id : undefined,
+      floating: true
+    };
+
+    openModal('shift', floatingShiftContext);
+  }, [canEdit, scheduleData, viewMode, openModal]);
 
   if (isLoading) {
     return (
@@ -91,9 +132,11 @@ export const ScheduleView: React.FC = () => {
             <ScheduleTable
               bounds={areaData.bounds}
               data={areaData}
-              editable={areaData.editable}
+              editable={canEdit}
               type="area"
-              mode={mode}
+              mode={editMode}
+              onAddShift={handleAddShift}
+              onAddFloatingShift={handleAddFloatingShift}
             />
             {areaData.area.floatingShifts?.length > 0 && (
               <FloatingShifts
@@ -124,9 +167,11 @@ export const ScheduleView: React.FC = () => {
             <ScheduleTable
               bounds={personData.bounds}
               data={personData}
-              editable={personData.editable}
+              editable={canEdit}
               type="person"
-              mode={mode}
+              mode={editMode}
+              onAddShift={handleAddShift}
+              onAddFloatingShift={handleAddFloatingShift}
             />
             {(personData.notes.operations.length > 0 || personData.notes.personnel.length > 0) && (
               <div className="space-y-2">
