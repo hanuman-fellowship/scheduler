@@ -149,6 +149,79 @@ export const createTestResidentCategory = async (scheduleId: number, categoryDat
   });
 };
 
+export const createTestShift = async (
+  scheduleId: number,
+  data: Partial<{
+    areaId: number;
+    dayId: number;
+    startAtSeconds: number;
+    endAtSeconds: number;
+    numPeople: number;
+  }> = {}
+) => {
+  // Create default area and day if not provided
+  let areaId = data.areaId;
+  if (!areaId) {
+    const area = await createTestArea(scheduleId, { name: 'Test Area', shortName: 'TA' });
+    areaId = area.id;
+  }
+
+  let dayId = data.dayId;
+  if (!dayId) {
+    const day = await createTestDay(scheduleId, { name: 'Monday', dayOfWeek: 1 });
+    dayId = day.id;
+  }
+
+  return await prisma.shift.create({
+    data: {
+      scheduleId,
+      areaId,
+      dayId,
+      startAtSeconds: data.startAtSeconds ?? 32400, // 9:00 AM
+      endAtSeconds: data.endAtSeconds ?? 36000,     // 10:00 AM
+      numPeople: data.numPeople ?? 2,
+    },
+  });
+};
+
+export const createTestAssignment = async (
+  scheduleId: number,
+  data: Partial<{
+    shiftId: number;
+    personId: number;
+    name: string;
+    star: boolean;
+  }> = {}
+) => {
+  // Create a default shift if shiftId not provided
+  let shiftId = data.shiftId;
+  if (!shiftId) {
+    const shift = await createTestShift(scheduleId);
+    shiftId = shift.id;
+  }
+
+  // Create a default person if personId not provided and > 0
+  let personId = data.personId ?? 1;
+  if (personId > 0) {
+    try {
+      await prisma.person.findUniqueOrThrow({ where: { id: personId } });
+    } catch {
+      const person = await createTestPerson({ first: 'Test', last: 'Person' });
+      personId = person.id;
+    }
+  }
+
+  return await prisma.assignment.create({
+    data: {
+      scheduleId,
+      shiftId: shiftId!,
+      personId,
+      name: data.name || null,
+      star: data.star || false,
+    },
+  });
+};
+
 export const cleanupTestData = async () => {
   // Clean up in reverse order of dependencies
   await prisma.changeField.deleteMany();
@@ -181,5 +254,8 @@ export const resetTestCounters = () => {
   userCounter = 0;
   scheduleCounter = 0;
 };
+
+// Alias for compatibility with tests
+export const createTestCategory = createTestResidentCategory;
 
 export { prisma };

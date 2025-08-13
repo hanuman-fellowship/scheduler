@@ -69,7 +69,8 @@ export interface PersonResponse {
   id: number;
   first: string;
   last: string;
-  name: string; // display name
+  displayName?: string; // Optional display name from database
+  name: string; // computed display name
   category: {
     id: number;
     name: string;
@@ -187,8 +188,8 @@ export interface CreateShiftRequest {
 
 export interface CreateAssignmentRequest {
   shiftId: number;
-  personId: number; // 0 for "other"
-  name?: string; // if personId = 0
+  personId: number | null; // null for "other"
+  name?: string; // if personId = null
 }
 
 // ============================================================================
@@ -255,10 +256,15 @@ export interface HoursByDay {
 export interface AssignmentResponse {
   id: number;
   shiftId: number;
-  personId: number;
+  personId: number | null;
   name?: string;
   star: boolean;
-  person?: PersonResponse;
+  person?: {
+    id: number;
+    first: string;
+    last: string;
+    displayName?: string;
+  };
 }
 
 export interface AssignmentWithShiftResponse extends AssignmentResponse {

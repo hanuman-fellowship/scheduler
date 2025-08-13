@@ -11,6 +11,7 @@ import * as shiftController from './controllers/shiftController';
 import * as areaController from './controllers/areaController';
 import * as dayController from './controllers/dayController';
 import * as scheduleViewController from './controllers/scheduleViewController';
+import * as assignmentController from './controllers/assignmentController';
 import { requireAuth, requireRole } from './middleware/auth';
 
 // Create a function that can be configured for different environments
@@ -99,6 +100,14 @@ export const createApp = (options: {
   app.post('/api/shifts', requireAuth, requireRole('operations'), asyncHandler(shiftController.create));
   app.put('/api/shifts/:id', requireAuth, requireRole('operations'), asyncHandler(shiftController.update));
   app.delete('/api/shifts/:id', requireAuth, requireRole('operations'), asyncHandler(shiftController.deleteShift));
+
+  // Assignment management (operations only for now)
+  app.get('/api/assignments/shift/:shiftId/available-people', requireAuth, asyncHandler(assignmentController.getAvailablePeopleForShift));
+  app.get('/api/assignments/shift/:shiftId', requireAuth, asyncHandler(assignmentController.getShiftAssignments));
+  app.post('/api/assignments', requireAuth, requireRole('operations'), asyncHandler(assignmentController.createAssignment));
+  app.put('/api/assignments/:id', requireAuth, requireRole('operations'), asyncHandler(assignmentController.updateAssignment));
+  app.delete('/api/assignments/:id', requireAuth, requireRole('operations'), asyncHandler(assignmentController.deleteAssignment));
+  app.post('/api/assignments/:id/star', requireAuth, requireRole('operations'), asyncHandler(assignmentController.toggleAssignmentStar));
 
   // Area management
   app.get('/api/areas', requireAuth, asyncHandler(areaController.list));

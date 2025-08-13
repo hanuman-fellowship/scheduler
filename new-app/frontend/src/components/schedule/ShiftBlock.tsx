@@ -22,12 +22,15 @@ export const ShiftBlock: React.FC<ShiftBlockProps> = ({
 
   // Area schedule: show time range and assignments
   if (type === 'area' || type === 'gaps') {
+    // Gaps are always clickable, regardless of editable state
+    const isClickable = type === 'gaps' || editable;
+    
     return (
       <span 
         className={`shift ${isFirst ? '' : 'stacked'}`}
         id={`shift-${shift.id}`}
-        onClick={() => editable && onShiftClick?.(shift.id)}
-        style={{ cursor: editable ? 'pointer' : 'default' }}
+        onClick={() => isClickable && onShiftClick?.(shift.id)}
+        style={{ cursor: isClickable ? 'pointer' : 'default' }}
       >
         <b>{timeRange}</b>
         <br />

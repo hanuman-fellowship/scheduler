@@ -36,8 +36,8 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
         return (
           <div 
             key={shift.id}
-            className="mb-1 p-1 text-xs cursor-pointer hover:bg-gray-100 border border-gray-300 rounded"
-            onClick={() => onShiftClick?.(shift.id)}
+            className={`mb-1 p-1 text-xs ${editable ? 'cursor-pointer hover:bg-gray-100' : 'cursor-default'} border border-gray-300 rounded`}
+            onClick={editable ? () => onShiftClick?.(shift.id) : undefined}
           >
             <div className="font-semibold">
               {formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}
@@ -69,8 +69,8 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
         return (
           <div 
             key={shift.id}
-            className="mb-1 p-1 text-xs cursor-pointer hover:bg-gray-100 border border-gray-300 rounded"
-            onClick={() => onShiftClick?.(shift.id)}
+            className={`mb-1 p-1 text-xs ${editable ? 'cursor-pointer hover:bg-gray-100' : 'cursor-default'} border border-gray-300 rounded`}
+            onClick={editable ? () => onShiftClick?.(shift.id) : undefined}
           >
             <div className="font-semibold text-blue-600">
               {assignment?.area?.shortName || `Area ${shift.areaId}`}

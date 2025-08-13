@@ -224,13 +224,13 @@ model Assignment {
   id         Int     @id @default(autoincrement())
   scheduleId Int     @map("schedule_id")
   shiftId    Int     @map("shift_id")
-  personId   Int     @map("person_id") // 0 for "other"
-  name       String? // for personId = 0
+  personId   Int?    @map("person_id") // null for "other"
+  name       String? // for personId = null
   star       Boolean @default(false)
 
   schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   shift    Shift    @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  person   Person?  @relation(fields: [personId], references: [id], onDelete: Cascade)
 
   @@map("assignments")
 }

@@ -98,18 +98,24 @@ describe('ScheduleView Shift Editing', () => {
   })
 
   it('should make shift times clickable when schedule is editable', async () => {
+    const user = userEvent.setup()
     renderWithProviders(<ScheduleView />)
 
     await waitFor(() => {
       expect(screen.getByText('Kitchen')).toBeInTheDocument()
     })
 
-    // Find the shift time display
-    const shiftTime = screen.getByText('8:00 - 9:00')
+    // Verify shift time is present and clickable (can be clicked without errors)
+    const shiftTime = screen.getByText('8 - 9')
     expect(shiftTime).toBeInTheDocument()
     
-    // Check that it has click handler styles
-    expect(shiftTime).toHaveStyle({ cursor: 'pointer' })
+    // Test that clicking the shift time works (shows this is interactive)
+    await user.click(shiftTime)
+    
+    // Should open the edit shift modal
+    await waitFor(() => {
+      expect(screen.getByText('Edit Shift')).toBeInTheDocument()
+    })
   })
 
   it('should open edit modal when shift time is clicked', async () => {
@@ -121,7 +127,7 @@ describe('ScheduleView Shift Editing', () => {
     })
 
     // Click on the shift time
-    const shiftTime = screen.getByText('8:00 - 9:00')
+    const shiftTime = screen.getByText('8 - 9')
     await user.click(shiftTime)
 
     // Should open the edit shift modal
@@ -144,18 +150,23 @@ describe('ScheduleView Shift Editing', () => {
       isRequest: vi.fn(() => false)
     })
 
+    const user = userEvent.setup()
     renderWithProviders(<ScheduleView />)
 
     await waitFor(() => {
       expect(screen.getByText('Kitchen')).toBeInTheDocument()
     })
 
-    // Find the shift time display
-    const shiftTime = screen.getByText('8:00 - 9:00')
+    // Verify shift time is present
+    const shiftTime = screen.getByText('8 - 9')
     expect(shiftTime).toBeInTheDocument()
     
-    // Check that it does not have click handler styles
-    expect(shiftTime).toHaveStyle({ cursor: 'default' })
+    // Try clicking the shift time - it should not open the modal since not editable
+    await user.click(shiftTime)
+    
+    // Should NOT open the edit shift modal (wait a bit to be sure)
+    await new Promise(resolve => setTimeout(resolve, 100))
+    expect(screen.queryByText('Edit Shift')).not.toBeInTheDocument()
   })
 
   it('should handle clicks on person schedule shift times', async () => {
@@ -206,7 +217,7 @@ describe('ScheduleView Shift Editing', () => {
     })
 
     // Click on the shift time in person schedule
-    const shiftTime = screen.getByText('8:00 - 9:00')
+    const shiftTime = screen.getByText('8 - 9')
     await user.click(shiftTime)
 
     // Should open the edit shift modal
@@ -249,10 +260,16 @@ describe('ScheduleView Shift Editing', () => {
       expect(screen.getByText('Unassigned Shifts')).toBeInTheDocument()
     })
 
-    // Even though gaps schedule is not editable by default,
-    // operations users should still be able to edit shifts
-    // But in this test, the schedule permission overrides individual shift editability
-    const shiftTime = screen.getByText('8:00 - 9:00')
-    expect(shiftTime).toHaveStyle({ cursor: 'default' })
+    // Gaps should always be clickable for operations users to assign people
+    const shiftTime = screen.getByText('8 - 9')
+    expect(shiftTime).toBeInTheDocument()
+    
+    // Click the shift time - should work even though gaps schedule is not editable
+    await user.click(shiftTime)
+    
+    // Should open the edit shift modal (gaps are always clickable)
+    await waitFor(() => {
+      expect(screen.getByText('Edit Shift')).toBeInTheDocument()
+    })
   })
 })
