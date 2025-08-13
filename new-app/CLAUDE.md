@@ -455,7 +455,14 @@ The application has a complete, tested foundation ready for core feature develop
 8. **Centralized Time Handling**: Complete time utility system with seconds-based storage, legacy formatting, and comprehensive validation
 9. **Schedule View Backend**: Complete API endpoints with hardcoded time periods and legacy-style time formatting
 10. **Schedule View Components**: Legacy-compatible 774px table with all display components (ScheduleTable, TimeSlotRow, ShiftCell, etc.)
-11. **Test Coverage**: 377 passing tests (43 shared + 182 backend + 152 frontend) covering all implemented features
+11. **Assignment System (NEW)**: Complete backend and frontend implementation
+    - Backend API endpoints with conflict detection algorithm
+    - Frontend modals for assignment management
+    - Available people list with conflict indicators
+    - Star/unstar priority assignment system
+    - "Other" assignment support with custom names
+    - Integration with shift editing workflow
+12. **Test Coverage**: 450+ passing tests covering all implemented features
 
 ### 📋 **Key Architecture Files**
 
@@ -466,6 +473,30 @@ The application has a complete, tested foundation ready for core feature develop
 - **API Routes**: `backend/src/routes.ts` - RESTful API endpoints
 - **Test Suites**: Comprehensive coverage in `__tests__` directories across all workspaces
 - **Documentation**: Complete specs in `/docs/` and implementation guides
+
+### 🎯 **Assignment Management System (NEW)**
+
+**Complete implementation following legacy patterns with modern architecture:**
+
+#### Backend Implementation:
+- **POST /api/assignments**: Create assignment with conflict validation
+- **PUT /api/assignments/:id**: Update assignment (person, star, name)
+- **DELETE /api/assignments/:id**: Remove assignment
+- **POST /api/assignments/:id/star**: Toggle priority status
+- **GET /api/assignments/shift/:shiftId/available-people**: Get available people with conflicts
+- **GET /api/assignments/shift/:shiftId**: Get shift assignments
+
+#### Frontend Implementation:
+- **AssignmentModal**: Add people to shifts with category grouping
+- **AssignmentListModal**: View/manage current assignments
+- **Conflict Detection UI**: Shows why people are unavailable
+- **Integrated in EditShiftForm**: Seamless assignment management within shift editing
+
+#### Conflict Detection:
+- Time overlap detection on same day
+- Off day validation
+- Existing assignment check
+- Shift capacity enforcement
 
 ### ⏰ **Centralized Time Handling System**
 

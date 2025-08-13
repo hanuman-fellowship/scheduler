@@ -263,8 +263,27 @@ export interface AssignmentResponse {
     id: number;
     first: string;
     last: string;
+    name?: string;
     displayName?: string;
+    category?: {
+      id: number;
+      name: string;
+      color: string;
+    };
   };
+}
+
+export interface AvailablePersonResponse {
+  id: number;
+  name: string;
+  displayName?: string;
+  category: {
+    id: number;
+    name: string;
+    color: string;
+  };
+  available: boolean;
+  conflictReason?: string;
 }
 
 export interface AssignmentWithShiftResponse extends AssignmentResponse {
