@@ -102,7 +102,6 @@ describe('InProgressScheduleSelection', () => {
     )
 
     expect(screen.getByText('Loading schedules...')).toBeInTheDocument()
-    expect(screen.getByText('Cancel')).toBeInTheDocument()
   })
 
   it('should render schedules grouped by user', async () => {
@@ -164,25 +163,7 @@ describe('InProgressScheduleSelection', () => {
     expect(mockSwitchToSchedule).toHaveBeenCalledWith(mockSchedules[1])
   })
 
-  it('should handle cancel action', async () => {
-    const user = userEvent.setup()
-    
-    renderWithQueryClient(
-      <InProgressScheduleSelection
-        onCancel={mockOnCancel}
-        onScheduleSelected={mockOnScheduleSelected}
-      />
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText('Cancel')).toBeInTheDocument()
-    })
-
-    const cancelButton = screen.getByText('Cancel')
-    await user.click(cancelButton)
-
-    expect(mockOnCancel).toHaveBeenCalled()
-  })
+  // Cancel button removed; modal is closed via backdrop in parent Modal
 
   it('should display current schedule info', async () => {
     renderWithQueryClient(

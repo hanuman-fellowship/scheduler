@@ -141,7 +141,7 @@ describe('DeleteScheduleModal', () => {
     })
   })
 
-  it('disables buttons during deletion', async () => {
+  it('disables delete button during deletion', async () => {
     const user = userEvent.setup()
     
     // Mock slow API response
@@ -150,25 +150,13 @@ describe('DeleteScheduleModal', () => {
     renderComponent()
     
     const deleteButton = screen.getByRole('button', { name: 'Delete Schedule' })
-    const cancelButton = screen.getByRole('button', { name: 'Cancel' })
     
     await user.click(deleteButton)
     
     expect(screen.getByRole('button', { name: 'Deleting...' })).toBeDisabled()
-    expect(cancelButton).toBeDisabled()
   })
 
-  it('calls onCancel when cancel button is clicked', async () => {
-    const user = userEvent.setup()
-    const onCancel = vi.fn()
-    
-    renderComponent({ onCancel })
-    
-    const cancelButton = screen.getByRole('button', { name: 'Cancel' })
-    await user.click(cancelButton)
-    
-    expect(onCancel).toHaveBeenCalled()
-  })
+  // Cancel button removed; closing handled by parent Modal backdrop
 
   it('shows error when trying to delete published schedule', () => {
     // Mock published schedule

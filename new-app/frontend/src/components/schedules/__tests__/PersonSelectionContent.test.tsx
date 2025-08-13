@@ -102,20 +102,5 @@ describe('PersonSelectionContent', () => {
     expect(mockOnCancel).toHaveBeenCalled();
   });
 
-  it('should handle cancel button', async () => {
-    const user = userEvent.setup();
-    vi.mocked(scheduleNavService.scheduleNavigationService.getPeopleForSelection).mockResolvedValue({});
-    vi.mocked(scheduleNavService.scheduleNavigationService.getLastSelectedPerson).mockReturnValue(null);
-
-    renderWithProviders(
-      <PersonSelectionContent onCancel={mockOnCancel} />
-    );
-    
-    await waitFor(() => {
-      expect(screen.getByText('No people found')).toBeInTheDocument();
-    });
-
-    await user.click(screen.getByText('Cancel'));
-    expect(mockOnCancel).toHaveBeenCalled();
-  });
+  // Cancel button removed; closing handled by parent Modal backdrop
 });

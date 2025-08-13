@@ -98,7 +98,6 @@ describe('PublishedScheduleSelection', () => {
     )
 
     expect(screen.getByText('Loading published schedules...')).toBeInTheDocument()
-    expect(screen.getByText('Cancel')).toBeInTheDocument()
   })
 
   it('should render published schedules grouped by year', async () => {
@@ -188,25 +187,7 @@ describe('PublishedScheduleSelection', () => {
     expect(mockSwitchToSchedule).toHaveBeenCalledWith(mockPublishedSchedules[1])
   })
 
-  it('should handle cancel action', async () => {
-    const user = userEvent.setup()
-    
-    renderWithQueryClient(
-      <PublishedScheduleSelection
-        onCancel={mockOnCancel}
-        onScheduleSelected={mockOnScheduleSelected}
-      />
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText('Cancel')).toBeInTheDocument()
-    })
-
-    const cancelButton = screen.getByText('Cancel')
-    await user.click(cancelButton)
-
-    expect(mockOnCancel).toHaveBeenCalled()
-  })
+  // Cancel button removed; clicking backdrop closes via parent modal
 
   it('should display current schedule info', async () => {
     renderWithQueryClient(

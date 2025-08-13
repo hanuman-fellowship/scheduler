@@ -19,12 +19,12 @@
     "test:watch": "jest --watch --verbose",
     "test:coverage": "jest --coverage",
     "test:debug": "jest --detectOpenHandles --forceExit",
-    "test:setup": "DATABASE_URL=\"${DATABASE_URL_TEST:-postgresql://scheduler_user:scheduler_password@localhost:5432/scheduler_test}\" npx prisma db push",
-    "test:reset": "DATABASE_URL=\"${DATABASE_URL_TEST:-postgresql://scheduler_user:scheduler_password@localhost:5432/scheduler_test}\" npx prisma db push --force-reset",
     "check": "tsc --noEmit",
     "migrate": "npx prisma migrate dev",
     "seed": "ts-node -r tsconfig-paths/register src/seed.ts",
-    "prisma": "npx prisma generate"
+    "prisma": "npx prisma",
+    "db:studio": "npx prisma studio",
+    "db:exec": "npx prisma db execute --stdin"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",

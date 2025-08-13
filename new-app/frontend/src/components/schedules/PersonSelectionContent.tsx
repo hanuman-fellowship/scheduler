@@ -45,14 +45,6 @@ export const PersonSelectionContent: React.FC<PersonSelectionContentProps> = ({
         <div className="text-center py-8">
           <div className="text-lg">Loading people...</div>
         </div>
-        <div className="flex justify-end">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
-          >
-            Cancel
-          </button>
-        </div>
       </div>
     );
   }
@@ -65,14 +57,6 @@ export const PersonSelectionContent: React.FC<PersonSelectionContentProps> = ({
             Error loading people: {error instanceof Error ? error.message : 'Unknown error'}
           </div>
         </div>
-        <div className="flex justify-end">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
-          >
-            Cancel
-          </button>
-        </div>
       </div>
     );
   }
@@ -82,14 +66,6 @@ export const PersonSelectionContent: React.FC<PersonSelectionContentProps> = ({
       <div className="space-y-4">
         <div className="text-center py-8">
           <div className="text-lg text-gray-500">No people found</div>
-        </div>
-        <div className="flex justify-end">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
-          >
-            Cancel
-          </button>
         </div>
       </div>
     );
@@ -143,14 +119,7 @@ export const PersonSelectionContent: React.FC<PersonSelectionContentProps> = ({
         </div>
       </div>
       
-      <div className="flex justify-end">
-        <button
-          onClick={onCancel}
-          className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
-        >
-          Cancel
-        </button>
-      </div>
+      <div />
     </div>
   );
 };

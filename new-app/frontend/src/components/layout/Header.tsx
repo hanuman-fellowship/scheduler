@@ -11,7 +11,7 @@ import { ScheduleStatusIndicator } from '../schedules/ScheduleStatusIndicator'
 
 export default function Header() {
   const { user, logout, isOperations, isManager, isPersonnel } = useAuthStore()
-  const { isEditable, isViewable, isRequest } = useScheduleStore()
+  const { isEditable, isViewable, isRequest, isPublished } = useScheduleStore()
   const { openModal, openAreaSelectionModal, openPersonSelectionModal, openInProgressSchedulesModal, openPublishedSchedulesModal, openEditCopyModal, openDeleteScheduleModal } = useGlobalModal()
   
   // Check if current schedule allows editing operations
@@ -19,6 +19,9 @@ export default function Header() {
   
   // Check if current schedule allows viewing operations (person/area schedules)
   const canView = isViewable() || canEdit
+  
+  // Check if current schedule can be copied (published schedules OR owned schedules, but NOT requests)
+  const canCopy = (isPublished() || isEditable()) && !isRequest()
 
   // Set up keyboard shortcuts
   useKeyboardShortcuts([
@@ -127,8 +130,16 @@ export default function Header() {
                 <DropdownSeparator />
                 <MenuItem to="/days/edit">Edit Days...</MenuItem>
                 <MenuItem to="/boundaries/edit">Edit Times...</MenuItem>
+              </>
+            )}
+            {canCopy && (
+              <>
                 <DropdownSeparator />
                 <MenuItem onClick={openEditCopyModal}>Edit a Copy...</MenuItem>
+              </>
+            )}
+            {canEdit && (
+              <>
                 <MenuItem onClick={openDeleteScheduleModal}>Delete...</MenuItem>
                 <DropdownSeparator />
                 <MenuItem to="/schedule/template">New From Template...</MenuItem>

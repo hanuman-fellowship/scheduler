@@ -89,14 +89,6 @@ export default function DeleteScheduleModal({ onSuccess, onCancel }: DeleteSched
       )}
 
       <div className="flex justify-end space-x-2 pt-4">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={deleteMutation.isPending}
-          className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
-        >
-          Cancel
-        </button>
         {canDelete && (
           <button
             type="button"

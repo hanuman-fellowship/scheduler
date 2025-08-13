@@ -175,13 +175,6 @@ export const RetireModal: React.FC<RetireModalProps> = ({
               </span>
               <div className="space-x-2">
                 <button
-                  type="button"
-                  onClick={onClose}
-                  className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
                   type="submit"
                   disabled={selectedPeople.length === 0 || retirePeopleMutation.isPending}
                   className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"

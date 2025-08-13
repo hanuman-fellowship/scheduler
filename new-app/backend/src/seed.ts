@@ -20,13 +20,31 @@ async function main() {
     }
   });
 
-  // Create the Published schedule (foundational schedule like legacy system)
+  // Create a schedule group for the current period (published schedules need groups)
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay()); // Start of current week (Sunday)
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6); // End of current week (Saturday)
+
+  const scheduleGroup = await prisma.scheduleGroup.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      name: 'Current Week',
+      start: startOfWeek,
+      end: endOfWeek
+    }
+  });
+
+  // Create the Published schedule (properly published with schedule group)
   const publishedSchedule = await prisma.schedule.upsert({
     where: { id: 1 },
     update: {},
     create: {
       name: 'Published',
       userId: null, // Published schedules have no owner (like legacy)
+      scheduleGroupId: scheduleGroup.id, // This makes it truly published
       template: false,
       request: 0
     }
@@ -93,12 +111,92 @@ async function main() {
     }
   });
 
+  // Create a sample person for the schedule
+  const existingPerson = await prisma.person.findFirst({
+    where: {
+      first: 'Sample',
+      last: 'Person'
+    }
+  });
+
+  const samplePerson = existingPerson || await prisma.person.create({
+    data: {
+      first: 'Sample',
+      last: 'Person',
+      displayName: 'Sample Person'
+    }
+  });
+
+  // Add the person to this schedule with the residents category
+  const existingPersonSchedule = await prisma.peopleSchedule.findFirst({
+    where: {
+      personId: samplePerson.id,
+      scheduleId: publishedSchedule.id
+    }
+  });
+
+  const personSchedule = existingPersonSchedule || await prisma.peopleSchedule.create({
+    data: {
+      personId: samplePerson.id,
+      scheduleId: publishedSchedule.id,
+      residentCategoryId: residentsCategory.id
+    }
+  });
+
+  // Create a sample shift (Morning Kitchen - Monday 8:00 AM - 12:00 PM)
+  const mondayDay = days.find(d => d.name === 'Monday');
+  if (mondayDay) {
+    const existingShift = await prisma.shift.findFirst({
+      where: {
+        areaId: kitchenArea.id,
+        dayId: mondayDay.id,
+        startAtSeconds: 28800, // 8:00 AM
+        endAtSeconds: 43200    // 12:00 PM
+      }
+    });
+
+    const sampleShift = existingShift || await prisma.shift.create({
+      data: {
+        areaId: kitchenArea.id,
+        dayId: mondayDay.id,
+        scheduleId: publishedSchedule.id,
+        startAtSeconds: 28800, // 8:00 AM (8 * 60 * 60)
+        endAtSeconds: 43200,   // 12:00 PM (12 * 60 * 60)
+        numPeople: 2
+      }
+    });
+
+    // Create a sample assignment
+    const existingAssignment = await prisma.assignment.findFirst({
+      where: {
+        shiftId: sampleShift.id,
+        personId: samplePerson.id
+      }
+    });
+
+    if (!existingAssignment) {
+      await prisma.assignment.create({
+        data: {
+          shiftId: sampleShift.id,
+          scheduleId: publishedSchedule.id,
+          personId: samplePerson.id,
+          star: false
+        }
+      });
+    }
+  }
+
   console.log('✅ Seed data created:');
   console.log('  - User: admin / password123');
-  console.log('  - Schedule:', publishedSchedule.name);
+  console.log('  - Schedule Group:', scheduleGroup.name, `(${scheduleGroup.start.toDateString()} - ${scheduleGroup.end.toDateString()})`);
+  console.log('  - Schedule:', publishedSchedule.name, '(properly published)');
   console.log('  - Days:', days.map(d => d.name).join(', '));
   console.log('  - Area:', kitchenArea.name);
   console.log('  - Category:', residentsCategory.name);
+  console.log('  - Person:', samplePerson.displayName || `${samplePerson.first} ${samplePerson.last}`, '(assigned to schedule)');
+  console.log('  - Sample shift: Monday 8:00 AM - 12:00 PM in Kitchen (with assignment)');
+  console.log('');
+  console.log('🎯 Ready to use: Load "Published" schedule and use "Edit a Copy..." to create your first working schedule!');
 }
 
 main()

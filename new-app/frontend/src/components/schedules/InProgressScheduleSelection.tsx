@@ -44,14 +44,6 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
         <div className="text-center py-8">
           <div className="text-lg">Loading schedules...</div>
         </div>
-        <div className="flex justify-end">
-          <button
-            onClick={onCancel}
-            className="boxy-button-secondary"
-          >
-            Cancel
-          </button>
-        </div>
       </div>
     )
   }
@@ -63,14 +55,6 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
           <div className="text-lg text-red-600">
             Error loading schedules: {error instanceof Error ? error.message : 'Unknown error'}
           </div>
-        </div>
-        <div className="flex justify-end">
-          <button
-            onClick={onCancel}
-            className="boxy-button-secondary"
-          >
-            Cancel
-          </button>
         </div>
       </div>
     )
@@ -138,15 +122,6 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
       <div className="flex justify-between items-center pt-4">
         <div className="text-sm text-gray-600">
           {currentSchedule ? `Current: ${currentSchedule.name}` : 'No schedule selected'}
-        </div>
-        <div className="space-x-2">
-          <button
-            onClick={onCancel}
-            className="boxy-button-secondary"
-            disabled={switchScheduleMutation.isPending}
-          >
-            Cancel
-          </button>
         </div>
       </div>
 

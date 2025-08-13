@@ -75,19 +75,15 @@ export const CopyScheduleModal: React.FC<CopyScheduleModalProps> = ({
   const allSchedules = schedulesData?.mine || [];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-        <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-semibold">Copy Schedule</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
-          >
-            ×
-          </button>
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black/30" onClick={onClose} />
+      <div className="relative w-full max-w-md mx-4 sm:mx-6">
+        <div className="relative w-full bg-white rounded-xl shadow-2xl ring-1 ring-black/10">
+          <div className="px-6 pt-6 pb-4 border-b">
+            <h2 className="text-xl font-semibold leading-6 text-gray-900">Copy Schedule</h2>
+          </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Schedule Name */}
           <div>
             <label htmlFor="scheduleName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -183,14 +179,6 @@ export const CopyScheduleModal: React.FC<CopyScheduleModalProps> = ({
           {/* Submit Buttons */}
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <button
-              type="button"
-              onClick={onClose}
-              disabled={copyScheduleMutation.isPending}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
               disabled={copyScheduleMutation.isPending || !scheduleName.trim() || !sourceScheduleId}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -198,7 +186,8 @@ export const CopyScheduleModal: React.FC<CopyScheduleModalProps> = ({
               {copyScheduleMutation.isPending ? 'Copying...' : 'Copy Schedule'}
             </button>
           </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
