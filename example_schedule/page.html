@@ -1,0 +1,1012 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>
+		Kitchen Schedule	</title>	
+	<link rel="stylesheet" type="text/css" href="/css/schedule.css">	<link href="/smiley_favicon.ico" type="image/x-icon" rel="icon">
+<link href="/smiley_favicon.ico" type="image/x-icon" rel="shortcut icon">	<script type="text/javascript" src="/js/shortcut.js"></script>	<script type="text/javascript" src="/js/prototype.js"></script>	<script type="text/javascript" src="/js/scriptaculous.js"></script>	<script type="text/javascript" src="/js/dragdrop.js"></script>	<script type="text/javascript" src="/js/effects.js"></script>	<script type="text/javascript" src="/js/color_picker.js"></script>	<script type="text/javascript">
+shortcut.add("esc",function() {
+	
+		if ($('dialog').visible()) {
+			hideDialog();
+		} else {
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("r",function() {
+	
+		clickLink($('view_request'));
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':1,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("ctrl+h",function() {
+	
+		showHoursBy();
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("tab",function() {
+	
+		if ($('dialog').visible()) {
+			resetActive();
+		} else {
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':1,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("return",function() {
+	
+		if ($('dialog').visible()) {
+			clickLink($('dialog').down('a[rel=active]'));
+		} else {
+			var active = $$('span.assignment a.assign[rel=active]').first();
+			if (active) {
+				clickLink(active);
+			} else {
+				active = $$('span.assignment a[rel=active]').first();
+				if (active) {
+					clickLink(active.next('a'));
+				} else {
+					active = $$('a.time[rel=active]').first();
+					if (active) {
+						clickLink(active);
+					} else {
+						active = $$('span.shift a[rel=active]').first();
+						if (active) {
+							clickLink(active);
+						} else {
+							clickLink($$('a.add[rel=active]').first())
+						}
+					}
+				}
+			}
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("right",function() {
+	
+		if ($('dialog').visible()) {
+			if ($('conflictsBox')) {
+				var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.up('td').next('td').down('a') : dialog.down('a');
+			activate(newActive);
+			newActive.scrollIntoView(false);
+		} else {
+			var active = getActive();
+			var newActive = active.up('td').next('td').down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("alt+right",function() {
+	
+		var active = getActive();
+		var newActive = active.up('td').siblings().last().down('a.add');
+		newActive = newActive ? newActive : active;
+		showAddShift(newActive);
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':1,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("left",function() {
+	
+		if ($('dialog').visible()) {
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.up('td').previous('td').down('a') : dialog.down('a');
+			activate(newActive);
+			newActive.scrollIntoView(false);
+		} else {
+			var active = getActive();
+			var newActive = active.up('td').previous('td').down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("alt+left",function() {
+	
+		var active = getActive();
+		var newActive = active.up('td').siblings().first().next('td').down('a.add');
+		newActive = newActive ? newActive : active;
+		showAddShift(newActive);
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':1,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("up",function() {
+	
+		if ($('dialog').visible()) {
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.previous('a') : dialog.down('a');
+			activate(newActive);
+			newActive.scrollIntoView(false);
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			newActive = active.up('tr').previous('tr').down('td',tdNum).down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("alt+up",function() {
+	
+		if ($('dialog').visible()) {
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = $('dialog').down('a');
+			if (!active) active = newActive;
+			activate(newActive);
+			newActive.scrollIntoView(false);
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			var newActive = active.up('table').down('tr',1).down('td',tdNum).down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("down",function() {
+	
+		if ($('dialog').visible()) {
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.next('a') : dialog.down('a');
+			if (newActive) activate(newActive);
+			newActive.scrollIntoView(false);
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			var newActive = active.up('tr').next('tr').down('td',tdNum).down('a.add');
+			newActive = newActive ? newActive : active;
+			showAddShift(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("alt+down",function() {
+	
+		if ($('dialog').visible()) {
+			if ($('conflictsBox')) {
+				 var dialog = $('conflictsBox').checked ? $('all') : $('available');
+			} else {
+				var dialog = $('dialog');
+			}
+			var active = dialog.down('a[rel=active]');
+			newActive = active ? active.next('a', 1) : dialog.down('a');
+			newActive = newActive ? newActive : active.next('a');
+			if (newActive) activate(newActive);
+			newActive.scrollIntoView(false);
+		} else {
+			var active = getActive();
+			td = active.up('td');
+			for (tdNum = -1; td; tdNum++) {
+				td = td.previous('td');
+			}
+			var newActive = active.up('table').down('tr',4).down('td',tdNum).down('a.add'); 
+			showAddShift(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("n",function() {
+	
+		var active = getActive();
+		td = active.up('td');
+		for (tdNum = -1; td; tdNum++) {
+			td = td.previous('td');
+		}
+		clickLink($('notes').down('a'));
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':1,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("shift+left",function() {
+	
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		} else {
+			$('previousSchedule').style.backgroundColor = '#FFF8BA';
+			clickLink($('previousSchedule'));
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("shift+right",function() {
+	
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		} else {
+			$('nextSchedule').style.backgroundColor = '#FFF8BA';
+			clickLink($('nextSchedule'));
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("shift+down",function() {
+	
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		} else {
+			if ($$('a.time').first()) { // area
+				var active = $$('a.time[rel=active]').first();
+				newActive = active ? active.up('span').next('span').down('a') :
+					$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			} else { // person
+				var active = $$('span.shift a[rel=active]').first();
+				newActive = active ? active.up('span.shift').next('span.shift').down('a') :
+					$$('a.add[rel=active]').first().up('td').down('span.shift').down('a');
+			}
+			newActive.up('td').down('a.add').hide();
+			activate(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("shift+up",function() {
+	
+		if ($('dialog').visible()) {
+			$('conflictsBox').click();
+			resetActive();
+		} else {
+			var active = $$('a.time[rel=active]').first();
+			newActive = active ? active.up('span').previous('span').down('a') :
+				$$('a.add[rel=active]').first().up('td').down('span').down('a');
+			newActive.up('td').down('a.add').hide();
+			activate(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("ctrl+down",function() {
+	
+		if ($('dialog').visible()) {
+		} else {
+			var active = $$('span.assignment a[rel=active]').first();
+			newActive = active ? active.up('span').next('span').down('a') :
+				$$('a.time[rel=active]').first().up('span').down('span').down('a');
+			newActive.up('td').down('a.time').style.backgroundColor = '';
+			activate(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("ctrl+up",function() {
+	
+		if ($('dialog').visible()) {
+		} else {
+			var active = $$('span.assignment a[rel=active]').first();
+			newActive = active ? active.up('span').previous('span').down('a') :
+				$$('a.time[rel=active]').first().up('span').down('span').down('a');
+			newActive.up('td').down('a.time').style.backgroundColor = '';
+			activate(newActive);
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+<script type="text/javascript">
+shortcut.add("backspace",function() {
+	
+		// this one uses window.location instead of clickLink()
+		// because clickLink() was doing nasty things in some browsers
+		var active = $$('span.assignment a[rel=active]').first();
+		if (active) {
+			window.location = active.href;
+		} else {
+			active = $$('a.time[rel=active]').first();
+			if (active) {
+				window.location = active.next('a').href; 
+			} else {
+				active = $$('span.shift a[rel=active]').first();
+				if (active) {
+					window.location = active.up().next('a').href;
+				}
+			}
+		}
+	;
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':1,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+</head>
+<body onload="setScroll()" onkeypress="typeActivate(event)">  
+	<div id="container">
+		<div id="content">
+						<!-- content -->
+							<span class="no_print">
+
+	<script type="text/javascript" src="/js/functions.js"></script>
+	<script type="text/javascript" src="/js/dropdowntabs.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/dialog.css">
+<nobr>
+<link rel="stylesheet" type="text/css" href="/css/menu.css">
+<div id="menu" class="top"><ul><li><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/scheduler' id='menu_SCHEDULER!' rel='sub1'>SCHEDULER!</a></li></ul></div>
+<script type="text/javascript">
+//<![CDATA[
+tabdropdown.init('menu')
+//]]>
+</script></nobr>
+	<script type="text/javascript">
+//<![CDATA[
+Event.observe('login', 'click', function(event) { new Ajax.Updater('dialog_content','/scheduler/users/login', {asynchronous:true, evalScripts:true, onComplete:function(request, json) {openDialog('login',true,'bottom')}, requestHeaders:['X-Update', 'dialog_content']}) }, false);
+//]]>
+</script>	<script type="text/javascript">
+shortcut.add("ctrl+l",function() {
+	clickLink($('login'));
+	},{
+		'type':'keydown',
+		'propagate':false,
+		'disable_in_input':false,
+		'disable_in_dialog':false,
+		'target':document	});
+</script>
+</span>
+	<div>
+	<div class="schedule_message ">	<span id="group_name">		Effective 2/8-2/14 ~CV 2021~									<span class="alert no_print"><img src="/img/small_alert_icon.gif" alt="">			<span>This schedule is no longer in effect</span></span>		</span>
+<span id="published" onmouseover="" onmouseout="">Published on February 8th, 2021 8:59am</span>
+</div>
+<div style="position:relative">
+<a href="/" id="published_link" onclick="" style="" onmouseover="" onmouseout="">Published Schedules</a><script type="text/javascript">
+//<![CDATA[
+
+//]]>
+</script>
+</div>
+<table style="" width="774" border="0" align="center" cellpadding="0" cellspacing="0"> 
+	<tr> 
+		<td width="99" rowspan="2" colspan="3"> 
+			<p style="position:relative;top:-10;left:20px;">
+				Manager: 		<span class="title" style="padding-left:3px;position:relative;top:3px">
+			Sunanda				</span>
+			</p>
+		</td> 
+		<td width="222" rowspan="2"> 
+			<div align="center" class="title"> 
+							<span id="area_name">
+				Kitchen				</span>
+							<br>
+				Schedule			</div>
+		</td> 
+		<td width="107">
+			<div align="right">
+						</div>
+		</td> 
+		<td width="15">
+			 
+		</td> 
+		<td width="178">
+			<span style="font-size:24px;"> 
+						</span>
+		</td> 
+	</tr> 
+	<tr> 
+		<td width="200px" colspan="3" style="padding:4px"> 
+			<div align="center">
+		Effective 2/8-2/14 ~CV 2021~			</div>
+		</td> 
+	</tr> 
+</table> 
+<table style="" width="774" border="2" align="center" cellpadding="0" cellspacing="0"> 
+	<tr> 
+		<td width="75" bordercolor="#000000"> 
+		<div align="center" class="no_print">
+																</div>
+		</td> 
+		<td width="75" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>
+									Monday<br>2/8												</p> 
+			</div> 
+		</td>
+		<td width="75" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>
+									Tuesday<br>2/9												</p> 
+			</div> 
+		</td>
+		<td width="75" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>
+									Wednesday<br>2/10												</p> 
+			</div> 
+		</td>
+		<td width="75" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>
+									Thursday<br>2/11												</p> 
+			</div> 
+		</td>
+		<td width="75" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>
+									Friday<br>2/12												</p> 
+			</div> 
+		</td>
+		<td width="75" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>
+									Saturday<br>2/13												</p> 
+			</div> 
+		</td>
+		<td width="75" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>
+									Sunday<br>2/14												</p> 
+			</div> 
+		</td>
+	</tr>	
+	<tr> 
+		<td width="75" height="60" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>Before Breakfast</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+															<span class="shift" id="5686"><b>5:30 - 8</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Kalpana's Schedule">Kalpana</span><br></span></span>																																																															<span class="shift" id="5595"><b>8:30 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1140' style='color:#990099' title='View Anne\'s Schedule'>Anne</a><br></span></span>																																																																																																																																																																																																																																																																																																																											</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																								<span class="shift" id="1353"><b>8 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1167' style='color:#990099' title='View Haley\'s Schedule'>Haley</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Carmen's Schedule">Carmen</span><br></span></span>																																																																																																																																																																																																																																																																																																																																																																																	</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																					<span class="shift" id="2670"><b>8 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1140' style='color:#990099' title='View Anne\'s Schedule'>Anne</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Erin's Schedule">Erin</span><br></span></span>																																																																																																																																																																																																																																																																																																																																				</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																										<span class="shift" id="5711"><b>8 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Carmen's Schedule">Carmen</span><br></span></span>																																													<span class="shift" id="5685"><b>9:30 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Erin's Schedule">Erin</span><br></span></span>																																																																																																																																																																																																																																																																																																																		</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																	<span class="shift" id="5687"><b>8 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span></span>																																																																																																																																																																																																																																																																																																																																																																								</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																												<span class="shift" id="5064"><b>8 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Carmen's Schedule">Carmen</span><br></span></span>																																																																																																																																																																																																																																																																																																																																													</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																			<span class="shift" id="1184"><b>8 - 10</b><br><span style="position:relative" class="assignment"><span class="star" style="">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1271' style='color:#990099' title='View Jeffrey\'s Schedule'>Jeffrey</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1054' style='color:#FF0000' title='View Anjul\'s Schedule'>Anjul</a><br></span></span>																																																																																																																																																																																																																																																																																																																																																						</p> 
+			</div> 
+		</td> 
+		</tr>
+<tr>
+<td width="75" height="60" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>Morning</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																									<span class="shift" id="5699"><b>10 - 10:30</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1140' style='color:#990099' title='View Anne\'s Schedule'>Anne</a><br></span></span>																																																																								<span class="shift" id="5531"><b>10:30 - 11</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/116' style='color:#990099' title='View Stephanie\'s Schedule'>Stephanie</a><br></span></span>																																																																																																																																																																																																																								</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																				<span class="shift" id="5428"><b>10 - 11</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span></span>																																																																																																																																																																																																																																																																					</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																<span class="shift" id="5688"><b>10 - 10:30</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1140' style='color:#990099' title='View Anne\'s Schedule'>Anne</a><br></span></span>																																																																								<span class="shift" id="4291"><b>10:30 - 11</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Erin's Schedule">Erin</span><br></span></span>																																																																																																																																																																																																																																	</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																											<span class="shift" id="5672"><b>10 - 11</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Erin's Schedule">Erin</span><br></span></span>																																																																																																																																																																																																																																																																														</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																													<span class="shift" id="5660"><b>10 - 11</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span></span>																																																																																																																																																																																																																																																												</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																		<span class="shift" id="5662"><b>10 - 10:30</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Elijah's Schedule">Elijah</span><br></span></span>																																													<span class="shift" id="4402"><b>10:30 - 11</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span></span>																																																																																																																																																																																																																																										</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																						<span class="shift" id="5528"><b>10 - 11:30</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span></span>																																																																																																																																																																																																																																																			</p> 
+			</div> 
+		</td> 
+		</tr>
+<tr>
+<td width="75" height="60" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>Afternoon</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																														<span class="shift" id="5586"><b>1 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Hari Priya's Schedule">Hari Priya</span><br></span></span>																																																																																										<span class="shift" id="3724"><b>5 - 6</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Brajesh's Schedule">Brajesh</span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Xan's Schedule">Xan</span><br></span></span>																																																																																	</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																										<span class="shift" id="5714"><b>12:30 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Kranti's Schedule">Kranti</span><br></span></span>																																																						<span class="shift" id="4517"><b>2 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Sunanda 's Schedule">Sunanda </span><br></span></span>																																																						<span class="shift" id="3324"><b>5 - 6</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1140' style='color:#990099' title='View Anne\'s Schedule'>Anne</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1146' style='color:#990099' title='View Avi\'s Schedule'>Avi</a><br></span></span>																																																																																																			</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																					<span class="shift" id="5647"><b>1 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Hari Priya's Schedule">Hari Priya</span><br></span></span>																																																																																										<span class="shift" id="3325"><b>5 - 6</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1241' style='color:#990099' title='View Diana\'s Schedule'>Diana</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span></span>																																																																																										</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																			<span class="shift" id="5712"><b>1 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Hari Priya's Schedule">Hari Priya</span><br></span></span>																																																																																																																														<span class="shift" id="5072"><b>5 - 6</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1146' style='color:#990099' title='View Avi\'s Schedule'>Avi</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Nate's Schedule">Nate</span><br></span></span>																																																																								</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																												<span class="shift" id="5619"><b>1 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Kranti's Schedule">Kranti</span><br></span></span>																																																															<span class="shift" id="5408"><b>5 - 6</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1282' style='color:#990099' title='View Jameelah\'s Schedule'>Jameelah</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a><br></span></span>																																																																																																																														</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																									<span class="shift" id="3821"><b>2 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Hari Priya's Schedule">Hari Priya</span><br></span></span>									<span class="shift" id="5203"><b>4 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1140' style='color:#990099' title='View Anne\'s Schedule'>Anne</a><br></span></span>																		<span class="shift" id="430"><b>5 - 6</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Tara's Schedule">Tara</span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/784' style='color:#990099' title='View Quincy\'s Schedule'>Quincy</a><br></span></span>																																																																																																																					</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																							<span class="shift" id="5671"><b>1 - 5</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Hari Priya's Schedule">Hari Priya</span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Kranti's Schedule">Kranti</span><br></span></span>																																																						<span class="shift" id="2807"><b>5 - 6</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1241' style='color:#990099' title='View Diana\'s Schedule'>Diana</a><br></span></span>																																																																																																												</p> 
+			</div> 
+		</td> 
+		</tr>
+<tr>
+<td width="75" height="60" bordercolor="#000000"> 
+			<div align="center"> 
+				<p>After Dinner</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																																																																																																																																					<span class="shift" id="3158"><b>6 - 7</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Elijah's Schedule">Elijah</span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1315' style='color:#990099' title='View Natalie\'s Schedule'>Natalie</a><br></span></span>																																				</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																																																																																																										<span class="shift" id="92"><b>6 - 7</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Erin's Schedule">Erin</span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Stephanie's Schedule">Stephanie</span><br></span></span>																																																															</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																																																																																																																			<span class="shift" id="3320"><b>6 - 7</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Jennifer 's Schedule">Jennifer </span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/784' style='color:#990099' title='View Quincy\'s Schedule'>Quincy</a><br></span></span>																																																						</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																																																																																																																																														<span class="shift" id="5069"><b>6 - 7</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Erin's Schedule">Erin</span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Nate's Schedule">Nate</span><br></span></span>																											</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																																																																																																																												<span class="shift" id="5058"><b>6 - 7</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Elijah's Schedule">Elijah</span><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1282' style='color:#990099' title='View Jameelah\'s Schedule'>Jameelah</a><br></span></span>																																													</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																																																																																																																																																																<span class="shift" id="96"><b>6 - 7</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1271' style='color:#990099' title='View Jeffrey\'s Schedule'>Jeffrey</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1140' style='color:#990099' title='View Anne\'s Schedule'>Anne</a><br></span></span>									</p> 
+			</div> 
+		</td> 
+							<td>
+					<div align="center" class="shift"> 
+				<p> 
+																																																																																																																																																																																																																																																																																																																																																																																							<span class="shift" id="372"><b>6 - 7</b><br><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/1241' style='color:#990099' title='View Diana\'s Schedule'>Diana</a><br></span><span style="position:relative" class="assignment"><span class="star" style="display:none">*</span><span style="color:#000;font-style:italic" title="View Elijah's Schedule">Elijah</span><br></span></span>																		</p> 
+			</div> 
+		</td> 
+		</tr>
+	<tr> 
+		
+		<td id="0_0" onmouseover='showAddShift($("add_0_0"))' onmouseout='hideAddShift($("add_0_0"))' align="center" height="13" colspan="8" bordercolor="#000000" style="padding:3px;"> 
+					Also <span id="floating_1566">3.5 hours  w/ <a href='/2021/03%20effective%202%7C8-2%7C14%20~cv%202021~/people/schedule/466' style='color:#990099' title='View Swapna\'s Schedule'>Swapna</a> (Laundry)</span>													<br>
+		</td> 
+	</tr> 
+		
+	<tr> 
+		<td align="left" height="13" colspan="8" bordercolor="#000000" style="padding:3px;">
+			<a id="total_hours" title="Display hour breakdown (ctrl+h)" href="javascript:showHoursBy()">Total Hours: 100 of 100</a>		</td> 
+	</tr> 
+</table> 
+	<table align="center" width="850px" style="font-size:17pt;text-align:center">
+		<tr>
+			<td align="left">
+		</td>
+		<td align="right">
+		</td>
+	</tr>
+</table>
+<div id="hoursBy" style="display:none">
+<fieldset>
+	<legend>Hour Breakdown</legend>
+<div class="tall">
+<table>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Hari Priya:
+		</td>
+		<td style="text-align:left">
+			19		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Swapna:
+		</td>
+		<td style="text-align:left">
+			15.5		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Kranti:
+		</td>
+		<td style="text-align:left">
+			12.5		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Anne:
+		</td>
+		<td style="text-align:left">
+			7.5		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Erin:
+		</td>
+		<td style="text-align:left">
+			6		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Carmen:
+		</td>
+		<td style="text-align:left">
+			6		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Elijah:
+		</td>
+		<td style="text-align:left">
+			3.5		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Sunanda :
+		</td>
+		<td style="text-align:left">
+			3		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Jeffrey:
+		</td>
+		<td style="text-align:left">
+			3		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Diana:
+		</td>
+		<td style="text-align:left">
+			3		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Kalpana:
+		</td>
+		<td style="text-align:left">
+			2.5		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Nate:
+		</td>
+		<td style="text-align:left">
+			2		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Quincy:
+		</td>
+		<td style="text-align:left">
+			2		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Haley:
+		</td>
+		<td style="text-align:left">
+			2		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Avi:
+		</td>
+		<td style="text-align:left">
+			2		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Jameelah:
+		</td>
+		<td style="text-align:left">
+			2		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Anjul:
+		</td>
+		<td style="text-align:left">
+			2		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Stephanie:
+		</td>
+		<td style="text-align:left">
+			1.5		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Tara:
+		</td>
+		<td style="text-align:left">
+			1		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Xan:
+		</td>
+		<td style="text-align:left">
+			1		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Natalie:
+		</td>
+		<td style="text-align:left">
+			1		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Jennifer :
+		</td>
+		<td style="text-align:left">
+			1		</td>
+	</tr>
+		<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Brajesh:
+		</td>
+		<td style="text-align:left">
+			1		</td>
+	</tr>
+		<tr>
+		<td colspan="2">
+			<hr>
+		</td>
+	</tr>
+<tr><td></td></tr>
+<tr>
+		<td style="text-align:right;padding-right:10px;">
+			Total:
+		</td>
+		<td style="text-align:left">
+			100		</td>
+	</tr>
+</table>
+</div>
+</fieldset>
+</div>
+</div>
+<div id="behind_dialog">
+</div>
+<div id="dialog" style="display:none">
+	<div id="outer">
+		<div id="drag_here"></div>
+		<div id="dialog_content"></div>
+	</div>
+</div>
+		</div>
+	</div>
+</body>
+</html>

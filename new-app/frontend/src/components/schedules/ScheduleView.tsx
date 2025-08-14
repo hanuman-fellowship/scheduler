@@ -3,22 +3,22 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useScheduleView } from '../../hooks/useScheduleView';
 import { useScheduleStore } from '../../store/scheduleStore';
 import { useGlobalModal } from '../../contexts/GlobalModalContext';
-import { ScheduleTable } from '../schedule/ScheduleTable';
+import { ScheduleGrid } from './ScheduleGrid';
 import { ScheduleHeader } from './ScheduleHeader';
 import { FloatingShifts } from './FloatingShifts';
 import { ScheduleNotes } from './ScheduleNotes';
-import type { ScheduleViewMode } from '@shared/types';
+import { ScheduleNavigation } from './ScheduleNavigation';
+import type { ScheduleViewMode, AreaScheduleResponse, PersonScheduleResponse, GapsScheduleResponse } from '@shared/types';
 
 export const ScheduleView: React.FC = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode') as 'view' | 'edit' | 'request' | 'print' || 'view';
   const { isEditable, isRequest } = useScheduleStore();
-  const { openModal, openAssignmentModal } = useGlobalModal();
+  const { openModal } = useGlobalModal();
 
   // Determine if we should be in editing mode
   const canEdit = isEditable() || isRequest();
-  const editMode = canEdit ? 'edit' : 'view';
 
   // Validate and construct view mode
   const [viewMode, validationError] = React.useMemo((): [ScheduleViewMode | null, string | null] => {
@@ -38,29 +38,17 @@ export const ScheduleView: React.FC = () => {
     return [{ type, id: parsedId, mode }, null];
   }, [type, id, mode]);
 
-  if (validationError) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg text-red-600">
-          Error loading schedule: {validationError}
-        </div>
-      </div>
-    );
-  }
-
-  if (!viewMode) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Invalid schedule view</div>
-      </div>
-    );
-  }
-
-  const { data: scheduleData, isLoading, error } = useScheduleView(viewMode);
+  // IMPORTANT: Always call useScheduleView hook, even if viewMode is null
+  // This prevents "Rendered more hooks than during the previous render" error
+  const { 
+    data: scheduleData, 
+    isLoading, 
+    error 
+  } = useScheduleView(viewMode || { type: 'area', id: 1, mode: 'view' });
 
   // Handle shift creation based on the legacy pattern
   const handleAddShift = React.useCallback((dayId: number, periodName: string) => {
-    if (!canEdit || !scheduleData) return;
+    if (!canEdit || !scheduleData || !viewMode) return;
 
     // Create shift context based on schedule view type and position
     const shiftContext = {
@@ -78,7 +66,7 @@ export const ScheduleView: React.FC = () => {
 
   // Handle floating shift creation
   const handleAddFloatingShift = React.useCallback(() => {
-    if (!canEdit || !scheduleData) return;
+    if (!canEdit || !scheduleData || !viewMode) return;
 
     const floatingShiftContext = {
       scheduleType: viewMode.type,
@@ -99,26 +87,48 @@ export const ScheduleView: React.FC = () => {
     openModal('editShift', { shiftId });
   }, [canEdit, openModal]);
 
-  // Handle assignment creation - click on empty assignment slot or "Need X more"
-  const handleAssignmentClick = React.useCallback((shiftId: number, shiftName: string) => {
-    if (!canEdit) return;
+  // Handle navigation
+  const handlePreviousSchedule = React.useCallback(() => {
+    // TODO: Implement navigation to previous schedule
+    console.log('Navigate to previous schedule');
+  }, []);
 
-    // Open assignment modal with shift ID and name
-    openAssignmentModal(shiftId, shiftName);
-  }, [canEdit, openAssignmentModal]);
+  const handleNextSchedule = React.useCallback(() => {
+    // TODO: Implement navigation to next schedule
+    console.log('Navigate to next schedule');
+  }, []);
+
+  // Now handle the conditional rendering after all hooks are called
+  if (validationError) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '256px' }}>
+        <div style={{ fontSize: '18px', color: '#dc2626' }}>
+          Error loading schedule: {validationError}
+        </div>
+      </div>
+    );
+  }
+
+  if (!viewMode) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '256px' }}>
+        <div style={{ fontSize: '18px' }}>Invalid schedule view</div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading schedule...</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '256px' }}>
+        <div style={{ fontSize: '18px' }}>Loading schedule...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg text-red-600">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '256px' }}>
+        <div style={{ fontSize: '18px', color: '#dc2626' }}>
           Error loading schedule: {error instanceof Error ? error.message : 'Unknown error'}
         </div>
       </div>
@@ -127,8 +137,8 @@ export const ScheduleView: React.FC = () => {
 
   if (!scheduleData) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">No schedule data found</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '256px' }}>
+        <div style={{ fontSize: '18px' }}>No schedule data found</div>
       </div>
     );
   }
@@ -136,25 +146,26 @@ export const ScheduleView: React.FC = () => {
   const renderScheduleContent = () => {
     switch (viewMode.type) {
       case 'area':
-        const areaData = scheduleData as any; // Type assertion for now
+        const areaData = scheduleData as AreaScheduleResponse;
         return (
-          <div className="space-y-0">
+          <div style={{ margin: 0 }}>
             <ScheduleHeader
               title={areaData.area.name}
-              subtitle={areaData.area.manager?.username || areaData.area.manager}
+              subtitle={areaData.area.manager?.username || 'No Manager'}
+              managerName={areaData.area.manager?.username}
               editable={areaData.editable}
               type="area"
-              groupName={areaData.groupName}
+              groupName={(areaData as any).groupName}
+              isInProgress={!(areaData as any).groupName}
             />
-            <ScheduleTable
+            <ScheduleGrid
               bounds={areaData.bounds}
               data={areaData}
               editable={canEdit}
               type="area"
-              mode={editMode}
-              onAddShift={handleAddShift}
+              isRequestMode={isRequest()}
               onShiftClick={handleShiftClick}
-              onAssignmentClick={handleAssignmentClick}
+              onAddShift={handleAddShift}
               onAddFloatingShift={handleAddFloatingShift}
             />
             {areaData.area.floatingShifts?.length > 0 && (
@@ -173,31 +184,31 @@ export const ScheduleView: React.FC = () => {
         );
 
       case 'person':
-        const personData = scheduleData as any; // Type assertion for now
+        const personData = scheduleData as PersonScheduleResponse;
         return (
-          <div className="space-y-0">
+          <div style={{ margin: 0 }}>
             <ScheduleHeader
               title={personData.person.name}
-              subtitle={personData.person.category.name}
+              subtitle={personData.person.category?.name}
               editable={personData.editable}
               type="person"
-              totalHours={Object.values(personData.totalHours).reduce((sum: number, hours: any) => sum + hours, 0)}
-              groupName={personData.groupName}
-              personLastFirst={`${personData.person.last}, ${personData.person.first}`}
+              totalHours={(personData as any).totalHours ? Object.values((personData as any).totalHours).reduce((sum: number, hours: any) => sum + hours, 0) : 0}
+              groupName={(personData as any).groupName}
+              personLastFirst={`${(personData.person as any).lastName || (personData.person as any).last || ''}, ${(personData.person as any).firstName || (personData.person as any).first || ''}`}
+              isInProgress={!(personData as any).groupName}
             />
-            <ScheduleTable
+            <ScheduleGrid
               bounds={personData.bounds}
               data={personData}
               editable={canEdit}
               type="person"
-              mode={editMode}
-              onAddShift={handleAddShift}
+              isRequestMode={isRequest()}
               onShiftClick={handleShiftClick}
-              onAssignmentClick={handleAssignmentClick}
+              onAddShift={handleAddShift}
               onAddFloatingShift={handleAddFloatingShift}
             />
             {(personData.notes.operations.length > 0 || personData.notes.personnel.length > 0) && (
-              <div className="space-y-2">
+              <div style={{ marginTop: '8px' }}>
                 {personData.notes.operations.length > 0 && (
                   <ScheduleNotes
                     notes={personData.notes.operations.map((n: any) => n.content).join('\n')}
@@ -218,23 +229,24 @@ export const ScheduleView: React.FC = () => {
         );
 
       case 'gaps':
-        const gapsData = scheduleData as any; // Type assertion for now
+        const gapsData = scheduleData as GapsScheduleResponse;
         return (
-          <div className="space-y-0">
+          <div style={{ margin: 0 }}>
             <ScheduleHeader
               title="Unassigned Shifts"
               subtitle="Shifts needing coverage"
               editable={false}
               type="gaps"
+              groupName={(gapsData as any).groupName}
+              isInProgress={!(gapsData as any).groupName}
             />
-            <ScheduleTable
+            <ScheduleGrid
               bounds={gapsData.bounds}
               data={gapsData}
               editable={true}
               type="gaps"
-              mode={mode}
+              isRequestMode={false}
               onShiftClick={handleShiftClick}
-              onAssignmentClick={handleAssignmentClick}
             />
           </div>
         );
@@ -244,9 +256,18 @@ export const ScheduleView: React.FC = () => {
     }
   };
 
+  const showNavigation = mode !== 'request' && mode !== 'print' && viewMode.type !== 'gaps';
+
   return (
-    <div className="w-full">
+    <div style={{ width: '100%' }}>
       {renderScheduleContent()}
+      {showNavigation && (
+        <ScheduleNavigation
+          onPrevious={handlePreviousSchedule}
+          onNext={handleNextSchedule}
+          showNavigation={showNavigation}
+        />
+      )}
     </div>
   );
 };

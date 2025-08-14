@@ -1,4 +1,5 @@
 import React from 'react';
+import './LegacySchedule.css';
 
 interface ScheduleHeaderProps {
   title: string;
@@ -8,7 +9,10 @@ interface ScheduleHeaderProps {
   totalHours?: number;
   groupName?: string;
   personLastFirst?: string;
+  managerName?: string;
+  isInProgress?: boolean;
   onEdit?: () => void;
+  onTotalHoursClick?: () => void;
 }
 
 export const ScheduleHeader: React.FC<ScheduleHeaderProps> = ({
@@ -19,101 +23,108 @@ export const ScheduleHeader: React.FC<ScheduleHeaderProps> = ({
   totalHours,
   groupName,
   personLastFirst,
-  onEdit
+  managerName,
+  isInProgress = false,
+  onEdit,
+  onTotalHoursClick
 }) => {
-  return (
-    <div className="flex justify-center mb-0">
-      <table 
-        width={774} 
-        border={0} 
-        cellPadding={0} 
-        cellSpacing={0}
-        style={{ borderCollapse: 'separate' }}
-      >
-        <tbody>
-          <tr> 
-            <td width={99} rowSpan={2} colSpan={3} style={{ verticalAlign: 'top' }}> 
-              <p style={{ position: 'relative', top: '-10px', left: '20px' }}>
-                {type === 'area' ? 'Manager: ' : (
-                  <span 
-                    id="total_hours" 
-                    title="Display Hour Breakdown... (ctrl+h)" 
-                    style={{ textDecoration: 'none', cursor: 'pointer' }}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    Total Hours:
-                  </span>
-                )}
-                <span 
-                  className="title" 
-                  style={{ 
-                    paddingLeft: '3px', 
-                    position: 'relative', 
-                    top: '3px',
-                    fontWeight: 'bold' 
-                  }}
-                >
-                  {type === 'area' ? subtitle : (totalHours || '')}
-                </span>
-              </p>
-            </td> 
-            <td width={222} rowSpan={2} style={{ verticalAlign: 'top' }}> 
-              <div style={{ textAlign: 'center' }} className="title"> 
-                <span 
-                  id={type === 'area' ? 'area_name' : 'category_name'}
-                  style={{ 
-                    cursor: editable ? 'pointer' : 'default',
-                    fontWeight: 'bold'
-                  }}
-                  onClick={editable ? onEdit : undefined}
-                  title={editable ? 'Edit...' : ''}
-                >
-                  {type === 'person' ? subtitle : title}
-                </span>
-                <br />
-                Schedule
-              </div>
-            </td> 
-            <td width={107} style={{ verticalAlign: 'top' }}>
-              <div style={{ textAlign: 'right' }}>
-                {type === 'person' ? 'Name:' : ''}
-              </div>
-            </td> 
-            <td width={15} style={{ verticalAlign: 'top' }}>
-              &nbsp;
-            </td> 
-            <td width={178} style={{ verticalAlign: 'top' }}>
-              <span style={{ fontSize: '24px' }}> 
-                {type === 'person' && (
-                  <>
-                    <span 
-                      id="person_name"
-                      style={{ 
-                        cursor: editable ? 'pointer' : 'default',
-                        fontWeight: 'bold'
-                      }}
-                      onClick={editable ? onEdit : undefined}
-                      title={editable ? 'Edit Person...' : 'View Profile'}
-                    >
-                      {title}
-                    </span>
-                    <br />
-                    <span id="full_name">{personLastFirst}</span>
-                  </>
-                )}
+  // Create schedule message component
+  const renderScheduleMessage = () => {
+    if (!groupName && !isInProgress) return null;
+    
+    return (
+      <div>
+        <div className="schedule_message">
+          <span id="group_name">
+            {isInProgress ? 'In Progress' : groupName}
+            {!isInProgress && (
+              <span className="alert no_print">
+                <img src="/img/small_alert_icon.gif" alt="" />
+                <span>This schedule is no longer in effect</span>
               </span>
-            </td> 
-          </tr> 
-          <tr> 
-            <td width={200} colSpan={3} style={{ padding: '4px', verticalAlign: 'top' }}> 
-              <div style={{ textAlign: 'center' }}>
-                {groupName || ''}
-              </div>
-            </td> 
-          </tr> 
-        </tbody>
+            )}
+          </span>
+          <span id="published">
+            Published on {new Date().toLocaleDateString('en-US', { 
+              month: 'long', 
+              day: 'numeric', 
+              year: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit'
+            })}
+          </span>
+        </div>
+        <div style={{ position: 'relative' }}>
+          <a 
+            href="/" 
+            id="published_link" 
+            onClick={(e) => e.preventDefault()}
+          >
+            Published Schedules
+          </a>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {renderScheduleMessage()}
+      
+      <table width={774} border={0} style={{ margin: '0 auto' }} cellPadding={0} cellSpacing={0}>
+        <tr>
+          <td width={99} rowSpan={2} colSpan={3}>
+            <p className="manager-position">
+              {type === 'area' ? (
+                <>
+                  Manager:
+                  <span className="title title-padding">
+                    {managerName || 'No Manager'}
+                  </span>
+                </>
+              ) : type === 'person' ? (
+                <>
+                  Total Hours:
+                  <span className="title title-padding">
+                    {totalHours || 0}
+                  </span>
+                </>
+              ) : (
+                'Gaps View'
+              )}
+            </p>
+          </td>
+          <td width={222} rowSpan={2}>
+            <div style={{ textAlign: 'center' }} className="title">
+              <span id="area_name">
+                {title}
+              </span>
+              <br />
+              Schedule
+            </div>
+          </td>
+          <td width={107}>
+            <div style={{ textAlign: 'right' }}>
+              {/* Right content if needed */}
+            </div>
+          </td>
+          <td width={15}>
+            &nbsp;
+          </td>
+          <td width={178}>
+            <span style={{ fontSize: '24px' }}>
+              {/* Additional content for person schedules */}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td width={200} colSpan={3} style={{ padding: '4px' }}>
+            <div style={{ textAlign: 'center' }}>
+              {isInProgress ? 'In Progress' : (groupName || '')}
+            </div>
+          </td>
+        </tr>
       </table>
-    </div>
+    </>
   );
 };
