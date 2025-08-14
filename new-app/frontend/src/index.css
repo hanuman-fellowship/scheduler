@@ -15,10 +15,7 @@
 }
 
 @layer components {
-  /* Schedule table styling to match legacy */
-  .schedule-table {
-    @apply border-2 border-gray-800;
-  }
+  /* Schedule table styling to match legacy - border handled in ScheduleTable.css */
   
   .schedule-cell {
     @apply border border-gray-800 p-1 text-center align-top min-h-[60px];

@@ -10,7 +10,11 @@
 /* Main table - CRITICAL: Must be exactly 774px wide */
 .schedule-table {
   width: 774px !important;
-  border: 2px solid #000000;
+  /* 3D inset effect: grey on top/left, black on right/bottom */
+  border-top: 2px solid #666666;
+  border-left: 2px solid #666666;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
   border-collapse: separate;
   border-spacing: 0;
   background-color: white;
@@ -26,7 +30,11 @@
 
 /* Table headers */
 .day-header-row th {
-  border: 2px solid #000000;
+  /* 3D inset effect: black on top/left, grey on right/bottom */
+  border-top: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #666666;
+  border-bottom: 1px solid #666666;
   padding: 4px;
   font-weight: bold;
   text-align: center;
@@ -53,7 +61,11 @@
 
 /* Time slot rows */
 .time-slot-row td {
-  border: 2px solid #000000;
+  /* 3D inset effect: black on top/left, grey on right/bottom */
+  border-top: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #666666;
+  border-bottom: 1px solid #666666;
   vertical-align: middle;
   padding: 0;
 }
@@ -168,7 +180,11 @@ span.star {
 
 /* Hours summary row */
 .hours-summary-row td {
-  border: 2px solid #000000;
+  /* 3D inset effect: black on top/left, grey on right/bottom */
+  border-top: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #666666;
+  border-bottom: 1px solid #666666;
   padding: 4px;
   text-align: center;
   font-weight: bold;
@@ -191,7 +207,11 @@ span.star {
 
 /* Floating shifts row */
 .floating-shifts-row td {
-  border: 2px solid #000000;
+  /* 3D inset effect: black on top/left, grey on right/bottom */
+  border-top: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #666666;
+  border-bottom: 1px solid #666666;
   padding: 8px;
   background-color: #f5f5f5;
 }
