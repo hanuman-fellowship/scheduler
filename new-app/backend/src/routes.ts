@@ -100,12 +100,12 @@ export const createApp = (options: {
   app.put('/api/categories/:id', requireAuth, requireRole('operations'), asyncHandler(categoriesController.update));
   app.delete('/api/categories/:id', requireAuth, requireRole('operations'), asyncHandler(categoriesController.deleteCategory));
 
-  // Shift management (operations only for now)
+  // Shift management (permissions checked in controllers based on schedule)
   app.get('/api/shifts', requireAuth, asyncHandler(shiftController.list));
   app.get('/api/shifts/:id', requireAuth, asyncHandler(shiftController.get));
-  app.post('/api/shifts', requireAuth, requireRole('operations'), asyncHandler(shiftController.create));
-  app.put('/api/shifts/:id', requireAuth, requireRole('operations'), asyncHandler(shiftController.update));
-  app.delete('/api/shifts/:id', requireAuth, requireRole('operations'), asyncHandler(shiftController.deleteShift));
+  app.post('/api/shifts', requireAuth, asyncHandler(shiftController.create));
+  app.put('/api/shifts/:id', requireAuth, asyncHandler(shiftController.update));
+  app.delete('/api/shifts/:id', requireAuth, asyncHandler(shiftController.deleteShift));
 
   // Assignment management (operations only for now)
   app.get('/api/assignments/shift/:shiftId/available-people', requireAuth, asyncHandler(assignmentController.getAvailablePeopleForShift));

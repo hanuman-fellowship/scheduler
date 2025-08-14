@@ -66,7 +66,7 @@ export const requireAuth = async (req: AuthRequest, res: Response, next: NextFun
   }
 };
 
-export const requireRole = (role: UserRole) => {
+export const requireRole = (role: UserRole | UserRole[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({
@@ -78,7 +78,10 @@ export const requireRole = (role: UserRole) => {
       return;
     }
 
-    if (!req.user.roles.includes(role)) {
+    const allowedRoles = Array.isArray(role) ? role : [role];
+    const hasPermission = allowedRoles.some(allowedRole => req.user!.roles.includes(allowedRole));
+
+    if (!hasPermission) {
       res.status(403).json({
         error: {
           message: 'Insufficient permissions',

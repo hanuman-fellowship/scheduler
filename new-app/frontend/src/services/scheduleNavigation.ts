@@ -1,4 +1,5 @@
 import { api } from './api';
+import { useScheduleStore } from '../store/scheduleStore';
 import type { AreaResponse, PersonResponse } from '@shared/types';
 
 export interface AreaForSelection {
@@ -32,8 +33,13 @@ export const scheduleNavigationService = {
    * Get all areas for selection modal
    */
   async getAreasForSelection(): Promise<AreaForSelection[]> {
-    // Get current schedule from store - for now hardcode to 1 (Published schedule)
-    const response = await api.get('/areas?scheduleId=1');
+    // Get current schedule from store
+    const currentSchedule = useScheduleStore.getState().currentSchedule;
+    if (!currentSchedule) {
+      throw new Error('No current schedule available');
+    }
+    
+    const response = await api.get(`/areas?scheduleId=${currentSchedule.id}`);
     return response.data.map((area: AreaResponse) => ({
       id: area.id,
       name: area.name,
@@ -45,8 +51,13 @@ export const scheduleNavigationService = {
    * Get all people grouped by category for selection modal
    */
   async getPeopleForSelection(): Promise<PeopleByCategory> {
-    // Get current schedule from store - for now hardcode to 1 (Published schedule)
-    const response = await api.get('/people?scheduleId=1');
+    // Get current schedule from store
+    const currentSchedule = useScheduleStore.getState().currentSchedule;
+    if (!currentSchedule) {
+      throw new Error('No current schedule available');
+    }
+    
+    const response = await api.get(`/people?scheduleId=${currentSchedule.id}`);
     const people: PersonResponse[] = response.data;
     
     // Group people by category

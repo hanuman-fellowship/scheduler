@@ -21,8 +21,10 @@
 
 ## Next up
 
-- Request workflow implementation (HIGH PRIORITY - Essential for manager role)
-  - Manager request creation and submission
-  - Operations request review and approval
-  - See: `/new-app/MENU_IMPLEMENTATION_STATUS.md`
-  - Details: Phase 1 section in `/new-app/CLAUDE.md`
+- Interactive Assignment System (HIGH PRIORITY - Core scheduling functionality)
+  - Click empty shift slots to open assignment modal
+  - Show available people with conflict detection
+  - Single-click assignment with visual feedback
+  - Study legacy: `/views/areas/schedule.ctp` and `/controllers/assignments_controller.php`
+  - Backend APIs already exist, need frontend modal UI
+  - Essential for daily scheduling operations

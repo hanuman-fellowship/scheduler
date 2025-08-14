@@ -69,9 +69,57 @@ npm run setup         # Full setup (install + migrate + seed)
 
 ## User Roles & Permissions
 
-- **Operations**: Full system access, manage users/schedules, approve requests
-- **Manager**: Manage assigned areas, create/submit requests, view published schedules
-- **Personnel**: View published schedules only, see own assignments
+- **Operations**: Full system access, manage users/schedules, approve requests, edit any schedule
+- **Manager**: Manage assigned areas, create/edit shifts on draft requests only (request=2), view published schedules
+- **Personnel**: View published schedules only, see own assignments, no editing capabilities
+
+### **Legacy Permission Behavior**
+Based on CakePHP `redirectIfNotEditable()` function:
+- Managers can only modify schedules with `request = 2` (draft status)
+- Operations users bypass all schedule editing restrictions
+- Permission checks maintain thin controller pattern via `schedulePermissionService`
+
+## 🎯 Next Development Priority: Assignment Interface
+
+**Objective**: Implement interactive assignment system for area schedule views
+
+### **Legacy System Analysis Required**
+
+**⚠️ CRITICAL**: Before implementation, study the legacy CakePHP assignment workflow:
+
+1. **View Files to Examine**:
+   - `/views/areas/schedule.ctp` - Main area schedule view
+   - `/views/assignments/` - Assignment-related views and modals
+   - `/views/elements/` - Reusable assignment UI components
+
+2. **Controller Logic to Study**:
+   - `/controllers/assignments_controller.php` - Assignment CRUD operations
+   - `/controllers/areas_controller.php` - Schedule view integration
+   - How empty shift slots trigger assignment modals
+   - Modal population with available people
+
+3. **Key Interactions to Preserve**:
+   - **Click empty slot** → Opens assignment modal
+   - **Modal shows available people** with conflict indicators
+   - **Single click assigns person** to shift
+   - **Visual feedback** distinguishes assigned vs empty slots
+   - **Star system** for priority assignments
+   - **Conflict warnings** prevent double-booking
+
+4. **Technical Implementation Notes**:
+   - Modal should be **fast and responsive**
+   - People list should show **availability status**
+   - **Real-time conflict detection** as user selects
+   - **Optimistic updates** for immediate feedback
+
+### **Implementation Approach**
+1. Study legacy assignment modal UI/UX patterns
+2. Design React components matching legacy interaction flow
+3. Integrate with existing assignment APIs (already implemented)
+4. Test assignment workflow end-to-end
+5. Ensure performance with large people lists
+
+---
 
 ## Key Architecture Files
 
@@ -79,6 +127,7 @@ npm run setup         # Full setup (install + migrate + seed)
 - **Schedule Context**: `frontend/src/store/scheduleStore.ts` - Current schedule state
 - **API Routes**: `backend/src/routes.ts` - All endpoints
 - **Time Utilities**: `shared/src/timeUtils.ts` - Centralized time handling
+- **Assignment APIs**: `backend/src/services/assignmentService.ts` - Conflict detection and CRUD
 
 ## Legacy Integration Principle
 
@@ -97,11 +146,20 @@ npm run setup         # Full setup (install + migrate + seed)
 - Areas, Categories, People management
 - Schedule views (area/person/gaps)
 - Shift creation and editing
-- Assignment system
 - Schedule copying and templates
 - Publishing workflow
 
-**⚠️ Partially Implemented**: 22 items (35%) - Routes exist, missing backend APIs
+**🔄 Currently Working On**: Assignment Interface Enhancement
+- **Next Priority**: Interactive assignment system for area schedule views
+- **Goal**: Click empty shift slots to open assignment modal with available people
+- **Legacy Study Required**: Examine CakePHP assignment modal interactions and workflow
+
+**⚠️ Partially Implemented**: Assignment system backend APIs exist but missing frontend UI:
+- Assignment CRUD operations (create, update, delete, star) ✅
+- Conflict detection and availability checking ✅  
+- **Missing**: Interactive assignment interface in schedule grid
+- **Missing**: Assignment modal with people selection
+- **Missing**: Visual feedback for assignments vs empty slots
 
 **❌ Missing Entirely**: 18 items (28%) - Not implemented
 
@@ -109,6 +167,13 @@ See [Menu Implementation Status](./MENU_IMPLEMENTATION_STATUS.md) for detailed b
 
 ---
 
-**Status**: 🚀 **Core Systems Complete** - 531+ tests passing
+**Status**: 🚀 **Core Systems Complete** - 510+ tests passing
+
+### **Next Milestone: Assignment Interface**
+**Target**: Complete interactive assignment system with legacy UX compatibility
+- Study legacy assignment modal workflow first
+- Test assignment conflicts and availability checking  
+- Ensure fast, responsive UI for large people lists
+- Maintain existing test coverage standards
 
 **Keep documentation up to date after finishing tasks**

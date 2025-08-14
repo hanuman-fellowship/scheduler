@@ -367,12 +367,14 @@ frontend/
 5. ✅ Visual styling with legacy compatibility (774px width, today highlighting)
 6. ✅ Comprehensive test coverage for all schedule components
 
-### 🔜 Phase 3: Core Scheduling Operations (NEXT)
+### 🔄 Phase 3: Core Scheduling Operations (IN PROGRESS)
 
-1. ⭕ Shift creation and editing with time picker interface
-2. ⭕ Assignment interface with drag-and-drop functionality
-3. ⭕ Real-time schedule updates and conflict detection
-4. ⭕ Floating shifts management
+1. ✅ Shift creation and editing with time picker interface (AddShiftForm, EditShiftForm)
+2. ✅ Schedule context integration (uses current schedule from store)
+3. ✅ Error handling for missing schedule context
+4. ⭕ Assignment interface with drag-and-drop functionality
+5. ⭕ Real-time schedule updates and conflict detection
+6. ⭕ Floating shifts management
 
 ### 🔜 Phase 4: Workflows (PLANNED)
 
@@ -401,7 +403,19 @@ frontend/
 - **State**: Zustand auth store, React Query for server state with proper error handling
 - **Global Modal System**: Centralized modal management via GlobalModalContext
 - **Navigation System**: Working schedule navigation with keyboard shortcuts (Ctrl+A, Ctrl+P)
-- **Testing**: 114+ focused tests covering component behavior, interactions, and regressions
+- **Testing**: 267+ focused tests covering component behavior, interactions, and regressions
+
+### ✅ **Recent Enhancements**
+
+#### **Schedule Context Integration** 
+- **Fixed**: Area/person selection now uses current schedule instead of hardcoded schedule ID 1
+- **Enhanced**: AddShiftForm handles missing schedule gracefully with user-friendly error message  
+- **Service**: `scheduleNavigationService` properly integrates with `scheduleStore`
+
+#### **Error Handling Improvements**
+- Components gracefully handle null schedule context
+- Clear error messages guide users when schedule context is missing
+- Tests cover edge cases for missing data scenarios
 
 ### 🔧 Component Patterns Established
 

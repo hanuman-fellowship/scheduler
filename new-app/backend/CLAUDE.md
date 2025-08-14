@@ -324,7 +324,33 @@ See `TESTING_ROUTES.md` for detailed explanation of the new approach.
 - **"Other" Assignments**: Support for non-person assignments with custom names
 - **Comprehensive Validation**: Zod schemas with business rule enforcement
 
-**Status: ✅ COMPLETED** - All assignment APIs are functional and tested (196 backend tests passing).
+**Status: ✅ COMPLETED** - All assignment APIs are functional and tested (241 backend tests passing).
+
+## ✅ COMPLETED: Schedule Permission System
+
+**Legacy-compatible permission system implemented for shift operations:**
+
+### **Permission Rules**
+- **Operations Users**: Can create/edit/delete shifts on any schedule
+- **Manager Users**: Can only create/edit shifts on draft requests (`schedule.request = 2`)
+- **Personnel Users**: Cannot create/edit/delete shifts
+
+### **Key Service: `schedulePermissionService.ts`**
+```typescript
+// Check if schedule is editable by user
+export const isScheduleEditable = async (scheduleId: number, user: AuthUser): Promise<boolean>
+
+// Throw error if user cannot edit schedule  
+export const requireScheduleEditPermission = async (scheduleId: number, user: AuthUser): Promise<void>
+```
+
+### **Architecture Enhancement**
+- **`getUserCurrentScheduleId()`** moved to `scheduleBoundsService.ts` for shared access
+- Controllers remain thin - permission checks delegate to service layer
+- Legacy `redirectIfNotEditable()` behavior faithfully preserved in modern API
+- Proper HTTP status codes: 403 for permission errors, 400 for business rule errors
+
+**Status: ✅ COMPLETED** - Manager permissions correctly match legacy CakePHP behavior.
 
 ## Environment Variables
 

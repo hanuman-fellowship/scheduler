@@ -44,3 +44,49 @@ export const getCurrentScheduleId = async (): Promise<number> => {
 
   return currentSchedule.id;
 };
+
+// Get user's current schedule preference or fallback to default
+export const getUserCurrentScheduleId = async (userId: number): Promise<number> => {
+  // First, check if user has a stored schedule preference
+  const userSetting = await prisma.setting.findFirst({
+    where: {
+      userId: userId,
+      key: 'current_schedule_id'
+    }
+  });
+  
+  if (userSetting) {
+    const preferredScheduleId = parseInt(userSetting.val);
+    if (!isNaN(preferredScheduleId)) {
+      // Verify the preferred schedule still exists
+      const schedule = await prisma.schedule.findUnique({
+        where: { id: preferredScheduleId }
+      });
+      if (schedule) {
+        return preferredScheduleId;
+      }
+    }
+  }
+  
+  // Fallback: Try to get latest published schedule
+  const publishedSchedule = await prisma.schedule.findFirst({
+    where: { name: 'Published' },
+    orderBy: { updatedAt: 'desc' }
+  });
+  
+  if (publishedSchedule) {
+    return publishedSchedule.id;
+  }
+  
+  // Final fallback: Get user's most recent schedule
+  const userSchedule = await prisma.schedule.findFirst({
+    where: { userId: userId },
+    orderBy: { updatedAt: 'desc' }
+  });
+  
+  if (!userSchedule) {
+    throw new Error('No accessible schedule found for user');
+  }
+  
+  return userSchedule.id;
+};

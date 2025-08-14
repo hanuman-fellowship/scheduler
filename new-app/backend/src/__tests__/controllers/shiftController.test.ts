@@ -10,8 +10,11 @@ describe('shiftController', () => {
   let operationsToken: string;
   let managerToken: string;
   let schedule: any;
+  let draftSchedule: any;
   let area: any;
+  let draftArea: any;
   let day: any;
+  let draftDay: any;
 
   beforeEach(async () => {
     await resetTestDatabase();
@@ -51,6 +54,11 @@ describe('shiftController', () => {
     schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id });
     area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' });
     day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 2 });
+    
+    // Create draft schedule for manager tests (request=2)
+    draftSchedule = await createTestSchedule({ name: 'Draft Schedule', userId: user.id, request: 2 });
+    draftArea = await createTestArea(draftSchedule.id, { name: 'Kitchen', shortName: 'K' });
+    draftDay = await createTestDay(draftSchedule.id, { name: 'Monday', dayOfWeek: 2 });
   });
 
   afterEach(async () => {
@@ -85,7 +93,25 @@ describe('shiftController', () => {
       expect(response.body.id).toBeDefined();
     });
 
-    it('should require operations role', async () => {
+    it('should allow managers to create shifts on draft schedules', async () => {
+      const shiftData = {
+        areaId: draftArea.id,
+        dayId: draftDay.id,
+        startAtSeconds: timeStringToSeconds('09:00:00'),
+        endAtSeconds: timeStringToSeconds('17:00:00'),
+        numPeople: 1,
+        scheduleId: draftSchedule.id,
+      };
+
+      const response = await request(app)
+        .post('/api/shifts')
+        .set('Authorization', `Bearer ${managerToken}`)
+        .send(shiftData);
+
+      expect(response.status).toBe(201);
+    });
+    
+    it('should prevent managers from creating shifts on normal schedules', async () => {
       const shiftData = {
         areaId: area.id,
         dayId: day.id,
@@ -101,6 +127,7 @@ describe('shiftController', () => {
         .send(shiftData);
 
       expect(response.status).toBe(403);
+      expect(response.body.error.message).toBe('Managers can only create shifts on draft requests');
     });
 
     it('should return 400 for invalid time range', async () => {
@@ -241,13 +268,53 @@ describe('shiftController', () => {
       expect(response.status).toBe(404);
     });
 
-    it('should require operations role', async () => {
+    it('should allow managers to update shifts on draft schedules', async () => {
+      // Create a shift on draft schedule first
+      const createResponse = await request(app)
+        .post('/api/shifts')
+        .set('Authorization', `Bearer ${operationsToken}`)
+        .send({
+          areaId: draftArea.id,
+          dayId: draftDay.id,
+          startAtSeconds: timeStringToSeconds('09:00:00'),
+          endAtSeconds: timeStringToSeconds('17:00:00'),
+          numPeople: 1,
+          scheduleId: draftSchedule.id,
+        });
+
+      const shiftId = createResponse.body.id;
+
       const response = await request(app)
-        .put('/api/shifts/1')
+        .put(`/api/shifts/${shiftId}`)
+        .set('Authorization', `Bearer ${managerToken}`)
+        .send({ numPeople: 2 });
+
+      expect(response.status).toBe(200);
+    });
+    
+    it('should prevent managers from updating shifts on normal schedules', async () => {
+      // Create a shift on normal schedule first
+      const createResponse = await request(app)
+        .post('/api/shifts')
+        .set('Authorization', `Bearer ${operationsToken}`)
+        .send({
+          areaId: area.id,
+          dayId: day.id,
+          startAtSeconds: timeStringToSeconds('09:00:00'),
+          endAtSeconds: timeStringToSeconds('17:00:00'),
+          numPeople: 1,
+          scheduleId: schedule.id,
+        });
+
+      const shiftId = createResponse.body.id;
+
+      const response = await request(app)
+        .put(`/api/shifts/${shiftId}`)
         .set('Authorization', `Bearer ${managerToken}`)
         .send({ numPeople: 2 });
 
       expect(response.status).toBe(403);
+      expect(response.body.error.message).toBe('Managers can only create shifts on draft requests');
     });
   });
 
@@ -291,8 +358,23 @@ describe('shiftController', () => {
     });
 
     it('should require operations role', async () => {
+      // Create a shift first
+      const createResponse = await request(app)
+        .post('/api/shifts')
+        .set('Authorization', `Bearer ${operationsToken}`)
+        .send({
+          areaId: area.id,
+          dayId: day.id,
+          startAtSeconds: timeStringToSeconds('09:00:00'),
+          endAtSeconds: timeStringToSeconds('17:00:00'),
+          numPeople: 1,
+          scheduleId: schedule.id,
+        });
+
+      const shiftId = createResponse.body.id;
+
       const response = await request(app)
-        .delete('/api/shifts/1')
+        .delete(`/api/shifts/${shiftId}`)
         .set('Authorization', `Bearer ${managerToken}`);
 
       expect(response.status).toBe(403);

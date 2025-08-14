@@ -306,7 +306,7 @@ describe('AddShiftForm', () => {
 
     renderWithProviders()
 
-    expect(screen.getByText('No schedule selected. Please reload the page.')).toBeInTheDocument()
+    expect(screen.getByText('Please select a schedule before creating shifts.')).toBeInTheDocument()
   })
 
   it('should disable submit button when no area is selected', async () => {

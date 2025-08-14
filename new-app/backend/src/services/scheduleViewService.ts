@@ -1,5 +1,5 @@
 import prisma from './prisma';
-import { getScheduleBounds, getCurrentScheduleId } from './scheduleBoundsService';
+import { getScheduleBounds, getUserCurrentScheduleId } from './scheduleBoundsService';
 import type { UserRole, AreaScheduleResponse, PersonScheduleResponse, GapsScheduleResponse, HoursByDay } from '@shared/types';
 
 interface AuthUser {
@@ -9,9 +9,11 @@ interface AuthUser {
   roles: UserRole[];
 }
 
+
 export const getAreaSchedule = async (areaId: number, user: AuthUser): Promise<AreaScheduleResponse> => {
-  const scheduleId = await getCurrentScheduleId();
-  
+  // Get user's current schedule preference instead of hardcoded 'Published'
+  const scheduleId = await getUserCurrentScheduleId(user.id);
+
   const area = await prisma.area.findFirst({
     where: { 
       id: areaId,
@@ -107,7 +109,7 @@ export const getAreaSchedule = async (areaId: number, user: AuthUser): Promise<A
 };
 
 export const getPersonSchedule = async (personId: number, user: AuthUser): Promise<PersonScheduleResponse> => {
-  const scheduleId = await getCurrentScheduleId();
+  const scheduleId = await getUserCurrentScheduleId(user.id);
 
   const peopleSchedule = await prisma.peopleSchedule.findFirst({
     where: {
@@ -224,7 +226,7 @@ export const getGapsSchedule = async (user: AuthUser): Promise<GapsScheduleRespo
     throw new Error('Access denied');
   }
 
-  const scheduleId = await getCurrentScheduleId();
+  const scheduleId = await getUserCurrentScheduleId(user.id);
   const bounds = await getScheduleBounds(scheduleId);
 
   // Find shifts that have fewer assignments than numPeople

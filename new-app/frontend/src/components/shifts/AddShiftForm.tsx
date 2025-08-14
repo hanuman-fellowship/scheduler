@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { shiftService } from '../../services/shifts'
 import { areasService } from '../../services/areas'
@@ -32,38 +32,75 @@ export default function AddShiftForm({
 }: AddShiftFormProps) {
   const { currentSchedule } = useScheduleStore()
   
+  // Early return if no schedule available
+  if (!currentSchedule) {
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <h3 className="text-lg font-semibold text-red-800 mb-2">No Schedule Available</h3>
+        <p className="text-red-600">Please select a schedule before creating shifts.</p>
+        <div className="mt-4 flex justify-end">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    )
+  }
+  
   // Use a separate form state for time strings (for UI display)
   const [formData, setFormData] = useState({
     areaId: initialAreaId || 0,
-    dayId: initialDayId || 1,
+    dayId: initialDayId || 0, // Will be set when days load
     start: initialStart,
     end: initialEnd,
     numPeople: 1,
-    scheduleId: currentSchedule?.id || 1,
+    scheduleId: currentSchedule.id,
   })
 
   const queryClient = useQueryClient()
 
   // Load areas and days for dropdowns
   const { data: areas = [] } = useQuery({
-    queryKey: ['areas', currentSchedule?.id],
-    queryFn: () => areasService.getAreas(currentSchedule?.id),
-    enabled: !!currentSchedule?.id,
+    queryKey: ['areas', currentSchedule.id],
+    queryFn: () => areasService.getAreas(currentSchedule.id),
+    enabled: true,
   })
 
   const { data: days = [] } = useQuery({
-    queryKey: ['days', currentSchedule?.id],
-    queryFn: () => daysService.getDays(currentSchedule?.id || 1),
-    enabled: !!currentSchedule?.id,
+    queryKey: ['days', currentSchedule.id],
+    queryFn: () => daysService.getDays(currentSchedule.id),
+    enabled: !!currentSchedule.id,
   })
 
   const createShiftMutation = useMutation({
     mutationFn: shiftService.createShift,
     onSuccess: () => {
+      // Invalidate multiple query patterns to refresh all schedule views
       queryClient.invalidateQueries({ queryKey: ['shifts'] })
+      queryClient.invalidateQueries({ queryKey: ['scheduleView'] })
       onSuccess()
     },
   })
+
+  // Update dayId when days are loaded - ensure we use a day from the current schedule
+  useEffect(() => {
+    if (days.length > 0) {
+      // Check if current dayId exists in the loaded days (from current schedule)
+      const currentDayExists = days.some(d => d.id === formData.dayId)
+      
+      if (!currentDayExists) {
+        // Current dayId doesn't exist in this schedule, pick a default
+        // Default to Monday (dayOfWeek = 1) if available, otherwise first day
+        const mondayDay = days.find(d => d.dayOfWeek === 1)
+        const defaultDay = mondayDay || days[0]
+        setFormData(prev => ({ ...prev, dayId: defaultDay.id }))
+      }
+    }
+  }, [days, formData.dayId])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -80,7 +117,7 @@ export default function AddShiftForm({
       startAtSeconds: timeStringToSeconds(formData.start),
       endAtSeconds: timeStringToSeconds(formData.end),
       numPeople: formData.numPeople,
-      scheduleId: currentSchedule?.id || 1,
+      scheduleId: currentSchedule!.id,
     }
     
     createShiftMutation.mutate(shiftData)
