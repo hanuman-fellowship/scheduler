@@ -1,3 +1,5 @@
 config/database.php
 webroot/img/people
 tmp/**/*
+.claude-flow/metrics/
+.claude-flow/
