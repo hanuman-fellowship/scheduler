@@ -7,3 +7,4 @@ prisma/migrations/migration_lock.toml
 # Logs
 *.log
 logs/
+.claude-flow/
