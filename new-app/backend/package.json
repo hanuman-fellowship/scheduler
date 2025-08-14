@@ -24,7 +24,8 @@
     "seed": "ts-node -r tsconfig-paths/register src/seed.ts",
     "prisma": "npx prisma",
     "db:studio": "npx prisma studio",
-    "db:exec": "npx prisma db execute --stdin"
+    "db:exec": "npx prisma db execute --stdin",
+    "db:query": "ts-node -r tsconfig-paths/register scripts/db-query.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",

@@ -36,8 +36,10 @@ export const AssignmentListModal: React.FC<AssignmentListModalProps> = ({
     mutationFn: assignmentService.deleteAssignment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assignments', shiftId] });
+      queryClient.invalidateQueries({ queryKey: ['available-people', shiftId] }); // Update available people
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
-      queryClient.invalidateQueries({ queryKey: ['schedule'] });
+      queryClient.invalidateQueries({ queryKey: ['schedule'] }); // Legacy key
+      queryClient.invalidateQueries({ queryKey: ['scheduleView'] }); // Current schedule view
     }
   });
 
@@ -47,6 +49,7 @@ export const AssignmentListModal: React.FC<AssignmentListModalProps> = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assignments', shiftId] });
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
+      queryClient.invalidateQueries({ queryKey: ['scheduleView'] }); // Current schedule view
     }
   });
 

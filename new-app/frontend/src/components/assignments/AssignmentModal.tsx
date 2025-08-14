@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AvailablePersonResponse } from '@shared/types';
 import { assignmentService } from '../../services/assignmentService';
@@ -21,9 +21,23 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
   shiftId,
   shiftName
 }) => {
-  const [showConflicts, setShowConflicts] = useState(false);
+  const [ignoreConflicts, setIgnoreConflicts] = useState(false);
   const [otherName, setOtherName] = useState('');
   const queryClient = useQueryClient();
+
+  // Add keyboard shortcuts
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   // Fetch available people for this shift
   const { data: availablePeople = [], isLoading } = useQuery({
@@ -36,10 +50,13 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
   const createAssignmentMutation = useMutation({
     mutationFn: assignmentService.createAssignment,
     onSuccess: () => {
-      // Invalidate relevant queries
+      // Invalidate relevant queries - be specific about shift assignments
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
-      queryClient.invalidateQueries({ queryKey: ['assignments'] });
-      queryClient.invalidateQueries({ queryKey: ['schedule'] });
+      queryClient.invalidateQueries({ queryKey: ['assignments', shiftId] }); // Specific shift assignments
+      queryClient.invalidateQueries({ queryKey: ['assignments'] }); // General assignments
+      queryClient.invalidateQueries({ queryKey: ['available-people', shiftId] }); // Update available people
+      queryClient.invalidateQueries({ queryKey: ['schedule'] }); // Legacy key
+      queryClient.invalidateQueries({ queryKey: ['scheduleView'] }); // Current schedule view
       onClose();
     }
   });
@@ -80,22 +97,22 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`Assign Person to ${shiftName}`}
+      title="Assign Person"
     >
       <div className="space-y-4">
-        {/* Conflict toggle - matching legacy UI */}
-        <div className="flex items-center justify-between">
-          <label className="flex items-center space-x-2">
+        {/* Header layout matching legacy - left conflict toggle, right other input */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
             <input
               type="checkbox"
-              checked={showConflicts}
-              onChange={(e) => setShowConflicts(e.target.checked)}
+              id="conflictsBox"
+              checked={ignoreConflicts}
+              onChange={(e) => setIgnoreConflicts(e.target.checked)}
               className="rounded"
             />
-            <span>Show People with Conflicts</span>
-          </label>
+            <label htmlFor="conflictsBox">Ignore Conflicts</label>
+          </div>
 
-          {/* Other name input - matching legacy UI */}
           <form onSubmit={handleAssignOther} className="flex items-center space-x-2">
             <label htmlFor="other-name">Other:</label>
             <input
@@ -104,12 +121,12 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
               value={otherName}
               onChange={(e) => setOtherName(e.target.value)}
               className="border rounded px-2 py-1"
-              placeholder="Custom name"
+              tabIndex={1}
             />
             <button
               type="submit"
               disabled={!otherName.trim() || createAssignmentMutation.isPending}
-              className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
             >
               Assign
             </button>
@@ -121,45 +138,52 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
           <div className="text-center py-4">Loading available people...</div>
         )}
 
-        {/* People list grouped by category - matching legacy UI */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
-          {Object.values(peopleByCategory).map(({ category, people }) => (
-            <div key={category.id} className="space-y-1">
-              <h3 
-                className="font-semibold"
-                style={{ color: category.color }}
-              >
-                {category.name}
-              </h3>
-              <div className="space-y-1">
-                {people
-                  .filter(person => showConflicts || person.available)
-                  .map(person => (
-                    <button
-                      key={person.id}
-                      onClick={() => handleAssignPerson(person.id)}
-                      disabled={!person.available || createAssignmentMutation.isPending}
-                      className={`
-                        block w-full text-left px-2 py-1 rounded
-                        ${person.available 
-                          ? 'hover:bg-gray-100 cursor-pointer' 
-                          : 'opacity-50 cursor-not-allowed bg-red-50'
-                        }
-                      `}
-                      style={{ color: category.color }}
-                      title={!person.available ? person.conflictReason : undefined}
-                    >
-                      {person.displayName || person.name}
-                      {!person.available && (
-                        <span className="text-xs text-red-500 ml-2">
-                          ({person.conflictReason})
-                        </span>
-                      )}
-                    </button>
+        {/* People list in table format - matching legacy UI */}
+        <div className="max-h-96 overflow-y-auto">
+          <table className="w-full">
+            <tbody>
+              <tr className="align-top">
+                {Object.values(peopleByCategory)
+                  .sort((a, b) => a.category.name.localeCompare(b.category.name))
+                  .map(({ category, people }) => (
+                    <td key={category.id} className="px-2 py-1 align-top" style={{ padding: '10px' }}>
+                      <strong style={{ color: category.color }}>{category.name}</strong>
+                      <br />
+                      <div className="space-y-0">
+                        {people
+                          .filter(person => person.available || ignoreConflicts)
+                          .sort((a, b) => (a.displayName || a.name).localeCompare(b.displayName || b.name))
+                          .map(person => (
+                            <div key={person.id}>
+                              <button
+                                onClick={() => handleAssignPerson(person.id)}
+                                disabled={!person.available || createAssignmentMutation.isPending}
+                                className={`
+                                  text-left underline hover:no-underline
+                                  ${person.available 
+                                    ? 'cursor-pointer' 
+                                    : 'cursor-not-allowed opacity-50'
+                                  }
+                                `}
+                                style={{ color: category.color }}
+                                title={!person.available ? person.conflictReason : undefined}
+                              >
+                                {person.displayName || person.name}
+                              </button>
+                              {!person.available && (
+                                <span className="text-xs text-red-500 ml-1">
+                                  ({person.conflictReason})
+                                </span>
+                              )}
+                              <br />
+                            </div>
+                          ))}
+                      </div>
+                    </td>
                   ))}
-              </div>
-            </div>
-          ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         {/* No people available message */}

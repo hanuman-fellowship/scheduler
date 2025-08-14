@@ -384,7 +384,7 @@ async function copyScheduleData(sourceScheduleId: number, targetScheduleId: numb
     dayIdMap.set(day.id, newDay.id);
   }
   
-  // Copy resident categories
+  // Copy resident categories (legacy behavior: always create new categories)
   const categoryIdMap = new Map<number, number>();
   for (const category of sourceSchedule.residentCategories) {
     const newCategory = await prisma.residentCategory.create({

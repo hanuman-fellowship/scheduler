@@ -45,7 +45,7 @@ npm run dev           # Start both backend and frontend
 ### Quality Standards
 
 - **Required**: `npm run check` must pass after every task
-- **Testing**: `npm run test` must pass after every task  
+- **Testing**: `npm run test` must pass after every task
 - **Type Safety**: Full TypeScript coverage, no `any` types
 - **Legacy Reference**: Study CakePHP code before implementing features
 
@@ -65,6 +65,7 @@ npm run test          # Run all tests (531+ tests must pass)
 npm run migrate       # Run Prisma migrations
 npm run prisma        # Access Prisma Studio
 npm run setup         # Full setup (install + migrate + seed)
+npm run db:query      # Run SQL queries: npm run db:query "SELECT * FROM users"
 ```
 
 ## User Roles & Permissions
@@ -74,57 +75,87 @@ npm run setup         # Full setup (install + migrate + seed)
 - **Personnel**: View published schedules only, see own assignments, no editing capabilities
 
 ### **Legacy Permission Behavior**
+
 Based on CakePHP `redirectIfNotEditable()` function:
+
 - Managers can only modify schedules with `request = 2` (draft status)
 - Operations users bypass all schedule editing restrictions
 - Permission checks maintain thin controller pattern via `schedulePermissionService`
 
+## 🎯 Next Development Priority: Legacy Shift Display Analysis & Implementation
 
-## 🎯 Next Development Priority: Refine Assignment Modal Details
+**Objective**: Analyze and implement the exact legacy area schedule shift display with all interactions, hover states, and styling details
 
-**Objective**: Carefully review and refine the assignment modal to match all legacy UI/UX details
+### **⚠️ CRITICAL TASK: Complete Legacy Shift UI Analysis**
+
+The assignment modal has been refined and is working well, but now we need to ensure the shift display itself matches the legacy system exactly. This is critical for user adoption and training.
 
 ### **Legacy System Deep Analysis Required**
 
-**⚠️ CRITICAL**: The assignment modal is functional but needs detailed refinement to match the legacy system exactly:
+**Study these legacy files systematically:**
 
-1. **Detailed View Files to Study**:
-   - `/views/assignments/assign.ctp` - Exact modal layout and behavior
-   - `/views/helpers/schedule.php` - Assignment display formatting
-   - `/views/elements/dialog.ctp` - Modal wrapper styling
-   - Check exact text, spacing, colors, and interaction patterns
+1. **Area Schedule Display**:
+   - `/views/schedules/area.ctp` - Main area schedule view
+   - `/views/helpers/schedule.php` - Shift rendering helpers and formatting
+   - `/views/elements/shift.ctp` - Individual shift display elements
+   - `/webroot/css/schedule.css` - Styling for shifts, assignments, and hover states
 
-2. **Specific Details to Verify**:
-   - **Modal title format** - Should it show shift details?
-   - **People sorting** - By name, category, or availability?
-   - **Category headers** - Exact styling and color usage
-   - **Conflict display** - Inline vs tooltip vs separate section
-   - **"Other" input** - Position, label, behavior
-   - **Button placement** - Close, assign, cancel positions
-   - **Keyboard shortcuts** - ESC to close, Enter to assign?
-   - **Loading states** - Spinner style and position
-   - **Empty states** - What shows when no people available?
-   - **Success feedback** - Flash message, animation, or silent update?
+2. **Every Action and Interaction** (document each one):
+   - **Left click on shift** - What happens? Edit? View? Assignment?
+   - **Right click on shift** - Context menu? What options?
+   - **Hover on shift** - What styling changes? Tooltips? Preview info?
+   - **Click on assignment within shift** - Edit assignment? Person details?
+   - **Hover on assignment** - Assignment details? Person info? Conflict warnings?
+   - **Double-click behaviors** - Quick actions? Shortcuts?
+   - **Keyboard shortcuts** - Arrow navigation? Enter to select? Delete to remove?
 
-3. **Performance Considerations**:
-   - **Large lists** - How does legacy handle 100+ people?
-   - **Search/filter** - Does legacy have people search?
-   - **Scroll behavior** - Fixed headers, virtual scrolling?
-   - **Modal size** - Responsive or fixed dimensions?
+3. **Visual States and Styling**:
+   - **Empty shift styling** - Border? Background? "Need X people" text?
+   - **Partially filled shift** - How many assignments shown vs "Need X more"?
+   - **Full shift styling** - Visual indicators for capacity reached?
+   - **Overfilled shift** - Warning colors? Special styling?
+   - **Starred assignments** - Star icon placement, color, size
+   - **Conflict indicators** - Red text? Background colors? Icons?
+   - **Category colors** - Where and how are category colors applied?
+   - **Time overlap warnings** - Visual indicators for scheduling conflicts?
 
-4. **Edge Cases to Test**:
-   - Shift at full capacity
-   - Person with multiple conflicts
-   - Network errors during assignment
-   - Concurrent assignments by multiple users
+4. **Responsive and Layout Details**:
+   - **Grid alignment** - How do shifts align within time slots?
+   - **Text wrapping** - Person names, area names, shift details
+   - **Overflow handling** - What happens with too many assignments?
+   - **Cell sizing** - Fixed width? Dynamic? Minimum/maximum dimensions?
+   - **Spacing and padding** - Exact pixel measurements between elements
 
-### **Refinement Approach**
-1. Screenshot legacy assignment modal in various states
-2. Document exact pixel dimensions, colors, fonts
-3. Create side-by-side comparison with current implementation
-4. List all discrepancies, no matter how small
-5. Implement refinements with visual regression tests
-6. Test with actual users familiar with legacy system
+5. **Interactive Feedback**:
+   - **Loading states** - Spinners during assignment changes?
+   - **Success/error feedback** - Flash messages? Color changes? Animations?
+   - **Drag and drop** - Can assignments be moved between shifts?
+   - **Selection states** - Visual feedback for selected shifts/assignments?
+
+### **Implementation Approach**
+
+1. **Document Current vs Legacy**:
+   - Screenshot legacy area schedule in various states (empty, partial, full, conflicts)
+   - Screenshot current implementation side-by-side
+   - Create detailed comparison matrix of every visual and interaction difference
+
+2. **Pixel-Perfect Analysis**:
+   - Measure exact dimensions, margins, padding, font sizes
+   - Document color hex codes for all states
+   - Identify all CSS classes and styling rules used
+
+3. **Interaction Analysis**:
+   - Test every possible click, hover, keyboard interaction in legacy
+   - Document the exact behavior and visual feedback for each
+   - Note any special cases or edge behaviors
+
+4. **Implementation Priority**:
+   - Start with the most critical interactions (assignment click, shift hover)
+   - Implement visual states and styling to match exactly
+   - Add all secondary interactions and edge cases
+   - Test with users familiar with legacy system for muscle memory validation
+
+**This analysis is essential for user training and adoption. Users rely on specific visual cues and interaction patterns they've memorized from years of using the legacy system.**
 
 ---
 
@@ -141,6 +172,7 @@ Based on CakePHP `redirectIfNotEditable()` function:
 **Before implementing any feature**: Study the legacy CakePHP code to understand user workflows, business logic, and interaction patterns. Maintain the exact user experience while modernizing the implementation.
 
 **Key Areas to Reference**:
+
 - Controllers (`/controllers/`) - User workflows and interactions
 - Models (`/models/`) - Business rules and validation
 - Views (`/views/`) - UI patterns and user actions

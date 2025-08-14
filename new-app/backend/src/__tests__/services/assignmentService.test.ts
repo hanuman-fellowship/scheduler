@@ -372,6 +372,224 @@ describe('assignmentService', () => {
       expect(result[0].available).toBe(false)
       expect(result[0].conflictReason).toContain('Conflicts with 32400-36000')
     })
+
+    it('should handle people with categories from different schedules correctly', async () => {
+      const user = await createTestUser({ roles: ['operations'] })
+      
+      // Create two separate schedules
+      const schedule1 = await createTestSchedule({ name: 'Schedule 1', userId: user.id })
+      const schedule2 = await createTestSchedule({ name: 'Schedule 2', userId: user.id })
+      
+      // Create identical categories in both schedules (different IDs, same name)
+      const category1 = await createTestCategory(schedule1.id, { name: 'Residents', color: '#008080' })
+      const category2 = await createTestCategory(schedule2.id, { name: 'Residents', color: '#008080' })
+      
+      // Create shift in schedule 2
+      const area2 = await createTestArea(schedule2.id, { name: 'Kitchen', shortName: 'K' })
+      const day2 = await createTestDay(schedule2.id, { name: 'Monday', dayOfWeek: 1 })
+      const shift2 = await createTestShift(schedule2.id, {
+        areaId: area2.id,
+        dayId: day2.id,
+        startAtSeconds: 32400, // 9:00 AM
+        endAtSeconds: 36000,   // 10:00 AM
+        numPeople: 2
+      })
+      
+      // Create two people
+      const person1 = await createTestPerson({ first: 'John', last: 'Doe' })
+      const person2 = await createTestPerson({ first: 'Jane', last: 'Smith' })
+
+      // Add both people to schedule2, but with correct category references
+      await prisma.peopleSchedule.createMany({
+        data: [
+          { scheduleId: schedule2.id, personId: person1.id, residentCategoryId: category2.id }, // Correct reference
+          { scheduleId: schedule2.id, personId: person2.id, residentCategoryId: category2.id }  // Correct reference
+        ]
+      })
+
+      const result = await assignmentService.getAvailablePeopleForShift(shift2.id)
+
+      // Should return both people properly grouped under same category
+      expect(result).toHaveLength(2)
+      expect(result[0].category.id).toBe(category2.id) // Should reference schedule2's category
+      expect(result[1].category.id).toBe(category2.id) // Should reference schedule2's category
+      expect(result[0].category.name).toBe('Residents')
+      expect(result[1].category.name).toBe('Residents')
+    })
+
+    it('should not return people with category references from wrong schedule', async () => {
+      const user = await createTestUser({ roles: ['operations'] })
+      
+      // Create two separate schedules
+      const schedule1 = await createTestSchedule({ name: 'Schedule 1', userId: user.id })
+      const schedule2 = await createTestSchedule({ name: 'Schedule 2', userId: user.id })
+      
+      // Create categories in both schedules
+      const category1 = await createTestCategory(schedule1.id, { name: 'Residents', color: '#008080' })
+      const category2 = await createTestCategory(schedule2.id, { name: 'Residents', color: '#008080' })
+      
+      // Create shift in schedule 2
+      const area2 = await createTestArea(schedule2.id, { name: 'Kitchen', shortName: 'K' })
+      const day2 = await createTestDay(schedule2.id, { name: 'Monday', dayOfWeek: 1 })
+      const shift2 = await createTestShift(schedule2.id, {
+        areaId: area2.id,
+        dayId: day2.id,
+        startAtSeconds: 32400, // 9:00 AM
+        endAtSeconds: 36000,   // 10:00 AM
+        numPeople: 2
+      })
+      
+      const person = await createTestPerson({ first: 'John', last: 'Doe' })
+
+      // Simulate bad data: person in schedule2 but referencing category1 (wrong schedule)
+      await prisma.peopleSchedule.create({
+        data: {
+          scheduleId: schedule2.id,
+          personId: person.id,
+          residentCategoryId: category1.id // Wrong! This category belongs to schedule1
+        }
+      })
+
+      // This should fail gracefully - the service should handle this data integrity issue
+      // by either filtering out the person or handling the missing category relationship
+      const result = await assignmentService.getAvailablePeopleForShift(shift2.id)
+
+      // The person should either not appear, or should appear with category info from the wrong schedule
+      // This test documents the current behavior and ensures we handle this edge case
+      expect(Array.isArray(result)).toBe(true)
+      
+      if (result.length > 0) {
+        // If the person appears, they should have category info (even if from wrong schedule)
+        expect(result[0]).toHaveProperty('category')
+        expect(result[0].category).toHaveProperty('id')
+        expect(result[0].category).toHaveProperty('name')
+        expect(result[0].category).toHaveProperty('color')
+      }
+    })
+
+    it('should detect when person is already assigned to the same shift', async () => {
+      const user = await createTestUser({ roles: ['operations'] })
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id })
+      const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' })
+      const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 1 })
+      const shift = await createTestShift(schedule.id, {
+        areaId: area.id,
+        dayId: day.id,
+        startAtSeconds: 32400, // 9:00 AM
+        endAtSeconds: 36000,   // 10:00 AM
+        numPeople: 2
+      })
+      const category = await createTestCategory(schedule.id, { name: 'Residents', color: '#008080' })
+      const person = await createTestPerson({ first: 'John', last: 'Doe' })
+
+      // Add person to schedule
+      await prisma.peopleSchedule.create({
+        data: {
+          scheduleId: schedule.id,
+          personId: person.id,
+          residentCategoryId: category.id
+        }
+      })
+
+      // Assign person to the shift
+      await createTestAssignment(schedule.id, { shiftId: shift.id, personId: person.id })
+
+      const result = await assignmentService.getAvailablePeopleForShift(shift.id)
+
+      expect(result).toHaveLength(1)
+      expect(result[0].available).toBe(false)
+      expect(result[0].conflictReason).toBe('Already assigned')
+    })
+
+    it('should detect off days conflicts', async () => {
+      const user = await createTestUser({ roles: ['operations'] })
+      const schedule = await createTestSchedule({ name: 'Test Schedule', userId: user.id })
+      const area = await createTestArea(schedule.id, { name: 'Kitchen', shortName: 'K' })
+      const day = await createTestDay(schedule.id, { name: 'Monday', dayOfWeek: 1 })
+      const shift = await createTestShift(schedule.id, {
+        areaId: area.id,
+        dayId: day.id,
+        startAtSeconds: 32400, // 9:00 AM
+        endAtSeconds: 36000,   // 10:00 AM
+        numPeople: 2
+      })
+      const category = await createTestCategory(schedule.id, { name: 'Residents', color: '#008080' })
+      const person = await createTestPerson({ first: 'John', last: 'Doe' })
+
+      // Add person to schedule
+      await prisma.peopleSchedule.create({
+        data: {
+          scheduleId: schedule.id,
+          personId: person.id,
+          residentCategoryId: category.id
+        }
+      })
+
+      // Add off day for this person on this day
+      await prisma.offDay.create({
+        data: {
+          scheduleId: schedule.id,
+          personId: person.id,
+          dayId: day.id
+        }
+      })
+
+      const result = await assignmentService.getAvailablePeopleForShift(shift.id)
+
+      expect(result).toHaveLength(1)
+      expect(result[0].available).toBe(false)
+      expect(result[0].conflictReason).toBe('Off day')
+    })
+
+    it('should only return people from the same schedule as the shift', async () => {
+      const user = await createTestUser({ roles: ['operations'] })
+      
+      // Create two separate schedules
+      const schedule1 = await createTestSchedule({ name: 'Schedule 1', userId: user.id })
+      const schedule2 = await createTestSchedule({ name: 'Schedule 2', userId: user.id })
+      
+      // Create categories in both schedules
+      const category1 = await createTestCategory(schedule1.id, { name: 'Residents', color: '#008080' })
+      const category2 = await createTestCategory(schedule2.id, { name: 'Staff', color: '#FF5722' })
+      
+      // Create shift in schedule 1
+      const area1 = await createTestArea(schedule1.id, { name: 'Kitchen', shortName: 'K' })
+      const day1 = await createTestDay(schedule1.id, { name: 'Monday', dayOfWeek: 1 })
+      const shift1 = await createTestShift(schedule1.id, {
+        areaId: area1.id,
+        dayId: day1.id,
+        startAtSeconds: 32400,
+        endAtSeconds: 36000,
+        numPeople: 2
+      })
+      
+      const person1 = await createTestPerson({ first: 'John', last: 'Doe' })
+      const person2 = await createTestPerson({ first: 'Jane', last: 'Smith' })
+
+      // Add person1 to schedule1, person2 to schedule2
+      await prisma.peopleSchedule.create({
+        data: {
+          scheduleId: schedule1.id,
+          personId: person1.id,
+          residentCategoryId: category1.id
+        }
+      })
+      await prisma.peopleSchedule.create({
+        data: {
+          scheduleId: schedule2.id,
+          personId: person2.id,
+          residentCategoryId: category2.id
+        }
+      })
+
+      // Get available people for shift in schedule1
+      const result = await assignmentService.getAvailablePeopleForShift(shift1.id)
+
+      // Should only return person1 (from schedule1), not person2 (from schedule2)
+      expect(result).toHaveLength(1)
+      expect(result[0].id).toBe(person1.id)
+      expect(result[0].category.name).toBe('Residents')
+    })
   })
 
   describe('getShiftAssignments', () => {

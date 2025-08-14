@@ -79,7 +79,7 @@ describe('AssignmentModal', () => {
       />
     );
 
-    expect(screen.getByText('Assign Person to Morning Shift')).toBeInTheDocument();
+    expect(screen.getByText('Assign Person')).toBeInTheDocument();
   });
 
   it('should load and display available people grouped by category', async () => {
@@ -139,8 +139,8 @@ describe('AssignmentModal', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Check the "Show People with Conflicts" checkbox
-    const checkbox = screen.getByLabelText('Show People with Conflicts');
+    // Check the "Ignore Conflicts" checkbox
+    const checkbox = screen.getByLabelText('Ignore Conflicts');
     await user.click(checkbox);
 
     // Now Jane Smith should be visible with conflict reason
@@ -202,7 +202,7 @@ describe('AssignmentModal', () => {
       />
     );
 
-    const otherInput = screen.getByPlaceholderText('Custom name');
+    const otherInput = screen.getByLabelText('Other:');
     await user.type(otherInput, 'Contractor');
     
     const assignButton = screen.getByRole('button', { name: 'Assign' });

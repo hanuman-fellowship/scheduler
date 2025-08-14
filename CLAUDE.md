@@ -29,11 +29,13 @@
 
 ## Next up
 
-- **Refine Assignment Modal** (HIGH PRIORITY - Polish for production)
-  - ✅ Assignment system is working with click-to-assign functionality
-  - ⚠️ Now needs detailed refinement to match legacy modal exactly
-  - Study carefully: `/views/assignments/assign.ctp` for exact layout
-  - Check: modal title, people sorting, category styling, conflict display
-  - Verify: "Other" input position, button placement, keyboard shortcuts
-  - Test with users familiar with legacy system for muscle memory
-  - This polish is critical for user adoption and training
+- **Legacy Shift Display Analysis & Implementation** (HIGH PRIORITY - Critical for production)
+  - ✅ Assignment modal is complete and working perfectly with real-time updates
+  - ⚠️ Now analyze how the legacy app handled the shift display on the area schedule
+  - **Study systematically**: `/views/schedules/area.ctp`, `/views/helpers/schedule.php`, `/views/elements/shift.ctp`, `/webroot/css/schedule.css`
+  - **Document every action**: Left click, right click, hover states, double-click, keyboard shortcuts
+  - **Document every visual detail**: Empty shifts, partial shifts, full shifts, starred assignments, conflict indicators, category colors
+  - **Document styling**: Exact dimensions, margins, padding, font sizes, color codes, hover effects
+  - **Analyze interactions**: Assignment clicks, shift editing, drag/drop, tooltips, loading states
+  - **Implement pixel-perfect match**: This is critical for user muscle memory and training
+  - Focus on area schedule view as it's the most commonly used interface
