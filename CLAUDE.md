@@ -21,6 +21,8 @@
 
 ## Next up
 
-- Pixel-perfect legacy schedule view compliance.
-  - See: `/new-app/LEGACY_AREA_SCHEDULE_SPECIFICATION.md`
-  - Details: Phase 7 section in `/new-app/CLAUDE.md`
+- Request workflow implementation (HIGH PRIORITY - Essential for manager role)
+  - Manager request creation and submission
+  - Operations request review and approval
+  - See: `/new-app/MENU_IMPLEMENTATION_STATUS.md`
+  - Details: Phase 1 section in `/new-app/CLAUDE.md`
