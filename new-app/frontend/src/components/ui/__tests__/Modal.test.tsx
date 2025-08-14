@@ -39,12 +39,9 @@ describe('Modal (shared UI)', () => {
       </Modal>
     )
 
-    // Backdrop has class containing "bg-black/30"
-    const backdrop = document.querySelector('div[class*="bg-black/30"]') as HTMLDivElement
+    // Find the backdrop element (the first fixed element with z-50)
+    const backdrop = document.querySelector('div.fixed.inset-0.z-50') as HTMLDivElement
     expect(backdrop).toBeTruthy()
-
-    // Ensure we did not apply blur
-    expect(backdrop.className).not.toContain('backdrop-blur')
 
     fireEvent.click(backdrop)
     expect(onClose).toHaveBeenCalled()

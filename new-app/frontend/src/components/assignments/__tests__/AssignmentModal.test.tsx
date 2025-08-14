@@ -16,10 +16,11 @@ vi.mock('../../../services/assignmentService', () => ({
 
 // Mock the Modal component
 vi.mock('../../ui/Modal', () => ({
-  default: ({ isOpen, onClose, title, children }: any) => 
+  default: ({ isOpen, onClose, title, children, actions }: any) => 
     isOpen ? (
       <div role="dialog" aria-label={title}>
         <h2>{title}</h2>
+        {actions && <div className="actions">{actions}</div>}
         {children}
       </div>
     ) : null
@@ -79,7 +80,7 @@ describe('AssignmentModal', () => {
       />
     );
 
-    expect(screen.getByText('Assign Person')).toBeInTheDocument();
+    expect(screen.getByText('Assign')).toBeInTheDocument();
   });
 
   it('should load and display available people grouped by category', async () => {
@@ -145,7 +146,8 @@ describe('AssignmentModal', () => {
 
     // Now Jane Smith should be visible with conflict reason
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    expect(screen.getByText('(Time conflict)')).toBeInTheDocument();
+    // The conflict reason is in a title attribute and hidden span
+    expect(screen.getByTitle('Time conflict')).toBeInTheDocument();
   });
 
   it('should assign a person when clicked', async () => {
@@ -177,7 +179,9 @@ describe('AssignmentModal', () => {
     expect(assignmentService.createAssignment).toHaveBeenCalledWith({
       shiftId: 1,
       personId: 1,
-      name: undefined
+      name: undefined,
+      communityHours: false,
+      recurring: false
     });
   });
 
@@ -202,16 +206,16 @@ describe('AssignmentModal', () => {
       />
     );
 
-    const otherInput = screen.getByLabelText('Other:');
+    const otherInput = screen.getByPlaceholderText('Other assignment name...');
     await user.type(otherInput, 'Contractor');
-    
-    const assignButton = screen.getByRole('button', { name: 'Assign' });
-    await user.click(assignButton);
+    await user.keyboard('{Enter}');
 
     expect(assignmentService.createAssignment).toHaveBeenCalledWith({
       shiftId: 1,
       personId: null,
-      name: 'Contractor'
+      name: 'Contractor',
+      communityHours: false,
+      recurring: false
     });
   });
 });

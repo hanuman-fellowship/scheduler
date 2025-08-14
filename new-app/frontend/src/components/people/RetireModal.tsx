@@ -111,7 +111,7 @@ export const RetireModal: React.FC<RetireModalProps> = ({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Retire People">
+    <Modal isOpen={isOpen} onClose={onClose} title="Retire People" useForm={false}>
       <div className="space-y-4">
         {isLoading && (
           <div className="text-center py-4">Loading people...</div>

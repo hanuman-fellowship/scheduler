@@ -319,12 +319,16 @@ export interface CreateAssignmentRequest {
   shiftId: number;
   personId: number | null; // null for "other"
   name?: string; // if personId = null
+  communityHours?: boolean;
+  recurring?: boolean;
 }
 
 export interface UpdateAssignmentRequest {
   personId?: number | null;
   name?: string;
   star?: boolean;
+  communityHours?: boolean;
+  recurring?: boolean;
 }
 
 // ============================================================================
@@ -401,6 +405,8 @@ export interface AssignmentResponse {
   personId: number | null;
   name?: string;
   star: boolean;
+  communityHours?: boolean;
+  recurring?: boolean;
   person?: {
     id: number;
     first: string;

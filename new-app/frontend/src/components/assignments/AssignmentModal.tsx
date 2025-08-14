@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AvailablePersonResponse } from '@shared/types';
 import { assignmentService } from '../../services/assignmentService';
@@ -12,8 +12,8 @@ interface AssignmentModalProps {
 }
 
 /**
- * Assignment modal component for assigning people to shifts
- * Follows legacy UI patterns with categories and conflict detection
+ * Scheduler3-style assignment modal with exact visual and interaction patterns
+ * Matches legacy CakePHP implementation pixel-perfectly
  */
 export const AssignmentModal: React.FC<AssignmentModalProps> = ({
   isOpen,
@@ -22,22 +22,15 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
   shiftName
 }) => {
   const [ignoreConflicts, setIgnoreConflicts] = useState(false);
+  const [communityHours, setCommunityHours] = useState(false);
+  const [recurring, setRecurring] = useState(false);
   const [otherName, setOtherName] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [typeBuffer, setTypeBuffer] = useState('');
+  const [lastTypedAt, setLastTypedAt] = useState(0);
+  
+  const contentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
-
-  // Add keyboard shortcuts
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
 
   // Fetch available people for this shift
   const { data: availablePeople = [], isLoading } = useQuery({
@@ -50,18 +43,17 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
   const createAssignmentMutation = useMutation({
     mutationFn: assignmentService.createAssignment,
     onSuccess: () => {
-      // Invalidate relevant queries - be specific about shift assignments
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
-      queryClient.invalidateQueries({ queryKey: ['assignments', shiftId] }); // Specific shift assignments
-      queryClient.invalidateQueries({ queryKey: ['assignments'] }); // General assignments
-      queryClient.invalidateQueries({ queryKey: ['available-people', shiftId] }); // Update available people
-      queryClient.invalidateQueries({ queryKey: ['schedule'] }); // Legacy key
-      queryClient.invalidateQueries({ queryKey: ['scheduleView'] }); // Current schedule view
+      queryClient.invalidateQueries({ queryKey: ['assignments', shiftId] });
+      queryClient.invalidateQueries({ queryKey: ['assignments'] });
+      queryClient.invalidateQueries({ queryKey: ['available-people', shiftId] });
+      queryClient.invalidateQueries({ queryKey: ['schedule'] });
+      queryClient.invalidateQueries({ queryKey: ['scheduleView'] });
       onClose();
     }
   });
 
-  // Group people by category (matching legacy UI)
+  // Group people by category and create flat list for navigation
   const peopleByCategory = availablePeople.reduce((acc, person) => {
     const categoryId = person.category.id;
     if (!acc[categoryId]) {
@@ -74,11 +66,127 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
     return acc;
   }, {} as Record<number, { category: { id: number; name: string; color: string }; people: AvailablePersonResponse[] }>);
 
+  // Create flat list of visible people for keyboard navigation
+  const visiblePeople = Object.values(peopleByCategory)
+    .sort((a, b) => a.category.name.localeCompare(b.category.name))
+    .flatMap(({ people }) => 
+      people
+        .filter(person => person.available || ignoreConflicts)
+        .sort((a, b) => (a.displayName || a.name).localeCompare(b.displayName || b.name))
+    );
+
+  // Keyboard navigation and shortcuts
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Skip if typing in assignment name field
+      if ((e.target as HTMLElement)?.id === 'assignment_name') return;
+
+      switch (e.key) {
+        case 'Escape':
+          onClose();
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          selectNext();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          selectPrev();
+          break;
+        case 'Tab':
+          e.preventDefault();
+          if (e.shiftKey) {
+            selectPrev();
+          } else {
+            selectNext();
+          }
+          break;
+        case 'Enter':
+          e.preventDefault();
+          if (selectedIndex >= 0 && selectedIndex < visiblePeople.length) {
+            handleAssignPerson(visiblePeople[selectedIndex].id);
+          }
+          break;
+      }
+    };
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Skip if typing in assignment name field
+      if ((e.target as HTMLElement)?.id === 'assignment_name') return;
+      if (!visiblePeople.length) return;
+
+      const letter = String.fromCharCode(e.which || e.keyCode);
+      const now = Date.now();
+      
+      // Reset buffer if too much time has passed
+      if (now - lastTypedAt > 900) {
+        setTypeBuffer('');
+      }
+      
+      const newBuffer = (now - lastTypedAt > 900 ? '' : typeBuffer) + letter;
+      setTypeBuffer(newBuffer);
+      setLastTypedAt(now);
+      
+      // Find matching person
+      const matchingIndex = visiblePeople.findIndex(person => 
+        (person.displayName || person.name).toLowerCase().startsWith(newBuffer.toLowerCase())
+      );
+      
+      if (matchingIndex >= 0) {
+        setSelectedIndex(matchingIndex);
+        scrollToSelected(matchingIndex);
+      }
+
+      // Prevent space from scrolling page
+      if (e.key === ' ') {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keypress', handleKeyPress);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keypress', handleKeyPress);
+    };
+  }, [isOpen, selectedIndex, visiblePeople, typeBuffer, lastTypedAt, onClose]);
+
+  const selectNext = () => {
+    if (visiblePeople.length === 0) return;
+    const nextIndex = selectedIndex >= visiblePeople.length - 1 ? 0 : selectedIndex + 1;
+    setSelectedIndex(nextIndex);
+    scrollToSelected(nextIndex);
+  };
+
+  const selectPrev = () => {
+    if (visiblePeople.length === 0) return;
+    const prevIndex = selectedIndex <= 0 ? visiblePeople.length - 1 : selectedIndex - 1;
+    setSelectedIndex(prevIndex);
+    scrollToSelected(prevIndex);
+  };
+
+  const scrollToSelected = (index: number) => {
+    const element = document.querySelector(`[data-person-index="${index}"]`);
+    if (element && contentRef.current) {
+      const elementRect = element.getBoundingClientRect();
+      const containerRect = contentRef.current.getBoundingClientRect();
+      const scrollTop = contentRef.current.scrollTop;
+      const targetScrollTop = scrollTop + elementRect.top - containerRect.top - containerRect.height / 2 + elementRect.height / 2;
+      
+      contentRef.current.scrollTop = targetScrollTop;
+    }
+  };
+
   const handleAssignPerson = (personId: number) => {
     createAssignmentMutation.mutate({
       shiftId,
       personId,
-      name: undefined
+      name: undefined,
+      communityHours,
+      recurring
     });
   };
 
@@ -88,107 +196,194 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
       createAssignmentMutation.mutate({
         shiftId,
         personId: null,
-        name: otherName.trim()
+        name: otherName.trim(),
+        communityHours,
+        recurring
       });
     }
   };
+
+  const handleIgnoreConflictsChange = (checked: boolean) => {
+    setIgnoreConflicts(checked);
+    // Reset selection when toggling conflicts
+    setSelectedIndex(-1);
+  };
+
+  // Actions JSX for the modal
+  const actions = (
+    <>
+      <div className="form-check" style={{ display: 'inline-block', marginRight: '1em' }}>
+        <input
+          type="checkbox"
+          id="ignore_conflicts"
+          name="ignore_conflicts"
+          checked={ignoreConflicts}
+          onChange={(e) => handleIgnoreConflictsChange(e.target.checked)}
+        />
+        <label htmlFor="ignore_conflicts" style={{ marginLeft: '0.25em' }}>Ignore Conflicts</label>
+      </div>
+      
+      <div className="form-check" style={{ display: 'inline-block', marginRight: '1em' }}>
+        <input
+          type="checkbox"
+          id="community_hours"
+          name="community_hours"
+          checked={communityHours}
+          onChange={(e) => setCommunityHours(e.target.checked)}
+        />
+        <label htmlFor="community_hours" style={{ marginLeft: '0.25em' }}>Community Hours</label>
+      </div>
+      
+      <div className="form-check" style={{ display: 'inline-block' }}>
+        <input
+          type="checkbox"
+          id="recurring"
+          name="recurring"
+          checked={recurring}
+          onChange={(e) => setRecurring(e.target.checked)}
+        />
+        <label htmlFor="recurring" style={{ marginLeft: '0.25em' }}>Recurring (copy when copying weeks)</label>
+      </div>
+    </>
+  );
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Assign Person"
+      title="Assign"
+      actions={actions}
     >
-      <div className="space-y-4">
-        {/* Header layout matching legacy - left conflict toggle, right other input */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="conflictsBox"
-              checked={ignoreConflicts}
-              onChange={(e) => setIgnoreConflicts(e.target.checked)}
-              className="rounded"
-            />
-            <label htmlFor="conflictsBox">Ignore Conflicts</label>
-          </div>
-
-          <form onSubmit={handleAssignOther} className="flex items-center space-x-2">
-            <label htmlFor="other-name">Other:</label>
-            <input
-              id="other-name"
-              type="text"
-              value={otherName}
-              onChange={(e) => setOtherName(e.target.value)}
-              className="border rounded px-2 py-1"
-              tabIndex={1}
-            />
-            <button
-              type="submit"
-              disabled={!otherName.trim() || createAssignmentMutation.isPending}
-              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-            >
-              Assign
-            </button>
-          </form>
-        </div>
+      <div ref={contentRef}>
+        {/* Assignment name input */}
+        <input
+          type="text"
+          id="assignment_name"
+          className="form-control"
+          placeholder="Other assignment name..."
+          value={otherName}
+          onChange={(e) => setOtherName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleAssignOther(e);
+            }
+          }}
+          style={{
+            width: '100%',
+            padding: '0.375rem 0.75rem',
+            marginBottom: '1rem',
+            border: '1px solid #ced4da',
+            borderRadius: '0.25rem'
+          }}
+        />
 
         {/* Loading state */}
         {isLoading && (
-          <div className="text-center py-4">Loading available people...</div>
+          <div style={{ textAlign: 'center', padding: '1rem' }}>Loading available people...</div>
         )}
 
-        {/* People list in table format - matching legacy UI */}
-        <div className="max-h-96 overflow-y-auto">
-          <table className="w-full">
-            <tbody>
-              <tr className="align-top">
-                {Object.values(peopleByCategory)
-                  .sort((a, b) => a.category.name.localeCompare(b.category.name))
-                  .map(({ category, people }) => (
-                    <td key={category.id} className="px-2 py-1 align-top" style={{ padding: '10px' }}>
-                      <strong style={{ color: category.color }}>{category.name}</strong>
-                      <br />
-                      <div className="space-y-0">
-                        {people
-                          .filter(person => person.available || ignoreConflicts)
-                          .sort((a, b) => (a.displayName || a.name).localeCompare(b.displayName || b.name))
-                          .map(person => (
-                            <div key={person.id}>
-                              <button
-                                onClick={() => handleAssignPerson(person.id)}
-                                disabled={!person.available || createAssignmentMutation.isPending}
-                                className={`
-                                  text-left underline hover:no-underline
-                                  ${person.available 
-                                    ? 'cursor-pointer' 
-                                    : 'cursor-not-allowed opacity-50'
-                                  }
-                                `}
-                                style={{ color: category.color }}
-                                title={!person.available ? person.conflictReason : undefined}
-                              >
-                                {person.displayName || person.name}
-                              </button>
-                              {!person.available && (
-                                <span className="text-xs text-red-500 ml-1">
-                                  ({person.conflictReason})
-                                </span>
-                              )}
-                              <br />
-                            </div>
-                          ))}
+        {/* People list - scheduler3 style */}
+        <div
+          id="assign_shifts"
+          className={ignoreConflicts ? 'from_area ignore_conflicts' : 'from_area'}
+          style={{
+            marginTop: '1em',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {Object.values(peopleByCategory)
+            .sort((a, b) => a.category.name.localeCompare(b.category.name))
+            .map(({ category, people }) => {
+              const visibleCategoryPeople = people
+                .filter(person => person.available || ignoreConflicts)
+                .sort((a, b) => (a.displayName || a.name).localeCompare(b.displayName || b.name));
+              
+              if (visibleCategoryPeople.length === 0) return null;
+              
+              return (
+                <div key={category.id}>
+                  <h5 style={{
+                    marginTop: '.5em',
+                    marginBottom: 0,
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {category.name}
+                  </h5>
+                  
+                  {visibleCategoryPeople.map((person) => {
+                    const personGlobalIndex = visiblePeople.findIndex(p => p.id === person.id);
+                    const isSelected = personGlobalIndex === selectedIndex;
+                    const isConflicting = !person.available;
+                    
+                    return (
+                      <div
+                        key={person.id}
+                        data-person-index={personGlobalIndex}
+                        className={`assign_shift${isConflicting ? ' conflicting' : ''}`}
+                        style={{
+                          color: category.color,
+                          display: isConflicting && !ignoreConflicts ? 'none' : 'block'
+                        }}
+                        onMouseEnter={() => {
+                          setSelectedIndex(personGlobalIndex);
+                          // Clear type buffer when hovering
+                          setTypeBuffer('');
+                        }}
+                        onMouseLeave={() => {
+                          // Don't clear selection on mouse leave to maintain keyboard navigation
+                        }}
+                      >
+                        <a
+                          href="#"
+                          className={`type_selectable${isSelected ? ' selected' : ''}`}
+                          data-num={personGlobalIndex + 1}
+                          data-shift-id={shiftId}
+                          data-person-id={person.id}
+                          data-for="area"
+                          style={{
+                            display: 'inline-block',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                            backgroundColor: isSelected ? '#b8e0ff' : 'transparent', // darken(#d0ecff, 15%)
+                            padding: isSelected ? '2px 4px' : '2px 4px',
+                            outline: 'none'
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAssignPerson(person.id);
+                          }}
+                          onFocus={() => setSelectedIndex(personGlobalIndex)}
+                        >
+                          {person.displayName || person.name}
+                        </a>
+                        
+                        {isConflicting && (
+                          <div
+                            className="conflict_notice hover_for_more"
+                            data-s-id={shiftId}
+                            data-p-id={person.id}
+                            style={{
+                              display: 'inline-block',
+                              marginLeft: '4px',
+                              color: '#f39c12' // Orange warning color
+                            }}
+                            title={person.conflictReason}
+                          >
+                            ⚠️
+                            <span style={{ display: 'none' }}>{person.conflictReason}</span>
+                          </div>
+                        )}
                       </div>
-                    </td>
-                  ))}
-              </tr>
-            </tbody>
-          </table>
+                    );
+                  })}
+                </div>
+              );
+            })}
         </div>
 
         {/* No people available message */}
         {!isLoading && availablePeople.length === 0 && (
-          <div className="text-center text-gray-500 py-4">
+          <div style={{ textAlign: 'center', color: '#6c757d', padding: '1rem' }}>
             No people available for this shift
           </div>
         )}

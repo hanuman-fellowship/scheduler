@@ -29,13 +29,21 @@
 
 ## Next up
 
-- **Legacy Shift Display Analysis & Implementation** (HIGH PRIORITY - Critical for production)
-  - ✅ Assignment modal is complete and working perfectly with real-time updates
-  - ⚠️ Now analyze how the legacy app handled the shift display on the area schedule
-  - **Study systematically**: `/views/schedules/area.ctp`, `/views/helpers/schedule.php`, `/views/elements/shift.ctp`, `/webroot/css/schedule.css`
-  - **Document every action**: Left click, right click, hover states, double-click, keyboard shortcuts
-  - **Document every visual detail**: Empty shifts, partial shifts, full shifts, starred assignments, conflict indicators, category colors
-  - **Document styling**: Exact dimensions, margins, padding, font sizes, color codes, hover effects
-  - **Analyze interactions**: Assignment clicks, shift editing, drag/drop, tooltips, loading states
-  - **Implement pixel-perfect match**: This is critical for user muscle memory and training
-  - Focus on area schedule view as it's the most commonly used interface
+- **Implement Scheduler3-Style Shift Display** (HIGH PRIORITY - Critical for production)
+  - ✅ Assignment modal is complete - now focus on shift cell display
+  - **Comprehensive analysis**: `/docs/SCHEDULER3_SHIFT_DISPLAY_ANALYSIS.md` - Complete documentation of legacy shift display functionality
+  - **Reference files**: Key scheduler3 files for shift display implementation:
+    - `app/views/schedules/area.ctp` - Main area schedule grid
+    - `app/views/helpers/schedule.php` - Shift rendering helpers and formatting
+    - `app/views/elements/shift.ctp` - Individual shift display elements
+    - `app/webroot/css/schedule.css` - Complete styling for shifts and assignments
+  - **Critical aspects to implement**:
+    - Exact cell layout, spacing, and typography matching legacy
+    - Assignment display with person names, categories, and colors
+    - Interactive click behaviors (person links, assignment removal, etc.)
+    - Hover states and visual feedback
+    - Starred assignments display and functionality
+    - Conflict indicators and warnings
+    - Empty vs filled vs overfilled shift states
+  - **Implementation approach**: Update ShiftCell component in new-app to match scheduler3 pixel-perfectly
+  - This is essential for user training and muscle memory preservation
