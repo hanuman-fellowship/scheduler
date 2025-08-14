@@ -17,6 +17,11 @@ export const schedulesService = {
     return data
   },
 
+  async getPublishedSchedules(): Promise<Schedule[]> {
+    const { data } = await api.get<Schedule[]>('/schedules/published-list')
+    return data
+  },
+
   async getSchedule(id: number) {
     const { data } = await api.get(`/schedules/${id}`)
     return data

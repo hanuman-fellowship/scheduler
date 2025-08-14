@@ -90,7 +90,7 @@ describe('InProgressScheduleSelection', () => {
 
     mockSchedulesService.getSchedules.mockResolvedValue({ 
       mine: mockSchedules.filter(s => s.userId === 1), // Only user's own schedules
-      all: mockSchedules // All schedules for operations users
+      all: mockSchedules.filter(s => s.userId !== null) // All in-progress schedules for operations users (no published)
     })
   })
 
@@ -107,7 +107,7 @@ describe('InProgressScheduleSelection', () => {
     expect(screen.getByText('Loading schedules...')).toBeInTheDocument()
   })
 
-  it('should render schedules grouped by user', async () => {
+  it('should render schedules grouped by user without duplicates', async () => {
     renderWithQueryClient(
       <InProgressScheduleSelection
         onCancel={mockOnCancel}
@@ -120,11 +120,13 @@ describe('InProgressScheduleSelection', () => {
       expect(screen.getByText('Other Schedules')).toBeInTheDocument()
     })
 
-    // Should show user's own schedule
-    expect(screen.getByText('My Working Schedule')).toBeInTheDocument()
+    // Should show user's own schedule only once (in My Schedules)
+    const myWorkingScheduleElements = screen.getAllByText('My Working Schedule')
+    expect(myWorkingScheduleElements).toHaveLength(1)
     
-    // Should show other user's schedule  
-    expect(screen.getByText('Other User Schedule')).toBeInTheDocument()
+    // Should show other user's schedule (only in Other Schedules)
+    const otherScheduleElements = screen.getAllByText('Other User Schedule')
+    expect(otherScheduleElements).toHaveLength(1)
     
     // Should NOT show published schedule (userId is null)
     expect(screen.queryByText('Published Schedule')).not.toBeInTheDocument()
@@ -210,5 +212,35 @@ describe('InProgressScheduleSelection', () => {
     await waitFor(() => {
       expect(screen.getAllByText('No schedules found')).toHaveLength(2) // One for each section
     })
+  })
+
+  it('should not show user schedules in Other Schedules section', async () => {
+    // Test specifically for the bug where user's schedules appeared in both sections
+    mockSchedulesService.getSchedules.mockResolvedValue({ 
+      mine: [mockSchedules[0]], // User's schedule
+      all: mockSchedules // All schedules including user's own
+    })
+    
+    renderWithQueryClient(
+      <InProgressScheduleSelection
+        onCancel={mockOnCancel}
+        onScheduleSelected={mockOnScheduleSelected}
+      />
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText('My Schedules')).toBeInTheDocument()
+      expect(screen.getByText('Other Schedules')).toBeInTheDocument()
+    })
+
+    // Get all instances of "My Working Schedule"
+    const myScheduleElements = screen.getAllByText('My Working Schedule')
+    
+    // Should only appear once (in My Schedules section, not in Other Schedules)
+    expect(myScheduleElements).toHaveLength(1)
+    
+    // Verify it's in the right section by checking its parent structure
+    const mySchedulesSection = screen.getByText('My Schedules').parentElement
+    expect(mySchedulesSection).toContainElement(myScheduleElements[0])
   })
 })

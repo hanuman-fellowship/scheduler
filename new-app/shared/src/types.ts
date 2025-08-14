@@ -66,6 +66,40 @@ export interface SchedulesResponse {
   all?: ScheduleResponse[]; // if operations role
 }
 
+// ============================================================================
+// Schedule Helper Functions
+// ============================================================================
+
+/**
+ * Check if a schedule is published (system-owned)
+ * Published schedules have userId = null
+ */
+export const isPublishedSchedule = (schedule: ScheduleResponse | { userId?: number | null }): boolean => {
+  return schedule.userId === null;
+}
+
+/**
+ * Check if a schedule is in progress (user-owned, not template, not request)
+ * In-progress schedules have userId != null and are normal schedules
+ */
+export const isInProgressSchedule = (schedule: ScheduleResponse): boolean => {
+  return schedule.userId !== null && !schedule.template && schedule.request === 0;
+}
+
+/**
+ * Filter schedules to only published ones
+ */
+export const filterPublishedSchedules = (schedules: ScheduleResponse[]): ScheduleResponse[] => {
+  return schedules.filter(isPublishedSchedule);
+}
+
+/**
+ * Filter schedules to only in-progress ones
+ */
+export const filterInProgressSchedules = (schedules: ScheduleResponse[]): ScheduleResponse[] => {
+  return schedules.filter(isInProgressSchedule);
+}
+
 export interface PersonResponse {
   id: number;
   first: string;

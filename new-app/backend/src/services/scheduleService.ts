@@ -10,8 +10,13 @@ interface AuthUser {
 }
 
 export const getSchedulesForUser = async (user: AuthUser) => {
+  // Only return in-progress schedules (user-owned, non-template, non-request)
   const mySchedules = await prisma.schedule.findMany({
-    where: { userId: user.id },
+    where: { 
+      userId: user.id,
+      template: false,
+      request: 0
+    },
     orderBy: { updatedAt: 'desc' },
     select: {
       id: true,
@@ -31,11 +36,18 @@ export const getSchedulesForUser = async (user: AuthUser) => {
   };
 
   if (user.roles.includes('operations')) {
+    // Only return in-progress schedules from all users (not published, not templates)
     const allSchedules = await prisma.schedule.findMany({
+      where: {
+        userId: { not: null }, // Exclude published schedules (userId = null)
+        template: false,
+        request: 0
+      },
       orderBy: { updatedAt: 'desc' },
       select: {
         id: true,
         name: true,
+        userId: true,
         request: true,
         template: true,
         createdAt: true,
@@ -426,6 +438,39 @@ export async function getScheduleGroups(): Promise<Array<{
       createdAt: schedule.createdAt.toISOString()
     }))
   }));
+}
+
+// Get all published schedules
+export async function getPublishedSchedules() {
+  try {
+    console.log('Service: Fetching published schedules from database...');
+    const publishedSchedules = await prisma.schedule.findMany({
+      where: {
+        userId: null // Published schedules have no owner
+      },
+      orderBy: {
+        updatedAt: 'desc'
+      }
+    });
+    
+    console.log('Service: Found schedules:', publishedSchedules.length);
+    
+    const result = publishedSchedules.map(schedule => ({
+      id: schedule.id,
+      name: schedule.name,
+      userId: schedule.userId,
+      request: schedule.request,
+      template: schedule.template,
+      createdAt: schedule.createdAt.toISOString(),
+      updatedAt: schedule.updatedAt.toISOString()
+    }));
+    
+    console.log('Service: Mapped result:', result);
+    return result;
+  } catch (error) {
+    console.error('Service: Error in getPublishedSchedules:', error);
+    throw error;
+  }
 }
 
 // Get published schedules (current active one)

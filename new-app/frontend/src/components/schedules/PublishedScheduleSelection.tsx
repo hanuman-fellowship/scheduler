@@ -21,9 +21,9 @@ export const PublishedScheduleSelection: React.FC<PublishedScheduleSelectionProp
   const queryClient = useQueryClient()
   const [expandedYears, setExpandedYears] = useState<Set<string>>(new Set(['2024', '2025']))
 
-  const { data: schedulesData, isLoading, error } = useQuery({
-    queryKey: ['schedules'],
-    queryFn: schedulesService.getSchedules,
+  const { data: publishedSchedules, isLoading, error } = useQuery({
+    queryKey: ['published-schedules'],
+    queryFn: schedulesService.getPublishedSchedules,
     staleTime: 1000 * 60 * 5, // 5 minutes
   })
 
@@ -33,7 +33,7 @@ export const PublishedScheduleSelection: React.FC<PublishedScheduleSelectionProp
       return schedule
     },
     onSuccess: (schedule) => {
-      queryClient.invalidateQueries({ queryKey: ['schedules'] })
+      queryClient.invalidateQueries({ queryKey: ['published-schedules'] })
       onScheduleSelected(schedule)
     }
   })
@@ -74,16 +74,13 @@ export const PublishedScheduleSelection: React.FC<PublishedScheduleSelectionProp
     )
   }
 
-  // Filter published schedules (name = 'Published', user_id = null)
-  const publishedSchedules = (schedulesData?.mine || []).filter((schedule: any) => 
-    schedule.name === 'Published'
-  )
+  // Backend now returns only published schedules directly
 
   // Map API ScheduleResponse to local Schedule type expected by the store
-  const publishedSchedulesForStore: Schedule[] = publishedSchedules.map((s: any) => ({
+  const publishedSchedulesForStore: Schedule[] = (publishedSchedules || []).map((s: any) => ({
     id: s.id,
     name: s.name,
-    userId: null,
+    userId: s.userId,
     template: Boolean(s.template),
     request: Number(s.request),
     createdAt: s.createdAt,

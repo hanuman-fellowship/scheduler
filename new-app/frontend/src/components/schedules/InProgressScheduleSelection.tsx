@@ -60,20 +60,17 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
     )
   }
 
-  // Filter in-progress schedules (user-owned, non-template, non-request)
-  // Note: schedulesData.mine already contains only the current user's schedules
-  const mySchedules = schedulesData?.mine?.filter((schedule: any) => 
-    !schedule.template && 
-    schedule.request === 0
-  ) || []
+  // Backend now returns only in-progress schedules directly
+  // schedulesData.mine contains only the current user's in-progress schedules
+  // schedulesData.all contains all users' in-progress schedules (for operations only)
+  const mySchedules = schedulesData?.mine || []
 
-  // Operations users also have access to all schedules, filter for others
+  // Operations users also have access to other users' schedules
+  // Ensure we don't show the user's own schedules in "Other Schedules"
+  const myScheduleIds = new Set(mySchedules.map((s: any) => s.id))
   const otherSchedules = user?.roles.includes('operations') 
     ? (schedulesData?.all?.filter((schedule: any) => 
-        schedule.userId !== user?.id &&
-        schedule.userId !== null && 
-        !schedule.template && 
-        schedule.request === 0
+        !myScheduleIds.has(schedule.id) // Exclude user's own schedules
       ) || [])
     : []
 

@@ -84,11 +84,11 @@ describe('PublishedScheduleSelection', () => {
       isLoading: false
     })
 
-    mockSchedulesService.getSchedules.mockResolvedValue({ mine: mockPublishedSchedules })
+    mockSchedulesService.getPublishedSchedules.mockResolvedValue(mockPublishedSchedules.filter(s => s.userId === null))
   })
 
   it('should render loading state initially', () => {
-    mockSchedulesService.getSchedules.mockReturnValue(new Promise(() => {})) // Never resolves
+    mockSchedulesService.getPublishedSchedules.mockReturnValue(new Promise(() => {})) // Never resolves
     
     renderWithQueryClient(
       <PublishedScheduleSelection
@@ -203,7 +203,7 @@ describe('PublishedScheduleSelection', () => {
   })
 
   it('should handle error state', async () => {
-    mockSchedulesService.getSchedules.mockRejectedValue(new Error('Network error'))
+    mockSchedulesService.getPublishedSchedules.mockRejectedValue(new Error('Network error'))
     
     renderWithQueryClient(
       <PublishedScheduleSelection
@@ -219,8 +219,8 @@ describe('PublishedScheduleSelection', () => {
   })
 
   it('should show empty state when no published schedules found', async () => {
-    // Return only working schedules (userId is not null)
-    mockSchedulesService.getSchedules.mockResolvedValue({ mine: [mockPublishedSchedules[3]] })
+    // Return empty array (no published schedules)
+    mockSchedulesService.getPublishedSchedules.mockResolvedValue([])
     
     renderWithQueryClient(
       <PublishedScheduleSelection

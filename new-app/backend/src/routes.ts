@@ -77,6 +77,7 @@ export const createApp = (options: {
   // Schedule routes
   app.get('/api/schedules', requireAuth, asyncHandler(scheduleController.list));
   app.get('/api/schedules/current', requireAuth, asyncHandler(scheduleController.getCurrentSchedule));
+  app.get('/api/schedules/published-list', requireAuth, asyncHandler(scheduleManagementController.getPublishedSchedules));
   app.post('/api/schedules/:id/set-current', requireAuth, asyncHandler(scheduleController.setCurrentSchedule));
   app.get('/api/schedules/:id', requireAuth, asyncHandler(scheduleController.get));
   app.delete('/api/schedules/:id', requireAuth, asyncHandler(scheduleController.deleteSchedule));

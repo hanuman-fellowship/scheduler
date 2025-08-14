@@ -13,8 +13,8 @@ describe('TotalHoursRow', () => {
       endAtSeconds: 57600, // 4:00 PM (8 hours)
       numPeople: 2,
       assignments: [
-        { id: 1, shiftId: 1, personId: 1, starred: false },
-        { id: 2, shiftId: 1, personId: 2, starred: false }
+        { id: 1, shiftId: 1, personId: 1, star: false },
+        { id: 2, shiftId: 1, personId: 2, star: false }
       ]
     },
     {
@@ -25,7 +25,7 @@ describe('TotalHoursRow', () => {
       endAtSeconds: 46800, // 1:00 PM (4 hours)
       numPeople: 1,
       assignments: [
-        { id: 3, shiftId: 2, personId: 1, starred: true }
+        { id: 3, shiftId: 2, personId: 1, star: true }
       ]
     }
   ];
@@ -66,7 +66,7 @@ describe('TotalHoursRow', () => {
   });
 
   it('should show difference when not all shifts are fully assigned', () => {
-    const underAssignedShifts = [
+    const underAssignedShifts: ShiftWithAssignments[] = [
       {
         id: 1,
         areaId: 1,
@@ -75,7 +75,7 @@ describe('TotalHoursRow', () => {
         endAtSeconds: 57600, // 4:00 PM (8 hours)
         numPeople: 3, // Capacity for 3 people
         assignments: [
-          { id: 1, shiftId: 1, personId: 1, starred: false }
+          { id: 1, shiftId: 1, personId: 1, star: false }
         ] // Only 1 person assigned
       }
     ];

@@ -73,6 +73,19 @@ export const getScheduleGroups = async (req: AuthRequest, res: Response): Promis
   }
 };
 
+// Get all published schedules
+export const getPublishedSchedules = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    console.log('Getting published schedules...');
+    const publishedSchedules = await scheduleService.getPublishedSchedules();
+    console.log('Found published schedules:', publishedSchedules.length);
+    res.json(publishedSchedules);
+  } catch (error) {
+    console.error('Error getting published schedules:', error);
+    res.status(500).json({ error: 'Failed to fetch published schedules' });
+  }
+};
+
 // Get the currently published schedule
 export const getPublishedSchedule = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
