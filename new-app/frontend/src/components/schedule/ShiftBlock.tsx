@@ -31,10 +31,15 @@ export const ShiftBlock: React.FC<ShiftBlockProps> = ({
       <span 
         className={`shift ${isFirst ? '' : 'stacked'}`}
         id={`shift-${shift.id}`}
-        onClick={() => isClickable && onShiftClick?.(shift.id)}
-        style={{ cursor: isClickable ? 'pointer' : 'default' }}
       >
-        <b>{timeRange}</b>
+        <b 
+          onClick={(e) => { 
+            e.stopPropagation(); 
+            isClickable && onShiftClick?.(shift.id); 
+          }}
+        >
+          {timeRange}
+        </b>
         <br />
         <AssignmentList
           assignments={shift.assignments}

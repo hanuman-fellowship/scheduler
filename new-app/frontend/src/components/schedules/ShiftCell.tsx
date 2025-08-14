@@ -11,6 +11,7 @@ interface ShiftCellProps {
   isToday: boolean;
   onShiftClick?: (shiftId: number) => void;
   onAdd?: () => void;
+  onAssignClick?: (shiftId: number) => void;
 }
 
 export const ShiftCell: React.FC<ShiftCellProps> = ({
@@ -21,7 +22,8 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
   editable,
   isToday,
   onShiftClick,
-  onAdd
+  onAdd,
+  onAssignClick
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -55,7 +57,11 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
                 </div>
               ))}
               {shift.assignments.length < shift.numPeople && (
-                <div className="text-gray-400 italic">
+                <div 
+                  className={`text-gray-400 italic ${editable && onAssignClick ? 'cursor-pointer hover:text-blue-600 hover:underline' : ''}`}
+                  onClick={editable && onAssignClick ? (e) => { e.stopPropagation(); onAssignClick(shift.id); } : undefined}
+                  title={editable && onAssignClick ? 'Click to assign people' : undefined}
+                >
                   Need {shift.numPeople - shift.assignments.length} more
                 </div>
               )}

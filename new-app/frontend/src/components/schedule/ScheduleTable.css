@@ -93,8 +93,9 @@
   vertical-align: middle;
 }
 
-.shift-cell.editable:hover {
-  background-color: #FFF8BA;
+/* Remove whole cell hover - we'll use specific element hovers instead */
+.shift-cell.editable {
+  background-color: white;
 }
 
 /* Shift blocks - CRITICAL: Legacy stacking pattern */
@@ -102,10 +103,23 @@ span.shift {
   display: block;
   padding: 0;
   margin: 0;
-  cursor: pointer;
   text-align: center;
   line-height: 1.2;
   font-size: 12px;
+}
+
+/* Hover effect for clickable time (shift editing) */
+span.shift b {
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 2px;
+  transition: background-color 0.2s;
+}
+
+.shift-cell.editable span.shift b:hover {
+  background-color: #FFF8BA;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* CRITICAL: 20px padding between stacked shifts */
@@ -123,6 +137,15 @@ span.assignment {
   display: inline-block;
   margin-bottom: 2px;
   font-size: 12px;
+  padding: 1px 2px;
+  border-radius: 2px;
+  transition: background-color 0.2s;
+}
+
+/* Hover effect for clickable assignments */
+.shift-cell.editable span.assignment:hover {
+  background-color: #E3F2FD;
+  cursor: pointer;
 }
 
 span.assignment.starred {
@@ -132,6 +155,12 @@ span.assignment.starred {
 span.assignment.unassigned {
   color: #999999;
   font-style: italic;
+}
+
+/* Hover effect for unassigned slots */
+.shift-cell.editable span.assignment.unassigned:hover {
+  background-color: #FFF3E0;
+  color: #666666;
 }
 
 /* Star indicator */

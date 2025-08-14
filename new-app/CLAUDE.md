@@ -79,45 +79,52 @@ Based on CakePHP `redirectIfNotEditable()` function:
 - Operations users bypass all schedule editing restrictions
 - Permission checks maintain thin controller pattern via `schedulePermissionService`
 
-## 🎯 Next Development Priority: Assignment Interface
 
-**Objective**: Implement interactive assignment system for area schedule views
+## 🎯 Next Development Priority: Refine Assignment Modal Details
 
-### **Legacy System Analysis Required**
+**Objective**: Carefully review and refine the assignment modal to match all legacy UI/UX details
 
-**⚠️ CRITICAL**: Before implementation, study the legacy CakePHP assignment workflow:
+### **Legacy System Deep Analysis Required**
 
-1. **View Files to Examine**:
-   - `/views/areas/schedule.ctp` - Main area schedule view
-   - `/views/assignments/` - Assignment-related views and modals
-   - `/views/elements/` - Reusable assignment UI components
+**⚠️ CRITICAL**: The assignment modal is functional but needs detailed refinement to match the legacy system exactly:
 
-2. **Controller Logic to Study**:
-   - `/controllers/assignments_controller.php` - Assignment CRUD operations
-   - `/controllers/areas_controller.php` - Schedule view integration
-   - How empty shift slots trigger assignment modals
-   - Modal population with available people
+1. **Detailed View Files to Study**:
+   - `/views/assignments/assign.ctp` - Exact modal layout and behavior
+   - `/views/helpers/schedule.php` - Assignment display formatting
+   - `/views/elements/dialog.ctp` - Modal wrapper styling
+   - Check exact text, spacing, colors, and interaction patterns
 
-3. **Key Interactions to Preserve**:
-   - **Click empty slot** → Opens assignment modal
-   - **Modal shows available people** with conflict indicators
-   - **Single click assigns person** to shift
-   - **Visual feedback** distinguishes assigned vs empty slots
-   - **Star system** for priority assignments
-   - **Conflict warnings** prevent double-booking
+2. **Specific Details to Verify**:
+   - **Modal title format** - Should it show shift details?
+   - **People sorting** - By name, category, or availability?
+   - **Category headers** - Exact styling and color usage
+   - **Conflict display** - Inline vs tooltip vs separate section
+   - **"Other" input** - Position, label, behavior
+   - **Button placement** - Close, assign, cancel positions
+   - **Keyboard shortcuts** - ESC to close, Enter to assign?
+   - **Loading states** - Spinner style and position
+   - **Empty states** - What shows when no people available?
+   - **Success feedback** - Flash message, animation, or silent update?
 
-4. **Technical Implementation Notes**:
-   - Modal should be **fast and responsive**
-   - People list should show **availability status**
-   - **Real-time conflict detection** as user selects
-   - **Optimistic updates** for immediate feedback
+3. **Performance Considerations**:
+   - **Large lists** - How does legacy handle 100+ people?
+   - **Search/filter** - Does legacy have people search?
+   - **Scroll behavior** - Fixed headers, virtual scrolling?
+   - **Modal size** - Responsive or fixed dimensions?
 
-### **Implementation Approach**
-1. Study legacy assignment modal UI/UX patterns
-2. Design React components matching legacy interaction flow
-3. Integrate with existing assignment APIs (already implemented)
-4. Test assignment workflow end-to-end
-5. Ensure performance with large people lists
+4. **Edge Cases to Test**:
+   - Shift at full capacity
+   - Person with multiple conflicts
+   - Network errors during assignment
+   - Concurrent assignments by multiple users
+
+### **Refinement Approach**
+1. Screenshot legacy assignment modal in various states
+2. Document exact pixel dimensions, colors, fonts
+3. Create side-by-side comparison with current implementation
+4. List all discrepancies, no matter how small
+5. Implement refinements with visual regression tests
+6. Test with actual users familiar with legacy system
 
 ---
 
@@ -138,42 +145,12 @@ Based on CakePHP `redirectIfNotEditable()` function:
 - Models (`/models/`) - Business rules and validation
 - Views (`/views/`) - UI patterns and user actions
 
-## Current Implementation Status
+## Project Status
 
-**✅ Fully Implemented**: 23 items (37%) - Core operations working including:
-- User authentication and management
-- Schedule context system
-- Areas, Categories, People management
-- Schedule views (area/person/gaps)
-- Shift creation and editing
-- Schedule copying and templates
-- Publishing workflow
+**Current**: Assignment system is functional. See [Implementation Status](./IMPLEMENTATION_STATUS.md) for details.
 
-**🔄 Currently Working On**: Assignment Interface Enhancement
-- **Next Priority**: Interactive assignment system for area schedule views
-- **Goal**: Click empty shift slots to open assignment modal with available people
-- **Legacy Study Required**: Examine CakePHP assignment modal interactions and workflow
-
-**⚠️ Partially Implemented**: Assignment system backend APIs exist but missing frontend UI:
-- Assignment CRUD operations (create, update, delete, star) ✅
-- Conflict detection and availability checking ✅  
-- **Missing**: Interactive assignment interface in schedule grid
-- **Missing**: Assignment modal with people selection
-- **Missing**: Visual feedback for assignments vs empty slots
-
-**❌ Missing Entirely**: 18 items (28%) - Not implemented
-
-See [Menu Implementation Status](./MENU_IMPLEMENTATION_STATUS.md) for detailed breakdown.
+**Next Priority**: Polish assignment modal to match legacy system exactly.
 
 ---
-
-**Status**: 🚀 **Core Systems Complete** - 510+ tests passing
-
-### **Next Milestone: Assignment Interface**
-**Target**: Complete interactive assignment system with legacy UX compatibility
-- Study legacy assignment modal workflow first
-- Test assignment conflicts and availability checking  
-- Ensure fast, responsive UI for large people lists
-- Maintain existing test coverage standards
 
 **Keep documentation up to date after finishing tasks**

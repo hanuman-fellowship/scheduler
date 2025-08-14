@@ -190,7 +190,7 @@ describe('EditShiftForm', () => {
     confirmSpy.mockRestore()
   })
 
-  it('should prevent reducing people count below current assignments', async () => {
+  it('should allow setting number of people without assignment constraints', async () => {
 
     renderWithProviders(
       <EditShiftForm
@@ -205,12 +205,12 @@ describe('EditShiftForm', () => {
       expect(screen.getByDisplayValue('Kitchen')).toBeInTheDocument()
     })
 
-    // Check that min value is set to current assignments (1)
+    // Check that min value is set to 1 (no assignment constraints)
     const numPeopleInput = screen.getByLabelText('Number of People:') as HTMLInputElement
     expect(numPeopleInput.min).toBe('1')
     
-    // Should show current assignments info
-    expect(screen.getByText('Currently assigned: 1 people (minimum)')).toBeInTheDocument()
+    // Should NOT show assignment info since it's been removed from edit modal
+    expect(screen.queryByText(/Currently assigned/)).not.toBeInTheDocument()
   })
 
   it('should handle cancel button', async () => {

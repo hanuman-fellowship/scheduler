@@ -9,6 +9,7 @@ interface ScheduleGridProps {
   type: 'area' | 'person' | 'gaps';
   onShiftClick?: (shiftId: number) => void;
   onAddShift?: (dayId: number, slot: string) => void;
+  onAssignClick?: (shiftId: number) => void;
 }
 
 export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
@@ -17,7 +18,8 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
   editable,
   type,
   onShiftClick,
-  onAddShift
+  onAddShift,
+  onAssignClick
 }) => {
   // Get today's date for highlighting
   const today = new Date();
@@ -156,6 +158,7 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
                     isToday={isToday(parseInt(dayId))}
                     onShiftClick={onShiftClick}
                     onAdd={onAddShift ? () => onAddShift(parseInt(dayId), timePeriod.name) : undefined}
+                    onAssignClick={onAssignClick}
                   />
                 );
               })}

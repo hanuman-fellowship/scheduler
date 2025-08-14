@@ -27,8 +27,7 @@ export const AssignmentList: React.FC<AssignmentListProps> = ({
           key={assignment.id} 
           className={`assignment ${assignment.star ? 'starred' : ''}`}
           style={{ 
-            color: assignment.person?.category?.color || 'inherit',
-            cursor: editable ? 'pointer' : 'default'
+            color: assignment.person?.category?.color || 'inherit'
           }}
           onClick={() => editable && onAssignmentClick?.()}
         >
@@ -57,7 +56,6 @@ export const AssignmentList: React.FC<AssignmentListProps> = ({
         <span 
           key={`unassigned-${index}`} 
           className="assignment unassigned"
-          style={{ cursor: editable ? 'pointer' : 'default' }}
           onClick={() => editable && onAssignmentClick?.()}
         >
           ________

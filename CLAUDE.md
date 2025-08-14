@@ -1,5 +1,13 @@
 # Scheduler - Minimal Guide
 
+## Documentation Philosophy
+
+**Keep CLAUDE.md files lean and focused on what needs to be done.**
+
+- ✅ **DO**: Current priorities, next steps, development guidelines
+- ❌ **DON'T**: Implementation history, completed features, detailed explanations
+- 📁 **INSTEAD**: Put implementation details in separate helper files (IMPLEMENTATION.md, STATUS.md, etc.)
+
 ## Where to find things
 
 - **Detailed project guide**: `/new-app/CLAUDE.md`
@@ -21,10 +29,11 @@
 
 ## Next up
 
-- Interactive Assignment System (HIGH PRIORITY - Core scheduling functionality)
-  - Click empty shift slots to open assignment modal
-  - Show available people with conflict detection
-  - Single-click assignment with visual feedback
-  - Study legacy: `/views/areas/schedule.ctp` and `/controllers/assignments_controller.php`
-  - Backend APIs already exist, need frontend modal UI
-  - Essential for daily scheduling operations
+- **Refine Assignment Modal** (HIGH PRIORITY - Polish for production)
+  - ✅ Assignment system is working with click-to-assign functionality
+  - ⚠️ Now needs detailed refinement to match legacy modal exactly
+  - Study carefully: `/views/assignments/assign.ctp` for exact layout
+  - Check: modal title, people sorting, category styling, conflict display
+  - Verify: "Other" input position, button placement, keyboard shortcuts
+  - Test with users familiar with legacy system for muscle memory
+  - This polish is critical for user adoption and training

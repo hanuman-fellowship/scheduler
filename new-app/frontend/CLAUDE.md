@@ -350,97 +350,43 @@ frontend/
 
 ## Development Status
 
-### ✅ Phase 1: Foundation (COMPLETED)
+**Current Phase**: Assignment modal polish - matching legacy UI/UX exactly
 
-1. ✅ Authentication flow and protected routing
-2. ✅ Basic layout with navigation
-3. ✅ Role-based header menus (Operations, Manager, Personnel)
-4. ✅ People page with category management
-5. ✅ Dropdown menu system with hover behavior
+**Completed**: Foundation, schedule views, shift operations, assignment system
 
-### ✅ Phase 2: Schedule View System (COMPLETED)
+See [Implementation Status](../IMPLEMENTATION_STATUS.md) for completed feature details.
 
-1. ✅ Complete schedule view implementation (area, person, gaps)
-2. ✅ Backend API integration with proper error handling
-3. ✅ Interactive schedule grid with time slots and shift display
-4. ✅ Navigation system with modal selection and keyboard shortcuts
-5. ✅ Visual styling with legacy compatibility (774px width, today highlighting)
-6. ✅ Comprehensive test coverage for all schedule components
+### 🔄 Phase 4: Assignment Modal Polish (IN PROGRESS)
 
-### 🔄 Phase 3: Core Scheduling Operations (IN PROGRESS)
+1. **Study legacy modal** (`/views/assignments/assign.ctp`) for exact UI/UX match
+2. **Refine details**: modal title, people sorting, category styling, conflict display
+3. **Button placement**: Close, assign, cancel positions to match legacy
+4. **Keyboard shortcuts**: ESC to close, Enter to assign behavior
+5. **Edge case handling**: Full capacity, multiple conflicts, network errors
+6. **Performance**: Large people lists, search/filter capabilities
 
-1. ✅ Shift creation and editing with time picker interface (AddShiftForm, EditShiftForm)
-2. ✅ Schedule context integration (uses current schedule from store)
-3. ✅ Error handling for missing schedule context
-4. ⭕ Assignment interface with drag-and-drop functionality
-5. ⭕ Real-time schedule updates and conflict detection
-6. ⭕ Floating shifts management
-
-### 🔜 Phase 4: Workflows (PLANNED)
+### 🔜 Phase 5: Advanced Workflows (PLANNED)
 
 1. Schedule copying and publishing workflow
-2. Request submission workflow (manager → operations)
+2. Request submission workflow (manager → operations) 
 3. Email notifications feedback
 4. Undo/redo functionality
+5. Floating shifts management
 
-### 🔜 Phase 5: Polish (PLANNED)
+### 🔜 Phase 6: Polish & Performance (PLANNED)
 
 1. Advanced calendar views and filtering
-2. Mobile optimization for touch interfaces
+2. Mobile optimization for touch interfaces  
 3. Performance optimization for large schedules
 4. Advanced accessibility features
 
-## Current Frontend Architecture
+## Architecture Notes
 
-### ✅ Implemented Components
-
-- **Layout**: Header, Layout with role-based navigation
-- **UI Components**: MenuDropdown, MenuItem, Modal, BoxyButton
-- **Pages**: HomePage, PeoplePage, BigBoardPage, LoginPage, AreasPage
-- **Schedule Components**: ScheduleView, ScheduleGrid, ShiftCell, ScheduleHeader, FloatingShifts
-- **Selection Components**: AreaSelectionContent, PersonSelectionContent with category grouping
-- **Services**: API client setup with retry logic, auth service, people service, areas service, schedule view service
-- **State**: Zustand auth store, React Query for server state with proper error handling
-- **Global Modal System**: Centralized modal management via GlobalModalContext
-- **Navigation System**: Working schedule navigation with keyboard shortcuts (Ctrl+A, Ctrl+P)
-- **Testing**: 267+ focused tests covering component behavior, interactions, and regressions
-
-### ✅ **Recent Enhancements**
-
-#### **Schedule Context Integration** 
-- **Fixed**: Area/person selection now uses current schedule instead of hardcoded schedule ID 1
-- **Enhanced**: AddShiftForm handles missing schedule gracefully with user-friendly error message  
-- **Service**: `scheduleNavigationService` properly integrates with `scheduleStore`
-
-#### **Error Handling Improvements**
-- Components gracefully handle null schedule context
-- Clear error messages guide users when schedule context is missing
-- Tests cover edge cases for missing data scenarios
-
-### 🔧 Component Patterns Established
-
-- **MenuDropdown**: Reusable hover-based dropdown with instant switching
-- **MenuItem**: Navigation component with proper SPA routing
-- **MenuContext**: Shared state for coordinated menu behavior
-- **Global Modal System**: Centralized modal management that can be triggered from anywhere
-  - Supports shift, person, category, and area creation modals
-  - No page navigation required - modals open instantly on current page
-  - Accessible via `useGlobalModal()` hook from any component
-
-### 🧪 Testing Strategy
-
-- **78 Tests**: Focused, essential coverage without redundancy
-- **Unit Tests**: Component behavior and interactions
-- **Integration Tests**: Multi-component workflows
-- **Regression Tests**: Specific bug fixes (person menu issue)
-- **Test Structure**: Co-located with components, shared utilities
-
-### 📊 Code Quality Metrics
-
-- **Test Coverage**: Core functionality and user interactions
-- **Component Architecture**: Separation of concerns, reusability
-- **Type Safety**: Full TypeScript coverage
-- **Performance**: Optimized menu switching, efficient re-renders
+- **React + TypeScript + Vite** with Tailwind CSS
+- **State Management**: React Query + Zustand stores
+- **Testing**: 267 tests with Vitest + React Testing Library
+- **Modal System**: GlobalModalContext for centralized modal management
+- **Navigation**: Keyboard shortcuts (Ctrl+A, Ctrl+P) for schedule views
 
 ## Development Commands
 
