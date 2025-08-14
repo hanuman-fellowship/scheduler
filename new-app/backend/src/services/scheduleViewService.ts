@@ -91,7 +91,13 @@ export const getAreaSchedule = async (areaId: number, user: AuthUser): Promise<A
         id: fs.id,
         areaId: fs.areaId,
         personId: fs.personId,
-        hours: Number(fs.hours)
+        hours: Number(fs.hours),
+        person: {
+          id: fs.person.id,
+          name: `${fs.person.first} ${fs.person.last}`,
+          first: fs.person.first,
+          last: fs.person.last
+        }
       })) || []
     },
     bounds,

@@ -4,11 +4,11 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 export interface Schedule {
   id: number
   name: string
-  userId: number | null
+  userId?: number | null
   template: boolean
   request: number
   createdAt: string
-  updatedAt: string
+  updatedAt?: string
 }
 
 interface ScheduleStore {
@@ -70,14 +70,34 @@ export const useScheduleStore = create<ScheduleStore>()(
             throw new Error('Invalid schedule object provided')
           }
           
-          // For now, just update the local state since we don't have the API endpoint yet
-          // TODO: Implement actual schedule switching API call
-          set({ currentSchedule: schedule, isLoading: false })
+          // Get auth token
+          const authStorage = localStorage.getItem('auth-storage')
+          const token = authStorage ? JSON.parse(authStorage).state.token : ''
+          
+          // Call backend API to set as current schedule and get full details
+          const response = await fetch(`/api/schedules/${schedule.id}/set-current`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          
+          if (!response.ok) {
+            const errorData = await response.json()
+            throw new Error(errorData.message || `Failed to set current schedule: ${response.status}`)
+          }
+          
+          const responseData = await response.json()
+          const fullSchedule = responseData.schedule
+          
+          // Update local state with the full schedule details from backend
+          set({ currentSchedule: fullSchedule, isLoading: false })
           
           // Store the user's schedule preference
           localStorage.setItem('last-selected-schedule-id', schedule.id.toString())
           
-          console.log(`Switched to schedule: ${schedule.name} (ID: ${schedule.id})`)
+          console.log(`Switched to schedule: ${fullSchedule.name} (ID: ${fullSchedule.id})`)
         } catch (error) {
           console.error('Error switching schedule:', error)
           set({ isLoading: false })

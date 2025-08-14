@@ -24,7 +24,7 @@ export const ScheduleStatusIndicator: React.FC = () => {
     }
     
     if (isPublished()) {
-      const publishedDate = new Date(currentSchedule.updatedAt).toLocaleDateString('en-US', {
+      const publishedDate = new Date(currentSchedule.updatedAt || currentSchedule.createdAt).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

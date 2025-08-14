@@ -88,7 +88,10 @@ describe('InProgressScheduleSelection', () => {
       isPersonnel: vi.fn(() => false)
     })
 
-    mockSchedulesService.getSchedules.mockResolvedValue({ mine: mockSchedules })
+    mockSchedulesService.getSchedules.mockResolvedValue({ 
+      mine: mockSchedules.filter(s => s.userId === 1), // Only user's own schedules
+      all: mockSchedules // All schedules for operations users
+    })
   })
 
   it('should render loading state initially', () => {

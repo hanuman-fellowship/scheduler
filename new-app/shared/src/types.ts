@@ -55,6 +55,7 @@ export interface UserResponse {
 export interface ScheduleResponse {
   id: number;
   name: string;
+  userId?: number | null; // Optional for backwards compatibility, present in 'all' schedules
   request: 0 | 1 | 2; // 0=normal, 1=submitted, 2=draft
   template: boolean;
   createdAt: string;
@@ -100,6 +101,12 @@ export interface FloatingShiftResponse {
   areaId: number;
   personId: number;
   hours: number;
+  person: {
+    id: number;
+    name: string;
+    first: string;
+    last: string;
+  };
 }
 
 export interface DayResponse {

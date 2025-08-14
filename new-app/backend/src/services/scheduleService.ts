@@ -16,6 +16,7 @@ export const getSchedulesForUser = async (user: AuthUser) => {
     select: {
       id: true,
       name: true,
+      userId: true,
       request: true,
       template: true,
       createdAt: true

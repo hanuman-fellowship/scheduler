@@ -8,6 +8,7 @@ import type {
 import { TimeSlotRow } from './TimeSlotRow';
 import { HoursSummaryRow } from './HoursSummaryRow';
 import { FloatingShiftsRow } from './FloatingShiftsRow';
+import { TotalHoursRow } from './TotalHoursRow';
 import './ScheduleTable.css';
 
 interface ScheduleTableProps {
@@ -114,6 +115,14 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({
               floatingShifts={data.area.floatingShifts || []}
               editable={editable && mode === 'edit'}
               onAdd={onAddFloatingShift}
+            />
+          )}
+
+          {/* Total hours row for area schedules */}
+          {type === 'area' && 'area' in data && (
+            <TotalHoursRow
+              shifts={data.area.shifts}
+              floatingShifts={data.area.floatingShifts || []}
             />
           )}
         </tbody>

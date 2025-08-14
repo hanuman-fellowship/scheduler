@@ -155,7 +155,7 @@ export const createTestUser = async (userData: Partial<Omit<TestUser, 'id'>>) =>
   return user;
 };
 
-export const createTestSchedule = async (scheduleData: { name?: string; userId: number; template?: boolean; request?: number }) => {
+export const createTestSchedule = async (scheduleData: { name?: string; userId: number | null; template?: boolean; request?: number }) => {
   return await prisma.schedule.create({
     data: {
       name: scheduleData.name || 'Test Schedule',

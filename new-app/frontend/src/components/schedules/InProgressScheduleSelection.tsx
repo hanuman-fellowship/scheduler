@@ -61,15 +61,21 @@ export const InProgressScheduleSelection: React.FC<InProgressScheduleSelectionPr
   }
 
   // Filter in-progress schedules (user-owned, non-template, non-request)
-  const inProgressSchedules = schedulesData?.mine?.filter((schedule: any) => 
-    schedule.userId !== null && 
+  // Note: schedulesData.mine already contains only the current user's schedules
+  const mySchedules = schedulesData?.mine?.filter((schedule: any) => 
     !schedule.template && 
     schedule.request === 0
   ) || []
 
-  // Group by user
-  const mySchedules = inProgressSchedules.filter((s: any) => s.userId === user?.id)
-  const otherSchedules = inProgressSchedules.filter((s: any) => s.userId !== user?.id)
+  // Operations users also have access to all schedules, filter for others
+  const otherSchedules = user?.roles.includes('operations') 
+    ? (schedulesData?.all?.filter((schedule: any) => 
+        schedule.userId !== user?.id &&
+        schedule.userId !== null && 
+        !schedule.template && 
+        schedule.request === 0
+      ) || [])
+    : []
 
   const ScheduleList = ({ schedules, title }: { schedules: Schedule[], title: string }) => (
     <div className="mb-6">

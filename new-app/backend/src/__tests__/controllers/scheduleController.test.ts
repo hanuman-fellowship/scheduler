@@ -362,4 +362,218 @@ describe('ScheduleController', () => {
       expect(response.body.error.code).toBe('CURRENT_SCHEDULE_NOT_FOUND');
     });
   });
+
+  describe('POST /schedules/:id/set-current', () => {
+    it('should set schedule as current and store user preference', async () => {
+      // Login as regular user who owns the schedule
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password'
+        });
+
+      const token = loginResponse.body.token;
+
+      // Set the schedule as current
+      const response = await request(testApp)
+        .post(`/api/schedules/${testSchedule.id}/set-current`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('message', 'Schedule set as current');
+      expect(response.body).toHaveProperty('schedule');
+      expect(response.body.schedule.id).toBe(testSchedule.id);
+
+      // Verify setting was stored in database
+      const setting = await prisma.setting.findFirst({
+        where: {
+          userId: regularUser.id,
+          key: 'current_schedule_id'
+        }
+      });
+
+      expect(setting).toBeTruthy();
+      expect(setting!.val).toBe(testSchedule.id.toString());
+    });
+
+    it('should update existing preference when setting new current schedule', async () => {
+      // Create another schedule
+      const secondSchedule = await createTestSchedule({
+        name: 'Second Schedule',
+        userId: regularUser.id,
+        template: false,
+        request: 0
+      });
+
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password'
+        });
+
+      const token = loginResponse.body.token;
+
+      // Set first schedule as current
+      await request(testApp)
+        .post(`/api/schedules/${testSchedule.id}/set-current`)
+        .set('Authorization', `Bearer ${token}`);
+
+      // Set second schedule as current
+      const response = await request(testApp)
+        .post(`/api/schedules/${secondSchedule.id}/set-current`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+
+      // Verify setting was updated, not duplicated
+      const settings = await prisma.setting.findMany({
+        where: {
+          userId: regularUser.id,
+          key: 'current_schedule_id'
+        }
+      });
+
+      expect(settings).toHaveLength(1);
+      expect(settings[0].val).toBe(secondSchedule.id.toString());
+    });
+
+    it('should return 404 for non-existent schedule', async () => {
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password'
+        });
+
+      const token = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .post('/api/schedules/99999/set-current')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body.error.code).toBe('SCHEDULE_NOT_FOUND');
+    });
+
+    it('should return 400 for invalid schedule ID', async () => {
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password'
+        });
+
+      const token = loginResponse.body.token;
+
+      const response = await request(testApp)
+        .post('/api/schedules/invalid/set-current')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body.error.code).toBe('INVALID_SCHEDULE_ID');
+    });
+  });
+
+  describe('GET /schedules/current with user preferences', () => {
+    it('should return user\'s preferred schedule when set', async () => {
+      // Create a "Published" schedule (fallback)
+      const publishedSchedule = await createTestSchedule({
+        name: 'Published',
+        userId: null,
+        template: false,
+        request: 0
+      });
+
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password'
+        });
+
+      const token = loginResponse.body.token;
+
+      // Set user's preferred schedule
+      await request(testApp)
+        .post(`/api/schedules/${testSchedule.id}/set-current`)
+        .set('Authorization', `Bearer ${token}`);
+
+      // Get current schedule - should return user's preference, not published
+      const response = await request(testApp)
+        .get('/api/schedules/current')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.id).toBe(testSchedule.id);
+      expect(response.body.name).toBe('Test Schedule');
+    });
+
+    it('should fall back to published schedule when no preference set', async () => {
+      // Create a "Published" schedule
+      const publishedSchedule = await createTestSchedule({
+        name: 'Published',
+        userId: null,
+        template: false,
+        request: 0
+      });
+
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password'
+        });
+
+      const token = loginResponse.body.token;
+
+      // Get current schedule without setting preference
+      const response = await request(testApp)
+        .get('/api/schedules/current')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.id).toBe(publishedSchedule.id);
+      expect(response.body.name).toBe('Published');
+    });
+
+    it('should fall back when preferred schedule is deleted', async () => {
+      // Create a "Published" schedule
+      const publishedSchedule = await createTestSchedule({
+        name: 'Published',
+        userId: null,
+        template: false,
+        request: 0
+      });
+
+      const loginResponse = await request(testApp)
+        .post('/api/auth/login')
+        .send({
+          username: 'regular_user',
+          password: 'password'
+        });
+
+      const token = loginResponse.body.token;
+
+      // Set user's preferred schedule
+      await request(testApp)
+        .post(`/api/schedules/${testSchedule.id}/set-current`)
+        .set('Authorization', `Bearer ${token}`);
+
+      // Delete the preferred schedule
+      await prisma.schedule.delete({
+        where: { id: testSchedule.id }
+      });
+
+      // Get current schedule - should fall back to published
+      const response = await request(testApp)
+        .get('/api/schedules/current')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.id).toBe(publishedSchedule.id);
+      expect(response.body.name).toBe('Published');
+    });
+  });
 });

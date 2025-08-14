@@ -4,11 +4,11 @@ import type { SchedulesResponse } from '@shared/types'
 export interface Schedule {
   id: number
   name: string
-  userId: number | null
+  userId?: number | null
   template: boolean
   request: number
   createdAt: string
-  updatedAt: string
+  updatedAt?: string
 }
 
 export const schedulesService = {

@@ -180,7 +180,18 @@ describe('ScheduleView Shift Integration', () => {
       ...mockAreaScheduleData,
       area: {
         ...mockAreaScheduleData.area,
-        floatingShifts: [{ id: 1, hours: 8 }]
+        floatingShifts: [{ 
+          id: 1, 
+          areaId: 1,
+          personId: 1,
+          hours: 8,
+          person: {
+            id: 1,
+            name: 'John Doe',
+            first: 'John',
+            last: 'Doe'
+          }
+        }]
       }
     }
     
