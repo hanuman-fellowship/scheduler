@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { ShiftWithAssignments, TimeSlot } from '@shared/types';
 import { formatTimeRange } from '../../../../shared/src/timeUtils';
-import './LegacySchedule.css';
 
 interface ShiftCellProps {
   shifts: ShiftWithAssignments[];
@@ -24,101 +23,77 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
   onShiftClick,
   onAdd
 }) => {
-  const [, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Use the shared formatTimeRange function for minimal time display
   const formatShiftTime = (startSeconds: number, endSeconds: number) => {
     return formatTimeRange(startSeconds, endSeconds);
   };
 
-  const renderShift = (shift: ShiftWithAssignments, index: number) => {
-    const isFirstShift = index === 0;
+  const renderShift = (shift: ShiftWithAssignments) => {
     switch (type) {
       case 'area':
         return (
-          <span 
+          <div 
             key={shift.id}
-            id={`shift_${shift.id}`}
-            className={`shift ${!isFirstShift ? 'stacked' : ''}`}
+            className={`mb-1 p-1 text-xs ${editable ? 'cursor-pointer hover:bg-gray-100' : 'cursor-default'} border border-gray-300 rounded`}
+            onClick={editable ? () => onShiftClick?.(shift.id) : undefined}
           >
-            <b className="shift-time">
-              <a 
-                className={editable ? 'editable-link' : ''}
-                onClick={editable ? () => onShiftClick?.(shift.id) : undefined}
-              >
-                {formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}
-              </a>
-            </b>
-            <br />
-            {shift.assignments.map(assignment => (
-              <span key={assignment.id} className="assignment-name">
-                {assignment.star && <span className="star">★</span>}
-                {assignment.person ? (
-                  <a className={editable ? 'editable-link' : ''}>
-                    {assignment.person.name || assignment.name}
-                  </a>
-                ) : assignment.name ? (
-                  <span>{assignment.name}</span>
-                ) : null}
-                <br />
-              </span>
-            ))}
-            {/* Render unassigned slots */}
-            {Array.from({ length: shift.numPeople - shift.assignments.length }).map((_, idx) => (
-              <span key={`unassigned_${idx}`} className="assignment-name">
-                <a className="assignment-unassigned">
-                  ________
-                </a>
-                <br />
-              </span>
-            ))}
-          </span>
+            <div className="font-semibold">
+              {formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}
+            </div>
+            <div className="space-y-1">
+              {shift.assignments.map(assignment => (
+                <div 
+                  key={assignment.id}
+                  className="flex items-center justify-between"
+                >
+                  <span className={assignment.person ? 'text-blue-600' : 'text-gray-500'}>
+                    {assignment.person?.name || assignment.name || 'Unassigned'}
+                  </span>
+                  {assignment.star && <span className="text-yellow-500">⭐</span>}
+                </div>
+              ))}
+              {shift.assignments.length < shift.numPeople && (
+                <div className="text-gray-400 italic">
+                  Need {shift.numPeople - shift.assignments.length} more
+                </div>
+              )}
+            </div>
+          </div>
         );
 
       case 'person':
         // For person schedules, show area and time
         const assignment = shift.assignments[0]; // Person schedules have one assignment per shift
         return (
-          <span 
+          <div 
             key={shift.id}
-            className="shift person"
+            className={`mb-1 p-1 text-xs ${editable ? 'cursor-pointer hover:bg-gray-100' : 'cursor-default'} border border-gray-300 rounded`}
+            onClick={editable ? () => onShiftClick?.(shift.id) : undefined}
           >
-            <b className="shift-time">
-              <a 
-                className={editable ? 'editable-link' : ''}
-                onClick={editable ? () => onShiftClick?.(shift.id) : undefined}
-              >
-                {formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}
-              </a>
-            </b>
-            <br />
-            <span className="assignment-name">
-              {assignment?.star && <span className="star">★</span>}
-              Area {(assignment as any)?.area?.name || shift.areaId}
-            </span>
-          </span>
+            <div className="font-semibold text-blue-600">
+{`Area ${shift.areaId}`}
+            </div>
+            <div>{formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}</div>
+            {assignment?.star && <span className="text-yellow-500">⭐</span>}
+          </div>
         );
 
       case 'gaps':
         return (
-          <span 
+          <div 
             key={shift.id}
-            className={`shift ${!isFirstShift ? 'stacked' : ''}`}
-            style={{ color: '#ff0000' }}
+            className="mb-1 p-1 text-xs cursor-pointer hover:bg-red-100 border border-red-300 rounded bg-red-50"
+            onClick={() => onShiftClick?.(shift.id)}
           >
-            <b className="shift-time">
-              <a 
-                style={{ color: '#ff0000' }}
-                onClick={() => onShiftClick?.(shift.id)}
-              >
-                {formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}
-              </a>
-            </b>
-            <br />
-            <span style={{ color: '#ff0000' }}>
-              Need {shift.numPeople}
-            </span>
-          </span>
+            <div className="font-semibold text-red-600">
+              {formatShiftTime(shift.startAtSeconds, shift.endAtSeconds)}
+            </div>
+            <div className="text-red-500">
+              Need {shift.numPeople} people
+            </div>
+          </div>
         );
 
       default:
@@ -126,50 +101,40 @@ export const ShiftCell: React.FC<ShiftCellProps> = ({
     }
   };
 
-  // Determine if this is an off day for person schedules
-  const isOffDay = type === 'person' && shifts.length === 0;
-  
   return (
     <td 
-      id={`${timeSlot.name}_${dayId}`}
-      className={`schedule-cell-75 shift-cell-height shift-cell ${
-        isToday ? 'today-highlight' : ''
-      } ${isOffDay ? 'dayoff-bg' : ''} ${editable ? 'editable' : ''}`}
-      style={{ borderColor: '#000000', position: 'relative' }}
+      className={`border-2 border-black p-1 align-top relative ${
+        isToday ? 'bg-yellow-50' : 'bg-white'
+      }`}
+      style={{ 
+        width: '75px', 
+        minHeight: '60px',
+        maxHeight: '120px',
+        overflow: 'hidden'
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div style={{ textAlign: 'center' }} className="shift">
-        <p>
-          {/* Add shift button - hidden by default, shown on hover */}
-          {editable && onAdd && (
-            <a 
-              className="add"
-              id={`add_${timeSlot.name}_${dayId}`}
-              onClick={onAdd}
-              style={{ 
-                position: 'absolute',
-                top: '2px',
-                right: '2px'
-              }}
-            >
-              {" + "}
-            </a>
-          )}
-          
-          {/* Off day X for print mode */}
-          {isOffDay && <span className="dayoff_x">X</span>}
-          
-          {/* Render all shifts */}
-          {shifts.map((shift, index) => renderShift(shift, index))}
-          
-          {/* Empty state for gaps view */}
-          {type === 'gaps' && shifts.length === 0 && (
-            <span style={{ fontSize: '11px', color: '#999', fontStyle: 'italic' }}>
-              No gaps
-            </span>
-          )}
-        </p>
+      <div className="space-y-1 h-full overflow-y-auto">
+        {shifts.map(renderShift)}
+        
+        {/* Add button for editable mode */}
+        {editable && isHovered && onAdd && (
+          <button
+            onClick={onAdd}
+            className="w-full p-1 text-xs bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded text-blue-600 font-medium"
+            title="Add shift"
+          >
+            + Add
+          </button>
+        )}
+        
+        {/* Empty state for gaps view */}
+        {type === 'gaps' && shifts.length === 0 && (
+          <div className="text-xs text-gray-400 italic text-center py-2">
+            No gaps
+          </div>
+        )}
       </div>
     </td>
   );
